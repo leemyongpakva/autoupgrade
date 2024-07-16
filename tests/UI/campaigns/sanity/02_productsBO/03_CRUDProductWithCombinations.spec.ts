@@ -215,9 +215,9 @@ test.describe('BO - Catalog - Products : CRUD product with combinations', async 
 
       const productAttributes = await foClassicProductPage.getProductAttributes(page);
       await Promise.all([
-        // color
-        expect(productAttributes[0].value).toEqual(newProductData.attributes[1].values.join(' ')),
         // size
+        expect(productAttributes[0].value).toEqual(newProductData.attributes[1].values.join(' ')),
+        // color
         expect(productAttributes[1].value).toEqual(newProductData.attributes[0].values.join(' ')),
       ]);
     });
@@ -304,11 +304,28 @@ test.describe('BO - Catalog - Products : CRUD product with combinations', async 
       ]);
 
       const productAttributes = await foClassicProductPage.getProductAttributes(page);
-      await Promise.all([
-        expect(productAttributes[0].value).toEqual(
-          `${newProductData.attributes[1].values.join(' ')} ${updateProductData.attributes[1].values.join(' ')}`),
-        expect(productAttributes[1].value).toEqual(newProductData.attributes[0].values.join(' ')),
-      ]);
+
+      if (semver.gte(psVersion, '7.1.0')) {
+        await Promise.all([
+          // size
+          expect(productAttributes[0].value).toEqual(
+            `${newProductData.attributes[1].values.join(' ')} ${updateProductData.attributes[1].values.join(' ')}`),
+          // Color
+          expect(productAttributes[1].value).toEqual(newProductData.attributes[0].values.join(' ')),
+        ]);
+      } else {
+        await Promise.all([
+          // size
+          expect(productAttributes[0].value).toEqual(
+            `${newProductData.attributes[1].values.join(' ')} ${updateProductData.attributes[1].values.join(' ')}`),
+          // Color
+          expect(productAttributes[1].value).toContain(newProductData.attributes[0].values[0]),
+          expect(productAttributes[1].value).toContain(newProductData.attributes[0].values[1]),
+          expect(productAttributes[1].value).toContain(updateProductData.attributes[0].values[1]),
+          expect(productAttributes[1].value).toContain(updateProductData.attributes[0].values[2]),
+          expect(productAttributes[1].value).toContain(updateProductData.attributes[0].values[3]),
+        ]);
+      }
     });
   });
 

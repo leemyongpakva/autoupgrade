@@ -20,6 +20,9 @@ import {
   test, expect, Page, BrowserContext,
 } from '@playwright/test';
 
+import semver from 'semver';
+
+const psVersion = utilsTest.getPSVersion();
 const baseContext: string = 'sanity_checkoutFO_orderProduct';
 
 /*
@@ -162,7 +165,11 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   test('should Pay by bank wire and confirm order', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'confirmOrder', baseContext);
 
-    await foClassicCheckoutPage.choosePaymentAndOrder(page, dataPaymentMethods.wirePayment.moduleName);
+    if (semver.gte(psVersion, '7.1.0')) {
+      await foClassicCheckoutPage.choosePaymentAndOrder(page, dataPaymentMethods.wirePayment.moduleName);
+    } else {
+      await foClassicCheckoutPage.choosePaymentAndOrder(page, '2');
+    }
 
     const pageTitle = await foClassicCheckoutOrderConfirmationPage.getPageTitle(page);
     expect(pageTitle).toEqual(foClassicCheckoutOrderConfirmationPage.pageTitle);
