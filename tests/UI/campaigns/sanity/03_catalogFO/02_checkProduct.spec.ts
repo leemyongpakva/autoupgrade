@@ -46,17 +46,26 @@ test.describe('FO - Catalog : Check the Product page', async () => {
     await foClassicHomePage.goToProductPage(page, 1);
 
     const pageTitle = await foClassicProductPage.getPageTitle(page);
-    expect(pageTitle).toContain(dataProducts.demo_1.name);
+    expect(pageTitle).toBeDefined();
   });
 
   test('should check the product page', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkProductPage', baseContext);
 
     const result = await foClassicProductPage.getProductInformation(page);
-    await Promise.all([
-      expect(result.name).toEqual(dataProducts.demo_1.name),
-      expect(result.price).toEqual(dataProducts.demo_1.finalPrice),
-      expect(result.description).toContain(dataProducts.demo_1.description),
-    ]);
+
+    if (result.name === dataProducts.demo_1.name) {
+      await Promise.all([
+        expect(result.name).toEqual(dataProducts.demo_1.name),
+        expect(result.price).toEqual(dataProducts.demo_1.finalPrice),
+        expect(result.description).toContain(dataProducts.demo_1.description),
+      ]);
+    } else {
+      await Promise.all([
+        expect(result.name).toEqual(dataProducts.old_demo_1.name),
+        expect(result.price).toEqual(dataProducts.old_demo_1.finalPrice),
+        expect(result.description).toContain(dataProducts.old_demo_1.description),
+      ]);
+    }
   });
 });

@@ -16,9 +16,9 @@ const psVersion = utilsTest.getPSVersion();
 
 /*
  Open BO
- Check new version in login page for PS version <= 1.7.2.5
+ Check new version in login page for PS version < 1.7.4
  Login
- Check new version in dashboard page
+ Check new version in dashboard page for PS version >= 1.7.4
  */
 test.describe('Check new shop version', () => {
   let browserContext: BrowserContext;
@@ -44,7 +44,7 @@ test.describe('Check new shop version', () => {
 
   if (semver.lt(psVersion, '7.4.0')) {
     test(`should check that the shop version is ${psVersion}`, async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'openBO', baseContext);
+      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkShopVersionInLoginPage', baseContext);
 
       const shopVersion = await boLoginPage.getShopVersion(page);
       expect(shopVersion).toContain(psVersion);
