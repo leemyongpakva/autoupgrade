@@ -227,7 +227,7 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
 
       test(`should reset filter by '${tst.args.filterBy}'`, async () => {
         await utilsTest.addContextItem(test.info(), 'testIdentifier', `resetFilter${tst.args.identifier}`, baseContext);
-        
+
         const numberOfProductsAfterReset = await boProductsPage.resetAndGetNumberOfLines(page);
         expect(numberOfProductsAfterReset).toEqual(numberOfProducts);
       });
