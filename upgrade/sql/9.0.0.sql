@@ -292,3 +292,7 @@ DELETE FROM `PREFIX_hook` WHERE `name` IN (
 /* Clean hook registrations related to removed hooks */
 DELETE FROM `PREFIX_hook_module` WHERE `id_hook` NOT IN (SELECT id_hook FROM `PREFIX_hook`);
 DELETE FROM `PREFIX_hook_module_exceptions` WHERE `id_hook` NOT IN (SELECT id_hook FROM `PREFIX_hook`);
+
+/* Feature value position */
+/* https://github.com/PrestaShop/PrestaShop/pull/37042 */
+/* PHP:add_column('feature_value', 'position', 'int(10) unsigned NOT NULL DEFAULT \'0\''); */;
