@@ -851,4 +851,32 @@ abstract class CoreUpgrader
         $this->logger->info($this->container->getTranslator()->trans('Running opcache_reset'));
         $this->container->resetOpcache();
     }
+
+    /**
+     * @throws Exception
+     */
+    protected function shouldClearCoreCache(): bool
+    {
+        $destinationVersion = $this->container->getUpgrader()->getDestinationVersion();
+
+        return version_compare($destinationVersion, '9.0.0') >= 0 && php_sapi_name() === 'cli';
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function clearCoreCache(): void
+    {
+        $rootPath = $this->container->getProperty(UpgradeContainer::PS_ROOT_PATH);
+        $command = 'php ' . $rootPath . '/bin/console cache:warmup --env=prod';
+        $output = [];
+        $resultCode = 0;
+
+        exec($command, $output, $resultCode);
+
+        if ($resultCode !== 0) {
+            throw new UpgradeException("An error was raised when clearing the core cache: \n" . implode("\n", $output));
+        }
+        $this->logger->debug('Core cache has been cleared to avoid dependency conflicts.');
+    }
 }

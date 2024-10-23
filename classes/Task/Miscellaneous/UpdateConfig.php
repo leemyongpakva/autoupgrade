@@ -109,9 +109,6 @@ class UpdateConfig extends AbstractTask
             return ExitCode::FAIL;
         }
 
-        $this->container->getState()->setInstallVersion($this->container->getUpgrader()->getDestinationVersion());
-        $this->container->getState()->setOriginVersion($this->container->getProperty(UpgradeContainer::PS_VERSION));
-
         return ExitCode::SUCCESS;
     }
 

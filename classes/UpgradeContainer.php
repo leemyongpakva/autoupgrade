@@ -453,14 +453,6 @@ class UpgradeContainer
             $currentPrestashopVersion
         );
 
-        $this->getState()->setInstallVersion($upgrader->getDestinationVersion());
-        $this->getState()->setOriginVersion($this->getProperty(self::PS_VERSION));
-
-        if ($upgrader->getChannel() === Upgrader::CHANNEL_LOCAL) {
-            $archiveXml = $this->getUpgradeConfiguration()->getLocalChannelXml();
-            $this->fileLoader->addXmlMd5File($upgrader->getDestinationVersion(), $this->getProperty(self::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $archiveXml);
-        }
-
         $this->upgrader = $upgrader;
 
         return $this->upgrader;
