@@ -296,3 +296,4 @@ DELETE FROM `PREFIX_hook_module_exceptions` WHERE `id_hook` NOT IN (SELECT id_ho
 /* Feature value position */
 /* https://github.com/PrestaShop/PrestaShop/pull/37042 */
 /* PHP:add_column('feature_value', 'position', 'int(10) unsigned NOT NULL DEFAULT \'0\''); */;
+INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_FEATURE_VALUES_ORDER', 'name', NOW(), NOW());
