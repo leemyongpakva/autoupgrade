@@ -28,7 +28,6 @@
 namespace PrestaShop\Module\AutoUpgrade\Task\Miscellaneous;
 
 use Exception;
-use PrestaShop\Module\AutoUpgrade\Exceptions\ZipActionException;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
@@ -37,9 +36,7 @@ use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\Upgrader;
-use RuntimeException;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\Filesystem\Exception\IOException;
+use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
 
 /**
  * update configuration after validating the new values.
@@ -90,7 +87,7 @@ class UpdateConfig extends AbstractTask
             }
 
             try {
-                $targetVersion = $this->extractPrestashopVersionFromZip($fullFilePath);
+                $targetVersion = (new PrestashopVersionService($this->container->getZipAction()))->extractPrestashopVersionFromZip($fullFilePath);
             } catch (Exception $exception) {
                 $this->setErrorFlag();
                 $this->logger->info($this->translator->trans('Unable to retrieve version from zip: %s.', [$exception->getMessage()]));
@@ -108,7 +105,7 @@ class UpdateConfig extends AbstractTask
             }
 
             try {
-                $xmlVersion = $this->extractPrestashopVersionFromXml($fullXmlPath);
+                $xmlVersion = (new PrestashopVersionService($this->container->getZipAction()))->extractPrestashopVersionFromXml($fullXmlPath);
             } catch (Exception $exception) {
                 $this->setErrorFlag();
                 $this->logger->info($this->translator->trans('We couldn\'t find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again'));
@@ -199,72 +196,5 @@ class UpdateConfig extends AbstractTask
         $this->container->getLogger()->debug('Configuration update: ' . json_encode($config->toArray(), JSON_PRETTY_PRINT));
 
         return (new UpgradeConfigurationStorage($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR))->save($config, UpgradeFileNames::CONFIG_FILENAME);
-    }
-
-    /**
-     * @throws ZipActionException
-     * @throws Exception
-     */
-    private function extractPrestashopVersionFromZip(string $zipFile): string
-    {
-        $internalZipFileName = 'prestashop.zip';
-        $versionFile = 'install/install_version.php';
-
-        if (!file_exists($zipFile)) {
-            throw new FileNotFoundException("Unable to find $zipFile file");
-        }
-        $zip = $this->container->getZipAction()->open($zipFile);
-        $internalZipContent = $this->container->getZipAction()->extractFileFromArchive($zip, $internalZipFileName);
-        $zip->close();
-
-        $tempInternalZipPath = $this->createTemporaryFile($internalZipContent);
-
-        $internalZip = $this->container->getZipAction()->open($tempInternalZipPath);
-        $fileContent = $this->container->getZipAction()->extractFileFromArchive($internalZip, $versionFile);
-        $internalZip->close();
-
-        @unlink($tempInternalZipPath);
-
-        return $this->extractVersionFromContent($fileContent);
-    }
-
-    /**
-     * @throws IOException
-     */
-    private function createTemporaryFile(string $content): string
-    {
-        $tempFilePath = tempnam(sys_get_temp_dir(), 'internal_zip_');
-        if (file_put_contents($tempFilePath, $content) === false) {
-            throw new IOException('Unable to create temporary file');
-        }
-
-        return $tempFilePath;
-    }
-
-    /**
-     * @throws RuntimeException
-     */
-    private function extractVersionFromContent(string $content): string
-    {
-        $pattern = "/define\\('_PS_INSTALL_VERSION_', '([\\d.]+)'\\);/";
-        if (preg_match($pattern, $content, $matches)) {
-            return $matches[1];
-        } else {
-            throw new RuntimeException('Unable to extract version from content');
-        }
-    }
-
-    /**
-     * @throws RuntimeException
-     */
-    private function extractPrestashopVersionFromXml(string $xmlPath): string
-    {
-        $xml = @simplexml_load_file($xmlPath);
-
-        if (!isset($xml->ps_root_dir['version'])) {
-            throw new RuntimeException('Prestashop version not found in file ' . $xmlPath);
-        }
-
-        return $xml->ps_root_dir['version'];
     }
 }
