@@ -28,28 +28,20 @@
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
-class UpdatePagePostUpdateController extends AbstractPageController
+class UpdatePagePostUpdateController extends AbstractPageWithStepController
 {
     const CURRENT_STEP = UpdateSteps::STEP_POST_UPDATE;
     const CURRENT_PAGE = 'update';
 
-    /**
-     * @return string
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function step(): string
+    protected function getPageTemplate(): string
     {
-        return $this->getTwig()->render(
-            '@ModuleAutoUpgrade/steps/post-update.html.twig',
-            $this->getParams()
-        );
+        return 'update';
+    }
+
+    protected function getStepTemplate(): string
+    {
+        return self::CURRENT_STEP;
     }
 
     /**

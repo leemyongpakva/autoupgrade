@@ -33,9 +33,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 abstract class AbstractPageController extends AbstractGlobalController
 {
-    const CURRENT_PAGE = '';
-    const CURRENT_ROUTE = '';
-
     protected function getPsVersion(): string
     {
         return $this->upgradeContainer->getProperty($this->upgradeContainer::PS_VERSION);
@@ -96,17 +93,37 @@ abstract class AbstractPageController extends AbstractGlobalController
             return AjaxResponseBuilder::hydrationResponse(
                 PageSelectors::PAGE_PARENT_ID,
                 $this->renderPageContent(
-                    $this::CURRENT_PAGE,
+                    $this->getPageTemplate(),
                     $this->getParams()
                 ),
-                $this::CURRENT_ROUTE
+                $this->displayRouteInUrl()
             );
         }
 
         return $this->renderPage(
-            $this::CURRENT_PAGE,
+            $this->getPageTemplate(),
             $this->getParams()
         );
+    }
+
+    /**
+     * Relative path from the templates folder of the twig file
+     * to load when opening or reloading the page while being on the controller.
+     * Omit "pages/" and ".html.twig" from the value.
+     *
+     * @see index()
+     */
+    abstract protected function getPageTemplate(): string;
+
+    /**
+     * Provide another route to display in the address bar when this controller
+     * is called from an ajax request.
+     *
+     * @return Routes::*|void
+     */
+    protected function displayRouteInUrl(): ?string
+    {
+        return null;
     }
 
     /**

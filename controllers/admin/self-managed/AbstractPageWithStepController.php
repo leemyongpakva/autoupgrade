@@ -27,45 +27,36 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
-use PrestaShop\Module\AutoUpgrade\Router\Routes;
+use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use Symfony\Component\HttpFoundation\Response;
 
-class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
+abstract class AbstractPageWithStepController extends AbstractPageController
 {
-    const CURRENT_STEP = UpdateSteps::STEP_UPDATE_OPTIONS;
-
-    protected function getPageTemplate(): string
+    public function step()
     {
-        return 'update';
-    }
+        if (!$this->request->isXmlHttpRequest()) {
+            return new Response('Unexpected call to a step route outside an ajax call.', 404);
+        }
 
-    protected function getStepTemplate(): string
-    {
-        return self::CURRENT_STEP;
-    }
-
-    protected function displayRouteInUrl(): ?string
-    {
-        return Routes::UPDATE_PAGE_UPDATE_OPTIONS;
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::STEP_PARENT_ID,
+            $this->getTwig()->render(
+                '@ModuleAutoUpgrade/steps/' . $this->getStepTemplate() . '.html.twig',
+                $this->getParams()
+            ),
+            $this->displayRouteInUrl()
+        );
     }
 
     /**
-     * @return array
+     * Relative path from the templates folder of the twig file
+     * to load when reaching this step.
      *
-     * @throws \Exception
+     * @see step()
+     *
+     * @return UpdateSteps::STEP_*
      */
-    protected function getParams(): array
-    {
-        $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
-
-        return array_merge(
-            $updateSteps->getStepParams(self::CURRENT_STEP),
-            [
-                'default_deactive_non_native_modules' => true,
-                'default_regenerate_email_templates' => true,
-                'switch_the_theme' => '1',
-                'disable_all_overrides' => false,
-            ]
-        );
-    }
+    abstract protected function getStepTemplate(): string;
 }
