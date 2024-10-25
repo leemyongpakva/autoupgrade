@@ -14,6 +14,9 @@ import {
 } from '@playwright/test';
 
 const baseContext: string = 'sanity_cartFO_editCheckCart';
+import semver from 'semver';
+
+const psVersion = utilsTest.getPSVersion();
 
 /*
   Open the FO home page
@@ -153,12 +156,15 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
 
     await foClassicCartPage.editProductQuantity(page, 2, 2);
 
-    // getNumberFromText is used to get the new price ATI
     const totalPrice = await foClassicCartPage.getATIPrice(page);
     expect(totalPrice).toBeGreaterThan(totalATI);
 
-    // getNumberFromText is used to get the new products number
-    const productsNumber = await foClassicCartPage.getCartNotificationsNumber(page);
+    let productsNumber: number = 0;
+    if (semver.gte(psVersion, '8.0.0')) {
+      productsNumber = await foClassicCartPage.getCartNotificationsNumber(page);
+    } else {
+      productsNumber = await foClassicCartPage.getProductsNumber(page);
+    }
     expect(productsNumber).toBeGreaterThan(itemsNumber);
   });
 });
