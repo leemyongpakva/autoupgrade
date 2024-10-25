@@ -90,7 +90,7 @@ class UpgradeConfiguration extends ArrayCollection
     public function getChannelZip(): ?string
     {
         if ($this->getChannel() === Upgrader::CHANNEL_LOCAL) {
-            $this->getLocalChannelZip();
+            return $this->getLocalChannelZip();
         }
 
         return self::ONLINE_CHANNEL_ZIP;
