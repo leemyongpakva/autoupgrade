@@ -36,7 +36,6 @@ use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\UpgradePage;
 use PrestaShop\Module\AutoUpgrade\UpgradeSelfCheck;
 use Symfony\Component\HttpFoundation\Request;
-use UnexpectedValueException;
 
 class AdminSelfUpgradeController extends ModuleAdminController
 {
