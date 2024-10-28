@@ -31,6 +31,7 @@ use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponse;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
+use UnexpectedValueException;
 
 /**
  * Execute the whole upgrade process in a single request.
@@ -65,7 +66,12 @@ class AllUpdateTasks extends ChainedTasks
             $config = [
                 'channel' => $options['channel'],
             ];
-            $this->container->getUpgradeConfiguration()->validate($config);
+            $error = $this->container->getConfigurationValidator()->validate($config);
+
+            if (!empty($error)) {
+                throw new UnexpectedValueException(reset($error));
+            }
+
             $this->container->getUpgradeConfiguration()->merge($config);
         }
 

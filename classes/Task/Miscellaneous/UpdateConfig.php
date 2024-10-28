@@ -74,54 +74,34 @@ class UpdateConfig extends AbstractTask
             }
         }
 
-        $this->container->getUpgradeConfiguration()->validate($config);
+        $isLocal = $config['channel'] === Upgrader::CHANNEL_LOCAL;
 
-        if (isset($config['channel']) && $config['channel'] === Upgrader::CHANNEL_LOCAL) {
+        $error = $this->container->getConfigurationValidator()->validate($config);
+
+        if ($isLocal && empty($error)) {
+            $this->container->getLocalChannelConfigurationValidator()->validate($config);
+        }
+
+        if ($isLocal) {
             $file = $config['archive_zip'];
             $fullFilePath = $this->container->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $file;
-            if (!file_exists($fullFilePath)) {
-                $this->setErrorFlag();
-                $this->logger->info($this->translator->trans('File %s does not exist. Unable to select that channel.', [$file]));
-
-                return ExitCode::FAIL;
-            }
-
             try {
-                $targetVersion = (new PrestashopVersionService($this->container->getZipAction()))->extractPrestashopVersionFromZip($fullFilePath);
+                $config['archive_version_num'] = (new PrestashopVersionService($this->container->getZipAction()))->extractPrestashopVersionFromZip($fullFilePath);
+                $this->logger->info($this->translator->trans('Upgrade process will use archive.'));
             } catch (Exception $exception) {
                 $this->setErrorFlag();
-                $this->logger->info($this->translator->trans('Unable to retrieve version from zip: %s.', [$exception->getMessage()]));
+                $this->logger->info($this->translator->trans('We couldn\'t find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.'));
 
                 return ExitCode::FAIL;
             }
 
-            $xmlFile = $config['archive_xml'];
-            $fullXmlPath = $this->container->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $xmlFile;
-            if (!empty($xmlFile) && !file_exists($fullXmlPath)) {
-                $this->setErrorFlag();
-                $this->logger->info($this->translator->trans('File %s does not exist. Unable to select that channel.', [$xmlFile]));
+        }
 
-                return ExitCode::FAIL;
-            }
+        if (!empty($error)) {
+            $this->setErrorFlag();
+            $this->logger->info(reset($error));
 
-            try {
-                $xmlVersion = (new PrestashopVersionService($this->container->getZipAction()))->extractPrestashopVersionFromXml($fullXmlPath);
-            } catch (Exception $exception) {
-                $this->setErrorFlag();
-                $this->logger->info($this->translator->trans('We couldn\'t find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again'));
-
-                return ExitCode::FAIL;
-            }
-
-            if ($xmlVersion !== $targetVersion) {
-                $this->error = true;
-                $this->logger->info($this->translator->trans('Prestashop version detected in the xml (%s) does not match the zip version (%s).', [$xmlVersion, $targetVersion]));
-
-                return ExitCode::FAIL;
-            }
-
-            $config['archive_version_num'] = $targetVersion;
-            $this->logger->info($this->translator->trans('Upgrade process will use archive.'));
+            return ExitCode::FAIL;
         }
 
         if (!$this->writeConfig($config)) {
@@ -188,13 +168,13 @@ class UpdateConfig extends AbstractTask
      */
     private function writeConfig(array $config): bool
     {
-        $this->container->getUpgradeConfiguration()->merge($config);
+        $classConfig = $this->container->getUpgradeConfiguration();
+        $classConfig->merge($config);
+
         $this->logger->info($this->translator->trans('Configuration successfully updated.') . ' <strong>' . $this->translator->trans('This page will now be reloaded and the module will check if a new version is available.') . '</strong>');
 
-        $config = $this->container->getUpgradeConfiguration();
+        $this->container->getLogger()->debug('Configuration update: ' . json_encode($classConfig->toArray(), JSON_PRETTY_PRINT));
 
-        $this->container->getLogger()->debug('Configuration update: ' . json_encode($config->toArray(), JSON_PRETTY_PRINT));
-
-        return (new UpgradeConfigurationStorage($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR))->save($config, UpgradeFileNames::CONFIG_FILENAME);
+        return (new UpgradeConfigurationStorage($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR))->save($classConfig, UpgradeFileNames::CONFIG_FILENAME);
     }
 }

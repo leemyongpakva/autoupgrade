@@ -28,79 +28,92 @@
 namespace PrestaShop\Module\AutoUpgrade\Parameters;
 
 use PrestaShop\Module\AutoUpgrade\Upgrader;
+use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 use UnexpectedValueException;
 
 class ConfigurationValidator
 {
     /**
+     * @var Translator
+     */
+    private $translator;
+
+    /**
+     * @var LocalChannelConfigurationValidator
+     */
+    private $localChannelConfigurationValidator;
+
+    public function __construct(Translator $translator, LocalChannelConfigurationValidator $localChannelConfigurationValidator)
+    {
+        $this->translator = $translator;
+        $this->localChannelConfigurationValidator = $localChannelConfigurationValidator;
+    }
+
+    /**
      * @param array<string, mixed> $array
      *
-     * @return void
-     *
-     * @throws UnexpectedValueException
+     * @return array<string, string>
      */
-    public function validate(array $array = []): void
+    public function validate(array $array = []): array
     {
         $isLocal = isset($array['channel']) && $array['channel'] === Upgrader::CHANNEL_LOCAL;
 
         foreach ($array as $key => $value) {
             switch ($key) {
                 case 'channel':
-                    $this->validateChannel($value);
+                    $error = $this->validateChannel($value);
                     break;
                 case 'archive_zip':
-                    $this->validateArchiveZip($value, $isLocal);
+                    $error = $this->validateArchiveZip($value, $isLocal);
                     break;
                 case 'archive_xml':
-                    $this->validateArchiveXml($value, $isLocal);
+                    $error = $this->validateArchiveXml($value, $isLocal);
                     break;
                 case 'PS_AUTOUP_CUSTOM_MOD_DESACT':
                 case 'PS_AUTOUP_KEEP_MAILS':
                 case 'PS_AUTOUP_KEEP_IMAGES':
                 case 'PS_DISABLE_OVERRIDES':
-                    $this->validateBool($value, $key);
+                    $error = $this->validateBool($value, $key);
                     break;
             }
+
+            if (isset($error)) {
+                return [$key => $error];
+            }
         }
+
+        return [];
     }
 
-    /**
-     * @throws UnexpectedValueException
-     */
-    private function validateChannel(string $channel): void
+    private function validateChannel(string $channel): ?string
     {
         if ($channel !== Upgrader::CHANNEL_LOCAL && $channel !== Upgrader::CHANNEL_ONLINE) {
-            throw new UnexpectedValueException('Unknown channel ' . $channel);
+            return $this->translator->trans('Unknown channel %s', [$channel]);
         }
+        return null;
     }
 
-    /**
-     * @throws UnexpectedValueException
-     */
-    private function validateArchiveZip(string $zip, bool $isLocal): void
+    private function validateArchiveZip(string $zip, bool $isLocal): ?string
     {
         if ($isLocal && empty($zip)) {
-            throw new UnexpectedValueException('No zip archive provided');
+            return $this->translator->trans('No zip archive provided');
         }
+        return null;
     }
 
-    /**
-     * @throws UnexpectedValueException
-     */
-    private function validateArchiveXml(string $xml, bool $isLocal): void
+    private function validateArchiveXml(string $xml, bool $isLocal): ?string
     {
         if ($isLocal && empty($xml)) {
-            throw new UnexpectedValueException('No xml archive provided');
+            return $this->translator->trans('No xml archive provided');
         }
+        return null;
     }
 
-    /**
-     * @throws UnexpectedValueException
-     */
-    private function validateBool(string $boolValue, string $key): void
+    private function validateBool(string $boolValue, string $key): ?string
     {
-        if (filter_var($boolValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null) {
-            throw new UnexpectedValueException('Value must be a boolean for ' . $key);
+        if ($boolValue === '' || filter_var($boolValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null) {
+            return $this->translator->trans('Value must be a boolean for %s', [$key]);
         }
+        return null;
     }
 }

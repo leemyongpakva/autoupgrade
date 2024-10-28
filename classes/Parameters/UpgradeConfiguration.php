@@ -80,6 +80,11 @@ class UpgradeConfiguration extends ArrayCollection
     private $validator;
 
     /**
+     * @var LocalChannelConfigurationValidator
+     */
+    private $localChannelValidator;
+
+    /**
      * Get the name of the new release archive.
      */
     public function getLocalChannelZip(): ?string
@@ -234,21 +239,5 @@ class UpgradeConfiguration extends ArrayCollection
         foreach ($array as $key => $value) {
             $this->set($key, $value);
         }
-    }
-
-    /**
-     * @param array<string, mixed> $array
-     *
-     * @return void
-     *
-     * @throws UnexpectedValueException
-     */
-    public function validate(array $array = []): void
-    {
-        if ($this->validator === null) {
-            $this->validator = new ConfigurationValidator();
-        }
-
-        $this->validator->validate($array);
     }
 }

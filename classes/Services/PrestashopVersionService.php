@@ -6,6 +6,7 @@ use PrestaShop\Module\AutoUpgrade\Exceptions\ZipActionException;
 use PrestaShop\Module\AutoUpgrade\ZipAction;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Filesystem\Exception\IOException;
+use RuntimeException;
 
 class PrestashopVersionService
 {

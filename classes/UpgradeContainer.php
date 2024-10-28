@@ -32,7 +32,9 @@ use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupManager;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
 use PrestaShop\Module\AutoUpgrade\Log\WebLogger;
+use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationValidator;
 use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\LocalChannelConfigurationValidator;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
@@ -744,6 +746,37 @@ class UpgradeContainer
         }
 
         return $this->assetsEnvironment = new AssetsEnvironment();
+    }
+
+    /**
+     * @return ConfigurationValidator
+     */
+    public function getConfigurationValidator(): ConfigurationValidator
+    {
+        if (null !== $this->configurationValidator) {
+            return $this->configurationValidator;
+        }
+
+        return $this->configurationValidator = new ConfigurationValidator(
+            $this->getTranslator(),
+            $this->getLocalChannelConfigurationValidator()
+        );
+    }
+
+    /**
+     * @return LocalChannelConfigurationValidator
+     */
+    public function getLocalChannelConfigurationValidator(): LocalChannelConfigurationValidator
+    {
+        if (null !== $this->localChannelConfigurationValidator) {
+            return $this->localChannelConfigurationValidator;
+        }
+
+        return $this->localChannelConfigurationValidator = new LocalChannelConfigurationValidator(
+            $this->getTranslator(),
+            $this->getZipAction(),
+            $this->getProperty(self::DOWNLOAD_PATH)
+        );
     }
 
     /**
