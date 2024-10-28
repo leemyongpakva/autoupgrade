@@ -22,7 +22,7 @@ class PrestashopVersionService
 
     /**
      * @throws ZipActionException
-     * @throws Exception
+     * @throws FileNotFoundException
      */
     public function extractPrestashopVersionFromZip(string $zipFile): string
     {

@@ -211,6 +211,16 @@ class UpgradeContainer
     private $assetsEnvironment;
 
     /**
+     * @var ConfigurationValidator
+     */
+    private $configurationValidator;
+
+    /**
+     * @var LocalChannelConfigurationValidator
+     */
+    private $localChannelConfigurationValidator;
+
+    /**
      * AdminSelfUpgrade::$autoupgradePath
      * Ex.: /var/www/html/PrestaShop/admin-dev/autoupgrade.
      *
@@ -758,8 +768,7 @@ class UpgradeContainer
         }
 
         return $this->configurationValidator = new ConfigurationValidator(
-            $this->getTranslator(),
-            $this->getLocalChannelConfigurationValidator()
+            $this->getTranslator()
         );
     }
 

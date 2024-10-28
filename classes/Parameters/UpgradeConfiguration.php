@@ -76,14 +76,6 @@ class UpgradeConfiguration extends ArrayCollection
         'maxWrittenAllowed' => 4194304, // bytes
     ];
 
-    /** @var ConfigurationValidator */
-    private $validator;
-
-    /**
-     * @var LocalChannelConfigurationValidator
-     */
-    private $localChannelValidator;
-
     /**
      * Get the name of the new release archive.
      */

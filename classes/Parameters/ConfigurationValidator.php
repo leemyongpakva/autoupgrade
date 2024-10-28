@@ -37,15 +37,9 @@ class ConfigurationValidator
      */
     private $translator;
 
-    /**
-     * @var LocalChannelConfigurationValidator
-     */
-    private $localChannelConfigurationValidator;
-
-    public function __construct(Translator $translator, LocalChannelConfigurationValidator $localChannelConfigurationValidator)
+    public function __construct(Translator $translator)
     {
         $this->translator = $translator;
-        $this->localChannelConfigurationValidator = $localChannelConfigurationValidator;
     }
 
     /**

@@ -31,6 +31,11 @@ class LocalChannelConfigurationValidator
         $this->downloadPath = $downloadPath;
     }
 
+    /**
+     * @param array<string, mixed> $array
+     *
+     * @return array<string, string>
+     */
     public function validate(array $array = []): array
     {
         $file = $array['archive_zip'];
