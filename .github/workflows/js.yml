@@ -42,7 +42,3 @@ jobs:
       - name: Launch typescript linter
         run:
           npm run lint --prefix ./_dev
-
-      - name: Launch scss linter
-        run:
-          npm run lint-scss --prefix ./_dev

@@ -163,7 +163,7 @@ All frontend commands should be executed from the `_dev` directory.
 
 - `npm run lint` ⮕ Runs **ESLint** and **Prettier** to perform static code analysis and automatic formatting of your JavaScript code. Add `:fix` to the command to automatically fix fixable issues.
 
-- `npm run lint-scss` ⮕ Runs **Stylelint** to lint and format your SCSS files. You can append `:fix` to automatically resolve solvable formatting issues.
+- `npm run stylelint` ⮕ Runs **Stylelint** to lint and format your SCSS files. You can append `:fix` to automatically resolve solvable formatting issues.
 
 
 ## Contributing
