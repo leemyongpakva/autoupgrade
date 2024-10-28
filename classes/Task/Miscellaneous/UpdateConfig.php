@@ -31,12 +31,12 @@ use Exception;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
+use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
 use PrestaShop\Module\AutoUpgrade\Task\AbstractTask;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\Upgrader;
-use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
 
 /**
  * update configuration after validating the new values.
@@ -94,7 +94,6 @@ class UpdateConfig extends AbstractTask
 
                 return ExitCode::FAIL;
             }
-
         }
 
         if (!empty($error)) {

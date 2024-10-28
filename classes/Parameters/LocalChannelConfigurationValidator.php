@@ -2,12 +2,10 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Parameters;
 
+use Exception;
 use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
-use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 use PrestaShop\Module\AutoUpgrade\ZipAction;
-use PrestaShop\Module\AutoUpgrade\Exceptions\ZipActionException;
-use Exception;
 
 class LocalChannelConfigurationValidator
 {
@@ -33,7 +31,8 @@ class LocalChannelConfigurationValidator
         $this->downloadPath = $downloadPath;
     }
 
-    public function validate(array $array = []): array {
+    public function validate(array $array = []): array
+    {
         $file = $array['archive_zip'];
         $fullFilePath = $this->downloadPath . DIRECTORY_SEPARATOR . $file;
         if (!file_exists($fullFilePath)) {

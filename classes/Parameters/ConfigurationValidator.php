@@ -29,7 +29,6 @@ namespace PrestaShop\Module\AutoUpgrade\Parameters;
 
 use PrestaShop\Module\AutoUpgrade\Upgrader;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
-use UnexpectedValueException;
 
 class ConfigurationValidator
 {
@@ -90,6 +89,7 @@ class ConfigurationValidator
         if ($channel !== Upgrader::CHANNEL_LOCAL && $channel !== Upgrader::CHANNEL_ONLINE) {
             return $this->translator->trans('Unknown channel %s', [$channel]);
         }
+
         return null;
     }
 
@@ -98,6 +98,7 @@ class ConfigurationValidator
         if ($isLocal && empty($zip)) {
             return $this->translator->trans('No zip archive provided');
         }
+
         return null;
     }
 
@@ -106,6 +107,7 @@ class ConfigurationValidator
         if ($isLocal && empty($xml)) {
             return $this->translator->trans('No xml archive provided');
         }
+
         return null;
     }
 
@@ -114,6 +116,7 @@ class ConfigurationValidator
         if ($boolValue === '' || filter_var($boolValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null) {
             return $this->translator->trans('Value must be a boolean for %s', [$key]);
         }
+
         return null;
     }
 }
