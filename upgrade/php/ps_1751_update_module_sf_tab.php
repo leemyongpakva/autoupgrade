@@ -24,14 +24,18 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * File copied from ps_update_tabs.php and modified for only adding modules related tabs
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_1751_update_module_sf_tab()
 {
     // Rename parent module tab (= Module manager)
     include_once 'rename_tab.php';
-    $adminModulesParentTabId = Db::getInstance()->getValue(
+    $adminModulesParentTabId = DbWrapper::getValue(
         'SELECT id_tab FROM ' . _DB_PREFIX_ . 'tab WHERE class_name = "AdminModulesSf"'
     );
     if (!empty($adminModulesParentTabId)) {

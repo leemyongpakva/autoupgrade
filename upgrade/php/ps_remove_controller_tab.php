@@ -1,11 +1,41 @@
 <?php
 
+/**
+ * Copyright since 2007 PrestaShop SA and Contributors
+ * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/OSL-3.0
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@prestashop.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade PrestaShop to newer
+ * versions in the future. If you wish to customize PrestaShop for your
+ * needs please refer to https://devdocs.prestashop.com/ for more information.
+ *
+ * @copyright Since 2007 PrestaShop SA and Contributors
+ * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ */
+
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
+/**
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
+ */
 function ps_remove_controller_tab($className, $quickAccessUrls = [])
 {
     // select given tab
     $tabsToBeDeleted = [];
     $rolesToBeDeleted = [];
-    $tabToDelete = Db::getInstance()->getRow(
+    $tabToDelete = DbWrapper::getRow(
         sprintf("SELECT id_tab, id_parent, class_name FROM %stab WHERE class_name = '%s'", _DB_PREFIX_, $className)
     );
 
@@ -17,7 +47,7 @@ function ps_remove_controller_tab($className, $quickAccessUrls = [])
     getElementsToBeDeleted($tabToDelete['id_tab'], $tabToDelete['id_parent'], $className, $tabsToBeDeleted, $rolesToBeDeleted);
 
     // delete tabs fetched by the recursive function
-    Db::getInstance()->execute(
+    DbWrapper::execute(
         sprintf(
             'DELETE FROM %stab WHERE id_tab IN (%s)',
             _DB_PREFIX_,
@@ -26,7 +56,7 @@ function ps_remove_controller_tab($className, $quickAccessUrls = [])
     );
 
     // delete orphan tab langs
-    Db::getInstance()->execute(
+    DbWrapper::execute(
         sprintf(
             'DELETE FROM `%stab_lang` WHERE `id_tab` NOT IN (SELECT id_tab FROM `%stab`)',
             _DB_PREFIX_,
@@ -43,8 +73,8 @@ function ps_remove_controller_tab($className, $quickAccessUrls = [])
         $className
     );
 
-    Db::getInstance()->execute($sqlLegacyQuickAccessLinkDeletion);
-    Db::getInstance()->execute(
+    DbWrapper::execute($sqlLegacyQuickAccessLinkDeletion);
+    DbWrapper::execute(
         sprintf(
             "DELETE FROM `%squick_access` WHERE link LIKE '%%controller=%s%%'",
             _DB_PREFIX_,
@@ -57,7 +87,7 @@ function ps_remove_controller_tab($className, $quickAccessUrls = [])
         foreach ($quickAccessUrls as &$link) {
             $link = "'" . $link . "'";
         }
-        Db::getInstance()->execute(
+        DbWrapper::execute(
             sprintf(
                 'DELETE FROM %squick_access WHERE link IN (%s)',
                 _DB_PREFIX_,
@@ -75,9 +105,12 @@ function ps_remove_controller_tab($className, $quickAccessUrls = [])
         }
         $sqlRoleDeletion .= "OR slug LIKE '" . $role . "'";
     }
-    Db::getInstance()->execute($sqlRoleDeletion);
+    DbWrapper::execute($sqlRoleDeletion);
 }
 
+/**
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
+ */
 function getElementsToBeDeleted($idTab, $idParent, $className, &$tabsToBeDeleted, &$rolesToBeDeleted)
 {
     // add current tab to tabs that will be deleted
@@ -88,7 +121,7 @@ function getElementsToBeDeleted($idTab, $idParent, $className, &$tabsToBeDeleted
     }
 
     // check if parent has any other children
-    $sibling = Db::getInstance()->getRow(
+    $sibling = DbWrapper::getRow(
         sprintf(
             'SELECT id_tab FROM %stab WHERE id_parent = ' . $idParent . ' AND id_tab NOT IN (%s)',
             _DB_PREFIX_,
@@ -102,7 +135,7 @@ function getElementsToBeDeleted($idTab, $idParent, $className, &$tabsToBeDeleted
     }
 
     // no sibling, get parent and repeat the process recursively
-    $parentTab = Db::getInstance()->getRow(
+    $parentTab = DbWrapper::getRow(
         sprintf('SELECT id_tab, id_parent, class_name FROM %stab WHERE id_tab = %s', _DB_PREFIX_, $idParent)
     );
 

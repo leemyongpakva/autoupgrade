@@ -1,4 +1,7 @@
 <?php
+
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -19,9 +22,15 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to https://devdocs.prestashop.com/ for more information.
  *
- * @author    PrestaShop SA and Contributors <contact@prestashop.com>
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ */
+
+/**
+ * @return void
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_1730_add_quick_access_evaluation_catalog()
 {
@@ -33,12 +42,12 @@ function ps_1730_add_quick_access_evaluation_catalog()
     if ($isStatscheckupInstalled) {
         $translator = Context::getContext()->getTranslator();
 
-        Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'quick_access` SET link = "index.php?controller=AdminStats&module=statscheckup" ');
+        DbWrapper::execute('INSERT INTO `' . _DB_PREFIX_ . 'quick_access` SET link = "index.php?controller=AdminStats&module=statscheckup" ');
 
-        $idQuickAccess = (int) Db::getInstance()->Insert_ID();
+        $idQuickAccess = (int) DbWrapper::Insert_ID();
 
         foreach (Language::getLanguages() as $language) {
-            Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'quick_access_lang` SET 
+            DbWrapper::execute('INSERT INTO `' . _DB_PREFIX_ . 'quick_access_lang` SET 
                 `id_quick_access` = ' . $idQuickAccess . ',
                 `id_lang` = ' . (int) $language['id_lang'] . ',
                 `name` = "' . pSQL($translator->trans('Catalog evaluation', [], 'Admin.Navigation.Header')) . '" ');

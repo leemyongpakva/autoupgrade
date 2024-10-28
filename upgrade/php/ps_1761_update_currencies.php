@@ -24,6 +24,7 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use PrestaShop\PrestaShop\Core\Localization\CLDR\LocaleRepository;
 
@@ -33,6 +34,8 @@ use PrestaShop\PrestaShop\Core\Localization\CLDR\LocaleRepository;
  * corresponding values of each currency.
  *
  * This upgrade script will cover this need by loading the CLDR data and update the currency if it still has the default table values.
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_1761_update_currencies()
 {
@@ -62,7 +65,7 @@ function ps_1761_update_currencies()
             $currency->precision = (int) $cldrCurrency->getDecimalDigits();
             $currency->numeric_iso_code = $cldrCurrency->getNumericIsoCode();
         }
-        Db::getInstance()->execute(
+        DbWrapper::execute(
             'UPDATE `' . _DB_PREFIX_ . 'currency`
             SET `precision` = ' . $currency->precision . ', `numeric_iso_code` = ' . $currency->numeric_iso_code . '
             WHERE `id_currency` = ' . $currency->id

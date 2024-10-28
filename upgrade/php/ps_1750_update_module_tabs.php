@@ -24,8 +24,12 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * File copied from ps_update_tabs.php and modified for only adding modules related tabs
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_1750_update_module_tabs()
 {
@@ -44,14 +48,14 @@ function ps_1750_update_module_tabs()
     include_once 'add_new_tab.php';
     foreach ($moduleTabsToBeAdded as $className => $tabDetails) {
         add_new_tab_17($className, $tabDetails['translations'], 0, false, $tabDetails['parent']);
-        Db::getInstance()->execute(
+        DbWrapper::execute(
             'UPDATE `' . _DB_PREFIX_ . 'tab` SET `active`= 1 WHERE `class_name` = "' . $className . '"'
         );
     }
 
     // STEP 2: Rename module tabs (Notifications as Alerts, Module selection as Module Catalog, Module Catalog as Module Selections)
     include_once 'rename_tab.php';
-    $adminModulesNotificationsTabId = Db::getInstance()->getValue(
+    $adminModulesNotificationsTabId = DbWrapper::getValue(
         'SELECT id_tab FROM ' . _DB_PREFIX_ . 'tab WHERE class_name = "AdminModulesNotifications"'
     );
     if (!empty($adminModulesNotificationsTabId)) {
@@ -68,7 +72,7 @@ function ps_1750_update_module_tabs()
         );
     }
 
-    $adminModulesCatalogTabId = Db::getInstance()->getValue(
+    $adminModulesCatalogTabId = DbWrapper::getValue(
         'SELECT id_tab FROM ' . _DB_PREFIX_ . 'tab WHERE class_name = "AdminModulesCatalog"'
     );
     if (!empty($adminModulesCatalogTabId)) {
@@ -85,7 +89,7 @@ function ps_1750_update_module_tabs()
         );
     }
 
-    $adminModulesManageTabId = Db::getInstance()->getValue(
+    $adminModulesManageTabId = DbWrapper::getValue(
         'SELECT id_tab FROM ' . _DB_PREFIX_ . 'tab WHERE class_name = "AdminModulesManage"'
     );
     if (!empty($adminModulesManageTabId)) {
@@ -102,7 +106,7 @@ function ps_1750_update_module_tabs()
         );
     }
 
-    $adminModulesAddonsSelectionsTabId = Db::getInstance()->getValue(
+    $adminModulesAddonsSelectionsTabId = DbWrapper::getValue(
         'SELECT id_tab FROM ' . _DB_PREFIX_ . 'tab WHERE class_name = "AdminAddonsCatalog"'
     );
     if (!empty($adminModulesAddonsSelectionsTabId)) {
@@ -121,11 +125,11 @@ function ps_1750_update_module_tabs()
 
     // STEP 3: Move the 2 module catalog controllers in the parent one
     // Get The ID of the parent
-    $adminParentModuleCatalogTabId = Db::getInstance()->getValue(
+    $adminParentModuleCatalogTabId = DbWrapper::getValue(
         'SELECT id_tab FROM ' . _DB_PREFIX_ . 'tab WHERE class_name = "AdminParentModulesCatalog"'
     );
     foreach (['AdminModulesCatalog', 'AdminAddonsCatalog'] as $key => $className) {
-        Db::getInstance()->execute(
+        DbWrapper::execute(
             'UPDATE `' . _DB_PREFIX_ . 'tab` SET `id_parent`= ' . (int) $adminParentModuleCatalogTabId . ', position = ' . $key . ' WHERE `class_name` = "' . $className . '"'
         );
     }

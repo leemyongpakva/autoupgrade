@@ -24,18 +24,22 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * Preset enabled new column in tabs to true for all (except for disabled modules)
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_1770_preset_tab_enabled()
 {
     //First set all tabs enabled
-    $result = Db::getInstance()->execute(
+    $result = DbWrapper::execute(
         'UPDATE `' . _DB_PREFIX_ . 'tab` SET `enabled` = 1'
     );
 
     //Then search for inactive modules and disable their tabs
-    $inactiveModules = Db::getInstance()->executeS(
+    $inactiveModules = DbWrapper::executeS(
         'SELECT `name` FROM `' . _DB_PREFIX_ . 'module` WHERE `active` != 1'
     );
     $moduleNames = [];
@@ -43,7 +47,7 @@ function ps_1770_preset_tab_enabled()
         $moduleNames[] = '"' . $inactiveModule['name'] . '"';
     }
     if (count($moduleNames) > 0) {
-        $result &= Db::getInstance()->execute(
+        $result &= DbWrapper::execute(
             'UPDATE `' . _DB_PREFIX_ . 'tab` SET `enabled` = 0 WHERE `module` IN (' . implode(',', $moduleNames) . ')'
         );
     }
