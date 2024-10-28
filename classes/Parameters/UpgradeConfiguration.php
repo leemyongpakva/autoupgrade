@@ -232,7 +232,7 @@ class UpgradeConfiguration extends ArrayCollection
 
     public static function isOverrideAllowed(): bool
     {
-        return (bool) Configuration::get(self::PS_DISABLE_OVERRIDES);
+        return !Configuration::get(self::PS_DISABLE_OVERRIDES);
     }
 
     public static function updateDisabledOverride(bool $value, ?int $shopId = null): void

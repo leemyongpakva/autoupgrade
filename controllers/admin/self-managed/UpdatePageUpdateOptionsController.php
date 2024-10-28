@@ -57,7 +57,9 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
     {
         $name = $this->request->request->get('name');
         if ($name === 'PS_DISABLE_OVERRIDES') {
-            UpgradeConfiguration::updatePSDisableOverrides((bool) $this->request->request->get('value'));
+            $this->upgradeContainer->initPrestaShopCore();
+            UpgradeConfiguration::updatePSDisableOverrides($this->request->request->getBoolean('value'));
+            return new JsonResponse(['success' => true]);
         }
 
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
@@ -66,7 +68,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         // TODO: Call the validator
 
         $upgradeConfiguration->merge([
-            $name => $this->request->request->get('value'),
+            $name => $this->request->request->getBoolean('value'),
         ]);
 
         $success = $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
