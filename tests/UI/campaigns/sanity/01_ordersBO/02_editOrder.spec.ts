@@ -6,6 +6,7 @@ import {
   boLoginPage,
   boOrdersPage,
   boOrdersViewBlockProductsPage,
+  boOrdersViewBasePage,
   // Import data
   dataOrderStatuses,
 } from '@prestashop-core/ui-testing';
@@ -78,7 +79,7 @@ test.describe('BO - Orders - Orders : Edit Order BO', async () => {
   test('should modify the order status and check the validation', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'editOrderStatus', baseContext);
 
-    const orderStatus = await boOrdersViewBlockProductsPage.modifyOrderStatus(page, dataOrderStatuses.paymentAccepted.name);
+    const orderStatus = await boOrdersViewBasePage.modifyOrderStatus(page, dataOrderStatuses.paymentAccepted.name);
     expect(orderStatus).toEqual(dataOrderStatuses.paymentAccepted.name);
   });
 
