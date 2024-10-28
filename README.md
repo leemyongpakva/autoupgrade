@@ -99,7 +99,7 @@ Here is an example of the different fields that can be found in it:
   "archive_num": "8.0.0", // Release number, specific to the archive channel
   "PS_AUTOUP_CUSTOM_MOD_DESACT": 1, // Disable non-native modules
   "PS_AUTOUP_CHANGE_DEFAULT_THEME": 0, // Keep the current theme
-  "PS_AUTOUP_KEEP_MAILS": 0, // Retain customized email templates
+  "PS_AUTOUP_REGEN_EMAIL": 1, // Retain customized email templates
   "PS_AUTOUP_BACKUP": 0, // Do not create a store backup
   "PS_AUTOUP_KEEP_IMAGES": 1, // Retain images
   "PS_DISABLE_OVERRIDES": 1 // Disable all overrides

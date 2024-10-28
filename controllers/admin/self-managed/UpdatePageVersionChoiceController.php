@@ -41,7 +41,7 @@ use PrestaShop\Module\AutoUpgrade\UpgradeSelfCheck;
 use PrestaShop\Module\AutoUpgrade\VersionUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class UpdatePageVersionChoiceController extends AbstractPageController
+class UpdatePageVersionChoiceController extends AbstractPageWithStepController
 {
     const CURRENT_STEP = UpdateSteps::STEP_VERSION_CHOICE;
     const FORM_NAME = 'version_choice';

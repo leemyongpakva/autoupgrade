@@ -41,7 +41,7 @@ class UpgradeConfiguration extends ArrayCollection
 {
     const PS_AUTOUP_CUSTOM_MOD_DESACT = 'PS_AUTOUP_CUSTOM_MOD_DESACT';
     const PS_AUTOUP_CHANGE_DEFAULT_THEME = 'PS_AUTOUP_CHANGE_DEFAULT_THEME';
-    const PS_AUTOUP_KEEP_MAILS = 'PS_AUTOUP_KEEP_MAILS';
+    const PS_AUTOUP_REGEN_EMAIL = 'PS_AUTOUP_REGEN_EMAIL';
     const PS_AUTOUP_BACKUP = 'PS_AUTOUP_BACKUP';
     const PS_AUTOUP_KEEP_IMAGES = 'PS_AUTOUP_KEEP_IMAGES';
     const PS_DISABLE_OVERRIDES = 'PS_DISABLE_OVERRIDES';
@@ -56,7 +56,7 @@ class UpgradeConfiguration extends ArrayCollection
     const UPGRADE_CONST_KEYS = [
         self::PS_AUTOUP_CUSTOM_MOD_DESACT,
         self::PS_AUTOUP_CHANGE_DEFAULT_THEME,
-        self::PS_AUTOUP_KEEP_MAILS,
+        self::PS_AUTOUP_REGEN_EMAIL,
         self::PS_AUTOUP_BACKUP,
         self::PS_AUTOUP_KEEP_IMAGES,
         self::PS_DISABLE_OVERRIDES,
@@ -69,7 +69,7 @@ class UpgradeConfiguration extends ArrayCollection
     const PS_CONST_DEFAULT_VALUE = [
         self::PS_AUTOUP_CUSTOM_MOD_DESACT => true,
         self::PS_AUTOUP_CHANGE_DEFAULT_THEME => false,
-        self::PS_AUTOUP_KEEP_MAILS => false,
+        self::PS_AUTOUP_REGEN_EMAIL => true,
         self::PS_AUTOUP_BACKUP => true,
         self::PS_AUTOUP_KEEP_IMAGES => true,
     ];
@@ -201,11 +201,11 @@ class UpgradeConfiguration extends ArrayCollection
     }
 
     /**
-     * @return bool true if we should keep the merchant emails untouched
+     * @return bool true if we should regenerate the merchant emails
      */
-    public function shouldKeepMails(): bool
+    public function shouldRegenerateMailTemplates(): bool
     {
-        return $this->computeBooleanConfiguration(self::PS_AUTOUP_KEEP_MAILS);
+        return $this->computeBooleanConfiguration(self::PS_AUTOUP_REGEN_EMAIL);
     }
 
     /**

@@ -7,7 +7,14 @@
 {% endblock %}
 
 {% block content %}
-  <div class="update-options-page__field-list">
+  <form 
+    class="update-options-page__field-list"
+    action=""
+    data-route-to-save="{{ form_route_to_save }}"
+    data-route-to-submit="{{ form_route_to_submit }}"
+    id="update-options-page-form"
+    name="update-options-page-form"
+  >
     {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
       id: "PS_AUTOUP_CUSTOM_MOD_DESACT",
       name: "PS_AUTOUP_CUSTOM_MOD_DESACT",
@@ -34,11 +41,14 @@
         "you to avoid conflicts during and after updates.",
       value: disable_all_overrides
     } %}
-  </div>
+  </form>
 {% endblock %}
 
 {% block buttons_inner %}
-  <button class="btn btn-lg btn-primary" type="button">
+  <button
+    class="btn btn-lg btn-primary" type="submit"
+    form="update-options-page-form"
+  >
     {{ 'Next'|trans({}) }}
     <i class="material-icons">arrow_forward</i>
   </button>

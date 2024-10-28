@@ -43,7 +43,7 @@ class AnalyticsTest extends TestCase
         $upgradeConfiguration = (new UpgradeConfiguration([
             UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => 0,
             UpgradeConfiguration::PS_AUTOUP_CHANGE_DEFAULT_THEME => 1,
-            UpgradeConfiguration::PS_AUTOUP_KEEP_MAILS => 0,
+            UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL => 1,
             UpgradeConfiguration::PS_AUTOUP_BACKUP => 1,
             UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => 0,
             UpgradeConfiguration::CHANNEL => 'major',

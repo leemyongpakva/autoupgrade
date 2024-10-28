@@ -27,8 +27,12 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
+use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
 {
@@ -49,6 +53,31 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         return Routes::UPDATE_PAGE_UPDATE_OPTIONS;
     }
 
+    public function saveOption(): JsonResponse
+    {
+        $name = $this->request->request->get('name');
+        if ($name === 'PS_DISABLE_OVERRIDES') {
+            UpgradeConfiguration::updatePSDisableOverrides((bool) $this->request->request->get('value'));
+        }
+
+        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
+        $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
+
+        // TODO: Call the validator
+
+        $upgradeConfiguration->merge([
+            $name => $this->request->request->get('value'),
+        ]);
+
+        $success = $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+        return new JsonResponse(['success' => $success]);
+    }
+
+    public function submit(): JsonResponse
+    {
+        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_PAGE_BACKUP);
+    }
+
     /**
      * @return array
      *
@@ -56,15 +85,19 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
+        $this->upgradeContainer->initPrestaShopCore();
+        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
 
         return array_merge(
             $updateSteps->getStepParams(self::CURRENT_STEP),
             [
-                'default_deactive_non_native_modules' => true,
-                'default_regenerate_email_templates' => true,
-                'switch_the_theme' => '1',
-                'disable_all_overrides' => false,
+                'form_route_to_save' => Routes::UPDATE_STEP_UPDATE_OPTIONS_SAVE_OPTION,
+                'form_route_to_submit' => Routes::UPDATE_STEP_UPDATE_OPTIONS_SUBMIT_FORM,
+
+                'default_deactive_non_native_modules' => $upgradeConfiguration->shouldDeactivateCustomModules(),
+                'default_regenerate_email_templates' => $upgradeConfiguration->shouldRegenerateMailTemplates(),
+                'disable_all_overrides' => !$upgradeConfiguration->isOverrideAllowed(),
             ]
         );
     }

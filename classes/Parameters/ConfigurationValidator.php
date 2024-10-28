@@ -64,7 +64,7 @@ class ConfigurationValidator
                     $error = $this->validateArchiveXml($value, $isLocal);
                     break;
                 case UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT:
-                case UpgradeConfiguration::PS_AUTOUP_KEEP_MAILS:
+                case UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL:
                 case UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES:
                 case UpgradeConfiguration::PS_DISABLE_OVERRIDES:
                     $error = $this->validateBool($value, $key);

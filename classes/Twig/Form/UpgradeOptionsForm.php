@@ -79,13 +79,13 @@ class UpgradeOptionsForm
                 'desc' => $translator->trans('This will change your theme: your shop will then use the default theme of the version of PrestaShop you are upgrading to.'),
             ],
 
-            UpgradeConfiguration::PS_AUTOUP_KEEP_MAILS => [
-                'title' => $translator->trans('Keep the customized email templates'),
+            UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL => [
+                'title' => $translator->trans('Regenerate the customized email templates'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
                 'type' => 'bool',
                 'desc' => $translator->trans('This will not upgrade the default PrestaShop e-mails.') . '<br />'
-                    . $translator->trans('If you customized the default PrestaShop e-mail templates, enabling this option will keep your modifications.'),
+                    . $translator->trans('If you customized the default PrestaShop e-mail templates, switching off this option will keep your modifications.'),
             ],
         ];
     }

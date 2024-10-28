@@ -238,13 +238,13 @@ class AdminSelfUpgradeController extends ModuleAdminController
                 'type' => 'bool',
                 'desc' => $this->trans('This will change your theme: your shop will then use the default theme of the version of PrestaShop you are upgrading to.'),
             ],
-            UpgradeConfiguration::PS_AUTOUP_KEEP_MAILS => [
-                'title' => $this->trans('Keep the customized email templates'),
+            UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL => [
+                'title' => $this->trans('Regenerate the customized email templates'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
                 'type' => 'bool',
                 'desc' => $this->trans('This will not upgrade the default PrestaShop e-mails.') . '<br />'
-                    . $this->trans('If you customized the default PrestaShop e-mail templates, enabling this option will keep your modifications.'),
+                    . $this->trans('If you customized the default PrestaShop e-mail templates, switching off this option will keep your modifications.'),
             ],
         ];
     }
