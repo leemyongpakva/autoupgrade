@@ -13,6 +13,9 @@ import {
 import {
   test, expect, Page, BrowserContext,
 } from '@playwright/test';
+import semver from 'semver';
+
+const psVersion = utilsTest.getPSVersion();
 
 const baseContext: string = 'sanity_ordersBO_filterOrders';
 
@@ -74,26 +77,41 @@ test.describe('BO - Orders - Orders : Filter the Orders table by ID, REFERENCE, 
     },
     {
       args: {
-        identifier: 'filterReference', filterType: 'input', filterBy: 'reference', filterValue: dataOrders.order_2.reference,
+        identifier: 'filterReference',
+        filterType: 'input',
+        filterBy: 'reference',
+        filterValue: dataOrders.order_2.reference,
       },
     },
     {
       args: {
-        identifier: 'filterOsName', filterType: 'select', filterBy: 'osname', filterValue: dataOrderStatuses.paymentError.name,
+        identifier: 'filterOsName',
+        filterType: 'select',
+        filterBy: 'osname',
+        filterValue: dataOrderStatuses.paymentError.name,
       },
     },
   ];
 
-  tests.forEach((tst) => {
+  tests.forEach((tst,index:number) => {
     test(`should filter the Orders table by '${tst.args.filterBy}' and check the result`, async () => {
       await utilsTest.addContextItem(test.info(), 'testIdentifier', tst.args.identifier, baseContext);
 
-      await boOrdersPage.filterOrders(
-        page,
-        tst.args.filterType,
-        tst.args.filterBy,
-        tst.args.filterValue.toString(),
-      );
+      if (semver.lte(psVersion, '7.6.9') && index === 2) {
+        await boOrdersPage.filterOrders(
+          page,
+          tst.args.filterType,
+          'os!id_order_state',
+          tst.args.filterValue.toString(),
+        );
+      } else {
+        await boOrdersPage.filterOrders(
+          page,
+          tst.args.filterType,
+          tst.args.filterBy,
+          tst.args.filterValue.toString(),
+        );
+      }
 
       const textColumn = await boOrdersPage.getTextColumn(page, tst.args.filterBy, 1);
       await expect(textColumn).toEqual(tst.args.filterValue.toString());
