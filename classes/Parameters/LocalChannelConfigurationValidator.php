@@ -57,6 +57,9 @@ class LocalChannelConfigurationValidator
             ?? [];
     }
 
+    /**
+     * @return array<string, string>|null
+     */
     private function validateZipFile(string $file): ?array
     {
         $fullFilePath = $this->getFileFullPath($file);
@@ -74,6 +77,9 @@ class LocalChannelConfigurationValidator
         return null;
     }
 
+    /**
+     * @return array<string, string>|null
+     */
     private function validateXmlFile(string $file): ?array
     {
         $fullXmlPath = $this->getFileFullPath($file);
@@ -91,6 +97,9 @@ class LocalChannelConfigurationValidator
         return null;
     }
 
+    /**
+     * @return array<string, string>|null
+     */
     private function validateVersionsMatch(): ?array
     {
         if ($this->xmlVersion !== null && $this->xmlVersion !== $this->targetVersion) {
