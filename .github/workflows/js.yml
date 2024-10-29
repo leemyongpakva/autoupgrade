@@ -40,9 +40,8 @@ jobs:
           npm install --prefix ./_dev
 
       - name: Launch typescript linter
-        run:
-          npm run lint --prefix ./_dev
-
-      - name: Launch scss linter
-        run:
-          npm run lint-scss --prefix ./_dev
+        run: |
+          npm run lint --prefix ./_dev || {
+            echo "::error::ESLint check failed. Run 'npm run lint:fix' to autofix issues."
+            exit 1
+          }

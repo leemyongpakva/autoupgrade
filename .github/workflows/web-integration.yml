@@ -1,0 +1,38 @@
+name: Web Integration Check
+
+on: [push, pull_request]
+
+jobs:
+  code_quality:
+    name: Web Integration Check
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository to access the code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Install project dependencies
+      - name: Install dependencies
+        run: npm install --prefix ./_dev
+
+      # Run Prettier check command
+      - name: Run Prettier check
+        run: |
+          npm run prettier --prefix ./_dev || {
+            echo "::error::Prettier check failed. Run 'npm run prettier:fix' to format your code."
+            exit 1
+          }
+
+      # Run Stylelint check command
+      - name: Run Stylelint check
+        run: |
+          npm run stylelint --prefix ./_dev || {
+            echo "::error::Stylelint check failed. Run 'npm run stylelint:fix' to autofix issues."
+            exit 1
+          }
