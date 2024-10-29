@@ -23,4 +23,13 @@
       {# Default content can go here, or it can be left empty for children to override #}
     {% endblock %}
   </div>
+
+  {% if field.error_message is defined and field.error_message is not empty %}
+    <div class="render-field__error">
+      <div class="error-message">
+        <i class="material-icons">error</i>
+        {{ field.error_message }}
+      </div>
+    </div>
+  {% endif %}
 </div>

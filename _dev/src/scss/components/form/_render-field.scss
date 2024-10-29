@@ -35,6 +35,11 @@ $e: ".render-field";
       gap: 0.25rem;
     }
 
+    &__error {
+      flex-shrink: 0;
+      flex-basis: 100%;
+    }
+
     &--no-desc {
       align-items: center;
     }
