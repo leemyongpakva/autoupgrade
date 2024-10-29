@@ -36,8 +36,8 @@ $e: ".render-field";
     }
 
     &__error {
-      flex-shrink: 0;
       flex-basis: 100%;
+      flex-shrink: 0;
     }
 
     &--no-desc {
