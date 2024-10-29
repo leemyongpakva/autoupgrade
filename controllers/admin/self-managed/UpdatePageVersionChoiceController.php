@@ -40,14 +40,9 @@ use PrestaShop\Module\AutoUpgrade\Upgrader;
 use PrestaShop\Module\AutoUpgrade\UpgradeSelfCheck;
 use PrestaShop\Module\AutoUpgrade\VersionUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 class UpdatePageVersionChoiceController extends AbstractPageController
 {
-    const CURRENT_PAGE = 'update';
-    const CURRENT_ROUTE = Routes::UPDATE_PAGE_VERSION_CHOICE;
     const CURRENT_STEP = UpdateSteps::STEP_VERSION_CHOICE;
     const FORM_NAME = 'version_choice';
     const FORM_FIELDS = [
@@ -60,19 +55,19 @@ class UpdatePageVersionChoiceController extends AbstractPageController
         'local_value' => Upgrader::CHANNEL_LOCAL,
     ];
 
-    /**
-     * @return string
-     *
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function step(): string
+    protected function getPageTemplate(): string
     {
-        return $this->getTwig()->render(
-            '@ModuleAutoUpgrade/steps/version-choice.html.twig',
-            $this->getParams()
-        );
+        return 'update';
+    }
+
+    protected function getStepTemplate(): string
+    {
+        return self::CURRENT_STEP;
+    }
+
+    protected function displayRouteInUrl(): ?string
+    {
+        return Routes::UPDATE_PAGE_VERSION_CHOICE;
     }
 
     /**
@@ -232,8 +227,6 @@ class UpdatePageVersionChoiceController extends AbstractPageController
     public function submit(): JsonResponse
     {
         /* we dont check again because the button is only accessible if check are ok */
-        return new JsonResponse([
-            'next_route' => Routes::UPDATE_STEP_UPDATE_OPTIONS,
-        ]);
+        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_UPDATE_OPTIONS);
     }
 }

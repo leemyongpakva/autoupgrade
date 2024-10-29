@@ -33,8 +33,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class HomePageController extends AbstractPageController
 {
-    const CURRENT_PAGE = 'home';
-    const CURRENT_ROUTE = Routes::HOME_PAGE;
     const FORM_FIELDS = [
         'route_choice' => 'route_choice',
     ];
@@ -42,6 +40,16 @@ class HomePageController extends AbstractPageController
         'update_value' => 'update',
         'restore_value' => 'restore',
     ];
+
+    protected function getPageTemplate(): string
+    {
+        return 'home';
+    }
+
+    protected function displayRouteInUrl(): ?string
+    {
+        return Routes::HOME_PAGE;
+    }
 
     public function submit(): JsonResponse
     {
