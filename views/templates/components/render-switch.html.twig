@@ -6,12 +6,12 @@
       <input
         class="ua-switch__input"
         type="checkbox"
-        name="{{ BoolName }}"
-        id="{{ BoolId }}"
-        {{ val ? 'checked' : '' }}
+        name="{{ name }}"
+        id="{{ id }}"
+        {{ value ? 'checked' : '' }}
       />
 
-      <label for="{{ BoolId }}" class="ua-switch__label">
+      <label for="{{ id }}" class="ua-switch__label">
         <span class="ua-switch__slider"></span>
         <span class="ua-switch__yes">
           {{ 'Yes'|trans }}

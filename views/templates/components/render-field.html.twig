@@ -1,19 +1,17 @@
-<div class="render-field render-field--{{ field.type }} {% if not field.desc %}render-field--no-desc{% endif %}"
-  {% if field.id %}
-    id="{{ field.id }}"
-  {% endif %}
->
+<div class="render-field {% if description is not defined or not description %}render-field--no-desc{% endif %}">
   <div class="render-field__infos">
-    <p class="render-field__title">
-      {{ field.title }}
-      {% if field.required %}
-        <sup class="text-danger">*</sup>
-      {% endif %}
-    </p>
+    {% if title is defined and title %}
+      <p class="render-field__title">
+        {{ title }}
+        {% if required is defined and required %}
+          <sup class="text-danger">*</sup>
+        {% endif %}
+      </p>
+    {% endif %}
 
-    {% if field.desc %}
+    {% if description is defined and description %}
       <p class="render-field__desc text-muted">
-        {{ field.desc }}
+        {{ description }}
       </p>
     {% endif %}
   </div>
@@ -23,4 +21,13 @@
       {# Default content can go here, or it can be left empty for children to override #}
     {% endblock %}
   </div>
+
+  {% if error_message is defined and error_message is not empty %}
+    <div class="render-field__error">
+      <div class="error-message">
+        <i class="material-icons">error</i>
+        {{ error_message }}
+      </div>
+    </div>
+  {% endif %}
 </div>
