@@ -16,25 +16,17 @@
 
     <div class="backup-page__section">
       {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
-        field: {
-          id: "backup_files_db",
-          title: "Back up files and database",
-          description: "",
-          switch_name: "PS_AUTOUP_BACKUP_FILES_DB",
-          switch_id: "PS_AUTOUP_BACKUP_FILES_DB",
-          value: default_backup_files_and_database,
-        },
+        id: "PS_AUTOUP_BACKUP_FILES_DB",
+        name: "PS_AUTOUP_BACKUP_FILES_DB",
+        title: "Back up files and database",
+        value: default_backup_files_and_database
       } %}
 
       {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
-        field: {
-          id: "backup_files_db",
-          title: "Include images",
-          description: "",
-          switch_name: "PS_AUTOUP_BACKUP_WITH_IMAGES",
-          switch_id: "PS_AUTOUP_BACKUP_WITH_IMAGES",
-          value: default_include_images,
-        },
+        id: "PS_AUTOUP_BACKUP_WITH_IMAGES",
+        name: "PS_AUTOUP_BACKUP_WITH_IMAGES",
+        title: "Include images",
+        value: default_include_images
       } %}
     </div>
   </div>

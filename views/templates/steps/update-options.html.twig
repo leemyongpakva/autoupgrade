@@ -9,39 +9,30 @@
 {% block content %}
   <div class="update-options-page__field-list">
     {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
-      field: {
-        id: "deactivate_modules",
-        title: "Deactivate non-native modules",
-        description: "All the modules installed after creating your store are considered non-native modules. They might be " ~
-          "incompatible with the new version of PrestaShop. We recommend deactivating them during the update.",
-        switch_name: "PS_AUTOUP_CUSTOM_MOD_DESACT",
-        switch_id: "PS_AUTOUP_CUSTOM_MOD_DESACT",
-        value: default_deactive_non_native_modules
-      },
+      id: "PS_AUTOUP_CUSTOM_MOD_DESACT",
+      name: "PS_AUTOUP_CUSTOM_MOD_DESACT",
+      title: "Deactivate non-native modules",
+      description: "All the modules installed after creating your store are considered non-native modules. They might be " ~
+        "incompatible with the new version of PrestaShop. We recommend deactivating them during the update.",
+      value: default_deactive_non_native_modules
     } %}
 
     {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
-      field: {
-        id: "regen_email",
-        title: "Regenerate email templates",
-        description: "If you've customized email templates, your changes will be lost if you activate this option.",
-        switch_name: "PS_AUTOUP_REGEN_EMAIL",
-        switch_id: "PS_AUTOUP_REGEN_EMAIL",
-        value: default_regenerate_email_templates
-      },
+      id: "PS_AUTOUP_REGEN_EMAIL",
+      name: "PS_AUTOUP_REGEN_EMAIL",
+      title: "Regenerate email templates",
+      description: "If you've customized email templates, your changes will be lost if you activate this option.",
+      value: default_regenerate_email_templates
     } %}
 
     {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
-      field: {
-        id: "disable_override",
-        title: "Disable all overrides",
-        description: "Overriding is a way to replace business behaviors (class files and controller files) to target only " ~
-          "one method or as many as you need. This option disables all classes & controllers overrides, allowing " ~
-          "you to avoid conflicts during and after updates.",
-        switch_name: "PS_AUTOUP_DISABLE_OVERRIDE",
-        switch_id: "PS_AUTOUP_DISABLE_OVERRIDE",
-        value: disable_all_overrides
-      },
+      id: "PS_AUTOUP_DISABLE_OVERRIDE",
+      name: "PS_AUTOUP_DISABLE_OVERRIDE",
+      title: "Disable all overrides",
+      description: "Overriding is a way to replace business behaviors (class files and controller files) to target only " ~
+        "one method or as many as you need. This option disables all classes & controllers overrides, allowing " ~
+        "you to avoid conflicts during and after updates.",
+      value: disable_all_overrides
     } %}
   </div>
 {% endblock %}
