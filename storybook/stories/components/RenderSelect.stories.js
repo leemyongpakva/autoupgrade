@@ -41,7 +41,7 @@ export const Select = {
         1: "Upgrade the default theme",
         2: "Do nothing",
       },
-      val: 1,
+      value: 1,
       key: "PS_AUTOUP_SWITCH_THEME",
     },
   },
