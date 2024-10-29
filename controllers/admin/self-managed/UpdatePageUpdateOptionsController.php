@@ -31,6 +31,7 @@ use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
+use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -55,24 +56,32 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
 
     public function saveOption(): JsonResponse
     {
-        $name = $this->request->request->get('name');
-        if ($name === 'PS_DISABLE_OVERRIDES') {
-            $this->upgradeContainer->initPrestaShopCore();
-            UpgradeConfiguration::updatePSDisableOverrides($this->request->request->getBoolean('value'));
-            return new JsonResponse(['success' => true]);
-        }
-
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
 
-        // TODO: Call the validator
+        $name = $this->request->request->get('name');
 
-        $upgradeConfiguration->merge([
+        $config = [
             $name => $this->request->request->getBoolean('value'),
-        ]);
+        ];
 
-        $success = $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
-        return new JsonResponse(['success' => $success]);
+        // TODO: Remove after rebase
+        $upgradeConfiguration->validate($config);
+        $error = null;
+        // TODO: Uncomment after rebase
+        // $error = $this->upgradeContainer->getConfigurationValidator()->validate($config);
+
+        if (empty($error)) {
+            if ($name === 'PS_DISABLE_OVERRIDES') {
+                $this->upgradeContainer->initPrestaShopCore();
+                UpgradeConfiguration::updatePSDisableOverrides($this->request->request->getBoolean('value'));
+            } else {
+                $upgradeConfiguration->merge($config);
+                $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+            }
+        }
+
+        return $this->getRefreshOfForm(array_merge($this->getParams(), ['error' => $error]));
     }
 
     public function submit(): JsonResponse
@@ -97,10 +106,33 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
                 'form_route_to_save' => Routes::UPDATE_STEP_UPDATE_OPTIONS_SAVE_OPTION,
                 'form_route_to_submit' => Routes::UPDATE_STEP_UPDATE_OPTIONS_SUBMIT_FORM,
 
-                'default_deactive_non_native_modules' => $upgradeConfiguration->shouldDeactivateCustomModules(),
-                'default_regenerate_email_templates' => $upgradeConfiguration->shouldRegenerateMailTemplates(),
-                'disable_all_overrides' => !$upgradeConfiguration->isOverrideAllowed(),
+                'form_fields' => [
+                    'deactive_non_native_modules' => [
+                        'field' => 'PS_AUTOUP_CUSTOM_MOD_DESACT',
+                        'value' => $upgradeConfiguration->shouldDeactivateCustomModules(),
+                    ],
+                    'regenerate_email_templates' => [
+                        'field' => 'PS_AUTOUP_REGEN_EMAIL',
+                        'value' => $upgradeConfiguration->shouldRegenerateMailTemplates(),
+                    ],
+                    'disable_all_overrides' => [
+                        'field' => 'PS_DISABLE_OVERRIDES',
+                        'value' => !$upgradeConfiguration->isOverrideAllowed(),
+                    ],
+                ],
             ]
+        );
+    }
+
+    private function getRefreshOfForm(array $params): JsonResponse
+    {
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::STEP_PARENT_ID,
+            $this->getTwig()->render(
+                '@ModuleAutoUpgrade/steps/' . $this->getStepTemplate() . '.html.twig',
+                $params
+            ),
+            $this->displayRouteInUrl()
         );
     }
 }

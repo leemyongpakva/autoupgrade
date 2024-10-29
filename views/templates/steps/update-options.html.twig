@@ -16,30 +16,33 @@
     name="update-options-page-form"
   >
     {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
-      id: "PS_AUTOUP_CUSTOM_MOD_DESACT",
-      name: "PS_AUTOUP_CUSTOM_MOD_DESACT",
+      id: form_fields.deactive_non_native_modules.field,
+      name: form_fields.deactive_non_native_modules.field,
       title: "Deactivate non-native modules",
       description: "All the modules installed after creating your store are considered non-native modules. They might be " ~
         "incompatible with the new version of PrestaShop. We recommend deactivating them during the update.",
-      value: default_deactive_non_native_modules
+      value: form_fields.deactive_non_native_modules.value,
+      error_message: error[form_fields.deactive_non_native_modules.field],
     } %}
 
     {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
-      id: "PS_AUTOUP_REGEN_EMAIL",
-      name: "PS_AUTOUP_REGEN_EMAIL",
+      id: form_fields.regenerate_email_templates.field,
+      name: form_fields.regenerate_email_templates.field,
       title: "Regenerate email templates",
       description: "If you've customized email templates, your changes will be lost if you activate this option.",
-      value: default_regenerate_email_templates
+      value: form_fields.regenerate_email_templates.value,
+      error_message: error[form_fields.regenerate_email_templates.field],
     } %}
 
     {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
-      id: "PS_AUTOUP_DISABLE_OVERRIDE",
-      name: "PS_AUTOUP_DISABLE_OVERRIDE",
+      id: form_fields.disable_all_overrides.field,
+      name: form_fields.disable_all_overrides.field,
       title: "Disable all overrides",
       description: "Overriding is a way to replace business behaviors (class files and controller files) to target only " ~
         "one method or as many as you need. This option disables all classes & controllers overrides, allowing " ~
         "you to avoid conflicts during and after updates.",
-      value: disable_all_overrides
+      value: form_fields.disable_all_overrides.value,
+      error_message: error[form_fields.disable_all_overrides.field],
     } %}
   </form>
 {% endblock %}

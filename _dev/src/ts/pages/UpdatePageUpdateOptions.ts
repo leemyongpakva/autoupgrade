@@ -41,7 +41,7 @@ export default class UpdatePageUpdateOptions extends UpdatePage {
 
   private initFormFields(form: HTMLFormElement): void {
     Array.from(form.elements).forEach((element) => {
-      if (element.nodeName !== "INPUT") {
+      if (element.nodeName !== 'INPUT') {
         return;
       }
 
@@ -52,17 +52,17 @@ export default class UpdatePageUpdateOptions extends UpdatePage {
   }
 
   private onInputChange = (ev: Event) => {
-    const optionInput = (ev.target as Element);
+    const optionInput = ev.target as HTMLInputElement;
 
     optionInput.setAttribute('disabled', 'true');
 
     const data = new FormData();
     data.append('name', optionInput.name);
-    data.append('value', optionInput.checked);
+    data.append('value', JSON.stringify(optionInput.checked));
     api.post(this.form.dataset.routeToSave!, data);
 
     optionInput.removeAttribute('disabled');
-  }
+  };
 
   private onFormSubmit = (event: Event) => {
     event.preventDefault();
