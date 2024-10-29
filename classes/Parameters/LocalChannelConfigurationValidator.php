@@ -5,7 +5,6 @@ namespace PrestaShop\Module\AutoUpgrade\Parameters;
 use Exception;
 use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
-use PrestaShop\Module\AutoUpgrade\ZipAction;
 
 class LocalChannelConfigurationValidator
 {

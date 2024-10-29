@@ -789,7 +789,7 @@ class UpgradeContainer
 
         return $this->localChannelConfigurationValidator = new LocalChannelConfigurationValidator(
             $this->getTranslator(),
-            $this->getPrestashopVersionService() ,
+            $this->getPrestashopVersionService(),
             $this->getProperty(self::DOWNLOAD_PATH)
         );
     }
