@@ -2085,7 +2085,7 @@ Comment: directory already exists</note>
       </trans-unit>
     </body>
   </file>
-  <file original="views/templates/components/render-bool.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
+  <file original="views/templates/components/render-switch.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
       <trans-unit id="93cba07454f06a4a960172bbd6e2a435">
         <source>Yes</source>
@@ -2183,7 +2183,7 @@ Comment: directory already exists</note>
       <trans-unit id="2284aa8fec405e1dd014326b51cde020">
         <source>Launch backup</source>
         <target>Launch backup</target>
-        <note>Line: 51</note>
+        <note>Line: 37</note>
       </trans-unit>
     </body>
   </file>
