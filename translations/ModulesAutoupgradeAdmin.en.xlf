@@ -982,50 +982,50 @@ Comment: directory already exists</note>
         <target>Apache mod_rewrite needs to be enabled.</target>
         <note>Line: 250</note>
       </trans-unit>
-      <trans-unit id="e469f21f7c9e2988397986b161345171">
-        <source>The following PHP extension%s need%s to be installed:</source>
-        <target>The following PHP extension%s need%s to be installed:</target>
-        <note>Line: 256</note>
+      <trans-unit id="fa35f5ac16c185a5c8a183cbd1d074f8">
+        <source>The following PHP extensions need to be installed:</source>
+        <target>The following PHP extensions need to be installed:</target>
+        <note>Line: 253</note>
       </trans-unit>
-      <trans-unit id="02f31136ff84e0c27a0a7d3328596fcd">
-        <source>The following PHP function%s need%s to be allowed:</source>
-        <target>The following PHP function%s need%s to be allowed:</target>
-        <note>Line: 264</note>
+      <trans-unit id="c83193705126f598dbb7d4db8404a73e">
+        <source>The following PHP functions need to be allowed:</source>
+        <target>The following PHP functions need to be allowed:</target>
+        <note>Line: 256</note>
       </trans-unit>
       <trans-unit id="a220e0ac5c6f7fa8692c131148ed050a">
         <source>PHP memory_limit needs to be greater than 256 MB.</source>
         <target>PHP memory_limit needs to be greater than 256 MB.</target>
-        <note>Line: 269</note>
+        <note>Line: 259</note>
       </trans-unit>
       <trans-unit id="24b3a661ea0947d7dfddb4fe68681907">
         <source>PHP file_uploads configuration needs to be enabled.</source>
         <target>PHP file_uploads configuration needs to be enabled.</target>
-        <note>Line: 272</note>
+        <note>Line: 262</note>
       </trans-unit>
       <trans-unit id="bff482e6212a866690c7a81fac9ea04b">
         <source><![CDATA[It's not possible to write in the following folders, please provide write access to the user running PHP with appropriate permission & ownership:]]></source>
         <target><![CDATA[It's not possible to write in the following folders, please provide write access to the user running PHP with appropriate permission & ownership:]]></target>
-        <note>Line: 281</note>
+        <note>Line: 271</note>
       </trans-unit>
       <trans-unit id="a99553cd5eff17f5895d093c44b5c430">
         <source>The version of PrestaShop does not match the one stored in database. Your database structure may not be up-to-date and/or the value of PS_VERSION_DB needs to be updated in the configuration table.</source>
         <target>The version of PrestaShop does not match the one stored in database. Your database structure may not be up-to-date and/or the value of PS_VERSION_DB needs to be updated in the configuration table.</target>
-        <note>Line: 286</note>
+        <note>Line: 276</note>
       </trans-unit>
       <trans-unit id="72562d8e237567846f4c37c1bff5f04b">
         <source>Your current version of the module is outdated.</source>
         <target>Your current version of the module is outdated.</target>
-        <note>Line: 290</note>
+        <note>Line: 280</note>
       </trans-unit>
       <trans-unit id="5163e27794d02cf99911da9f1bec323d">
         <source>Some core files have been altered, customization made on these files will be lost during the update:</source>
         <target>Some core files have been altered, customization made on these files will be lost during the update:</target>
-        <note>Line: 297</note>
+        <note>Line: 287</note>
       </trans-unit>
       <trans-unit id="5ae505096414401ddbb2affa6620a869">
         <source>Unknown requirement.</source>
         <target>Unknown requirement.</target>
-        <note>Line: 301</note>
+        <note>Line: 291</note>
       </trans-unit>
     </body>
   </file>
@@ -1477,17 +1477,17 @@ Comment: check DB access</note>
       <trans-unit id="001c32426a6cfb48ebb848b13141593c">
         <source>Major version</source>
         <target>Major version</target>
-        <note>Line: 99</note>
+        <note>Line: 94</note>
       </trans-unit>
       <trans-unit id="c5439de366a407641018f189da1ad4a7">
         <source>Minor version</source>
         <target>Minor version</target>
-        <note>Line: 102</note>
+        <note>Line: 97</note>
       </trans-unit>
       <trans-unit id="8a0dd44f366bc5604b8329a87be5f933">
         <source>Patch version</source>
         <target>Patch version</target>
-        <note>Line: 105</note>
+        <note>Line: 100</note>
       </trans-unit>
     </body>
   </file>
