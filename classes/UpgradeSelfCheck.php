@@ -250,20 +250,10 @@ class UpgradeSelfCheck
                 return $this->translator->trans('Apache mod_rewrite needs to be enabled.');
 
             case self::NOT_LOADED_PHP_EXTENSIONS_LIST_NOT_EMPTY:
-                $phpExtensionsCount = count($this->getNotLoadedPhpExtensions());
-
-                return $this->translator->trans(
-                    'The following PHP extension%s need%s to be installed:',
-                    [$phpExtensionsCount > 1 ? 's' : '', $phpExtensionsCount === 1 ? 's' : '']
-                );
+                return $this->translator->trans('The following PHP extensions need to be installed:');
 
             case self::NOT_EXIST_PHP_FUNCTIONS_LIST_NOT_EMPTY:
-                $phpFunctionsCount = count($this->getNotExistsPhpFunctions());
-
-                return $this->translator->trans(
-                    'The following PHP function%s need%s to be allowed:',
-                    [$phpFunctionsCount > 1 ? 's' : '', $phpFunctionsCount === 1 ? 's' : '']
-                );
+                return $this->translator->trans('The following PHP functions need to be allowed:');
 
             case self::MEMORY_LIMIT_INVALID:
                 return $this->translator->trans('PHP memory_limit needs to be greater than 256 MB.');
