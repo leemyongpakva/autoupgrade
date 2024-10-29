@@ -43,6 +43,7 @@ use PrestaShop\Module\AutoUpgrade\Repository\LocalArchiveRepository;
 use PrestaShop\Module\AutoUpgrade\Services\ComposerService;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
+use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
 use PrestaShop\Module\AutoUpgrade\Twig\AssetsEnvironment;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension3;
@@ -219,6 +220,11 @@ class UpgradeContainer
      * @var LocalChannelConfigurationValidator
      */
     private $localChannelConfigurationValidator;
+
+    /**
+     * @var PrestashopVersionService
+     */
+    private $prestashopVersionService;
 
     /**
      * AdminSelfUpgrade::$autoupgradePath
@@ -783,9 +789,21 @@ class UpgradeContainer
 
         return $this->localChannelConfigurationValidator = new LocalChannelConfigurationValidator(
             $this->getTranslator(),
-            $this->getZipAction(),
+            $this->getPrestashopVersionService() ,
             $this->getProperty(self::DOWNLOAD_PATH)
         );
+    }
+
+    /**
+     * @return PrestashopVersionService
+     */
+    public function getPrestashopVersionService(): PrestashopVersionService
+    {
+        if (null !== $this->prestashopVersionService) {
+            return $this->prestashopVersionService;
+        }
+
+        return $this->prestashopVersionService = new PrestashopVersionService($this->getZipAction());
     }
 
     /**
