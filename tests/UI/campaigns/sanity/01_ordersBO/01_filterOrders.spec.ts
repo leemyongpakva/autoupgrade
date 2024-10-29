@@ -93,7 +93,7 @@ test.describe('BO - Orders - Orders : Filter the Orders table by ID, REFERENCE, 
     },
   ];
 
-  tests.forEach((tst,index:number) => {
+  tests.forEach((tst, index: number) => {
     test(`should filter the Orders table by '${tst.args.filterBy}' and check the result`, async () => {
       await utilsTest.addContextItem(test.info(), 'testIdentifier', tst.args.identifier, baseContext);
 

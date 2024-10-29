@@ -127,7 +127,7 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
       .toFixed(2));
   });
 
-  test('should get the product number and check that is equal to 2', async () => {
+  test('should get the products number and check that is equal to 2', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkNumberOfProductsInCart', baseContext);
 
     totalATI = await foClassicCartPage.getATIPrice(page);
