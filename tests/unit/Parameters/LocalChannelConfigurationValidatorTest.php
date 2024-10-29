@@ -13,10 +13,6 @@ class LocalChannelConfigurationValidatorTest extends TestCase
 
     protected function setUp(): void
     {
-        if (PHP_VERSION_ID >= 80000) {
-            $this->markTestSkipped('An issue with this version of PHPUnit and PHP 8+ prevents this test to run.');
-        }
-
         $this->container = new UpgradeContainer('/html', '/html/admin');
 
         $downloadPath = __DIR__ . '/../../fixtures/localChannel/';
