@@ -448,22 +448,62 @@
       <trans-unit id="badf6aad60d4a95b698028bc55aa3347">
         <source>Cleaning file cache</source>
         <target>Cleaning file cache</target>
-        <note>Line: 85</note>
+        <note>Line: 118</note>
       </trans-unit>
       <trans-unit id="8c4204265814594491ae20c9899a0fff">
         <source>Running opcache_reset</source>
         <target>Running opcache_reset</target>
-        <note>Line: 87</note>
+        <note>Line: 120</note>
+      </trans-unit>
+      <trans-unit id="877f3f1346509ff0d53b27c14c49faaf">
+        <source>Update database in progress. %d queries left</source>
+        <target>Update database in progress. %d queries left</target>
+        <note>Line: 65</note>
       </trans-unit>
       <trans-unit id="eac34868b4fb511702e53d1405c45454">
         <source>Error during database upgrade. You may need to restore your database.</source>
         <target>Error during database upgrade. You may need to restore your database.</target>
-        <note>Line: 58</note>
+        <note>Line: 86</note>
       </trans-unit>
       <trans-unit id="08ee54c048e1589f4072a351035db2ad">
         <source>Database upgraded. Now upgrading your Addons modules...</source>
         <target>Database upgraded. Now upgrading your Addons modules...</target>
-        <note>Line: 65</note>
+        <note>Line: 93</note>
+      </trans-unit>
+      <trans-unit id="c5ada796f937732385b6594d7364b69a">
+        <source>Updating database data and structure</source>
+        <target>Updating database data and structure</target>
+        <note>Line: 135</note>
+      </trans-unit>
+      <trans-unit id="956ef5a4e2df09d2f7415c9f1284d17c">
+        <source>Checking version validity</source>
+        <target>Checking version validity</target>
+        <note>Line: 143</note>
+      </trans-unit>
+      <trans-unit id="de4026a3fc9813c32f3a247370c29f54">
+        <source>Disabling all non native modules</source>
+        <target>Disabling all non native modules</target>
+        <note>Line: 149</note>
+      </trans-unit>
+      <trans-unit id="ffb63e7ff1e05430b4a292ac8651f1e4">
+        <source>Keeping non native modules enabled</source>
+        <target>Keeping non native modules enabled</target>
+        <note>Line: 152</note>
+      </trans-unit>
+      <trans-unit id="f8498f0014f0b834b635ad879ae1b3fd">
+        <source>[ERROR] Version to install is too old.</source>
+        <target>[ERROR] Version to install is too old.</target>
+        <note>Line: 169</note>
+      </trans-unit>
+      <trans-unit id="62e3454ceb58a5cdd7e382f6ecc78fe4">
+        <source>Current version: %oldversion%. Version to install: %newversion%.</source>
+        <target>Current version: %oldversion%. Version to install: %newversion%.</target>
+        <note>Line: 169</note>
+      </trans-unit>
+      <trans-unit id="37ce0f29c7377c827e7247fe5645a782">
+        <source>You already have the %s version.</source>
+        <target>You already have the %s version.</target>
+        <note>Line: 171</note>
       </trans-unit>
     </body>
   </file>
@@ -1045,151 +1085,95 @@ Comment: directory already exists</note>
   </file>
   <file original="classes/UpgradeTools/CoreUpgrader/CoreUpgrader.php" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="d90307511d557233464da663999f3151">
-        <source>Initializing required environment constants</source>
-        <target>Initializing required environment constants</target>
-        <note>Line: 104</note>
-      </trans-unit>
-      <trans-unit id="956ef5a4e2df09d2f7415c9f1284d17c">
-        <source>Checking version validity</source>
-        <target>Checking version validity</target>
-        <note>Line: 107</note>
-      </trans-unit>
-      <trans-unit id="284a35fa27c84dae6a16f8b52d0715f6">
-        <source>Checking connection to database</source>
-        <target>Checking connection to database</target>
-        <note>Line: 112
-Comment: check DB access</note>
-      </trans-unit>
-      <trans-unit id="b3884f9e8ed49a8d7165787d3adec342">
-        <source>Invalid database configuration</source>
-        <target>Invalid database configuration</target>
-        <note>Line: 116</note>
-      </trans-unit>
-      <trans-unit id="de4026a3fc9813c32f3a247370c29f54">
-        <source>Disabling all non native modules</source>
-        <target>Disabling all non native modules</target>
-        <note>Line: 120</note>
-      </trans-unit>
-      <trans-unit id="ffb63e7ff1e05430b4a292ac8651f1e4">
-        <source>Keeping non native modules enabled</source>
-        <target>Keeping non native modules enabled</target>
-        <note>Line: 123</note>
-      </trans-unit>
-      <trans-unit id="c5ada796f937732385b6594d7364b69a">
-        <source>Updating database data and structure</source>
-        <target>Updating database data and structure</target>
-        <note>Line: 126</note>
-      </trans-unit>
       <trans-unit id="4e32fd9d99ee0c3370c870d4da3d31a9">
         <source>Running generic queries</source>
         <target>Running generic queries</target>
-        <note>Line: 133</note>
+        <note>Line: 123</note>
       </trans-unit>
       <trans-unit id="257f5523f283710c6859d8f425a0c657">
         <source>Database upgrade OK</source>
         <target>Database upgrade OK</target>
-        <note>Line: 136</note>
+        <note>Line: 126</note>
       </trans-unit>
       <trans-unit id="72c863d76f8a8e5b1d17f818894df989">
         <source>Upgrading languages</source>
         <target>Upgrading languages</target>
-        <note>Line: 138</note>
+        <note>Line: 128</note>
       </trans-unit>
       <trans-unit id="88bbbc84f51424b4b0c6da6aec2c2154">
         <source>Regenerating htaccess</source>
         <target>Regenerating htaccess</target>
-        <note>Line: 141</note>
+        <note>Line: 131</note>
       </trans-unit>
       <trans-unit id="128e1c61a1a4477ec05609569cc4d9d8">
         <source>Cleaning XML files</source>
         <target>Cleaning XML files</target>
-        <note>Line: 144</note>
+        <note>Line: 134</note>
       </trans-unit>
       <trans-unit id="ed176ad3db6e004d4c272928acf3d0ac">
         <source>Disabling overrides</source>
         <target>Disabling overrides</target>
-        <note>Line: 148</note>
+        <note>Line: 138</note>
       </trans-unit>
       <trans-unit id="12473a5949de1a1cd37806a14a56dbde">
         <source>Keeping overrides in place</source>
         <target>Keeping overrides in place</target>
-        <note>Line: 151</note>
+        <note>Line: 141</note>
       </trans-unit>
       <trans-unit id="9c7e0ba2c6ecb11af7f39843bbc18ff8">
         <source>Warning detected during upgrade.</source>
         <target>Warning detected during upgrade.</target>
-        <note>Line: 159</note>
+        <note>Line: 149</note>
       </trans-unit>
       <trans-unit id="c4615fc8cb7877b074cbe9813cd742b1">
         <source>Database upgrade completed</source>
         <target>Database upgrade completed</target>
-        <note>Line: 161</note>
-      </trans-unit>
-      <trans-unit id="bf3abb5f80807c7453c246193372e1ae">
-        <source>%s is not a valid version number.</source>
-        <target>%s is not a valid version number.</target>
-        <note>Line: 278</note>
-      </trans-unit>
-      <trans-unit id="f8498f0014f0b834b635ad879ae1b3fd">
-        <source>[ERROR] Version to install is too old.</source>
-        <target>[ERROR] Version to install is too old.</target>
-        <note>Line: 284</note>
-      </trans-unit>
-      <trans-unit id="62e3454ceb58a5cdd7e382f6ecc78fe4">
-        <source>Current version: %oldversion%. Version to install: %newversion%.</source>
-        <target>Current version: %oldversion%. Version to install: %newversion%.</target>
-        <note>Line: 284</note>
-      </trans-unit>
-      <trans-unit id="37ce0f29c7377c827e7247fe5645a782">
-        <source>You already have the %s version.</source>
-        <target>You already have the %s version.</target>
-        <note>Line: 286</note>
+        <note>Line: 151</note>
       </trans-unit>
       <trans-unit id="f25792b5b08a78dd01810297d219c10c">
         <source>Unable to find upgrade directory in the installation path.</source>
         <target>Unable to find upgrade directory in the installation path.</target>
-        <note>Line: 325</note>
+        <note>Line: 274</note>
       </trans-unit>
       <trans-unit id="aae22c1ae9a2b451abca76ae8c5c79e8">
         <source>Error while loading SQL upgrade file "%s".</source>
         <target>Error while loading SQL upgrade file "%s".</target>
-        <note>Line: 335</note>
+        <note>Line: 284</note>
       </trans-unit>
       <trans-unit id="8abd985d095a1282f6f01b98c121b41b">
         <source>Cannot find the SQL upgrade files. Please check that the %s folder is not empty.</source>
         <target>Cannot find the SQL upgrade files. Please check that the %s folder is not empty.</target>
-        <note>Line: 342</note>
+        <note>Line: 291</note>
       </trans-unit>
       <trans-unit id="7e6f1194307c585ca2e97f81c3db4bb3">
         <source>[DROP] SQL %s table has been dropped.</source>
         <target>[DROP] SQL %s table has been dropped.</target>
-        <note>Line: 528</note>
+        <note>Line: 496</note>
       </trans-unit>
       <trans-unit id="53983059bf39e1325bba11081ca40e97">
         <source>Keeping current theme</source>
         <target>Keeping current theme</target>
-        <note>Line: 789</note>
+        <note>Line: 756</note>
       </trans-unit>
       <trans-unit id="796b7c49e21f09173214f029c7f02f9d">
         <source>Switching to default theme.</source>
         <target>Switching to default theme.</target>
-        <note>Line: 794</note>
+        <note>Line: 761</note>
       </trans-unit>
       <trans-unit id="475d2ad61e3486ec4af224c5c701b668">
         <source>No RTL language detected, skipping RTL file update.</source>
         <target>No RTL language detected, skipping RTL file update.</target>
-        <note>Line: 811</note>
+        <note>Line: 778</note>
       </trans-unit>
       <trans-unit id="cfa3b2e9163ad9d582e76437d2a9af25">
         <source>Upgrade the RTL files of back-office themes.</source>
         <target>Upgrade the RTL files of back-office themes.</target>
-        <note>Line: 818</note>
+        <note>Line: 785</note>
       </trans-unit>
       <trans-unit id="8d9ed22a6dff372c22f0277700ca226c">
         <source>Upgrade the RTL files of front-office themes.</source>
         <target>Upgrade the RTL files of front-office themes.</target>
-        <note>Line: 839</note>
+        <note>Line: 806</note>
       </trans-unit>
     </body>
   </file>
@@ -1241,32 +1225,32 @@ Comment: check DB access</note>
       <trans-unit id="4d46d96c1ea641735ee0c26c6381c75e">
         <source>API keys not present in parameters, generating</source>
         <target>API keys not present in parameters, generating</target>
-        <note>Line: 64</note>
+        <note>Line: 44</note>
       </trans-unit>
       <trans-unit id="f32686b54f6af06671f1c3575df12c7c">
         <source>Keys generated using openssl_pkey_new, exporting private and public keys</source>
         <target>Keys generated using openssl_pkey_new, exporting private and public keys</target>
-        <note>Line: 70</note>
+        <note>Line: 50</note>
       </trans-unit>
       <trans-unit id="a971bd83f9fe8a03c10c29a065d3bd41">
         <source>Updating parameters file</source>
         <target>Updating parameters file</target>
-        <note>Line: 77</note>
+        <note>Line: 57</note>
       </trans-unit>
       <trans-unit id="f24283fb7f4ba875f0f8c0391587695e">
         <source>Unable to migrate parameters</source>
         <target>Unable to migrate parameters</target>
-        <note>Line: 79</note>
+        <note>Line: 59</note>
       </trans-unit>
       <trans-unit id="43987038411fdc693ba35bf02e6cf496">
         <source>Invalidating opcache for parameters file</source>
         <target>Invalidating opcache for parameters file</target>
-        <note>Line: 83</note>
+        <note>Line: 63</note>
       </trans-unit>
       <trans-unit id="d87028000710df8bad6886cfc6b4c98b">
         <source>Parameters file updated</source>
         <target>Parameters file updated</target>
-        <note>Line: 86</note>
+        <note>Line: 66</note>
       </trans-unit>
     </body>
   </file>
