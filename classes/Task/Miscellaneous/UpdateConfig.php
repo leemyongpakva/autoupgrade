@@ -31,7 +31,6 @@ use Exception;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
-use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
 use PrestaShop\Module\AutoUpgrade\Task\AbstractTask;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
@@ -82,11 +81,18 @@ class UpdateConfig extends AbstractTask
             $this->container->getLocalChannelConfigurationValidator()->validate($config);
         }
 
+        if (!empty($error)) {
+            $this->setErrorFlag();
+            $this->logger->info(reset($error));
+
+            return ExitCode::FAIL;
+        }
+
         if ($isLocal) {
             $file = $config['archive_zip'];
             $fullFilePath = $this->container->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $file;
             try {
-                $config['archive_version_num'] = (new PrestashopVersionService($this->container->getZipAction()))->extractPrestashopVersionFromZip($fullFilePath);
+                $config['archive_version_num'] = $this->container->getPrestashopVersionService()->extractPrestashopVersionFromZip($fullFilePath);
                 $this->logger->info($this->translator->trans('Upgrade process will use archive.'));
             } catch (Exception $exception) {
                 $this->setErrorFlag();
@@ -94,13 +100,6 @@ class UpdateConfig extends AbstractTask
 
                 return ExitCode::FAIL;
             }
-        }
-
-        if (!empty($error)) {
-            $this->setErrorFlag();
-            $this->logger->info(reset($error));
-
-            return ExitCode::FAIL;
         }
 
         if (!$this->writeConfig($config)) {

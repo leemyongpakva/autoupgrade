@@ -34,7 +34,6 @@ use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
-use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
@@ -218,7 +217,7 @@ class UpdatePageVersionChoiceController extends AbstractPageController
             if ($isLocal) {
                 $file = $requestConfig['archive_zip'];
                 $fullFilePath = $this->upgradeContainer->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $file;
-                $config['archive_version_num'] = (new PrestashopVersionService($this->upgradeContainer->getZipAction()))->extractPrestashopVersionFromZip($fullFilePath);
+                $requestConfig['archive_version_num'] = $this->upgradeContainer->getPrestashopVersionService()->extractPrestashopVersionFromZip($fullFilePath);
             }
 
             $config = $this->upgradeContainer->getUpgradeConfiguration();
