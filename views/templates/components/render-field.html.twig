@@ -1,4 +1,4 @@
-<div class="render-field render-field--{{ field.type }} {% if not field.desc %}render-field--no-desc{% endif %}"
+<div class="render-field {% if field.description is not defined or not field.description %}render-field--no-desc{% endif %}"
   {% if field.id %}
     id="{{ field.id }}"
   {% endif %}
@@ -6,14 +6,14 @@
   <div class="render-field__infos">
     <p class="render-field__title">
       {{ field.title }}
-      {% if field.required %}
+      {% if field.required is defined and field.required %}
         <sup class="text-danger">*</sup>
       {% endif %}
     </p>
 
-    {% if field.desc %}
+    {% if field.description is defined and field.description %}
       <p class="render-field__desc text-muted">
-        {{ field.desc }}
+        {{ field.description }}
       </p>
     {% endif %}
   </div>

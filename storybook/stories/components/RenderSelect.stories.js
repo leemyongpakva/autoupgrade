@@ -35,17 +35,14 @@ export const Select = {
     field: {
       id: "switch_theme",
       title: "Switch the theme",
-      desc: "Custom themes may cause compatibility issues. We recommend using a default theme during the update and change it afterwards.",
+      description: "Custom themes may cause compatibility issues. We recommend using a default theme during the update and change it afterwards.",
       choices: {
         0: "Keep the actual theme",
         1: "Upgrade the default theme",
         2: "Do nothing",
       },
-      type: "select",
-      required: true,
-      disabled: false,
+      val: 1,
+      key: "PS_AUTOUP_SWITCH_THEME",
     },
-    key: "PS_AUTOUP_SWITCH_THEME",
-    val: 1,
   },
 };

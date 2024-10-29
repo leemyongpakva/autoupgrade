@@ -2,9 +2,9 @@
 
 {% block action_content %}
   <div class="render-field__select">
-    <select name="{{ key }}">
+    <select name="{{ field.key }}">
       {% for cValue, cKey in field.choices %}
-        <option value="{{ cValue|default(0) }}" {{ cValue == val ? 'selected' : '' }}>
+        <option value="{{ cValue|default(0) }}" {{ cValue == field.val ? 'selected' : '' }}>
           {{ cKey }}
         </option>
       {% endfor %}

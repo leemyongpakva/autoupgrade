@@ -23,11 +23,11 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-import RenderBool from "../../../views/templates/components/render-bool.html.twig";
+import RenderSwitch from "../../../views/templates/components/render-switch.html.twig";
 
 export default {
   title: "Components/Render fields",
-  component: RenderBool,
+  component: RenderSwitch,
 };
 
 export const Switch = {
@@ -35,13 +35,10 @@ export const Switch = {
     field: {
       id: "deactivate_modules",
       title: "Deactivate non-native modules",
-      desc: "All the modules installed after creating your store are considered non-native modules. They might be incompatible with the new version of PrestaShop. We recommend deactivating them during the update.",
-      type: "bool",
-      required: true,
-      disabled: true,
+      description: "All the modules installed after creating your store are considered non-native modules. They might be incompatible with the new version of PrestaShop. We recommend deactivating them during the update.",
+      switch_name: "PS_AUTOUP_CUSTOM_MOD_DESACT",
+      switch_id: "PS_AUTOUP_CUSTOM_MOD_DESACT",
+      val: true,
     },
-    BoolName: "PS_AUTOUP_CUSTOM_MOD_DESACT",
-    BoolId: "PS_AUTOUP_CUSTOM_MOD_DESACT",
-    val: true,
   },
 };
