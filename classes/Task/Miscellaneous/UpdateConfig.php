@@ -83,7 +83,7 @@ class UpdateConfig extends AbstractTask
 
         if (!empty($error)) {
             $this->setErrorFlag();
-            $this->logger->info(reset($error));
+            $this->logger->error(reset($error));
 
             return ExitCode::FAIL;
         }
@@ -96,7 +96,7 @@ class UpdateConfig extends AbstractTask
                 $this->logger->info($this->translator->trans('Upgrade process will use archive.'));
             } catch (Exception $exception) {
                 $this->setErrorFlag();
-                $this->logger->info($this->translator->trans('We couldn\'t find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.'));
+                $this->logger->error($this->translator->trans('We couldn\'t find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.'));
 
                 return ExitCode::FAIL;
             }
@@ -104,7 +104,7 @@ class UpdateConfig extends AbstractTask
 
         if (!$this->writeConfig($config)) {
             $this->setErrorFlag();
-            $this->logger->info($this->translator->trans('Error on saving configuration'));
+            $this->logger->error($this->translator->trans('Error on saving configuration'));
 
             return ExitCode::FAIL;
         }
