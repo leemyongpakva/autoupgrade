@@ -39,12 +39,30 @@ export const UpdateOptions = {
       code: "update-options",
       title: "Update options",
     },
-    default_deactive_non_native_modules: true,
-    default_regenerate_email_templates: true,
-    switch_the_theme: 1,
-    disable_all_overrides: false,
+    form_fields: {
+      deactive_non_native_modules: {
+          field: 'PS_AUTOUP_CUSTOM_MOD_DESACT',
+          value: true,
+      },
+      regenerate_email_templates: {
+          field: 'PS_AUTOUP_REGEN_EMAIL',
+          value: true,
+      },
+      disable_all_overrides: {
+          field: 'PS_DISABLE_OVERRIDES',
+          value: false,
+      },
+    },
     step_parent_id: "ua_container",
     stepper_parent_id: "stepper_content",
+
+    form_route_to_save: "update-step-update-options-save-option",
+    form_route_to_submit: "update-step-update-options-submit-form",
+
+    error: {
+      'PS_AUTOUP_REGEN_EMAIL': 'Example of an error that occured when switching the value!',
+    },
+
     // Stepper
     ...Stepper.args,
   },
