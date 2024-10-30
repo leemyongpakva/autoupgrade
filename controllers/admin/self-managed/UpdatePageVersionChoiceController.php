@@ -224,6 +224,10 @@ class UpdatePageVersionChoiceController extends AbstractPageController
             $config->merge($requestConfig);
 
             (new UpgradeConfigurationStorage($this->upgradeContainer->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR))->save($config, UpgradeFileNames::CONFIG_FILENAME);
+        } else {
+            $error = [
+                reset($error)['target'] ?? 'global' => reset($error)['message'],
+            ];
         }
 
         $params = array_merge(

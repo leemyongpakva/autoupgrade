@@ -403,7 +403,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
 
         $error = $this->upgradeContainer->getConfigurationValidator()->validate($config);
         if (!empty($error)) {
-            throw new UnexpectedValueException(reset($error));
+            throw new UnexpectedValueException(reset($error)['message']);
         }
 
         $UpConfig = $this->upgradeContainer->getUpgradeConfiguration();

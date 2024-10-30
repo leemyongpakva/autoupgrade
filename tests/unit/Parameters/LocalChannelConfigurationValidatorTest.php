@@ -26,18 +26,24 @@ class LocalChannelConfigurationValidatorTest extends TestCase
 
     public function testValidateReturnsErrorIfZipFileDoesNotExist()
     {
-        $data = ['archive_zip' => 'non_existent.zip'];
+        $data = ['archive_zip' => 'non_existent.zip', 'archive_xml' => 'versioned_8.1.0.xml'];
         $result = $this->validator->validate($data);
 
-        $this->assertSame(['archive_zip' => 'File ' . $data['archive_zip'] . ' does not exist. Unable to select that channel.'], $result);
+        $this->assertSame([
+            'message' => 'File ' . $data['archive_zip'] . ' does not exist. Unable to select that channel.',
+            'target' => 'archive_zip',
+        ], $result[0]);
     }
 
     public function testValidateReturnsErrorIfNotVersionedZipFile()
     {
-        $data = ['archive_zip' => 'not_versioned_8.2.0.zip'];
+        $data = ['archive_zip' => 'not_versioned_8.2.0.zip', 'archive_xml' => 'versioned_8.1.0.xml'];
         $result = $this->validator->validate($data);
 
-        $this->assertSame(['archive_zip' => 'We couldn\'t find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.'], $result);
+        $this->assertSame([
+            'message' => 'We couldn\'t find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.',
+            'target' => 'archive_zip',
+        ], $result[0]);
     }
 
     public function testValidateReturnsErrorIfXmlFileDoesNotExist()
@@ -45,7 +51,10 @@ class LocalChannelConfigurationValidatorTest extends TestCase
         $data = ['archive_zip' => 'versioned_8.2.0.zip', 'archive_xml' => 'non_existent.xml'];
         $result = $this->validator->validate($data);
 
-        $this->assertSame(['archive_xml' => 'File ' . $data['archive_xml'] . ' does not exist. Unable to select that channel.'], $result);
+        $this->assertSame([
+            'message' => 'File ' . $data['archive_xml'] . ' does not exist. Unable to select that channel.',
+            'target' => 'archive_xml',
+        ], $result[0]);
     }
 
     public function testValidateReturnsErrorIfNotVersionedXmlFile()
@@ -53,7 +62,10 @@ class LocalChannelConfigurationValidatorTest extends TestCase
         $data = ['archive_zip' => 'versioned_8.2.0.zip', 'archive_xml' => 'not_versioned_8.2.0.xml'];
         $result = $this->validator->validate($data);
 
-        $this->assertSame(['archive_xml' => 'We couldn\'t find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.'], $result);
+        $this->assertSame([
+            'message' => 'We couldn\'t find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.',
+            'target' => 'archive_xml',
+        ], $result[0]);
     }
 
     public function testValidateReturnsErrorIfVersionsDoNotMatch()
@@ -61,7 +73,9 @@ class LocalChannelConfigurationValidatorTest extends TestCase
         $data = ['archive_zip' => 'versioned_8.2.0.zip', 'archive_xml' => 'versioned_8.1.0.xml'];
         $result = $this->validator->validate($data);
 
-        $this->assertSame(['global' => 'The PrestaShop version in your archive doesn’t match the one in XML file. Please fix this issue and try again.'], $result);
+        $this->assertSame([
+            'message' => 'The PrestaShop version in your archive doesn’t match the one in XML file. Please fix this issue and try again.',
+        ], $result[0]);
     }
 
     public function testValidatePassesWithValidFiles()

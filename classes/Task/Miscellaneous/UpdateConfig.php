@@ -83,7 +83,7 @@ class UpdateConfig extends AbstractTask
 
         if (!empty($error)) {
             $this->setErrorFlag();
-            $this->logger->error(reset($error));
+            $this->logger->error(reset($error)['message']);
 
             return ExitCode::FAIL;
         }

@@ -69,7 +69,7 @@ class AllUpdateTasks extends ChainedTasks
             $error = $this->container->getConfigurationValidator()->validate($config);
 
             if (!empty($error)) {
-                throw new UnexpectedValueException(reset($error));
+                throw new UnexpectedValueException(reset($error)['message']);
             }
 
             $this->container->getUpgradeConfiguration()->merge($config);

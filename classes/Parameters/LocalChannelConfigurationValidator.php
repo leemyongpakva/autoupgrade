@@ -43,7 +43,7 @@ class LocalChannelConfigurationValidator
     /**
      * @param array<string, mixed> $array
      *
-     * @return array<string, string>
+     * @return array<array<string, string>>
      */
     public function validate(array $array = []): array
     {
@@ -51,10 +51,26 @@ class LocalChannelConfigurationValidator
         $this->targetVersion = null;
         $this->xmlVersion = null;
 
-        return $this->validateZipFile($array['archive_zip'])
-            ?? $this->validateXmlFile($array['archive_xml'])
-            ?? $this->validateVersionsMatch()
-            ?? [];
+        $errors = [];
+
+        $zipErrors = $this->validateZipFile($array['archive_zip']);
+        if ($zipErrors) {
+            $errors[] = $zipErrors;
+        }
+
+        $xmlErrors = $this->validateXmlFile($array['archive_xml']);
+        if ($xmlErrors) {
+            $errors[] = $xmlErrors;
+        }
+
+        if (empty($errors)) {
+            $versionErrors = $this->validateVersionsMatch();
+            if ($versionErrors) {
+                $errors[] = $versionErrors;
+            }
+        }
+
+        return $errors;
     }
 
     /**
@@ -65,13 +81,19 @@ class LocalChannelConfigurationValidator
         $fullFilePath = $this->getFileFullPath($file);
 
         if (!file_exists($fullFilePath)) {
-            return ['archive_zip' => $this->translator->trans('File %s does not exist. Unable to select that channel.', [$file])];
+            return [
+                'message' => $this->translator->trans('File %s does not exist. Unable to select that channel.', [$file]),
+                'target' => 'archive_zip',
+            ];
         }
 
         try {
             $this->targetVersion = $this->versionService->extractPrestashopVersionFromZip($fullFilePath);
         } catch (Exception $exception) {
-            return ['archive_zip' => $this->translator->trans('We couldn\'t find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.')];
+            return [
+                'message' => $this->translator->trans('We couldn\'t find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.'),
+                'target' => 'archive_zip',
+            ];
         }
 
         return null;
@@ -85,13 +107,19 @@ class LocalChannelConfigurationValidator
         $fullXmlPath = $this->getFileFullPath($file);
 
         if (!file_exists($fullXmlPath)) {
-            return ['archive_xml' => $this->translator->trans('File %s does not exist. Unable to select that channel.', [$file])];
+            return [
+                'message' => $this->translator->trans('File %s does not exist. Unable to select that channel.', [$file]),
+                'target' => 'archive_xml',
+            ];
         }
 
         try {
             $this->xmlVersion = $this->versionService->extractPrestashopVersionFromXml($fullXmlPath);
         } catch (Exception $exception) {
-            return ['archive_xml' => $this->translator->trans('We couldn\'t find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.')];
+            return [
+                'message' => $this->translator->trans('We couldn\'t find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.'),
+                'target' => 'archive_xml',
+            ];
         }
 
         return null;
@@ -103,7 +131,9 @@ class LocalChannelConfigurationValidator
     private function validateVersionsMatch(): ?array
     {
         if ($this->xmlVersion !== null && $this->xmlVersion !== $this->targetVersion) {
-            return ['global' => $this->translator->trans('The PrestaShop version in your archive doesn’t match the one in XML file. Please fix this issue and try again.')];
+            return [
+                'message' => $this->translator->trans('The PrestaShop version in your archive doesn’t match the one in XML file. Please fix this issue and try again.'),
+            ];
         }
 
         return null;

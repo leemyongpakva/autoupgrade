@@ -60,7 +60,10 @@ class ConfigurationValidatorTest extends TestCase
         $channel = 'toto';
 
         $result = $this->validator->validate(['channel' => $channel]);
-        $this->assertEquals(['channel' => 'Unknown channel ' . $channel], $result);
+        $this->assertEquals([
+            'message' => 'Unknown channel ' . $channel,
+            'target' => 'channel',
+        ], $result[0]);
     }
 
     public function testValidateZipSuccess()
@@ -78,7 +81,10 @@ class ConfigurationValidatorTest extends TestCase
     public function testValidateZipFail()
     {
         $result = $this->validator->validate(['channel' => 'local', 'archive_zip' => '']);
-        $this->assertEquals(['archive_zip' => 'No zip archive provided'], $result);
+        $this->assertEquals([
+            'message' => 'No zip archive provided',
+            'target' => 'archive_zip',
+        ], $result[0]);
     }
 
     public function testValidateXmlSuccess()
@@ -96,7 +102,10 @@ class ConfigurationValidatorTest extends TestCase
     public function testValidateXmlFail()
     {
         $result = $this->validator->validate(['channel' => 'local', 'archive_xml' => '']);
-        $this->assertEquals(['archive_xml' => 'No xml archive provided'], $result);
+        $this->assertEquals([
+            'message' => 'No xml archive provided',
+            'target' => 'archive_xml',
+        ], $result[0]);
     }
 
     public function testValidateBoolSuccess()
@@ -112,9 +121,35 @@ class ConfigurationValidatorTest extends TestCase
     public function testValidateBoolFail()
     {
         $result = $this->validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => 'toto']);
-        $this->assertEquals(['PS_AUTOUP_CUSTOM_MOD_DESACT' => 'Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT'], $result);
+        $this->assertEquals([
+            'message' => 'Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT',
+            'target' => 'PS_AUTOUP_CUSTOM_MOD_DESACT',
+        ], $result[0]);
 
         $result = $this->validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => '']);
-        $this->assertEquals(['PS_AUTOUP_CUSTOM_MOD_DESACT' => 'Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT'], $result);
+        $this->assertEquals([
+            'message' => 'Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT',
+            'target' => 'PS_AUTOUP_CUSTOM_MOD_DESACT',
+        ], $result[0]);
+    }
+
+    public function testValidateMultipleInputFail()
+    {
+        $result = $this->validator->validate([
+            'channel' => 'local',
+            'archive_zip' => '',
+            'archive_xml' => '',
+        ]);
+
+        $this->assertEquals([
+            [
+                'message' => 'No zip archive provided',
+                'target' => 'archive_zip',
+            ],
+            [
+                'message' => 'No xml archive provided',
+                'target' => 'archive_xml',
+            ],
+        ], $result);
     }
 }

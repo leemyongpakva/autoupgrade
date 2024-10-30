@@ -45,10 +45,12 @@ class ConfigurationValidator
     /**
      * @param array<string, mixed> $array
      *
-     * @return array<string, string>
+     * @return array<array<string, string>>
      */
     public function validate(array $array = []): array
     {
+        $errors = [];
+
         $isLocal = isset($array['channel']) && $array['channel'] === Upgrader::CHANNEL_LOCAL;
 
         foreach ($array as $key => $value) {
@@ -71,11 +73,11 @@ class ConfigurationValidator
             }
 
             if (isset($error)) {
-                return [$key => $error];
+                $errors[] = ['message' => $error, 'target' => $key];
             }
         }
 
-        return [];
+        return $errors;
     }
 
     private function validateChannel(string $channel): ?string
