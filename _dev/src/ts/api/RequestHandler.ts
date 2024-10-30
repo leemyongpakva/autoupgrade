@@ -5,7 +5,7 @@ import Hydration from '../utils/Hydration';
 export class RequestHandler {
   private currentRequestAbortController: AbortController | null = null;
 
-  public post(route: string, data = new FormData(), fromPopState?: boolean) {
+  public async post(route: string, data = new FormData(), fromPopState?: boolean) {
     if (this.currentRequestAbortController) {
       this.currentRequestAbortController.abort();
     }
@@ -15,15 +15,18 @@ export class RequestHandler {
 
     data.append('dir', window.AutoUpgradeVariables.admin_dir);
 
-    baseApi
-      .post('', data, {
-        params: { route: route },
+    try {
+      const response = await baseApi.post('', data, {
+        params: { route },
         signal
-      })
-      .then((response) => {
-        const data = response.data as ApiResponse;
-        this.handleResponse(data, fromPopState);
       });
+
+      const responseData = response.data as ApiResponse;
+      this.handleResponse(responseData, fromPopState);
+    } catch (error) {
+      // TODO: catch errors
+      console.error(error);
+    }
   }
 
   private handleResponse(response: ApiResponse, fromPopState?: boolean) {
