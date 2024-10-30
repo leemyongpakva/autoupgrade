@@ -207,13 +207,13 @@ class UpdatePageVersionChoiceController extends AbstractPageController
 
         $this->upgradeContainer->initPrestaShopCore();
 
-        $error = $this->upgradeContainer->getConfigurationValidator()->validate($requestConfig);
+        $errors = $this->upgradeContainer->getConfigurationValidator()->validate($requestConfig);
 
-        if ($isLocal && empty($error)) {
-            $error = $this->upgradeContainer->getLocalChannelConfigurationValidator()->validate($requestConfig);
+        if ($isLocal && empty($errors)) {
+            $errors = $this->upgradeContainer->getLocalChannelConfigurationValidator()->validate($requestConfig);
         }
 
-        if (empty($error)) {
+        if (empty($errors)) {
             if ($isLocal) {
                 $file = $requestConfig['archive_zip'];
                 $fullFilePath = $this->upgradeContainer->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $file;
@@ -225,16 +225,23 @@ class UpdatePageVersionChoiceController extends AbstractPageController
 
             (new UpgradeConfigurationStorage($this->upgradeContainer->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR))->save($config, UpgradeFileNames::CONFIG_FILENAME);
         } else {
-            $error = [
-                reset($error)['target'] ?? 'global' => reset($error)['message'],
-            ];
+            $errors = array_column(
+                array_map(function ($error) {
+                    return [
+                        'key' => $error['target'] ?? 'global',
+                        'value' => $error['message'],
+                    ];
+                }, $errors),
+                'value',
+                'key'
+            );
         }
 
         $params = array_merge(
             $this->getParams(),
             [
                 'current_values' => $requestConfig,
-                'error' => $error,
+                'errors' => $errors,
             ]
         );
 
