@@ -1,38 +1,72 @@
 import api from '../api/RequestHandler';
 
 export default class RouteHandler {
+  /**
+   * @constructor
+   * @description Initializes the RouteHandler by setting the current route to 'home-page'
+   *              if no route is present. Sets up an event listener for the 'popstate' event
+   *              to handle route changes.
+   */
   constructor() {
     if (!this.getCurrentRoute()) {
       this.setNewRoute('home-page');
     }
-    window.addEventListener('popstate', () => this.handleRouteChange());
+    window.addEventListener('popstate', () => this.#handleRouteChange());
   }
 
-  private getCurrentUrl(): URL {
+  /**
+   * @private
+   * @returns {URL} The current URL object.
+   * @description Retrieves the current URL of the window.
+   */
+  #getCurrentUrl(): URL {
     return new URL(window.location.href);
   }
 
-  private getQueryParams(): URLSearchParams {
-    return this.getCurrentUrl().searchParams;
+  /**
+   * @private
+   * @returns {URLSearchParams} The URLSearchParams object containing the query parameters.
+   * @description Retrieves the query parameters from the current URL.
+   */
+  #getQueryParams(): URLSearchParams {
+    return this.#getCurrentUrl().searchParams;
   }
 
+  /**
+   * @public
+   * @returns {string | null} The current route name, or null if not found.
+   * @description Gets the current route from the query parameters.
+   */
   public getCurrentRoute(): string | null {
-    return this.getQueryParams().get('route');
+    return this.#getQueryParams().get('route');
   }
 
+  /**
+   * @public
+   * @param {string} newRoute - The new route name to set.
+   * @description Sets a new route by updating the query parameters and pushing the new URL
+   *              to the browser's history.
+   */
   public setNewRoute(newRoute: string): void {
-    const queryParams = this.getQueryParams();
+    const queryParams = this.#getQueryParams();
     queryParams.set('route', newRoute);
 
-    const newUrl = `${this.getCurrentUrl().pathname}?${queryParams.toString()}`;
+    const newUrl = `${this.#getCurrentUrl().pathname}?${queryParams.toString()}`;
 
     window.history.pushState(null, '', newUrl);
   }
 
-  private handleRouteChange() {
+  /**
+   * @private
+   * @async
+   * @returns {Promise<void>} A promise that resolves when the request is complete.
+   * @description Handles changes to the route by sending a POST request to the new route.
+   *              If the new route is not null, it makes a request using the api module.
+   */
+  async #handleRouteChange() {
     const newRoute = this.getCurrentRoute();
     if (newRoute !== null) {
-      api.post(newRoute, new FormData(), true);
+      await api.post(newRoute, new FormData(), true);
     }
   }
 }

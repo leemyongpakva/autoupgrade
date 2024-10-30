@@ -61,7 +61,8 @@ export default class ScriptHandler {
    * @public
    * @param {string} newRoute - The name of the route to load his associated script.
    * @returns void
-   * @description Updates the currently loaded route script by destroying the current page instance and loading a new one based on the provided route name.
+   * @description Updates the currently loaded route script by destroying the current
+   *              page instance and loading a new one based on the provided route name.
    */
   public updateRouteScript(newRoute: string) {
     this.#currentScript?.beforeDestroy();

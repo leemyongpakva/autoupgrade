@@ -9,6 +9,11 @@ export default class Stepper {
   private doneClass = `${this.baseClass}--done`;
   private normalClass = `${this.baseClass}--normal`;
 
+  /**
+   * @constructor
+   * @throws Will throw an error if the stepper or its steps are not found in the DOM.
+   * @description Initializes the Stepper by finding the parent element in the DOM and setting up the steps.
+   */
   constructor() {
     const stepper = document.getElementById(
       window.AutoUpgradeVariables.stepper_parent_id
@@ -39,6 +44,11 @@ export default class Stepper {
     });
   }
 
+  /**
+   * @public
+   * @param {string} currentStep - The code of the current step to be set.
+   * @description Sets the current step in the stepper and updates the classes for each step accordingly.
+   */
   public setCurrentStep = (currentStep: string) => {
     let isBeforeCurrentStep = true;
 
