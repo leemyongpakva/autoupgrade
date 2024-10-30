@@ -126,7 +126,7 @@ class UpdateModules extends AbstractTask
         if ($modules_left) {
             $this->stepDone = false;
             $this->next = TaskName::TASK_UPDATE_MODULES;
-            $this->logger->info($this->translator->trans('%s modules left to update.', [$modules_left]));
+            $this->logger->info($this->translator->trans('%s modules left to check.', [$modules_left]));
         } else {
             $this->stepDone = true;
             $this->status = 'ok';
