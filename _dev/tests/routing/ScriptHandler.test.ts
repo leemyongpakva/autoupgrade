@@ -52,15 +52,6 @@ describe('ScriptHandler', () => {
     expect(updateMount).toHaveBeenCalledTimes(1);
   });
 
-  it('should not load any script if the route does not match', () => {
-    (routeHandler.getCurrentRoute as jest.Mock).mockReturnValue('unknown-route');
-
-    scriptHandler = new ScriptHandler();
-
-    expect(HomePage).not.toHaveBeenCalled();
-    expect(UpdatePageVersionChoice).not.toHaveBeenCalled();
-  });
-
   it('should update the route script and destroy the previous one', () => {
     (routeHandler.getCurrentRoute as jest.Mock).mockReturnValue('home-page');
     scriptHandler = new ScriptHandler();
@@ -72,5 +63,37 @@ describe('ScriptHandler', () => {
     expect(homeDestroy).toHaveBeenCalledTimes(1);
     expect(UpdatePageVersionChoice).toHaveBeenCalledTimes(1);
     expect(updateMount).toHaveBeenCalledTimes(1);
+  });
+
+  it('should catch en log warning if no matching class is found for the route', () => {
+    const consoleWarningSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const route = 'unknown-route';
+    (routeHandler.getCurrentRoute as jest.Mock).mockReturnValue(route);
+
+    scriptHandler = new ScriptHandler();
+
+    expect(consoleWarningSpy).toHaveBeenCalledWith(
+      `No matching page Class found for route: ${route}`
+    );
+  });
+
+  it('should catch and log errors if page instantiation or mount fails', () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation();
+    const errorMessage = 'Test error';
+
+    updateMount.mockImplementation(() => {
+      throw new Error(errorMessage);
+    });
+
+    const route = 'update-page-version-choice';
+    (routeHandler.getCurrentRoute as jest.Mock).mockReturnValue('home-route');
+
+    scriptHandler = new ScriptHandler();
+    scriptHandler.updateRouteScript(route);
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      `Failed to load script for route ${route}:`,
+      expect.any(Error)
+    );
   });
 });

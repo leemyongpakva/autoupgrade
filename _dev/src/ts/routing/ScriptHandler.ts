@@ -9,17 +9,14 @@ import { RoutesMatching } from '../types/scriptHandlerTypes';
 import { routeHandler } from '../autoUpgrade';
 
 export default class ScriptHandler {
-  constructor() {
-    const currentRoute = routeHandler.getCurrentRoute();
+  #currentScript: PageAbstract | undefined;
 
-    if (currentRoute) {
-      this.loadScript(currentRoute);
-    }
-  }
-
-  private currentScript: PageAbstract | undefined;
-
-  private routesMatching: RoutesMatching = {
+  /**
+   * @private
+   * @type {RoutesMatching}
+   * @description Maps route names to their corresponding page classes.
+   */
+  readonly #routesMatching: RoutesMatching = {
     'home-page': HomePage,
     'update-page-version-choice': UpdatePageVersionChoice,
     'update-page-update-options': UpdatePageUpdateOptions,
@@ -28,16 +25,46 @@ export default class ScriptHandler {
     'update-page-post-update': UpdatePagePostUpdate
   };
 
-  private loadScript(routeName: string) {
-    if (this.routesMatching[routeName]) {
-      const pageClass = this.routesMatching[routeName];
-      this.currentScript = new pageClass();
-      this.currentScript.mount();
+  /**
+   * @constructor
+   * @description Initializes the `ScriptHandler` by loading the page script associated with the current route.
+   */
+  constructor() {
+    const currentRoute = routeHandler.getCurrentRoute();
+
+    if (currentRoute) {
+      this.#loadScript(currentRoute);
     }
   }
 
+  /**
+   * @private
+   * @param {string} routeName - The name of the route to load his associated script.
+   * @returns void
+   * @description Loads and mounts the page script associated with the specified route name.
+   */
+  #loadScript(routeName: string) {
+    const pageClass = this.#routesMatching[routeName];
+    if (pageClass) {
+      try {
+        this.#currentScript = new pageClass();
+        this.#currentScript.mount();
+      } catch (error) {
+        console.error(`Failed to load script for route ${routeName}:`, error);
+      }
+    } else {
+      console.warn(`No matching page Class found for route: ${routeName}`);
+    }
+  }
+
+  /**
+   * @public
+   * @param {string} newRoute - The name of the route to load his associated script.
+   * @returns void
+   * @description Updates the currently loaded route script by destroying the current page instance and loading a new one based on the provided route name.
+   */
   public updateRouteScript(newRoute: string) {
-    this.currentScript?.beforeDestroy();
-    this.loadScript(newRoute);
+    this.#currentScript?.beforeDestroy();
+    this.#loadScript(newRoute);
   }
 }
