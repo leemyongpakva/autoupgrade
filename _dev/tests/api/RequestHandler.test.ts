@@ -7,7 +7,6 @@ jest.mock('../../src/ts/api/baseApi', () => ({
 }));
 
 const mockHydrate = jest.fn();
-const mockAbort = jest.fn();
 
 jest.mock('../../src/ts/utils/Hydration', () => {
   return jest.fn().mockImplementation(() => ({
@@ -22,48 +21,40 @@ describe('RequestHandler', () => {
     requestHandler = new RequestHandler();
     (baseApi.post as jest.Mock).mockClear();
     mockHydrate.mockClear();
-    mockAbort.mockClear();
   });
 
-  it('should append admin_dir to FormData and call baseApi.post', () => {
+  it('should append admin_dir to FormData and call baseApi.post', async () => {
     const formData = new FormData();
     const route = 'some_route';
-
     (baseApi.post as jest.Mock).mockResolvedValue({ data: {} });
 
-    requestHandler.post(route, formData);
-
-    const expectedConfig = {
-      params: { route },
-      signal: expect.any(AbortSignal)
-    };
+    await requestHandler.post(route, formData);
 
     expect(formData.get('dir')).toBe(window.AutoUpgradeVariables.admin_dir);
-    expect(baseApi.post).toHaveBeenCalledWith('', formData, expectedConfig);
+    expect(baseApi.post).toHaveBeenCalledWith('', formData, {
+      params: { route },
+      signal: expect.any(AbortSignal)
+    });
   });
 
   it('should handle response with next_route and make two API calls', async () => {
     const response: ApiResponse = { next_route: 'next_route' };
-    (baseApi.post as jest.Mock).mockResolvedValue({ data: response });
+    (baseApi.post as jest.Mock).mockResolvedValueOnce({ data: response });
 
     const formData = new FormData();
     const route = 'some_route';
 
     await requestHandler.post(route, formData);
 
-    const expectedFirstCallConfig = {
+    expect(baseApi.post).toHaveBeenCalledTimes(2);
+    expect(baseApi.post).toHaveBeenNthCalledWith(1, '', formData, {
       params: { route },
       signal: expect.any(AbortSignal)
-    };
-
-    const expectedSecondCallConfig = {
+    });
+    expect(baseApi.post).toHaveBeenNthCalledWith(2, '', formData, {
       params: { route: 'next_route' },
       signal: expect.any(AbortSignal)
-    };
-
-    expect(baseApi.post).toHaveBeenCalledTimes(2);
-    expect(baseApi.post).toHaveBeenNthCalledWith(1, '', formData, expectedFirstCallConfig);
-    expect(baseApi.post).toHaveBeenNthCalledWith(2, '', formData, expectedSecondCallConfig);
+    });
   });
 
   it('should handle hydration response', async () => {
@@ -74,7 +65,7 @@ describe('RequestHandler', () => {
       new_route: 'home_page'
     };
 
-    (baseApi.post as jest.Mock).mockResolvedValue({ data: response });
+    (baseApi.post as jest.Mock).mockResolvedValueOnce({ data: response });
 
     const formData = new FormData();
     const route = 'some_route';
@@ -91,8 +82,8 @@ describe('RequestHandler', () => {
 
     const abortSpy = jest.spyOn(AbortController.prototype, 'abort');
 
-    requestHandler.post(route, formData);
-    requestHandler.post(route, formData);
+    await requestHandler.post(route, formData);
+    await requestHandler.post(route, formData);
 
     expect(abortSpy).toHaveBeenCalledTimes(1);
 
