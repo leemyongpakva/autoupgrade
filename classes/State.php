@@ -38,11 +38,11 @@ class State
     /**
      * @var string
      */
-    private $originVersion; // Origin version of PrestaShop
+    private $currentVersion; // Origin version of PrestaShop
     /**
      * @var ?string
      */
-    private $install_version; // Destination version of PrestaShop
+    private $destinationVersion; // Destination version of PrestaShop
     /**
      * @var string
      */
@@ -96,18 +96,6 @@ class State
      * @var string[]
      */
     private $installedLanguagesIso = [];
-    /**
-     * modules_addons is an array of array(id_addons => name_module).
-     *
-     * @var array<string, string>
-     */
-    private $modules_addons = [];
-    /**
-     * modules_versions is an array of array(id_addons => version of the module).
-     *
-     * @var array<string, string>
-     */
-    private $modules_versions = [];
 
     /**
      * @var bool Determining if all steps went totally successfully
@@ -119,6 +107,9 @@ class State
 
     /** @var ?string */
     private $processTimestamp;
+
+    /** @var bool Allows you to know if the state has been initialized using the initDefault method */
+    private $initialized = false;
 
     /**
      * @param array<string, mixed> $savedState from another request
@@ -152,7 +143,7 @@ class State
         return get_object_vars($this);
     }
 
-    public function initDefault(string $version): void
+    public function initDefault(string $currentVersion, ?string $destinationVersion): void
     {
         // installedLanguagesIso is used to merge translations files
         $installedLanguagesIso = array_map(
@@ -163,21 +154,24 @@ class State
 
         $rand = dechex(mt_rand(0, min(0xffffffff, mt_getrandmax())));
         $date = date('Ymd-His');
-        $backupName = 'V' . $version . '_' . $date . '-' . $rand;
+        $backupName = 'V' . $currentVersion . '_' . $date . '-' . $rand;
         // Todo: To be moved in state class? We could only require the backup name here
         // I.e = $this->upgradeContainer->getState()->setBackupName($backupName);, which triggers 2 other setters internally
         $this->setBackupName($backupName);
+        $this->setCurrentVersion($currentVersion);
+        $this->setDestinationVersion($destinationVersion);
+        $this->initialized = true;
     }
 
     // GETTERS
-    public function getOriginVersion(): string
+    public function getCurrentVersion(): string
     {
-        return $this->originVersion;
+        return $this->currentVersion;
     }
 
-    public function getInstallVersion(): ?string
+    public function getDestinationVersion(): ?string
     {
-        return $this->install_version;
+        return $this->destinationVersion;
     }
 
     public function getBackupName(): string
@@ -258,16 +252,16 @@ class State
     }
 
     // SETTERS
-    public function setOriginVersion(string $originVersion): State
+    public function setCurrentVersion(string $currentVersion): State
     {
-        $this->originVersion = $originVersion;
+        $this->currentVersion = $currentVersion;
 
         return $this;
     }
 
-    public function setInstallVersion(?string $install_version): State
+    public function setDestinationVersion(?string $destinationVersion): State
     {
-        $this->install_version = $install_version;
+        $this->destinationVersion = $destinationVersion;
 
         return $this;
     }
@@ -375,18 +369,6 @@ class State
         return $this;
     }
 
-    /**
-     * @param array<string, string> $modules_versions
-     *
-     * @return self
-     */
-    public function setModulesVersions(array $modules_versions): State
-    {
-        $this->modules_versions = $modules_versions;
-
-        return $this;
-    }
-
     public function setWarningExists(bool $warning_exists): State
     {
         $this->warning_exists = $warning_exists;
@@ -408,5 +390,10 @@ class State
     public function setProcessTimestamp(string $processTimestamp): void
     {
         $this->processTimestamp = $processTimestamp;
+    }
+
+    public function isInitialized(): bool
+    {
+        return $this->initialized;
     }
 }

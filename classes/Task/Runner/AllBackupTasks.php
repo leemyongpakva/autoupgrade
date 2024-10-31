@@ -29,7 +29,6 @@ namespace PrestaShop\Module\AutoUpgrade\Task\Runner;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
-use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 
 /**
  * Execute the whole upgrade process in a single request.
@@ -52,7 +51,6 @@ class AllBackupTasks extends ChainedTasks
     {
         if ($this->step === self::initialTask) {
             parent::init();
-            $this->container->getState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION));
         }
     }
 

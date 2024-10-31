@@ -546,7 +546,7 @@ class UpgradeContainer
 
         $this->moduleSourceProviders = [
             new LocalSourceProvider($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR . 'modules', $this->getFileConfigurationStorage()),
-            new MarketplaceSourceProvider($this->getState()->getInstallVersion(), $this->getProperty(self::PS_ROOT_PATH), $this->getFileLoader(), $this->getFileConfigurationStorage()),
+            new MarketplaceSourceProvider($this->getState()->getDestinationVersion(), $this->getProperty(self::PS_ROOT_PATH), $this->getFileLoader(), $this->getFileConfigurationStorage()),
             new ComposerSourceProvider($this->getProperty(self::LATEST_PATH), $this->getComposerService(), $this->getFileConfigurationStorage()),
             // Other providers
         ];

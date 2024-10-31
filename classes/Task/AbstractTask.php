@@ -185,16 +185,23 @@ abstract class AbstractTask
     public function init(): void
     {
         $this->container->initPrestaShopCore();
+        $this->setupEnvironment();
+    }
 
-        $isUpdateTask = self::TASK_TYPE === TaskType::TASK_TYPE_UPDATE;
-
-        if ($this->container->getUpgrader()->getChannel() === Upgrader::CHANNEL_LOCAL && $isUpdateTask) {
+    /**
+     * @throws Exception
+     */
+    protected function setupEnvironment(): void
+    {
+        if ($this::TASK_TYPE === TaskType::TASK_TYPE_UPDATE && $this->container->getUpgrader()->getChannel() === Upgrader::CHANNEL_LOCAL) {
             $archiveXml = $this->container->getUpgradeConfiguration()->getLocalChannelXml();
             $this->container->getFileLoader()->addXmlMd5File($this->container->getUpgrader()->getDestinationVersion(), $this->container->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $archiveXml);
         }
 
-        $this->container->getState()->setInstallVersion($this->container->getUpgrader()->getDestinationVersion());
-        $this->container->getState()->setOriginVersion($this->container->getProperty(UpgradeContainer::PS_VERSION));
+        if ($this::TASK_TYPE !== TaskType::TASK_TYPE_RESTORE && !$this->container->getState()->isInitialized()) {
+            $this->container->getState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION), $this->container->getUpgrader()->getDestinationVersion());
+            $this->logger->debug($this->translator->trans('Successfully initialized state.'));
+        }
     }
 
     abstract public function run(): int;

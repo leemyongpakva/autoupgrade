@@ -96,7 +96,7 @@ abstract class CoreUpgrader
         $this->container = $container;
         $this->logger = $logger;
         $this->filesystem = new Filesystem();
-        $this->destinationUpgradeVersion = $this->container->getState()->getInstallVersion();
+        $this->destinationUpgradeVersion = $this->container->getState()->getDestinationVersion();
         $this->pathToInstallFolder = realpath($this->container->getProperty(UpgradeContainer::LATEST_PATH) . DIRECTORY_SEPARATOR . 'install');
         $this->pathToUpgradeScripts = dirname(__DIR__, 3) . '/upgrade/';
         if (file_exists($this->pathToInstallFolder . DIRECTORY_SEPARATOR . 'autoload.php')) {
@@ -855,7 +855,7 @@ abstract class CoreUpgrader
     /**
      * @throws Exception
      */
-    protected function shouldClearCoreCache(): bool
+    public function shouldWarmupCoreCache(): bool
     {
         $destinationVersion = $this->container->getUpgrader()->getDestinationVersion();
 
@@ -865,18 +865,18 @@ abstract class CoreUpgrader
     /**
      * @throws Exception
      */
-    protected function clearCoreCache(): void
+    public function warmupCoreCache(): void
     {
         $rootPath = $this->container->getProperty(UpgradeContainer::PS_ROOT_PATH);
-        $command = 'php ' . $rootPath . '/bin/console cache:warmup --env=prod';
+        $command = 'php ' . $rootPath . '/bin/console cache:warmup --no-interaction --env=prod';
         $output = [];
         $resultCode = 0;
 
         exec($command, $output, $resultCode);
 
         if ($resultCode !== 0) {
-            throw new UpgradeException("An error was raised when clearing the core cache: \n" . implode("\n", $output));
+            throw new UpgradeException("An error was raised when warming up the core cache: \n" . implode("\n", $output));
         }
-        $this->logger->debug('Core cache has been cleared to avoid dependency conflicts.');
+        $this->logger->debug('Core cache has been generated to avoid dependency conflicts.');
     }
 }

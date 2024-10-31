@@ -172,4 +172,9 @@ class UpdateConfig extends AbstractTask
 
         return (new UpgradeConfigurationStorage($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR))->save($classConfig, UpgradeFileNames::CONFIG_FILENAME);
     }
+
+    public function init(): void
+    {
+        $this->container->initPrestaShopCore();
+    }
 }

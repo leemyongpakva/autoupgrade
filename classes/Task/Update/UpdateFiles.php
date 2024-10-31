@@ -224,13 +224,14 @@ class UpdateFiles extends AbstractTask
             rename($newReleasePath . DIRECTORY_SEPARATOR . 'install-dev', $newReleasePath . DIRECTORY_SEPARATOR . 'install');
         }
 
-        $destinationVersion = $this->container->getState()->getInstallVersion();
-        $originVersion = $this->container->getState()->getOriginVersion();
+        $destinationVersion = $this->container->getState()->getDestinationVersion();
+        $originVersion = $this->container->getState()->getCurrentVersion();
         $this->logger->debug(sprintf('Generate diff file list between %s and %s.', $originVersion, $destinationVersion));
         $diffFileList = $this->container->getChecksumCompare()->getFilesDiffBetweenVersions($originVersion, $destinationVersion);
         if (!is_array($diffFileList)) {
             $this->logger->error($this->translator->trans('Unable to generate diff file list between %s and %s.', [$originVersion, $destinationVersion]));
             $this->next = TaskName::TASK_ERROR;
+            $this->setErrorFlag();
 
             return ExitCode::FAIL;
         }
@@ -281,6 +282,6 @@ class UpdateFiles extends AbstractTask
 
     public function init(): void
     {
-        // Do nothing. Overrides parent init for avoiding core to be loaded here.
+        $this->setupEnvironment();
     }
 }

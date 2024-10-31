@@ -81,7 +81,7 @@ class CheckRequirementsCommand extends AbstractCommand
         $phpVersionResolverService = new PhpVersionResolverService(
             $distributionApiService,
             $this->upgradeContainer->getFileLoader(),
-            $this->upgradeContainer->getState()->getOriginVersion()
+            $this->upgradeContainer->getState()->getCurrentVersion()
         );
 
         $this->upgradeSelfCheck = new UpgradeSelfCheck(
@@ -93,7 +93,7 @@ class CheckRequirementsCommand extends AbstractCommand
             _PS_ROOT_DIR_,
             _PS_ADMIN_DIR_,
             $moduleConfigPath,
-            $this->upgradeContainer->getState()->getOriginVersion()
+            $this->upgradeContainer->getState()->getCurrentVersion()
         );
 
         $output->writeln('Result of prerequisite checks:');

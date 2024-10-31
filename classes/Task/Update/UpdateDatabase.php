@@ -53,8 +53,8 @@ class UpdateDatabase extends AbstractTask
         try {
             if (!$this->container->getFileConfigurationStorage()->exists(UpgradeFileNames::SQL_TO_EXECUTE_LIST)) {
                 $this->warmUp();
-                $originVersion = $this->container->getState()->getOriginVersion();
-                $sqlContentList = $this->getCoreUpgrader()->getSqlContentList($originVersion);
+                $currentVersion = $this->container->getState()->getCurrentVersion();
+                $sqlContentList = $this->getCoreUpgrader()->getSqlContentList($currentVersion);
                 $backlog = new Backlog(array_reverse($sqlContentList), count($sqlContentList));
             } else {
                 $this->getCoreUpgrader()->setupUpdateEnvironment();
@@ -101,9 +101,9 @@ class UpdateDatabase extends AbstractTask
             return $this->coreUpgrader;
         }
 
-        if (version_compare($this->container->getState()->getInstallVersion(), '8', '<')) {
+        if (version_compare($this->container->getState()->getDestinationVersion(), '8', '<')) {
             $this->coreUpgrader = new CoreUpgrader17($this->container, $this->logger);
-        } elseif (version_compare($this->container->getState()->getInstallVersion(), '8.1', '<')) {
+        } elseif (version_compare($this->container->getState()->getDestinationVersion(), '8.1', '<')) {
             $this->coreUpgrader = new CoreUpgrader80($this->container, $this->logger);
         } else {
             $this->coreUpgrader = new CoreUpgrader81($this->container, $this->logger);
@@ -143,6 +143,10 @@ class UpdateDatabase extends AbstractTask
         $this->logger->info($this->container->getTranslator()->trans('Checking version validity'));
         $this->checkVersionIsNewer();
 
+        if ($this->getCoreUpgrader()->shouldWarmupCoreCache()) {
+            $this->getCoreUpgrader()->warmupCoreCache();
+        }
+
         $this->getCoreUpgrader()->setupUpdateEnvironment();
 
         if ($this->container->getUpgradeConfiguration()->shouldDeactivateCustomModules()) {
@@ -160,15 +164,15 @@ class UpdateDatabase extends AbstractTask
      */
     protected function checkVersionIsNewer(): void
     {
-        $originVersion = VersionUtils::normalizePrestaShopVersion($this->container->getState()->getOriginVersion());
-        $installVersion = VersionUtils::normalizePrestaShopVersion($this->container->getState()->getInstallVersion());
+        $currentVersion = VersionUtils::normalizePrestaShopVersion($this->container->getState()->getCurrentVersion());
+        $destinationVersion = VersionUtils::normalizePrestaShopVersion($this->container->getState()->getDestinationVersion());
 
-        $versionCompare = version_compare($installVersion, $originVersion);
+        $versionCompare = version_compare($destinationVersion, $currentVersion);
 
         if ($versionCompare === -1) {
-            throw new UpgradeException($this->container->getTranslator()->trans('[ERROR] Version to install is too old.') . ' ' . $this->container->getTranslator()->trans('Current version: %oldversion%. Version to install: %newversion%.', ['%oldversion%' => $originVersion, '%newversion%' => $installVersion]));
+            throw new UpgradeException($this->container->getTranslator()->trans('[ERROR] Version to install is too old.') . ' ' . $this->container->getTranslator()->trans('Current version: %oldversion%. Version to install: %newversion%.', ['%oldversion%' => $currentVersion, '%newversion%' => $destinationVersion]));
         } elseif ($versionCompare === 0) {
-            throw new UpgradeException($this->container->getTranslator()->trans('You already have the %s version.', [$installVersion]));
+            throw new UpgradeException($this->container->getTranslator()->trans('You already have the %s version.', [$destinationVersion]));
         }
     }
 

@@ -292,6 +292,13 @@ class AdminSelfUpgradeController extends ModuleAdminController
             empty($_REQUEST['params']) ? [] : $_REQUEST['params']
         );
 
+        if (!$this->upgradeContainer->getState()->isInitialized()) {
+            $this->upgradeContainer->getState()->initDefault(
+                $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION),
+                $this->upgradeContainer->getUpgrader()->getDestinationVersion()
+            );
+        }
+
         // If you have defined this somewhere, you know what you do
         // load options from configuration if we're not in ajax mode
         if (!$this->ajax) {
@@ -300,9 +307,6 @@ class AdminSelfUpgradeController extends ModuleAdminController
                 $this->context->employee->id,
                 $this->context->language->iso_code
             );
-
-            $this->upgradeContainer->getState()->initDefault(
-                $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION));
 
             if (isset($_GET['refreshCurrentVersion'])) {
                 $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
@@ -478,7 +482,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
         $phpVersionResolverService = new PhpVersionResolverService(
             $distributionApiService,
             $this->upgradeContainer->getFileLoader(),
-            $this->upgradeContainer->getState()->getOriginVersion()
+            $this->upgradeContainer->getState()->getCurrentVersion()
         );
         $upgradeSelfCheck = new UpgradeSelfCheck(
             $upgrader,
@@ -489,7 +493,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
             $this->prodRootDir,
             $this->adminDir,
             $this->autoupgradePath,
-            $this->upgradeContainer->getState()->getOriginVersion()
+            $this->upgradeContainer->getState()->getCurrentVersion()
         );
         $response = new AjaxResponse($this->upgradeContainer->getState(), $this->upgradeContainer->getLogger());
         $this->content = (new UpgradePage(
