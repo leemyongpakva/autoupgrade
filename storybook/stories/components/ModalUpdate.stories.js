@@ -34,8 +34,6 @@ export default {
 export const Update = {
   args: {
     ...Modal.args,
-    title: "Start update?",
-    message: "You are about to launch the update, do you want to continue?",
     modalSize: "lg",
     noBackUp: false,
   },

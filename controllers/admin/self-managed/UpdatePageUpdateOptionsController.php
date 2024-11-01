@@ -85,7 +85,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
 
     public function submit(): JsonResponse
     {
-        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_PAGE_BACKUP);
+        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_BACKUP);
     }
 
     /**

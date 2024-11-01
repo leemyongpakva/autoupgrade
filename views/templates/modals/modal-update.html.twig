@@ -1,11 +1,14 @@
 {% extends "@ModuleAutoUpgrade/components/modal.html.twig" %}
 
+{% set title = 'Start update?'|trans({}) %}
+
 {% block modal_content %}
   {% if noBackUp %}
     <p>
       {{ 'Before starting the update, make sure you have a complete and recent backup of your store (database, files, and images).'|trans({}) }}
     </p>
   {% else %}
+    {% set message = 'You are about to launch the update, do you want to continue?'|trans({}) %}
     {{ parent() }}
   {% endif %}
 {% endblock %}
@@ -31,7 +34,13 @@
       <button type="button" class="btn btn-primary">
         <img
           class="modal__rocket-icon rocket-icon"
+<<<<<<< HEAD
           src="{{ assets_base_path }}/img/rocket_white.svg"
+||||||| parent of 6238891c (Enable backup form and modal)
+          src="{{ psBaseUri }}img/rocket_white.svg"
+=======
+          src="{{ assets_base_path }}img/rocket_white.svg"
+>>>>>>> 6238891c (Enable backup form and modal)
           width="20"
           height="20"
           alt=""

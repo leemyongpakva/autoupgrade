@@ -98,6 +98,14 @@ class Router
             'controller' => UpdatePageBackupController::class,
             'method' => 'step',
         ],
+        Routes::UPDATE_STEP_BACKUP_SAVE_OPTION => [
+            'controller' => UpdatePageBackupController::class,
+            'method' => 'saveOption',
+        ],
+        Routes::UPDATE_STEP_BACKUP_SUBMIT_FORM => [
+            'controller' => UpdatePageBackupController::class,
+            'method' => 'submit',
+        ],
         Routes::UPDATE_PAGE_UPDATE => [
             'controller' => UpdatePageUpdateController::class,
             'method' => 'index',

@@ -27,7 +27,12 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
+use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
+use PrestaShop\Module\AutoUpgrade\Router\Routes;
+use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UpdatePageBackupController extends AbstractPageWithStepController
 {
@@ -43,6 +48,46 @@ class UpdatePageBackupController extends AbstractPageWithStepController
         return self::CURRENT_STEP;
     }
 
+    protected function displayRouteInUrl(): ?string
+    {
+        return Routes::UPDATE_PAGE_BACKUP;
+    }
+
+    public function submit(): JsonResponse
+    {
+        return $this->displayModal([
+            'noBackUp' => (bool) rand(0, 1),
+
+            // TODO: assets_base_path is provided by all controllers. What about a asset() twig function instead?
+            'assets_base_path' => $this->upgradeContainer->getAssetsEnvironment()->getAssetsBaseUrl($this->request),
+        ]);
+    }
+
+    public function saveOption(): JsonResponse
+    {
+        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
+        $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
+
+        $name = $this->request->request->get('name');
+
+        $config = [
+            $name => $this->request->request->getBoolean('value'),
+        ];
+
+        // TODO: Remove after rebase
+        $upgradeConfiguration->validate($config);
+        $error = null;
+        // TODO: Uncomment after rebase
+        // $error = $this->upgradeContainer->getConfigurationValidator()->validate($config);
+
+        if (empty($error)) {
+            $upgradeConfiguration->merge($config);
+            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+        }
+
+        return $this->getRefreshOfForm(array_merge($this->getParams(), ['error' => $error]));
+    }
+
     /**
      * @return array
      *
@@ -50,15 +95,45 @@ class UpdatePageBackupController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
+        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
 
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),
             [
-                // TODO
-                'default_backup_files_and_database' => true,
-                'default_include_images' => false,
+                'form_route_to_save' => Routes::UPDATE_STEP_BACKUP_SAVE_OPTION,
+                'form_route_to_submit' => Routes::UPDATE_STEP_BACKUP_SUBMIT_FORM,
+
+                'form_fields' => [
+                    'include_images' => [
+                        'field' => 'PS_AUTOUP_KEEP_IMAGES',
+                        'value' => $upgradeConfiguration->shouldBackupImages(),
+                    ],
+                ],
             ]
+        );
+    }
+
+    private function getRefreshOfForm(array $params): JsonResponse
+    {
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::STEP_PARENT_ID,
+            $this->getTwig()->render(
+                '@ModuleAutoUpgrade/steps/' . $this->getStepTemplate() . '.html.twig',
+                $params
+            ),
+            $this->displayRouteInUrl()
+        );
+    }
+
+    private function displayModal(array $params): JsonResponse
+    {
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::MODAL_PARENT_ID,
+            $this->getTwig()->render(
+                '@ModuleAutoUpgrade/modals/modal-update.html.twig',
+                $params
+            )
         );
     }
 }

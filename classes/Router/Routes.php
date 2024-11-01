@@ -24,6 +24,8 @@ class Routes
     /* step: backup */
     const UPDATE_PAGE_BACKUP = 'update-page-backup';
     const UPDATE_STEP_BACKUP = 'update-step-backup';
+    const UPDATE_STEP_BACKUP_SAVE_OPTION = 'update-step-backup-options-save-option';
+    const UPDATE_STEP_BACKUP_SUBMIT_FORM = 'update-step-backup-options-submit-form';
 
     /* step: update */
     const UPDATE_PAGE_UPDATE = 'update-page-update';

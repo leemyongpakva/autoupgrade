@@ -45,6 +45,8 @@ export const Default = {
     modalSize: "lg",
     psBaseUri: "/",
     modalDanger: false,
+
+    assets_base_path: "",
   },
 };
 

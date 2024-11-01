@@ -39,8 +39,17 @@ export const Backup = {
       code: "backup",
       title: "Backup",
     },
-    default_backup_files_and_database: true,
-    default_include_images: false,
+
+    form_fields: {
+      include_images: {
+          field: 'PS_AUTOUP_KEEP_IMAGES',
+          value: true,
+      },
+    },
+    
+    form_route_to_save: "update-step-update-options-save-option",
+    form_route_to_submit: "update-step-update-options-submit-form",
+
     step_parent_id: "ua_container",
     // Stepper
     ...Stepper.args,
