@@ -1,4 +1,5 @@
 import api from '../api/RequestHandler';
+import ModalContainer from '../components/ModalContainer';
 import UpdatePage from './UpdatePage';
 
 export default class UpdatePageBackup extends UpdatePage {
@@ -10,12 +11,21 @@ export default class UpdatePageBackup extends UpdatePage {
     super();
 
     this.form = this.assertAndGetForm();
+    
   }
 
   public mount() {
     this.initStepper();
     this.initFormFields(this.form);
     this.form.addEventListener('submit', this.onFormSubmit);
+    document.getElementById('ua_container')?.addEventListener('click', this.onClick);
+    document.getElementById(ModalContainer.containerId)?.addEventListener(ModalContainer.okEvent, (ev) => {
+      if (ev.target.id === 'modal-confirm-backup') {
+        api.post(this.form.dataset.routeToConfirmBackup!);
+      } else if (ev.target.id === 'modal-confirm-update') {
+        api.post(this.form.dataset.routeToConfirmUpdate!);
+      }
+    });
   }
 
   public beforeDestroy() {
@@ -31,7 +41,7 @@ export default class UpdatePageBackup extends UpdatePage {
       throw new Error('Form not found');
     }
 
-    ['routeToSave', 'routeToSubmit'].forEach((data) => {
+    ['routeToSave', 'routeToSubmitBackup', 'routeToSubmitUpdate', 'routeToConfirmBackup', 'routeToConfirmUpdate'].forEach((data) => {
       if (!form.dataset[data]) {
         throw new Error(`Missing data ${data} from form dataset.`);
       }
@@ -52,6 +62,14 @@ export default class UpdatePageBackup extends UpdatePage {
     });
   }
 
+  private onClick = (ev: Event) => {
+    if (ev.target.id === 'update-backup-page-skip-btn') {
+      const formData = new FormData();
+      formData.append('backupDone', JSON.stringify(false));
+      api.post(this.form.dataset.routeToSubmitUpdate!, formData);
+    }
+  };
+
   private onInputChange = (ev: Event) => {
     const optionInput = ev.target as HTMLInputElement;
 
@@ -68,6 +86,6 @@ export default class UpdatePageBackup extends UpdatePage {
   private onFormSubmit = (event: Event) => {
     event.preventDefault();
 
-    api.post(this.form.dataset.routeToSubmit!, new FormData(this.form));
+    api.post(this.form.dataset.routeToSubmitBackup!, new FormData(this.form));
   };
 }

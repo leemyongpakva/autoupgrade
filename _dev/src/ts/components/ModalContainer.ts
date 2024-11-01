@@ -17,11 +17,18 @@ export default class ModalContainer {
             modalContainer.addEventListener('click', (ev: Event) => {
                 const modal = ev.target?.closest(".modal");
                 if (modal && ev.target?.closest("[data-dismiss='modal']")) {
-                    modal.dispatchEvent(new Event(ModalContainer.cancelEvent));
+                    modal.dispatchEvent(new Event(ModalContainer.cancelEvent, {bubbles: true}));
                 } else if(modal && ev.target?.closest(".modal-footer button:not([data-dismiss='modal'])")) {
-                    modal.dispatchEvent(new Event(ModalContainer.okEvent))
+                    modal.dispatchEvent(new Event(ModalContainer.okEvent, {bubbles: true}))
                 }
             });
+
+            modalContainer.addEventListener(
+                ModalContainer.cancelEvent, this.closeModal,
+            );
+            modalContainer.addEventListener(
+                ModalContainer.okEvent, this.closeModal,
+            );
         }
     }
 
@@ -30,14 +37,8 @@ export default class ModalContainer {
             document.getElementById(ModalContainer.containerId)?.getElementsByClassName('modal') || []
         ).forEach((modal: HTMLElement) => {
             modal.style.display = 'block';
-            modal.classList.add('in');
-
-            modal.addEventListener(
-                ModalContainer.cancelEvent, this.closeModal,
-            );
-            modal.addEventListener(
-                ModalContainer.okEvent, this.closeModal,
-            );
+            // Need to wait a bit to make sure the DOM is refreshed to trigger the animation
+            setTimeout(() => modal.classList.add('in'), 50);
         });
     }
 

@@ -1,4 +1,10 @@
 {% extends "@ModuleAutoUpgrade/components/modal.html.twig" %}
+{% set title = "Start backup?" %}
+{% set message = 'Your files and database will be backed up.' %}
+
+{% block modal_content %}
+  {{ parent() }}
+{% endblock %}
 
 {% block modal_extra_content %}{% endblock %}
 
