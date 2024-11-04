@@ -66,13 +66,13 @@ describe('ScriptHandler', () => {
   });
 
   it('should catch en log warning if no matching class is found for the route', () => {
-    const consoleWarningSpy = jest.spyOn(console, 'warn').mockImplementation();
+    const consoleDebugSpy = jest.spyOn(console, 'debug').mockImplementation();
     const route = 'unknown-route';
     (routeHandler.getCurrentRoute as jest.Mock).mockReturnValue(route);
 
     scriptHandler = new ScriptHandler();
 
-    expect(consoleWarningSpy).toHaveBeenCalledWith(
+    expect(consoleDebugSpy).toHaveBeenCalledWith(
       `No matching page Class found for route: ${route}`
     );
   });
