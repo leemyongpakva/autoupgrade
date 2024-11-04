@@ -45,7 +45,7 @@ class ConfigurationValidator
     /**
      * @param array<string, mixed> $array
      *
-     * @return array<array<string, string>>
+     * @return array<array{'message': string, 'target': string}>
      */
     public function validate(array $array = []): array
     {

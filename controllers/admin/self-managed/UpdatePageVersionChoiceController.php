@@ -29,7 +29,6 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
@@ -223,7 +222,7 @@ class UpdatePageVersionChoiceController extends AbstractPageController
             $config = $this->upgradeContainer->getUpgradeConfiguration();
             $config->merge($requestConfig);
 
-            (new UpgradeConfigurationStorage($this->upgradeContainer->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR))->save($config, UpgradeFileNames::CONFIG_FILENAME);
+            $this->upgradeContainer->getUpgradeConfigurationStorage()->save($config, UpgradeFileNames::CONFIG_FILENAME);
         } else {
             $errors = array_column(
                 array_map(function ($error) {

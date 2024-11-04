@@ -61,9 +61,11 @@ class ConfigurationValidatorTest extends TestCase
 
         $result = $this->validator->validate(['channel' => $channel]);
         $this->assertEquals([
-            'message' => 'Unknown channel ' . $channel,
-            'target' => 'channel',
-        ], $result[0]);
+            [
+                'message' => 'Unknown channel ' . $channel,
+                'target' => 'channel',
+            ],
+        ], $result);
     }
 
     public function testValidateZipSuccess()
@@ -82,9 +84,11 @@ class ConfigurationValidatorTest extends TestCase
     {
         $result = $this->validator->validate(['channel' => 'local', 'archive_zip' => '']);
         $this->assertEquals([
-            'message' => 'No zip archive provided',
-            'target' => 'archive_zip',
-        ], $result[0]);
+            [
+                'message' => 'No zip archive provided',
+                'target' => 'archive_zip',
+            ],
+        ], $result);
     }
 
     public function testValidateXmlSuccess()
@@ -103,9 +107,11 @@ class ConfigurationValidatorTest extends TestCase
     {
         $result = $this->validator->validate(['channel' => 'local', 'archive_xml' => '']);
         $this->assertEquals([
-            'message' => 'No xml archive provided',
-            'target' => 'archive_xml',
-        ], $result[0]);
+            [
+                'message' => 'No xml archive provided',
+                'target' => 'archive_xml',
+            ],
+        ], $result);
     }
 
     public function testValidateBoolSuccess()
@@ -122,15 +128,19 @@ class ConfigurationValidatorTest extends TestCase
     {
         $result = $this->validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => 'toto']);
         $this->assertEquals([
-            'message' => 'Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT',
-            'target' => 'PS_AUTOUP_CUSTOM_MOD_DESACT',
-        ], $result[0]);
+            [
+                'message' => 'Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT',
+                'target' => 'PS_AUTOUP_CUSTOM_MOD_DESACT',
+            ],
+        ], $result);
 
         $result = $this->validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => '']);
         $this->assertEquals([
-            'message' => 'Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT',
-            'target' => 'PS_AUTOUP_CUSTOM_MOD_DESACT',
-        ], $result[0]);
+            [
+                'message' => 'Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT',
+                'target' => 'PS_AUTOUP_CUSTOM_MOD_DESACT',
+            ],
+        ], $result);
     }
 
     public function testValidateMultipleInputFail()
