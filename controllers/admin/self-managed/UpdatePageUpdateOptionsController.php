@@ -62,14 +62,10 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         $name = $this->request->request->get('name');
 
         $config = [
-            $name => $this->request->request->getBoolean('value'),
+            $name => $this->request->request->get('value'),
         ];
 
-        // TODO: Remove after rebase
-        $upgradeConfiguration->validate($config);
-        $error = null;
-        // TODO: Uncomment after rebase
-        // $error = $this->upgradeContainer->getConfigurationValidator()->validate($config);
+        $error = $this->upgradeContainer->getConfigurationValidator()->validate($config);
 
         if (empty($error)) {
             if ($name === 'PS_DISABLE_OVERRIDES') {

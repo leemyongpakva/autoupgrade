@@ -18,9 +18,9 @@
     {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
       id: form_fields.deactive_non_native_modules.field,
       name: form_fields.deactive_non_native_modules.field,
-      title: "Deactivate non-native modules",
+      title: "Deactivate non-native modules"|trans({}),
       description: "All the modules installed after creating your store are considered non-native modules. They might be " ~
-        "incompatible with the new version of PrestaShop. We recommend deactivating them during the update.",
+        "incompatible with the new version of PrestaShop. We recommend deactivating them during the update."|trans({}),
       value: form_fields.deactive_non_native_modules.value,
       error_message: error[form_fields.deactive_non_native_modules.field] is defined ? error[form_fields.deactive_non_native_modules.field] : null,
     } %}
@@ -28,8 +28,8 @@
     {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
       id: form_fields.regenerate_email_templates.field,
       name: form_fields.regenerate_email_templates.field,
-      title: "Regenerate email templates",
-      description: "If you've customized email templates, your changes will be lost if you activate this option.",
+      title: "Regenerate email templates"|trans({}),
+      description: "If you've customized email templates, your changes will be lost if you activate this option."|trans({}),
       value: form_fields.regenerate_email_templates.value,
       error_message: error[form_fields.regenerate_email_templates.field] is defined ? error[form_fields.regenerate_email_templates.field] : null,
     } %}
@@ -37,10 +37,10 @@
     {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
       id: form_fields.disable_all_overrides.field,
       name: form_fields.disable_all_overrides.field,
-      title: "Disable all overrides",
+      title: "Disable all overrides"|trans({}),
       description: "Overriding is a way to replace business behaviors (class files and controller files) to target only " ~
         "one method or as many as you need. This option disables all classes & controllers overrides, allowing " ~
-        "you to avoid conflicts during and after updates.",
+        "you to avoid conflicts during and after updates."|trans({}),
       value: form_fields.disable_all_overrides.value,
       error_message: error[form_fields.disable_all_overrides.field] is defined ? error[form_fields.disable_all_overrides.field] : null,
     } %}
