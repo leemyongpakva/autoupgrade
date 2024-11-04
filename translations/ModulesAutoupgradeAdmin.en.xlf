@@ -1,5 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="classes/Parameters/ConfigurationValidator.php" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="494e9240706355902c051f7edbff16d8">
+        <source>Unknown channel %s</source>
+        <target>Unknown channel %s</target>
+        <note>Line: 86</note>
+      </trans-unit>
+      <trans-unit id="a1e2f27f691acb7eff72046d0c6d15b9">
+        <source>No zip archive provided</source>
+        <target>No zip archive provided</target>
+        <note>Line: 95</note>
+      </trans-unit>
+      <trans-unit id="08ecdfa1e85ff7b6cc146b6a61690840">
+        <source>No xml archive provided</source>
+        <target>No xml archive provided</target>
+        <note>Line: 104</note>
+      </trans-unit>
+      <trans-unit id="8f6819dd1d8ef2e214833f667fe994b0">
+        <source>Value must be a boolean for %s</source>
+        <target>Value must be a boolean for %s</target>
+        <note>Line: 113</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="classes/Parameters/LocalChannelConfigurationValidator.php" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="8cd1c74d3c55f934c1b312fc65f9022f">
+        <source>We couldn't find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.</source>
+        <target>We couldn't find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.</target>
+        <note>Line: 118</note>
+      </trans-unit>
+      <trans-unit id="1d1a5763d2901dbd435b378358a149b4">
+        <source>File %s does not exist. Unable to select that channel.</source>
+        <target>File %s does not exist. Unable to select that channel.</target>
+        <note>Line: 135</note>
+      </trans-unit>
+      <trans-unit id="a9c58dc4da830f87b1f0cb9e2b6f8a1c">
+        <source>We couldn't find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.</source>
+        <target>We couldn't find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.</target>
+        <note>Line: 144</note>
+      </trans-unit>
+      <trans-unit id="d10547e46af51c801cca4dd67a843c22">
+        <source>The PrestaShop version in your archive doesn’t match the one in XML file. Please fix this issue and try again.</source>
+        <target>The PrestaShop version in your archive doesn’t match the one in XML file. Please fix this issue and try again.</target>
+        <note>Line: 159</note>
+      </trans-unit>
+    </body>
+  </file>
   <file original="classes/Task/AbstractTask.php" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
       <trans-unit id="435d516735dbf7f622c7d14585f66840">
@@ -155,45 +203,25 @@
   </file>
   <file original="classes/Task/Miscellaneous/UpdateConfig.php" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="1d1a5763d2901dbd435b378358a149b4">
-        <source>File %s does not exist. Unable to select that channel.</source>
-        <target>File %s does not exist. Unable to select that channel.</target>
-        <note>Line: 105</note>
-      </trans-unit>
-      <trans-unit id="3d6985514f7836cb0e8efb8c286ca0f5">
-        <source>Unable to retrieve version from zip: %s.</source>
-        <target>Unable to retrieve version from zip: %s.</target>
-        <note>Line: 96</note>
-      </trans-unit>
-      <trans-unit id="497b68a6d0e3a6abf823f78631233e6a">
-        <source>We couldn't find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again</source>
-        <target>We couldn't find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again</target>
-        <note>Line: 114</note>
-      </trans-unit>
-      <trans-unit id="2d1b3a71b7f8c5f533921fe116788422">
-        <source>Prestashop version detected in the xml (%s) does not match the zip version (%s).</source>
-        <target>Prestashop version detected in the xml (%s) does not match the zip version (%s).</target>
-        <note>Line: 121</note>
-      </trans-unit>
       <trans-unit id="ab232f4b20c0e50dad9081bc39382569">
         <source>Upgrade process will use archive.</source>
         <target>Upgrade process will use archive.</target>
-        <note>Line: 127</note>
+        <note>Line: 96</note>
       </trans-unit>
       <trans-unit id="1fe9dd96f646eaa0cd3a0fcc7632ce12">
         <source>Error on saving configuration</source>
         <target>Error on saving configuration</target>
-        <note>Line: 132</note>
+        <note>Line: 107</note>
       </trans-unit>
       <trans-unit id="f2ff9d001d0a553c78da73443e7fcd97">
         <source>Configuration successfully updated.</source>
         <target>Configuration successfully updated.</target>
-        <note>Line: 195</note>
+        <note>Line: 172</note>
       </trans-unit>
       <trans-unit id="40b980e89ae332507380470cd26cdf4d">
         <source>This page will now be reloaded and the module will check if a new version is available.</source>
         <target>This page will now be reloaded and the module will check if a new version is available.</target>
-        <note>Line: 195</note>
+        <note>Line: 172</note>
       </trans-unit>
     </body>
   </file>
@@ -1452,7 +1480,7 @@ Comment: directory already exists</note>
       <trans-unit id="f4eb320e09f7ef88a627229870458454">
         <source>The module %s requires PHP %s to work properly. Please upgrade your server configuration.</source>
         <target>The module %s requires PHP %s to work properly. Please upgrade your server configuration.</target>
-        <note>Line: 424</note>
+        <note>Line: 428</note>
       </trans-unit>
     </body>
   </file>
@@ -2007,20 +2035,6 @@ Comment: directory already exists</note>
         <source>The requirements check is complete, you can update your store to this version of PrestaShop.</source>
         <target>The requirements check is complete, you can update your store to this version of PrestaShop.</target>
         <note>Line: 35</note>
-      </trans-unit>
-    </body>
-  </file>
-  <file original="views/templates/components/local-archive.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
-    <body>
-      <trans-unit id="0b4a925c935931bb73c6b28c285a21c0">
-        <source>We couldn't find a PrestaShop version in the .zip file you uploaded. Please try again.</source>
-        <target>We couldn't find a PrestaShop version in the .zip file you uploaded. Please try again.</target>
-        <note>Line: 32</note>
-      </trans-unit>
-      <trans-unit id="a9c58dc4da830f87b1f0cb9e2b6f8a1c">
-        <source>We couldn't find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.</source>
-        <target>We couldn't find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.</target>
-        <note>Line: 66</note>
       </trans-unit>
     </body>
   </file>
