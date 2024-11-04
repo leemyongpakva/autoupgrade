@@ -34,7 +34,8 @@ const config: StorybookConfig = {
     "@storybook/addon-webpack5-compiler-swc",
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-styling-webpack"
+    "@storybook/addon-styling-webpack",
+    "@storybook/addon-a11y"
   ],
   framework: {
     name: "@sensiolabs/storybook-symfony-webpack5",

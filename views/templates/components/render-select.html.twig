@@ -2,7 +2,7 @@
 
 {% block action_content %}
   <div class="render-field__select">
-    <select name="{{ name }}" id="{{ id }}">
+    <select name="{{ name }}" id="{{ id }}" aria-label="{{ name }}">
       {% for choice_value, choice_key in choices %}
         <option value="{{ choice_value|default(0) }}" {{ choice_value == value ? 'selected' : '' }}>
           {{ choice_key }}
