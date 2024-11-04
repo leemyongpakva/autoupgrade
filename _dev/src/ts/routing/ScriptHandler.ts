@@ -53,7 +53,7 @@ export default class ScriptHandler {
         console.error(`Failed to load script for route ${routeName}:`, error);
       }
     } else {
-      console.warn(`No matching page Class found for route: ${routeName}`);
+      console.debug(`No matching page Class found for route: ${routeName}`);
     }
   }
 
