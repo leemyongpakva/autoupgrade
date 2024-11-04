@@ -29,10 +29,10 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
-use PrestaShop\Module\AutoUpgrade\Task\Miscellaneous\UpdateConfig;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
@@ -156,8 +156,7 @@ class UpdatePageVersionChoiceController extends AbstractPageController
      */
     private function getRequirements(): array
     {
-        $controller = new UpdateConfig($this->upgradeContainer);
-        $controller->init();
+        $this->upgradeContainer->initPrestaShopCore();
 
         $distributionApiService = new DistributionApiService();
         $phpVersionResolverService = new PhpVersionResolverService(
@@ -201,17 +200,51 @@ class UpdatePageVersionChoiceController extends AbstractPageController
     public function save(): JsonResponse
     {
         $channel = $this->request->get(self::FORM_FIELDS['channel']);
+        $isLocal = $channel === self::FORM_OPTIONS['local_value'];
 
-        $controller = new UpdateConfig($this->upgradeContainer);
-        $controller->init();
-        $controller->run();
+        $requestConfig = $this->request->request->all();
+
+        $this->upgradeContainer->initPrestaShopCore();
+
+        $errors = $this->upgradeContainer->getConfigurationValidator()->validate($requestConfig);
+
+        if ($isLocal && empty($errors)) {
+            $errors = $this->upgradeContainer->getLocalChannelConfigurationValidator()->validate($requestConfig);
+        }
+
+        if (empty($errors)) {
+            if ($isLocal) {
+                $file = $requestConfig['archive_zip'];
+                $fullFilePath = $this->upgradeContainer->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $file;
+                $requestConfig['archive_version_num'] = $this->upgradeContainer->getPrestashopVersionService()->extractPrestashopVersionFromZip($fullFilePath);
+            }
+
+            $config = $this->upgradeContainer->getUpgradeConfiguration();
+            $config->merge($requestConfig);
+
+            $this->upgradeContainer->getUpgradeConfigurationStorage()->save($config, UpgradeFileNames::CONFIG_FILENAME);
+        } else {
+            $errors = array_column(
+                array_map(function ($error) {
+                    return [
+                        'key' => $error['target'] ?? 'global',
+                        'value' => $error['message'],
+                    ];
+                }, $errors),
+                'value',
+                'key'
+            );
+        }
 
         $params = array_merge(
             $this->getParams(),
-            ['current_values' => $this->request->request->all()]
+            [
+                'current_values' => $requestConfig,
+                'errors' => $errors,
+            ]
         );
 
-        if ($channel === self::FORM_OPTIONS['local_value']) {
+        if ($isLocal) {
             return AjaxResponseBuilder::hydrationResponse(PageSelectors::RADIO_CARD_ARCHIVE_PARENT_ID, $this->getTwig()->render(
                 '@ModuleAutoUpgrade/components/radio-card-local.html.twig',
                 $params

@@ -32,7 +32,9 @@ use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupManager;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
 use PrestaShop\Module\AutoUpgrade\Log\WebLogger;
+use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationValidator;
 use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\LocalChannelConfigurationValidator;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
@@ -41,6 +43,7 @@ use PrestaShop\Module\AutoUpgrade\Repository\LocalArchiveRepository;
 use PrestaShop\Module\AutoUpgrade\Services\ComposerService;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
+use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
 use PrestaShop\Module\AutoUpgrade\Twig\AssetsEnvironment;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension3;
@@ -207,6 +210,21 @@ class UpgradeContainer
      * @var AssetsEnvironment
      */
     private $assetsEnvironment;
+
+    /**
+     * @var ConfigurationValidator
+     */
+    private $configurationValidator;
+
+    /**
+     * @var LocalChannelConfigurationValidator
+     */
+    private $localChannelConfigurationValidator;
+
+    /**
+     * @var PrestashopVersionService
+     */
+    private $prestashopVersionService;
 
     /**
      * AdminSelfUpgrade::$autoupgradePath
@@ -744,6 +762,48 @@ class UpgradeContainer
         }
 
         return $this->assetsEnvironment = new AssetsEnvironment();
+    }
+
+    /**
+     * @return ConfigurationValidator
+     */
+    public function getConfigurationValidator(): ConfigurationValidator
+    {
+        if (null !== $this->configurationValidator) {
+            return $this->configurationValidator;
+        }
+
+        return $this->configurationValidator = new ConfigurationValidator(
+            $this->getTranslator()
+        );
+    }
+
+    /**
+     * @return LocalChannelConfigurationValidator
+     */
+    public function getLocalChannelConfigurationValidator(): LocalChannelConfigurationValidator
+    {
+        if (null !== $this->localChannelConfigurationValidator) {
+            return $this->localChannelConfigurationValidator;
+        }
+
+        return $this->localChannelConfigurationValidator = new LocalChannelConfigurationValidator(
+            $this->getTranslator(),
+            $this->getPrestashopVersionService(),
+            $this->getProperty(self::DOWNLOAD_PATH)
+        );
+    }
+
+    /**
+     * @return PrestashopVersionService
+     */
+    public function getPrestashopVersionService(): PrestashopVersionService
+    {
+        if (null !== $this->prestashopVersionService) {
+            return $this->prestashopVersionService;
+        }
+
+        return $this->prestashopVersionService = new PrestashopVersionService($this->getZipAction());
     }
 
     /**

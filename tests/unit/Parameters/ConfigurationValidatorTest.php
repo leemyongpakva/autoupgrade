@@ -28,90 +28,138 @@ namespace Parameters;
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationValidator;
-use UnexpectedValueException;
+use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
 class ConfigurationValidatorTest extends TestCase
 {
+    /** @var ConfigurationValidator */
+    private $validator;
+
+    protected function setUp()
+    {
+        $translator = $this->createMock(Translator::class);
+
+        $translator->method('trans')->willReturnCallback(function ($string, $params) {
+            return sprintf($string, ...$params);
+        });
+
+        $this->validator = new ConfigurationValidator($translator);
+    }
+
     public function testValidateChannelSuccess()
     {
-        $validator = new ConfigurationValidator();
+        $result = $this->validator->validate(['channel' => 'online']);
+        $this->assertEmpty($result);
 
-        $validator->validate(['channel' => 'online']);
-        $validator->validate(['channel' => 'local']);
+        $result = $this->validator->validate(['channel' => 'local']);
+        $this->assertEmpty($result);
     }
 
     public function testValidateChannelFail()
     {
-        $validator = new ConfigurationValidator();
+        $channel = 'toto';
 
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Unknown channel toto');
-
-        $validator->validate(['channel' => 'toto']);
+        $result = $this->validator->validate(['channel' => $channel]);
+        $this->assertEquals([
+            [
+                'message' => 'Unknown channel ' . $channel,
+                'target' => 'channel',
+            ],
+        ], $result);
     }
 
     public function testValidateZipSuccess()
     {
-        $validator = new ConfigurationValidator();
+        $result = $this->validator->validate(['archive_zip' => 'prestashop.zip']);
+        $this->assertEmpty($result);
 
-        $validator->validate(['archive_zip' => 'toto']);
-        $validator->validate(['channel' => 'local', 'archive_zip' => 'toto']);
-        $validator->validate(['channel' => 'online', 'archive_zip' => '']);
+        $result = $this->validator->validate(['channel' => 'local', 'archive_zip' => 'prestashop.zip']);
+        $this->assertEmpty($result);
+
+        $result = $this->validator->validate(['channel' => 'online', 'archive_zip' => '']);
+        $this->assertEmpty($result);
     }
 
     public function testValidateZipFail()
     {
-        $validator = new ConfigurationValidator();
-
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('No zip archive provided');
-
-        $validator->validate(['channel' => 'local', 'archive_zip' => '']);
+        $result = $this->validator->validate(['channel' => 'local', 'archive_zip' => '']);
+        $this->assertEquals([
+            [
+                'message' => 'No zip archive provided',
+                'target' => 'archive_zip',
+            ],
+        ], $result);
     }
 
     public function testValidateXmlSuccess()
     {
-        $validator = new ConfigurationValidator();
+        $result = $this->validator->validate(['archive_xml' => 'prestashop.xml']);
+        $this->assertEmpty($result);
 
-        $validator->validate(['archive_xml' => 'toto']);
-        $validator->validate(['channel' => 'local', 'archive_xml' => 'toto']);
-        $validator->validate(['channel' => 'online', 'archive_xml' => '']);
+        $result = $this->validator->validate(['channel' => 'local', 'archive_xml' => 'prestashop.xml']);
+        $this->assertEmpty($result);
+
+        $result = $this->validator->validate(['channel' => 'online', 'archive_xml' => '']);
+        $this->assertEmpty($result);
     }
 
     public function testValidateXmlFail()
     {
-        $validator = new ConfigurationValidator();
-
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('No xml archive provided');
-
-        $validator->validate(['channel' => 'local', 'archive_xml' => '']);
+        $result = $this->validator->validate(['channel' => 'local', 'archive_xml' => '']);
+        $this->assertEquals([
+            [
+                'message' => 'No xml archive provided',
+                'target' => 'archive_xml',
+            ],
+        ], $result);
     }
 
     public function testValidateBoolSuccess()
     {
-        $validator = new ConfigurationValidator();
+        $validValues = ['1', '0', 'true', 'false', 'on', 'off'];
 
-        $validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => '1']);
-        $validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => '0']);
-        $validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => 'true']);
-        $validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => 'false']);
-        $validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => 'on']);
-        $validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => 'off']);
+        foreach ($validValues as $value) {
+            $result = $this->validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => $value]);
+            $this->assertEmpty($result);
+        }
     }
 
     public function testValidateBoolFail()
     {
-        $validator = new ConfigurationValidator();
+        $result = $this->validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => 'toto']);
+        $this->assertEquals([
+            [
+                'message' => 'Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT',
+                'target' => 'PS_AUTOUP_CUSTOM_MOD_DESACT',
+            ],
+        ], $result);
 
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT');
+        $result = $this->validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => '']);
+        $this->assertEquals([
+            [
+                'message' => 'Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT',
+                'target' => 'PS_AUTOUP_CUSTOM_MOD_DESACT',
+            ],
+        ], $result);
+    }
 
-        $validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => 'toto']);
+    public function testValidateMultipleInputFail()
+    {
+        $result = $this->validator->validate([
+            'channel' => 'local',
+            'archive_zip' => '',
+            'archive_xml' => '',
+        ]);
 
-        $this->expectException(UnexpectedValueException::class);
-        $this->expectExceptionMessage('Value must be a boolean for PS_AUTOUP_CUSTOM_MOD_DESACT');
-
-        $validator->validate(['PS_AUTOUP_CUSTOM_MOD_DESACT' => '']);
+        $this->assertEquals([
+            [
+                'message' => 'No zip archive provided',
+                'target' => 'archive_zip',
+            ],
+            [
+                'message' => 'No xml archive provided',
+                'target' => 'archive_xml',
+            ],
+        ], $result);
     }
 }

@@ -401,8 +401,12 @@ class AdminSelfUpgradeController extends ModuleAdminController
             }
         }
 
+        $error = $this->upgradeContainer->getConfigurationValidator()->validate($config);
+        if (!empty($error)) {
+            throw new UnexpectedValueException(reset($error)['message']);
+        }
+
         $UpConfig = $this->upgradeContainer->getUpgradeConfiguration();
-        $UpConfig->validate($config);
         $UpConfig->merge($config);
 
         if ($this->upgradeContainer->getUpgradeConfigurationStorage()->save(
