@@ -1,0 +1,29 @@
+<div id="error_{{ error_code }}" class="error-page">
+  <div class="error-page__container">
+    {% block img %}
+      <img class="error-page__img" src="{{ psBaseUri }}img/404.svg" width="408" height="141" alt=""/>
+    {% endblock %}
+
+    <div class="error-page__infos">
+      {% block title %}
+        <h2 class="error-page__title">
+          {{ 'Something went wrong...'|trans({}) }}
+        </h2>
+      {% endblock %}
+
+      {% block description %}
+        <p class="error-page__desc">
+          {{ 'We can\'t find your update file in the server.'|trans({}) }}
+          <br/>
+          {{ 'Add a file to restore or update your store.'|trans({}) }}
+        </p>
+      {% endblock %}
+
+      {% block button %}
+        <a class="error-page__button btn btn-primary btn-lg" href="#">
+          {{ 'Go back to Update assistant'|trans({}) }}
+        </a>
+      {% endblock %}
+    </div>
+  </div>
+</div>

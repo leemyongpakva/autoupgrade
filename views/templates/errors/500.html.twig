@@ -1,0 +1,23 @@
+{% extends "@ModuleAutoUpgrade/layouts/error.html.twig" %}
+
+{% block img %}
+  <img class="error-page__img" src="{{ psBaseUri }}img/500.svg" width="403" height="174" alt=""/>
+{% endblock %}
+
+{% block title %}
+  <h2 class="error-page__title">
+    {{ 'Something went wrong...'|trans({}) }}
+  </h2>
+{% endblock %}
+
+{% block description %}
+  <p class="error-page__desc">
+    {{ 'The module is no longer responding. You can try again in a few moments.'|trans({}) }}
+  </p>
+{% endblock %}
+
+{% block button %}
+  <a class="error-page__button btn btn-primary btn-lg" href="#">
+    {{ 'Go back to Update assistant'|trans({}) }}
+  </a>
+{% endblock %}
