@@ -31,7 +31,7 @@ $e: ".logs";
     &__scroll {
       flex-grow: 1;
       min-height: var(--#{$ua-prefix}logs-height);
-      overflow-y: scroll;
+      overflow-y: auto;
       scroll-behavior: smooth;
     }
 

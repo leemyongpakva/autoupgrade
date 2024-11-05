@@ -45,8 +45,8 @@ export const Local = {
     },
     form_fields: {
       channel: "local",
-      archive_zip: "local",
-      archive_xml: "local",
+      archive_zip: "local_zip",
+      archive_xml: "local_xml",
     },
     current_values: {
       channel: "local",

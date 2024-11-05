@@ -1,7 +1,7 @@
 {% if logs %}
   <div class="logs">
     <div class="logs__inner">
-      <div class="logs__scroll">
+      <div class="logs__scroll" tabindex="0">
         <div class="logs__list">
           {% for log in logs %}
             <div class="logs__line logs__line--{{ log.status }}"

@@ -1,5 +1,6 @@
 <div class="modal fade {% if modalDanger %}modal--danger{% endif %}"
   {% if modalId %}id="{{ modalId }}"{% endif %}
+  aria-label="{{ title }}"
   role="dialog"
   tabindex="-1">
   <div class="modal-dialog {% if modalSize and modalSize != "md" %}modal-{{ modalSize }}{% endif %}"
