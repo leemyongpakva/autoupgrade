@@ -23,12 +23,8 @@ $e: ".radio-card";
       --#{$ua-prefix}radio-card-release-color
     );
     --#{$ua-prefix}radio-card-badge-color: var(--#{$ua-prefix}base-text-color);
-    --#{$ua-prefix}radio-card-badge-background-color: var(--#{$ua-prefix}primary-200);
-    --#{$ua-prefix}radio-card-badge-border-color: var(--#{$ua-prefix}border-color);
-    --#{$ua-prefix}radio-card-badge-major-background-color: var(--#{$ua-prefix}purple-50);
-    --#{$ua-prefix}radio-card-badge-major-border-color: var(--#{$ua-prefix}purple-500);
-    --#{$ua-prefix}radio-card-badge-minor-background-color: var(--#{$ua-prefix}ocean-blue-50);
-    --#{$ua-prefix}radio-card-badge-minor-border-color: var(--#{$ua-prefix}ocean-blue-500);
+    --#{$ua-prefix}radio-card-badge-background-color: var(--#{$ua-prefix}purple-50);
+    --#{$ua-prefix}radio-card-badge-border-color: var(--#{$ua-prefix}purple-50);
     --#{$ua-prefix}radio-card-loader-background-color: var(--#{$ua-prefix}muted-background-color);
     --#{$ua-prefix}radio-card-loader-color: var(--#{$ua-prefix}base-text-color);
     --#{$ua-prefix}radio-card-loader-dot-color: var(--#{$ua-prefix}ocean-blue-700);
@@ -154,26 +150,12 @@ $e: ".radio-card";
       flex-shrink: 0;
       padding: 0.125rem 0.5rem;
       background-color: var(--#{$ua-prefix}radio-card-badge-background-color);
+      border-color: var(--#{$ua-prefix}radio-card-badge-border-color);
       border-radius: var(--#{$ua-prefix}border-radius);
       font-size: 0.75rem;
       font-weight: 600;
       line-height: 1.5;
       color: var(--#{$ua-prefix}radio-card-badge-color);
-
-      &--major {
-        background-color: var(--#{$ua-prefix}radio-card-badge-major-background-color);
-        border-color: var(--#{$ua-prefix}radio-card-badge-major-border-color);
-      }
-
-      &--minor {
-        background-color: var(--#{$ua-prefix}radio-card-badge-minor-background-color);
-        border-color: var(--#{$ua-prefix}radio-card-badge-minor-border-color);
-      }
-
-      &--patch {
-        background-color: var(--#{$ua-prefix}radio-card-badge-background-color);
-        border-color: var(--#{$ua-prefix}radio-card-badge-border-color);
-      }
     }
 
     &__message {
