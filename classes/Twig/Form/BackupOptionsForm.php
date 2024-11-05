@@ -27,6 +27,7 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Twig\Form;
 
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
 class BackupOptionsForm
@@ -52,7 +53,7 @@ class BackupOptionsForm
         $this->formRenderer = $formRenderer;
 
         $this->fields = [
-            'PS_AUTOUP_BACKUP' => [
+            UpgradeConfiguration::PS_AUTOUP_BACKUP => [
                 'title' => $this->translator->trans('Back up my files and database'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
@@ -62,7 +63,7 @@ class BackupOptionsForm
                     'Automatically back up your database and files in order to restore your shop if needed. This is experimental: you should still perform your own manual backup for safety.'
                 ),
             ],
-            'PS_AUTOUP_KEEP_IMAGES' => [
+            UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => [
                 'title' => $this->translator->trans(
                     'Back up my images'
                 ),

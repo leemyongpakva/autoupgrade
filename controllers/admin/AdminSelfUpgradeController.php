@@ -197,7 +197,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
     private function _setFields()
     {
         $this->_fieldsBackupOptions = [
-            'PS_AUTOUP_BACKUP' => [
+            UpgradeConfiguration::PS_AUTOUP_BACKUP => [
                 'title' => $this->trans('Back up my files and database'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
@@ -205,7 +205,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
                 'type' => 'bool',
                 'desc' => $this->trans('Automatically back up your database and files in order to restore your shop if needed. This is experimental: you should still perform your own manual backup for safety.'),
             ],
-            'PS_AUTOUP_KEEP_IMAGES' => [
+            UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => [
                 'title' => $this->trans('Back up my images'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
@@ -215,7 +215,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
             ],
         ];
         $this->_fieldsUpgradeOptions = [
-            'PS_AUTOUP_CUSTOM_MOD_DESACT' => [
+            UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => [
                 'title' => $this->trans('Disable non-native modules'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
@@ -223,14 +223,14 @@ class AdminSelfUpgradeController extends ModuleAdminController
                 'desc' => $this->trans('As non-native modules can experience some compatibility issues, we recommend to disable them by default.') . '<br />' .
                     $this->trans('Keeping them enabled might prevent you from loading the "Modules" page properly after the upgrade.'),
             ],
-            'PS_DISABLE_OVERRIDES' => [
+            UpgradeConfiguration::PS_DISABLE_OVERRIDES => [
                 'title' => $this->trans('Disable all overrides'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
                 'type' => 'bool',
                 'desc' => $this->trans('Enable or disable all classes and controllers overrides.'),
             ],
-            'PS_AUTOUP_CHANGE_DEFAULT_THEME' => [
+            UpgradeConfiguration::PS_AUTOUP_CHANGE_DEFAULT_THEME => [
                 'title' => $this->trans('Switch to the default theme'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
@@ -238,7 +238,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
                 'type' => 'bool',
                 'desc' => $this->trans('This will change your theme: your shop will then use the default theme of the version of PrestaShop you are upgrading to.'),
             ],
-            'PS_AUTOUP_KEEP_MAILS' => [
+            UpgradeConfiguration::PS_AUTOUP_KEEP_MAILS => [
                 'title' => $this->trans('Keep the customized email templates'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
@@ -394,7 +394,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
                 continue;
             }
             // The PS_DISABLE_OVERRIDES variable must only be updated on the database side
-            if ($key === 'PS_DISABLE_OVERRIDES') {
+            if ($key === UpgradeConfiguration::PS_DISABLE_OVERRIDES) {
                 UpgradeConfiguration::updatePSDisableOverrides((bool) $_POST[$key]);
             } else {
                 $config[$key] = $_POST[$key];

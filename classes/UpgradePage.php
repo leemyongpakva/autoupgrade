@@ -269,7 +269,7 @@ class UpgradePage
         return [
             'psBaseUri' => __PS_BASE_URI__,
             '_PS_MODE_DEV_' => (defined('_PS_MODE_DEV_') && true == _PS_MODE_DEV_),
-            'PS_AUTOUP_BACKUP' => $this->config->shouldBackupFilesAndDatabase(),
+            UpgradeConfiguration::PS_AUTOUP_BACKUP => $this->config->shouldBackupFilesAndDatabase(),
             'adminDir' => $adminDir,
             'adminUrl' => __PS_BASE_URI__ . $adminDir,
             'token' => $this->token,
@@ -277,7 +277,7 @@ class UpgradePage
             'ajaxUpgradeTabExists' => file_exists($this->autoupgradePath . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php'),
             'currentIndex' => $this->currentIndex,
             'tab' => 'AdminSelfUpgrade',
-            'channel' => $this->config->get('channel'),
+            UpgradeConfiguration::CHANNEL => $this->config->get(UpgradeConfiguration::CHANNEL),
             'autoupgrade' => [
                 'version' => $this->upgradeSelfCheck->getModuleVersion(),
             ],

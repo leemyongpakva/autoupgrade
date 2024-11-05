@@ -29,6 +29,7 @@ namespace PrestaShop\Module\AutoUpgrade\Commands;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\DeveloperDocumentation;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\Runner\AllUpdateTasks;
 use Symfony\Component\Console\Input\InputArgument;
@@ -54,7 +55,7 @@ class UpdateCommand extends AbstractCommand
             ->addArgument('admin-dir', InputArgument::REQUIRED, 'The admin directory name.')
             ->addOption('chain', null, InputOption::VALUE_NONE, 'True by default. Allows you to chain update commands automatically. The command will continue executing subsequent tasks without requiring manual intervention to restart the process.')
             ->addOption('no-chain', null, InputOption::VALUE_NONE, 'Prevents chaining of update commands. The command will execute a task and then stop, logging the next command that needs to be run. You will need to manually restart the process to continue with the next step.')
-            ->addOption('channel', null, InputOption::VALUE_REQUIRED, "Selects what update to run ('local' / 'online')")
+            ->addOption(UpgradeConfiguration::CHANNEL, null, InputOption::VALUE_REQUIRED, "Selects what update to run ('local' / 'online')")
             ->addOption('config-file-path', null, InputOption::VALUE_REQUIRED, 'Configuration file location for update.')
             ->addOption('action', null, InputOption::VALUE_REQUIRED, 'Advanced users only. Sets the step you want to start from (Default: UpgradeNow, see ' . DeveloperDocumentation::DEV_DOC_UPGRADE_CLI_URL . ' for other values available)')
             ->addOption('data', null, InputOption::VALUE_REQUIRED, 'Advanced users only. Contains the state of the update process encoded in base64');
@@ -93,7 +94,7 @@ class UpdateCommand extends AbstractCommand
             $controller->setOptions([
                 'data' => $input->getOption('data'),
                 'action' => $input->getOption('action'),
-                'channel' => $input->getOption('channel'),
+                UpgradeConfiguration::CHANNEL => $input->getOption(UpgradeConfiguration::CHANNEL),
             ]);
             $controller->init();
             $exitCode = $controller->run();

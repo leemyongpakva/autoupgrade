@@ -29,6 +29,7 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
@@ -46,9 +47,9 @@ class UpdatePageVersionChoiceController extends AbstractPageController
     const CURRENT_STEP = UpdateSteps::STEP_VERSION_CHOICE;
     const FORM_NAME = 'version_choice';
     const FORM_FIELDS = [
-        'channel' => 'channel',
-        'archive_zip' => 'archive_zip',
-        'archive_xml' => 'archive_xml',
+        'channel' => UpgradeConfiguration::CHANNEL,
+        'archive_zip' => UpgradeConfiguration::ARCHIVE_ZIP,
+        'archive_xml' => UpgradeConfiguration::ARCHIVE_XML,
     ];
     const FORM_OPTIONS = [
         'online_value' => Upgrader::CHANNEL_ONLINE,
@@ -214,7 +215,7 @@ class UpdatePageVersionChoiceController extends AbstractPageController
 
         if (empty($errors)) {
             if ($isLocal) {
-                $file = $requestConfig['archive_zip'];
+                $file = $requestConfig[UpgradeConfiguration::ARCHIVE_ZIP];
                 $fullFilePath = $this->upgradeContainer->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $file;
                 $requestConfig['archive_version_num'] = $this->upgradeContainer->getPrestashopVersionService()->extractPrestashopVersionFromZip($fullFilePath);
             }

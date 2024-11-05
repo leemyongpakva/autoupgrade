@@ -73,7 +73,7 @@ class FormRenderer
             $required = !empty($field['required']);
             $disabled = !empty($field['disabled']);
 
-            if ($key === 'PS_DISABLE_OVERRIDES') {
+            if ($key === UpgradeConfiguration::PS_DISABLE_OVERRIDES) {
                 // values fetched from configuration in database
                 $val = UpgradeConfiguration::isOverrideAllowed();
             } else {
