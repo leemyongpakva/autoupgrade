@@ -35,9 +35,9 @@ export default class UpdatePageVersionChoice extends UpdatePage {
     });
   };
 
-  private sendForm = (routeToSend: string) => {
+  private sendForm = async (routeToSend: string) => {
     const formData = new FormData(this.form!);
-    api.post(routeToSend, formData);
+    await api.post(routeToSend, formData);
   };
 
   private addListenerToCheckRequirementsAgainButtons = () => {
@@ -61,7 +61,7 @@ export default class UpdatePageVersionChoice extends UpdatePage {
     }
   };
 
-  private saveForm = () => {
+  private saveForm = async () => {
     const routeToSave = this.form!.dataset.routeToSave;
 
     if (!routeToSave) {
@@ -82,7 +82,7 @@ export default class UpdatePageVersionChoice extends UpdatePage {
       currentInputCheck.removeAttribute('data-requirements-are-ok');
       this.toggleNextButton();
       currentInputCheck.classList.add(this.radioLoadingClass);
-      this.sendForm(routeToSave);
+      await this.sendForm(routeToSave);
     }
   };
 

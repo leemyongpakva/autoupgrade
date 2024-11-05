@@ -37,13 +37,13 @@ export default class HomePage extends PageAbstract {
     }
   };
 
-  private handleSubmit = (event: Event) => {
+  private handleSubmit = async (event: Event) => {
     event.preventDefault();
     const routeToSubmit = this.form?.dataset.routeToSubmit;
 
     if (routeToSubmit) {
       const formData = new FormData(this.form);
-      api.post(routeToSubmit, formData);
+      await api.post(routeToSubmit, formData);
     }
   };
 
