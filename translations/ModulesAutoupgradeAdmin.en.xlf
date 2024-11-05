@@ -2038,6 +2038,15 @@ Comment: directory already exists</note>
       </trans-unit>
     </body>
   </file>
+  <file original="views/templates/components/logs-progress.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="18b3f76b7dac69cf60eb8a6933caeafd">
+        <source>Progress is %s%</source>
+        <target>Progress is %s%</target>
+        <note>Line: 16</note>
+      </trans-unit>
+    </body>
+  </file>
   <file original="views/templates/components/logs.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
       <trans-unit id="12b7e9bd62f15c5f79030a36509eedf0">
