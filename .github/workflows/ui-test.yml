@@ -66,9 +66,27 @@ jobs:
         run: |
           docker exec -t prestashop php modules/autoupgrade/bin/console backup:create admin-dev
 
+      - name: Download local ZIP and XML for local channel
+        if: matrix.UPGRADE_CHANNEL == 'local'
+        run: |
+          docker exec -t prestashop curl --fail -L https://github.com/PrestaShop/zip-archives/raw/main/prestashop_${{ matrix.PS_VERSION_END }}.zip -o admin-dev/autoupgrade/download/prestashop_${{ matrix.PS_VERSION_END }}.zip
+          docker exec -t prestashop curl --fail -L https://api.prestashop.com/xml/md5/${{ matrix.PS_VERSION_END }}.xml -o admin-dev/autoupgrade/download/prestashop_${{ matrix.PS_VERSION_END }}.xml
+
+      - name: Write configuration file
+        run: |
+          docker exec -t prestashop sh -c "echo '{
+            \"channel\":\"${{ matrix.UPGRADE_CHANNEL }}\",
+            \"archive_zip\":\"prestashop_${{ matrix.PS_VERSION_END }}.zip\",
+            \"archive_xml\":\"prestashop_${{ matrix.PS_VERSION_END }}.xml\",
+            \"PS_AUTOUP_CUSTOM_MOD_DESACT\":\"true\",
+            \"PS_AUTOUP_CHANGE_DEFAULT_THEME\":\"false\",
+            \"PS_AUTOUP_KEEP_IMAGES\":\"true\",
+            \"PS_DISABLE_OVERRIDES\":\"true\"
+          }' > modules/autoupgrade/config.json"
+
       - name: Update
         run: |
-         docker exec -t prestashop php modules/autoupgrade/bin/console update:start --channel=online admin-dev
+         docker exec -t prestashop php modules/autoupgrade/bin/console update:start --config-file-path=modules/autoupgrade/config.json --channel=${{ matrix.UPGRADE_CHANNEL }} admin-dev
          docker exec -t prestashop chmod 777 -R /var/www/html/var
 
       - name: Install dependencies
