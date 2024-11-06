@@ -94,7 +94,7 @@ class UpdateCommand extends AbstractCommand
             $controller->setOptions([
                 'data' => $input->getOption('data'),
                 'action' => $input->getOption('action'),
-                UpgradeConfiguration::CHANNEL => $input->getOption(UpgradeConfiguration::CHANNEL),
+                UpgradeConfiguration::CHANNEL => $input->getOption('channel'),
             ]);
             $controller->init();
             $exitCode = $controller->run();
