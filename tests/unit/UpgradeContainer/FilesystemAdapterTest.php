@@ -26,6 +26,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 
 class FilesystemAdapterTest extends TestCase
