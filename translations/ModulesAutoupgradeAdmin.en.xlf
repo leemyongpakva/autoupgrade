@@ -53,7 +53,12 @@
       <trans-unit id="435d516735dbf7f622c7d14585f66840">
         <source>Action %s skipped</source>
         <target>Action %s skipped</target>
-        <note>Line: 150</note>
+        <note>Line: 151</note>
+      </trans-unit>
+      <trans-unit id="daafa671e5cd581e6c8af2af28846b66">
+        <source>Successfully initialized state.</source>
+        <target>Successfully initialized state.</target>
+        <note>Line: 203</note>
       </trans-unit>
     </body>
   </file>
@@ -216,12 +221,12 @@
       <trans-unit id="f2ff9d001d0a553c78da73443e7fcd97">
         <source>Configuration successfully updated.</source>
         <target>Configuration successfully updated.</target>
-        <note>Line: 172</note>
+        <note>Line: 169</note>
       </trans-unit>
       <trans-unit id="40b980e89ae332507380470cd26cdf4d">
         <source>This page will now be reloaded and the module will check if a new version is available.</source>
         <target>This page will now be reloaded and the module will check if a new version is available.</target>
-        <note>Line: 172</note>
+        <note>Line: 169</note>
       </trans-unit>
     </body>
   </file>
@@ -511,27 +516,27 @@
       <trans-unit id="de4026a3fc9813c32f3a247370c29f54">
         <source>Disabling all non native modules</source>
         <target>Disabling all non native modules</target>
-        <note>Line: 149</note>
+        <note>Line: 153</note>
       </trans-unit>
       <trans-unit id="ffb63e7ff1e05430b4a292ac8651f1e4">
         <source>Keeping non native modules enabled</source>
         <target>Keeping non native modules enabled</target>
-        <note>Line: 152</note>
+        <note>Line: 156</note>
       </trans-unit>
       <trans-unit id="f8498f0014f0b834b635ad879ae1b3fd">
         <source>[ERROR] Version to install is too old.</source>
         <target>[ERROR] Version to install is too old.</target>
-        <note>Line: 169</note>
+        <note>Line: 173</note>
       </trans-unit>
       <trans-unit id="62e3454ceb58a5cdd7e382f6ecc78fe4">
         <source>Current version: %oldversion%. Version to install: %newversion%.</source>
         <target>Current version: %oldversion%. Version to install: %newversion%.</target>
-        <note>Line: 169</note>
+        <note>Line: 173</note>
       </trans-unit>
       <trans-unit id="37ce0f29c7377c827e7247fe5645a782">
         <source>You already have the %s version.</source>
         <target>You already have the %s version.</target>
-        <note>Line: 171</note>
+        <note>Line: 175</note>
       </trans-unit>
     </body>
   </file>
@@ -608,15 +613,20 @@ Comment: directory already exists</note>
         <target>A file may be missing, or the release is stored in a subfolder by mistake.</target>
         <note>Line: 208</note>
       </trans-unit>
+      <trans-unit id="a845839e72a2af510180c93273119199">
+        <source>Unable to generate diff file list between %s and %s.</source>
+        <target>Unable to generate diff file list between %s and %s.</target>
+        <note>Line: 232</note>
+      </trans-unit>
       <trans-unit id="2de9cd00fdcc22adb43ea03f2a09dee5">
         <source>[ERROR] Unable to find files to upgrade.</source>
         <target>[ERROR] Unable to find files to upgrade.</target>
-        <note>Line: 269</note>
+        <note>Line: 271</note>
       </trans-unit>
       <trans-unit id="5479863b0426e29c3a17a3f9cc6e3746">
         <source>%s files will be upgraded.</source>
         <target>%s files will be upgraded.</target>
-        <note>Line: 274</note>
+        <note>Line: 276</note>
       </trans-unit>
     </body>
   </file>
@@ -630,37 +640,37 @@ Comment: directory already exists</note>
       <trans-unit id="6457b7906763efc16e4c05fe806cb680">
         <source>Your shop is currently running the latest compatible version. No updates are needed at this time.</source>
         <target>Your shop is currently running the latest compatible version. No updates are needed at this time.</target>
-        <note>Line: 60</note>
+        <note>Line: 59</note>
       </trans-unit>
       <trans-unit id="02aa51bf9b62b390e5b799c57f0367a7">
         <source>Destination version: %s</source>
         <target>Destination version: %s</target>
-        <note>Line: 65</note>
+        <note>Line: 64</note>
       </trans-unit>
       <trans-unit id="fd89b081ead6c32f16c370771cfe92e1">
         <source>Downloading step has been skipped, upgrade process will now unzip the local archive.</source>
         <target>Downloading step has been skipped, upgrade process will now unzip the local archive.</target>
-        <note>Line: 70</note>
+        <note>Line: 69</note>
       </trans-unit>
       <trans-unit id="1a74ca8250ceb3e4df43a70181064e03">
         <source>Shop deactivated. Extracting files...</source>
         <target>Shop deactivated. Extracting files...</target>
-        <note>Line: 71</note>
+        <note>Line: 70</note>
       </trans-unit>
       <trans-unit id="a3e702f156f1b517ba98d2487f58bd91">
         <source>Shop deactivated. Now downloading... (this can take a while)</source>
         <target>Shop deactivated. Now downloading... (this can take a while)</target>
-        <note>Line: 75</note>
+        <note>Line: 74</note>
       </trans-unit>
       <trans-unit id="10b5aa33077df49427f04cd33ad3843f">
         <source>Downloaded archive will come from %s</source>
         <target>Downloaded archive will come from %s</target>
-        <note>Line: 76</note>
+        <note>Line: 75</note>
       </trans-unit>
       <trans-unit id="da652b8ece8ba2da84d5f5116f6ef63e">
         <source>MD5 hash will be checked against %s</source>
         <target>MD5 hash will be checked against %s</target>
-        <note>Line: 77</note>
+        <note>Line: 76</note>
       </trans-unit>
     </body>
   </file>
@@ -1224,27 +1234,27 @@ Comment: directory already exists</note>
       <trans-unit id="b5ffb77b13ab03298982a49842ce78aa">
         <source>%lang% is not a valid iso code, skipping</source>
         <target>%lang% is not a valid iso code, skipping</target>
-        <note>Line: 76</note>
+        <note>Line: 75</note>
       </trans-unit>
       <trans-unit id="141ff76ab0d97a8ec25a295f763c9acc">
         <source>Downloading language pack for %lang%</source>
         <target>Downloading language pack for %lang%</target>
-        <note>Line: 82</note>
+        <note>Line: 81</note>
       </trans-unit>
       <trans-unit id="3bd67bb11ef4eca367343a48a437116c">
         <source>Installing %lang% language pack</source>
         <target>Installing %lang% language pack</target>
-        <note>Line: 87</note>
+        <note>Line: 86</note>
       </trans-unit>
       <trans-unit id="56f2d5890d12afbf29f105bcf5fc2624">
         <source>Generating mail templates for %lang%</source>
         <target>Generating mail templates for %lang%</target>
-        <note>Line: 92</note>
+        <note>Line: 91</note>
       </trans-unit>
       <trans-unit id="eb98c1e496a76fc9a930ed4731977498">
         <source>Cannot generate email templates: %s.</source>
         <target>Cannot generate email templates: %s.</target>
-        <note>Line: 112</note>
+        <note>Line: 111</note>
       </trans-unit>
     </body>
   </file>
@@ -1470,17 +1480,17 @@ Comment: directory already exists</note>
       <trans-unit id="92a5801448b25f111961462b0b31995d">
         <source>Unable to create file %s</source>
         <target>Unable to create file %s</target>
-        <note>Line: 344</note>
+        <note>Line: 348</note>
       </trans-unit>
       <trans-unit id="56195ded2802813800f43e3be1babe1c">
         <source>Error when trying to delete backups %s</source>
         <target>Error when trying to delete backups %s</target>
-        <note>Line: 379</note>
+        <note>Line: 383</note>
       </trans-unit>
       <trans-unit id="f4eb320e09f7ef88a627229870458454">
         <source>The module %s requires PHP %s to work properly. Please upgrade your server configuration.</source>
         <target>The module %s requires PHP %s to work properly. Please upgrade your server configuration.</target>
-        <note>Line: 428</note>
+        <note>Line: 432</note>
       </trans-unit>
     </body>
   </file>
