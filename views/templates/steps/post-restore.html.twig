@@ -1,0 +1,65 @@
+{% extends "@ModuleAutoUpgrade/layouts/step-content.html.twig" %}
+
+{% block page_class %}post-restore-checklist-page{% endblock %}
+
+{% block title %}
+  <h2>{{ step.title }}</h2>
+{% endblock %}
+
+{% block content %}
+  <div class="content__container">
+    {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
+      title: 'Your restoration is complete'|trans({}),
+      message: 'Before continuing with your tasks, please review the following checklist to ensure smooth operation after recent recovery.'|trans({}),
+      alertStatus: 'success',
+      buttonLabel: '',
+      buttonUrl: '',
+    } %}
+
+    <div class="content__section">
+      <h3 class="h3">
+        {{ 'Next steps'|trans({}) }}
+      </h3>
+
+      <ul>
+        <li>
+          {{ '<b>Open the developer documentation</b> to keep this checklist at-hand.'|trans({})|raw }}
+        </li>
+        <li>
+          {{ '<b>Disable the maintenance mode</b> in General settings > Maintenance.'|trans({})|raw }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="content__section">
+      <h3 class="h3">
+        {{ 'Troubleshooting'|trans({}) }}
+      </h3>
+
+      <ul>
+        <li>
+          {{ 'If you can\'t access your back office, try emptying the cache.'|trans({}) }}
+        </li>
+      </ul>
+    </div>
+
+    <div class="content__section">
+      <a class="link" href="{{ backlog_link }}" download>
+        {{ 'Download restore logs'|trans({}) }}
+        <i class="material-icons">file_upload</i>
+      </a>
+    </div>
+  </div>
+{% endblock %}
+
+{% block buttons_inner %}
+  <button class="btn btn-lg btn-default" type="button">
+    <i class="material-icons">exit_to_app</i>
+    {{ 'Exit'|trans({}) }}
+  </button>
+
+  <button class="btn btn-lg btn-primary" type="button">
+    <i class="material-icons">launch</i>
+    {{ 'Open developer documentation'|trans({}) }}
+  </button>
+{% endblock %}

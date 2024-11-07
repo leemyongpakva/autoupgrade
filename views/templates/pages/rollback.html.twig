@@ -1,5 +1,11 @@
 {% extends "@ModuleAutoUpgrade/layouts/page.html.twig" %}
 
 {% block container_inner %}
-  {% include "@ModuleAutoUpgrade/steps/restore.html.twig" %}
+  {% if step.code == "restore" %}
+    {% include "@ModuleAutoUpgrade/steps/restore.html.twig" %}
+  {% elseif step.code == "post-restore" %}
+    {% include "@ModuleAutoUpgrade/steps/post-restore.html.twig" %}
+  {% else %}
+    {% include "@ModuleAutoUpgrade/steps/backup-selection.html.twig" %}
+  {% endif %}
 {% endblock %}

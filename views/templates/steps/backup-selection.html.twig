@@ -1,15 +1,13 @@
 {% extends "@ModuleAutoUpgrade/layouts/step-content.html.twig" %}
 
-{% block page_class %}restore-page{% endblock %}
+{% block page_class %}backup-selection-page{% endblock %}
 
 {% block title %}
   <h2>{{ step.title }}</h2>
 {% endblock %}
 
 {% block content %}
-  {% include "@ModuleAutoUpgrade/components/logs-progress.html.twig" %}
-
-  {% include "@ModuleAutoUpgrade/components/logs.html.twig" %}
+  {% include "@ModuleAutoUpgrade/components/backup-selection.html.twig" %}
 {% endblock %}
 
 {% block buttons_inner %}

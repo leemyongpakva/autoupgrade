@@ -16,13 +16,6 @@
 
     <div class="backup-page__section">
       {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
-        id: "PS_AUTOUP_BACKUP_FILES_DB",
-        name: "PS_AUTOUP_BACKUP_FILES_DB",
-        title: "Back up files and database",
-        value: default_backup_files_and_database
-      } %}
-
-      {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
         id: "PS_AUTOUP_BACKUP_WITH_IMAGES",
         name: "PS_AUTOUP_BACKUP_WITH_IMAGES",
         title: "Include images",
@@ -33,6 +26,10 @@
 {% endblock %}
 
 {% block buttons_inner %}
+  <button class="btn btn-lg btn-default" type="button">
+    {{ 'Update without backup'|trans({}) }}
+  </button>
+
   <button class="btn btn-lg btn-primary" type="button">
     {{ 'Launch backup'|trans({}) }}
   </button>

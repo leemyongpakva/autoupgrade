@@ -23,20 +23,30 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-import BackupSelectionComponent from "../../../views/templates/components/backup-selection.html.twig";
+import PostRestorePage from "../../../views/templates/pages/rollback.html.twig";
+import { PostRestore as Stepper } from "../components/Stepper.stories";
 
 export default {
-  component: BackupSelectionComponent,
-  title: "Components/Backup selection",
+  component: PostRestorePage,
+  id: "42",
+  title: "Pages/Rollback",
 };
 
-export const Default = {
+export const PostRestore = {
   args: {
-    availableBackups: [
-      "autoupgrade_save_8.1.6 - 15/07/2024 8:00",
-      "autoupgrade_save_8.1.6 - 05/07/2024 16:30",
-      "autoupgrade_save_8.1.6 - 12/04/2024 22:10",
-    ],
-    showDelete: false,
+    // Step
+    step: {
+      code: "post-restore",
+      title: "Post-restore checklist",
+    },
+    psBaseUri: "/",
+    upToDate: true,
+    noLocalArchive: true,
+    currentPrestashopVersion: "8.1.6",
+    currentPhpVersion: "8.1",
+    backlog_link: "https://myshop.com/my-backlog.txt",
+    step_parent_id: "ua_container",
+    // Stepper
+    ...Stepper.args,
   },
 };

@@ -38,12 +38,12 @@ export const Default = {
       {
         state: "done",
         title: "Version choice",
-        code: "version_choice",
+        code: "version-choice",
       },
       {
         state: "current",
         title: "Update options",
-        code: "update_options",
+        code: "update-options",
       },
       {
         state: "normal",
@@ -58,7 +58,7 @@ export const Default = {
       {
         state: "normal",
         title: "Post-update",
-        code: "post_update",
+        code: "post-update",
       },
     ],
   },
@@ -71,12 +71,12 @@ export const VersionChoice = {
       {
         state: "current",
         title: "Version choice",
-        code: "version_choice",
+        code: "version-choice",
       },
       {
         state: "normal",
         title: "Update options",
-        code: "update_options",
+        code: "update-options",
       },
       {
         state: "normal",
@@ -91,7 +91,7 @@ export const VersionChoice = {
       {
         state: "normal",
         title: "Post-update",
-        code: "post_update",
+        code: "post-update",
       },
     ],
   },
@@ -104,12 +104,12 @@ export const UpdateOptions = {
       {
         state: "done",
         title: "Version choice",
-        code: "version_choice",
+        code: "version-choice",
       },
       {
         state: "current",
         title: "Update options",
-        code: "update_options",
+        code: "update-options",
       },
       {
         state: "normal",
@@ -124,7 +124,7 @@ export const UpdateOptions = {
       {
         state: "normal",
         title: "Post-update",
-        code: "post_update",
+        code: "post-update",
       },
     ],
   },
@@ -137,12 +137,12 @@ export const Backup = {
       {
         state: "done",
         title: "Version choice",
-        code: "version_choice",
+        code: "version-choice",
       },
       {
         state: "done",
         title: "Update options",
-        code: "update_options",
+        code: "update-options",
       },
       {
         state: "current",
@@ -157,7 +157,7 @@ export const Backup = {
       {
         state: "normal",
         title: "Post-update",
-        code: "post_update",
+        code: "post-update",
       },
     ],
   },
@@ -170,12 +170,12 @@ export const Update = {
       {
         state: "done",
         title: "Version choice",
-        code: "version_choice",
+        code: "version-choice",
       },
       {
         state: "done",
         title: "Update options",
-        code: "update_options",
+        code: "update-options",
       },
       {
         state: "done",
@@ -190,7 +190,7 @@ export const Update = {
       {
         state: "normal",
         title: "Post-update",
-        code: "post_update",
+        code: "post-update",
       },
     ],
   },
@@ -203,12 +203,12 @@ export const PostUpdate = {
       {
         state: "done",
         title: "Version choice",
-        code: "version_choice",
+        code: "version-choice",
       },
       {
         state: "done",
         title: "Update options",
-        code: "update_options",
+        code: "update-options",
       },
       {
         state: "done",
@@ -223,7 +223,30 @@ export const PostUpdate = {
       {
         state: "current",
         title: "Post-update",
-        code: "post_update",
+        code: "post-update",
+      },
+    ],
+  },
+};
+
+export const BackupSelection = {
+  args: {
+    stepper_parent_id: "stepper_content",
+    steps: [
+      {
+        state: "current",
+        title: "Backup selection",
+        code: "backup-selection",
+      },
+      {
+        state: "normal",
+        title: "Restore",
+        code: "restore",
+      },
+      {
+        state: "normal",
+        title: "Post-restore",
+        code: "post-restore",
       },
     ],
   },
@@ -234,20 +257,44 @@ export const Restore = {
     stepper_parent_id: "stepper_content",
     steps: [
       {
-        state: "current",
+        state: "done",
         title: "Backup selection",
-        code: "backup_selection",
+        code: "backup-selection",
       },
       {
-        state: "normal",
+        state: "current",
         title: "Restore",
         code: "restore",
       },
       {
         state: "normal",
         title: "Post-restore",
-        code: "post_restore",
+        code: "post-restore",
       },
     ],
   },
 };
+
+export const PostRestore = {
+  args: {
+    stepper_parent_id: "stepper_content",
+    steps: [
+      {
+        state: "done",
+        title: "Backup selection",
+        code: "backup-selection",
+      },
+      {
+        state: "done",
+        title: "Restore",
+        code: "restore",
+      },
+      {
+        state: "current",
+        title: "Post-restore",
+        code: "post-restore",
+      },
+    ],
+  },
+};
+

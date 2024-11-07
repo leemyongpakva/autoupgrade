@@ -36,3 +36,10 @@ export const Default = {
     progressPercentage: 25,
   }
 };
+
+export const RestoreLogsProgress = {
+  args: {
+    progressStatus: "Restoration in progress",
+    progressPercentage: 45,
+  }
+};
