@@ -1126,92 +1126,92 @@ Comment: directory already exists</note>
       <trans-unit id="4e32fd9d99ee0c3370c870d4da3d31a9">
         <source>Running generic queries</source>
         <target>Running generic queries</target>
-        <note>Line: 123</note>
+        <note>Line: 124</note>
       </trans-unit>
       <trans-unit id="257f5523f283710c6859d8f425a0c657">
         <source>Database upgrade OK</source>
         <target>Database upgrade OK</target>
-        <note>Line: 126</note>
+        <note>Line: 127</note>
       </trans-unit>
       <trans-unit id="72c863d76f8a8e5b1d17f818894df989">
         <source>Upgrading languages</source>
         <target>Upgrading languages</target>
-        <note>Line: 128</note>
+        <note>Line: 129</note>
       </trans-unit>
       <trans-unit id="88bbbc84f51424b4b0c6da6aec2c2154">
         <source>Regenerating htaccess</source>
         <target>Regenerating htaccess</target>
-        <note>Line: 131</note>
+        <note>Line: 132</note>
       </trans-unit>
       <trans-unit id="128e1c61a1a4477ec05609569cc4d9d8">
         <source>Cleaning XML files</source>
         <target>Cleaning XML files</target>
-        <note>Line: 134</note>
+        <note>Line: 135</note>
       </trans-unit>
       <trans-unit id="ed176ad3db6e004d4c272928acf3d0ac">
         <source>Disabling overrides</source>
         <target>Disabling overrides</target>
-        <note>Line: 138</note>
+        <note>Line: 139</note>
       </trans-unit>
       <trans-unit id="12473a5949de1a1cd37806a14a56dbde">
         <source>Keeping overrides in place</source>
         <target>Keeping overrides in place</target>
-        <note>Line: 141</note>
+        <note>Line: 142</note>
       </trans-unit>
       <trans-unit id="9c7e0ba2c6ecb11af7f39843bbc18ff8">
         <source>Warning detected during upgrade.</source>
         <target>Warning detected during upgrade.</target>
-        <note>Line: 149</note>
+        <note>Line: 150</note>
       </trans-unit>
       <trans-unit id="c4615fc8cb7877b074cbe9813cd742b1">
         <source>Database upgrade completed</source>
         <target>Database upgrade completed</target>
-        <note>Line: 151</note>
+        <note>Line: 152</note>
       </trans-unit>
       <trans-unit id="f25792b5b08a78dd01810297d219c10c">
         <source>Unable to find upgrade directory in the installation path.</source>
         <target>Unable to find upgrade directory in the installation path.</target>
-        <note>Line: 274</note>
+        <note>Line: 275</note>
       </trans-unit>
       <trans-unit id="aae22c1ae9a2b451abca76ae8c5c79e8">
         <source>Error while loading SQL upgrade file "%s".</source>
         <target>Error while loading SQL upgrade file "%s".</target>
-        <note>Line: 284</note>
+        <note>Line: 285</note>
       </trans-unit>
       <trans-unit id="8abd985d095a1282f6f01b98c121b41b">
         <source>Cannot find the SQL upgrade files. Please check that the %s folder is not empty.</source>
         <target>Cannot find the SQL upgrade files. Please check that the %s folder is not empty.</target>
-        <note>Line: 291</note>
+        <note>Line: 292</note>
       </trans-unit>
       <trans-unit id="7e6f1194307c585ca2e97f81c3db4bb3">
         <source>[DROP] SQL %s table has been dropped.</source>
         <target>[DROP] SQL %s table has been dropped.</target>
-        <note>Line: 496</note>
+        <note>Line: 492</note>
       </trans-unit>
       <trans-unit id="53983059bf39e1325bba11081ca40e97">
         <source>Keeping current theme</source>
         <target>Keeping current theme</target>
-        <note>Line: 756</note>
+        <note>Line: 752</note>
       </trans-unit>
       <trans-unit id="796b7c49e21f09173214f029c7f02f9d">
         <source>Switching to default theme.</source>
         <target>Switching to default theme.</target>
-        <note>Line: 761</note>
+        <note>Line: 757</note>
       </trans-unit>
       <trans-unit id="475d2ad61e3486ec4af224c5c701b668">
         <source>No RTL language detected, skipping RTL file update.</source>
         <target>No RTL language detected, skipping RTL file update.</target>
-        <note>Line: 778</note>
+        <note>Line: 774</note>
       </trans-unit>
       <trans-unit id="cfa3b2e9163ad9d582e76437d2a9af25">
         <source>Upgrade the RTL files of back-office themes.</source>
         <target>Upgrade the RTL files of back-office themes.</target>
-        <note>Line: 785</note>
+        <note>Line: 781</note>
       </trans-unit>
       <trans-unit id="8d9ed22a6dff372c22f0277700ca226c">
         <source>Upgrade the RTL files of front-office themes.</source>
         <target>Upgrade the RTL files of front-office themes.</target>
-        <note>Line: 806</note>
+        <note>Line: 802</note>
       </trans-unit>
     </body>
   </file>
