@@ -151,7 +151,6 @@ $e: ".radio-card";
       padding: 0.125rem 0.5rem;
       background-color: var(--#{$ua-prefix}radio-card-badge-background-color);
       border-color: var(--#{$ua-prefix}radio-card-badge-border-color);
-      border-radius: var(--#{$ua-prefix}border-radius);
       font-size: 0.75rem;
       font-weight: 600;
       line-height: 1.5;
@@ -232,6 +231,18 @@ $e: ".radio-card";
         display: flex;
         align-items: center;
         justify-content: center;
+      }
+    }
+  }
+
+  &.v1-7-8-0,
+  &.v1-7-3-0 {
+    #{$e} {
+      --#{$ua-prefix}radio-card-badge-background-color: var(--#{$ua-prefix}blue-50);
+      --#{$ua-prefix}radio-card-badge-border-color: var(--#{$ua-prefix}blue-50);
+
+      &__badge {
+        border-radius: 1rem;
       }
     }
   }
