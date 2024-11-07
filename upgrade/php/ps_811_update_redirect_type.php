@@ -1,4 +1,7 @@
 <?php
+
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -19,14 +22,20 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to https://devdocs.prestashop.com/ for more information.
  *
- * @author    PrestaShop SA and Contributors <contact@prestashop.com>
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ */
+
+/**
+ * @return true
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_811_update_redirect_type()
 {
     // Get information about redirect_type column
-    $columnInformation = Db::getInstance()->executeS('SHOW COLUMNS FROM `' . _DB_PREFIX_ . 'product` LIKE "redirect_type"');
+    $columnInformation = DbWrapper::executeS('SHOW COLUMNS FROM `' . _DB_PREFIX_ . 'product` LIKE "redirect_type"');
     if (empty($columnInformation)) {
         return true;
     }
@@ -40,14 +49,14 @@ function ps_811_update_redirect_type()
     }
 
     // If not, we execute our upgrade queries
-    Db::getInstance()->execute('ALTER TABLE `' . _DB_PREFIX_ . "product` MODIFY COLUMN `redirect_type` ENUM(
+    DbWrapper::execute('ALTER TABLE `' . _DB_PREFIX_ . "product` MODIFY COLUMN `redirect_type` ENUM(
         '','404','410','301-product','302-product','301-category','302-category','200-displayed','404-displayed','410-displayed','default'
         ) NOT NULL DEFAULT 'default';");
-    Db::getInstance()->execute('ALTER TABLE `' . _DB_PREFIX_ . "product_shop` MODIFY COLUMN `redirect_type` ENUM(
+    DbWrapper::execute('ALTER TABLE `' . _DB_PREFIX_ . "product_shop` MODIFY COLUMN `redirect_type` ENUM(
         '','404','410','301-product','302-product','301-category','302-category','200-displayed','404-displayed','410-displayed','default'
         ) NOT NULL DEFAULT 'default';");
-    Db::getInstance()->execute('UPDATE `' . _DB_PREFIX_ . "product` SET `redirect_type` = 'default' WHERE `redirect_type` = '404' OR `redirect_type` = '' OR `redirect_type` IS NULL;");
-    Db::getInstance()->execute('UPDATE `' . _DB_PREFIX_ . "product_shop` SET `redirect_type` = 'default' WHERE `redirect_type` = '404' OR `redirect_type` = '' OR `redirect_type` IS NULL;");
+    DbWrapper::execute('UPDATE `' . _DB_PREFIX_ . "product` SET `redirect_type` = 'default' WHERE `redirect_type` = '404' OR `redirect_type` = '' OR `redirect_type` IS NULL;");
+    DbWrapper::execute('UPDATE `' . _DB_PREFIX_ . "product_shop` SET `redirect_type` = 'default' WHERE `redirect_type` = '404' OR `redirect_type` = '' OR `redirect_type` IS NULL;");
 
     return true;
 }

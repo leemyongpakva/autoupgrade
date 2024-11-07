@@ -24,8 +24,12 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * File copied from ps_update_tabs.php and modified for only adding modules related tabs
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_1740_update_module_tabs()
 {
@@ -41,5 +45,5 @@ function ps_1740_update_module_tabs()
         add_new_tab_17($className, $translations, 0, false, 'AdminModulesSf');
     }
 
-    Db::getInstance()->execute('UPDATE `' . _DB_PREFIX_ . 'tab` SET `active`=1 WHERE `class_name` IN ("AdminModulesManage", "AdminModulesCatalog", "AdminModulesNotifications")');
+    DbWrapper::execute('UPDATE `' . _DB_PREFIX_ . 'tab` SET `active`=1 WHERE `class_name` IN ("AdminModulesManage", "AdminModulesCatalog", "AdminModulesNotifications")');
 }

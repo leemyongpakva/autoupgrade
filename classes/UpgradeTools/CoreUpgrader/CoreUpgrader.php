@@ -32,6 +32,7 @@ use Exception;
 use InvalidArgumentException;
 use Language;
 use ParseError;
+use PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException;
 use PrestaShop\Module\AutoUpgrade\Exceptions\UpgradeException;
 use PrestaShop\Module\AutoUpgrade\Log\LoggerInterface;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
@@ -430,7 +431,11 @@ abstract class CoreUpgrader
             }
 
             require_once $pathToPhpDirectory . strtolower($func_name) . '.php';
-            $phpRes = call_user_func_array($func_name, $parameters);
+            try {
+                $phpRes = call_user_func_array($func_name, $parameters);
+            } catch (UpdateDatabaseException $exception) {
+                $this->logPhpError($upgrade_file, $query, $exception->getMessage());
+            }
         }
         // Or an object method
         else {
@@ -440,7 +445,9 @@ abstract class CoreUpgrader
         }
 
         if ($this->hasPhpError($phpRes)) {
-            $this->logPhpError($upgrade_file, $query, $phpRes);
+            $message = (empty($phpRes['error']) ? '' : $phpRes['error'] . "\n") .
+                (empty($phpRes['msg']) ? '' : ' - ' . $phpRes['msg'] . "\n");
+            $this->logPhpError($upgrade_file, $query, $message);
         } else {
             $this->logger->debug('Migration file: ' . $upgrade_file . ', Query: ' . $query);
         }
@@ -456,32 +463,21 @@ abstract class CoreUpgrader
         return isset($phpRes) && (is_array($phpRes) && !empty($phpRes['error'])) || $phpRes === false;
     }
 
-    /**
-     * @param string $upgrade_file
-     * @param string $query
-     * @param mixed $phpRes
-     *
-     * @return void
-     */
-    private function logPhpError(string $upgrade_file, string $query, $phpRes): void
+    private function logPhpError(string $upgrade_file, string $query, string $message): void
     {
-        $this->logger->error(
-            '[ERROR] PHP ' . $upgrade_file . ' ' . $query . "\n" .
-            (empty($phpRes['error']) ? '' : $phpRes['error'] . "\n") .
-            (empty($phpRes['msg']) ? '' : ' - ' . $phpRes['msg'] . "\n")
-        );
+        $this->logger->error('PHP ' . $upgrade_file . ' ' . $query . ": \n" . $message);
         $this->container->getState()->setWarningExists(true);
     }
 
     private function logMissingFileError(string $path, string $func_name, string $query): void
     {
-        $this->logger->error('[ERROR] ' . $path . strtolower($func_name) . ' PHP - missing file ' . $query);
+        $this->logger->error($path . strtolower($func_name) . ' PHP - missing file ' . $query);
         $this->container->getState()->setWarningExists(true);
     }
 
     private function logForbiddenObjectMethodError(string $phpString, string $upgrade_file): void
     {
-        $this->logger->error('[ERROR] ' . $upgrade_file . ' PHP - Object Method call is forbidden (' . $phpString . ')');
+        $this->logger->error($upgrade_file . ' PHP - Object Method call is forbidden (' . $phpString . ')');
         $this->container->getState()->setWarningExists(true);
     }
 
@@ -821,7 +817,7 @@ abstract class CoreUpgrader
                 $commandBus->handle($adaptThemeToTRLLanguages);
             } catch (CoreException $e) {
                 $this->logger->error('
-                    [ERROR] PHP Impossible to generate RTL files for theme' . $theme['name'] . "\n" .
+                    PHP Impossible to generate RTL files for theme' . $theme['name'] . "\n" .
                     $e->getMessage()
                 );
 

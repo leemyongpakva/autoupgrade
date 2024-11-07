@@ -24,6 +24,8 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * Updates ps_tab_lang table for a given domain and className
  *
@@ -32,6 +34,8 @@
  *
  * @param string $domain
  * @param string $className
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_update_tab_lang($domain, $className)
 {
@@ -43,7 +47,7 @@ function ps_update_tab_lang($domain, $className)
         _DB_PREFIX_,
         $className
     );
-    $tab = Db::getInstance()->getRow($tabQuery);
+    $tab = DbWrapper::getRow($tabQuery);
 
     if (empty($tab)) {
         return;
@@ -70,6 +74,6 @@ function ps_update_tab_lang($domain, $className)
             $tab['id_tab'],
             $lang['id_lang']
         );
-        Db::getInstance()->execute($updateQuery);
+        DbWrapper::execute($updateQuery);
     }
 }

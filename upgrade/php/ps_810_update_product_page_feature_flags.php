@@ -1,4 +1,7 @@
 <?php
+
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -19,13 +22,19 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to https://devdocs.prestashop.com/ for more information.
  *
- * @author    PrestaShop SA and Contributors <contact@prestashop.com>
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ */
+
+/**
+ * @return void
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_810_update_product_page_feature_flags()
 {
-    $featureFlags = Db::getInstance()->executeS('SELECT name, state FROM `' . _DB_PREFIX_ . 'feature_flag`');
+    $featureFlags = DbWrapper::executeS('SELECT name, state FROM `' . _DB_PREFIX_ . 'feature_flag`');
 
     // Check if one of the feature flag is already enabled
     $productState = 0;
@@ -43,12 +52,12 @@ function ps_810_update_product_page_feature_flags()
     }
 
     // Update product feature flag with stability, and appropriate state
-    Db::getInstance()->update('feature_flag', [
+    DbWrapper::update('feature_flag', [
         'stability' => 'stable',
         'state' => $productState,
         'label_wording' => 'New product page',
     ], '`name` = \'product_page_v2\'');
 
     // Delete the multishop feature flag
-    Db::getInstance()->delete('feature_flag', '`name` = \'product_page_v2_multi_shop\'');
+    DbWrapper::delete('feature_flag', '`name` = \'product_page_v2_multi_shop\'');
 }

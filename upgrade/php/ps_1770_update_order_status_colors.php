@@ -24,10 +24,13 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
 use PrestaShop\PrestaShop\Core\Domain\Order\Status\OrderStatusColor;
 
 /**
  * Updates order status colors according to new color schema
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_1770_update_order_status_colors()
 {
@@ -59,7 +62,7 @@ function ps_1770_update_order_status_colors()
 
     foreach ($statusColorMap as $color => $statuses) {
         foreach ($statuses as $statusId) {
-            Db::getInstance()->execute(
+            DbWrapper::execute(
                 'UPDATE `' . _DB_PREFIX_ . 'order_state` SET `color` = "' . pSQL($color) . '" WHERE `id_order_state` = ' . (int) $statusId
             );
         }
@@ -76,7 +79,7 @@ function ps_1770_update_order_status_colors()
         foreach ($conditions as $field => $expectedValue) {
             $whereCondition .= ' AND `' . $field . '` = "' . pSQL($expectedValue) . '"';
         }
-        Db::getInstance()->execute(
+        DbWrapper::execute(
             'UPDATE `' . _DB_PREFIX_ . 'order_state` SET `color` = "' . pSQL($color) . '"' . $whereCondition
         );
     }

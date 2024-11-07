@@ -24,8 +24,12 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * File copied from ps_1750_update_module_tabs.php and modified to add new roles
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_1760_update_tabs()
 {
@@ -52,7 +56,7 @@ function ps_1760_update_tabs()
     include_once 'add_new_tab.php';
     foreach ($moduleTabsToBeAdded as $className => $tabDetails) {
         add_new_tab_17($className, $tabDetails['translations'], 0, false, $tabDetails['parent']);
-        Db::getInstance()->execute(
+        DbWrapper::execute(
             'UPDATE `' . _DB_PREFIX_ . 'tab` SET `active`= 1 WHERE `class_name` = "' . pSQL($className) . '"'
         );
     }

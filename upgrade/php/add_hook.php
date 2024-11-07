@@ -1,4 +1,7 @@
 <?php
+
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -19,13 +22,19 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to https://devdocs.prestashop.com/ for more information.
  *
- * @author    PrestaShop SA and Contributors <contact@prestashop.com>
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ */
+
+/**
+ * @return bool
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function add_hook($hook, $title, $description, $position = 1)
 {
-    return (bool) Db::getInstance()->execute('
+    return (bool) DbWrapper::execute('
         INSERT INTO `' . _DB_PREFIX_ . 'hook` (`name`, `title`, `description`, `position`)
         VALUES ("' . pSQL($hook) . '", "' . pSQL($title) . '", "' . pSQL($description) . '", ' . (int) $position . ')
         ON DUPLICATE KEY UPDATE `title` = VALUES(`title`), `description` = VALUES(`description`)    

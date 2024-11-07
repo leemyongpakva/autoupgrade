@@ -24,9 +24,15 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
 use PrestaShop\PrestaShop\Adapter\SymfonyContainer;
 use PrestaShop\PrestaShop\Core\Localization\CLDR\LocaleRepository;
 
+/**
+ * @return void
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
+ */
 function ps_1760_copy_data_from_currency_to_currency_lang()
 {
     // Force cache reset of languages (load locale column)
@@ -34,7 +40,7 @@ function ps_1760_copy_data_from_currency_to_currency_lang()
 
     $languages = Language::getLanguages();
     foreach ($languages as $language) {
-        Db::getInstance()->execute(
+        DbWrapper::execute(
             'INSERT INTO `' . _DB_PREFIX_ . 'currency_lang` (`id_currency`, `id_lang`, `name`)
             SELECT `id_currency`, ' . (int) $language['id_lang'] . ' as id_lang , `name`
             FROM `' . _DB_PREFIX_ . 'currency`
@@ -60,6 +66,9 @@ function ps_1760_copy_data_from_currency_to_currency_lang()
     ObjectModel::enableCache();
 }
 
+/**
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
+ */
 function refreshLocalizedCurrencyData(Currency $currency, array $languages, LocaleRepository $localeRepoCLDR)
 {
     $language = new Language($languages[0]['id_lang']);
@@ -71,7 +80,7 @@ function refreshLocalizedCurrencyData(Currency $currency, array $languages, Loca
             'numeric_iso_code' => $cldrCurrency->getNumericIsoCode(),
             'precision' => $cldrCurrency->getDecimalDigits(),
         ];
-        Db::getInstance()->update('currency', $fields, 'id_currency = ' . (int) $currency->id);
+        DbWrapper::update('currency', $fields, 'id_currency = ' . (int) $currency->id);
     }
 
     foreach ($languages as $languageData) {
@@ -97,6 +106,6 @@ function refreshLocalizedCurrencyData(Currency $currency, array $languages, Loca
 
         $where = 'id_currency = ' . (int) $currency->id
             . ' AND id_lang = ' . (int) $language->id;
-        Db::getInstance()->update('currency_lang', $fields, $where);
+        DbWrapper::update('currency_lang', $fields, $where);
     }
 }

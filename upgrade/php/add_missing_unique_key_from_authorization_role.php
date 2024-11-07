@@ -1,4 +1,7 @@
 <?php
+
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -19,16 +22,22 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to https://devdocs.prestashop.com/ for more information.
  *
- * @author    PrestaShop SA and Contributors <contact@prestashop.com>
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
  */
 
-// Allows you to catch up on a forgotten uniqueness constraint on the roles
+/**
+ * Allows you to catch up on a forgotten uniqueness constraint on the roles
+ *
+ * @return void
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
+ */
 function add_missing_unique_key_from_authorization_role()
 {
     // Verify if we need to create unique key
-    $keys = Db::getInstance()->executeS(
+    $keys = DbWrapper::executeS(
         'SHOW KEYS FROM ' . _DB_PREFIX_ . "authorization_role WHERE Key_name='slug'"
     );
 
@@ -37,7 +46,7 @@ function add_missing_unique_key_from_authorization_role()
     }
 
     // We recover the duplicates that we want to keep
-    $duplicates = Db::getInstance()->executeS(
+    $duplicates = DbWrapper::executeS(
         'SELECT MIN(id_authorization_role) AS keep_ID, slug FROM ' . _DB_PREFIX_ . 'authorization_role GROUP BY slug HAVING COUNT(*) > 1'
     );
 
@@ -47,21 +56,21 @@ function add_missing_unique_key_from_authorization_role()
 
     foreach ($duplicates as $duplicate) {
         // We recover the duplicates that we want to remove
-        $elementsToRemoves = Db::getInstance()->executeS(
+        $elementsToRemoves = DbWrapper::executeS(
             'SELECT id_authorization_role FROM ' . _DB_PREFIX_ . "authorization_role WHERE slug = '" . $duplicate['slug'] . "' AND id_authorization_role != " . $duplicate['keep_ID']
         );
 
         foreach ($elementsToRemoves as $elementToRemove) {
             // We update the access table which may have used a duplicate role
-            Db::getInstance()->execute(
+            DbWrapper::execute(
                 'UPDATE ' . _DB_PREFIX_ . "access SET id_authorization_role = '" . $duplicate['keep_ID'] . "' WHERE id_authorization_role = " . $elementToRemove['id_authorization_role']
             );
             // We remove the role
-            Db::getInstance()->delete('authorization_role', '`id_authorization_role` = ' . (int) $elementToRemove['id_authorization_role']);
+            DbWrapper::delete('authorization_role', '`id_authorization_role` = ' . (int) $elementToRemove['id_authorization_role']);
         }
     }
 
-    Db::getInstance()->execute(
+    DbWrapper::execute(
         'ALTER TABLE ' . _DB_PREFIX_ . 'authorization_role ADD UNIQUE KEY `slug` (`slug`)'
     );
 }

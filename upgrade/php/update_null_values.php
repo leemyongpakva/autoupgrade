@@ -24,16 +24,18 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * This function aims to update the null values of several columns, to default values,
  * in order to avoid unexpected behavior on data that does not take null values into account
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  *
  * @internal
  */
 function update_null_values()
 {
-    $db = Db::getInstance();
-
     $updates = [
         ['address', 'address2', ''],
         ['address', 'company', ''],
@@ -229,12 +231,12 @@ function update_null_values()
         list($tabName, $columnName, $newValue) = $update;
 
         // Check if the table exists
-        if (empty($db->executeS('SHOW TABLES LIKE "' . _DB_PREFIX_ . $tabName . '"'))) {
+        if (empty(DbWrapper::executeS('SHOW TABLES LIKE "' . _DB_PREFIX_ . $tabName . '"'))) {
             continue;
         }
 
         // Check if the column exists
-        if (empty($db->executeS('SHOW COLUMNS FROM `' . _DB_PREFIX_ . $tabName . "` WHERE Field = '" . $columnName . "'"))) {
+        if (empty(DbWrapper::executeS('SHOW COLUMNS FROM `' . _DB_PREFIX_ . $tabName . "` WHERE Field = '" . $columnName . "'"))) {
             continue;
         }
 
@@ -242,6 +244,6 @@ function update_null_values()
 
         // Update existing null values
         $updateQuery = 'UPDATE `' . _DB_PREFIX_ . $tabName . '` SET `' . $columnName . '`=' . $newValue . ' WHERE `' . $columnName . '` IS NULL';
-        $db->execute($updateQuery);
+        DbWrapper::execute($updateQuery);
     }
 }

@@ -24,17 +24,20 @@
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
 
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
 use PrestaShopBundle\Security\Voter\PageVoter;
 
 /**
  * Common method to handle the tab registration
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  *
  * @internal
  */
 function register_tab($className, $name, $id_parent, $returnId = false, $parentTab = null, $module = '')
 {
     if (null !== $parentTab && !empty($parentTab) && strtolower(trim($parentTab)) !== 'null') {
-        $id_parent = (int) Db::getInstance()->getValue('SELECT `id_tab` FROM `' . _DB_PREFIX_ . 'tab` WHERE `class_name` = \'' . pSQL($parentTab) . '\'');
+        $id_parent = (int) DbWrapper::getValue('SELECT `id_tab` FROM `' . _DB_PREFIX_ . 'tab` WHERE `class_name` = \'' . pSQL($parentTab) . '\'');
     }
 
     $array = [];
@@ -43,14 +46,14 @@ function register_tab($className, $name, $id_parent, $returnId = false, $parentT
         $array[$temp[0]] = $temp[1];
     }
 
-    if (!(int) Db::getInstance()->getValue('SELECT count(id_tab) FROM `' . _DB_PREFIX_ . 'tab` WHERE `class_name` = \'' . pSQL($className) . '\' ')) {
-        Db::getInstance()->execute('INSERT INTO `' . _DB_PREFIX_ . 'tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (' . (int) $id_parent . ', \'' . pSQL($className) . '\', \'' . pSQL($module) . '\',
+    if (!(int) DbWrapper::getValue('SELECT count(id_tab) FROM `' . _DB_PREFIX_ . 'tab` WHERE `class_name` = \'' . pSQL($className) . '\' ')) {
+        DbWrapper::execute('INSERT INTO `' . _DB_PREFIX_ . 'tab` (`id_parent`, `class_name`, `module`, `position`) VALUES (' . (int) $id_parent . ', \'' . pSQL($className) . '\', \'' . pSQL($module) . '\',
 									(SELECT IFNULL(MAX(t.position),0)+ 1 FROM `' . _DB_PREFIX_ . 'tab` t WHERE t.id_parent = ' . (int) $id_parent . '))');
     }
 
-    $languages = Db::getInstance()->executeS('SELECT id_lang, iso_code FROM `' . _DB_PREFIX_ . 'lang`');
+    $languages = DbWrapper::executeS('SELECT id_lang, iso_code FROM `' . _DB_PREFIX_ . 'lang`');
     foreach ($languages as $lang) {
-        Db::getInstance()->execute('
+        DbWrapper::execute('
 		INSERT IGNORE INTO `' . _DB_PREFIX_ . 'tab_lang` (`id_lang`, `id_tab`, `name`)
 		VALUES (' . (int) $lang['id_lang'] . ', (
 				SELECT `id_tab`
@@ -64,12 +67,14 @@ function register_tab($className, $name, $id_parent, $returnId = false, $parentT
 /**
  * Common method for getting the new tab ID
  *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
+ *
  * @internal
  */
 function get_new_tab_id($className, $returnId = false)
 {
     if ($returnId && strtolower(trim($returnId)) !== 'false') {
-        return (int) Db::getInstance()->getValue('SELECT `id_tab`
+        return (int) DbWrapper::getValue('SELECT `id_tab`
 								FROM `' . _DB_PREFIX_ . 'tab`
 								WHERE `class_name` = \'' . pSQL($className) . '\'');
     }
@@ -86,6 +91,8 @@ function get_new_tab_id($className, $returnId = false)
  * @param string $module
  *
  * @return int|null Tab id if requested
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function add_new_tab_17($className, $name, $id_parent, $returnId = false, $parentTab = null, $module = '')
 {
@@ -94,7 +101,7 @@ function add_new_tab_17($className, $name, $id_parent, $returnId = false, $paren
     // Preliminary - Get Parent class name for slug generation
     $parentClassName = null;
     if ($id_parent) {
-        $parentClassName = Db::getInstance()->getValue('
+        $parentClassName = DbWrapper::getValue('
             SELECT `class_name`
             FROM `' . _DB_PREFIX_ . 'tab`
             WHERE `id_tab` = "' . (int) $id_parent . '"
@@ -106,11 +113,11 @@ function add_new_tab_17($className, $name, $id_parent, $returnId = false, $paren
     foreach ([PageVoter::CREATE, PageVoter::READ, PageVoter::UPDATE, PageVoter::DELETE] as $role) {
         // 1- Add role
         $roleToAdd = strtoupper('ROLE_MOD_TAB_' . $className . '_' . $role);
-        Db::getInstance()->execute('INSERT IGNORE INTO `' . _DB_PREFIX_ . 'authorization_role` (`slug`)
+        DbWrapper::execute('INSERT IGNORE INTO `' . _DB_PREFIX_ . 'authorization_role` (`slug`)
             VALUES ("' . pSQL($roleToAdd) . '")');
-        $newID = Db::getInstance()->Insert_ID();
+        $newID = DbWrapper::Insert_ID();
         if (!$newID) {
-            $newID = Db::getInstance()->getValue('
+            $newID = DbWrapper::getValue('
                 SELECT `id_authorization_role`
                 FROM `' . _DB_PREFIX_ . 'authorization_role`
                 WHERE `slug` = "' . pSQL($roleToAdd) . '"
@@ -120,7 +127,7 @@ function add_new_tab_17($className, $name, $id_parent, $returnId = false, $paren
         // 2- Copy access from the parent
         if (!empty($parentClassName) && !empty($newID)) {
             $parentRole = strtoupper('ROLE_MOD_TAB_' . pSQL($parentClassName) . '_' . $role);
-            Db::getInstance()->execute(
+            DbWrapper::execute(
                 'INSERT IGNORE INTO `' . _DB_PREFIX_ . 'access` (`id_profile`, `id_authorization_role`)
                 SELECT a.`id_profile`, ' . (int) $newID . ' as `id_authorization_role`
                 FROM `' . _DB_PREFIX_ . 'access` a join `' . _DB_PREFIX_ . 'authorization_role` ar on a.`id_authorization_role` = ar.`id_authorization_role`

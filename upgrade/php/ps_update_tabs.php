@@ -1,4 +1,7 @@
 <?php
+
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -19,9 +22,15 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to https://devdocs.prestashop.com/ for more information.
  *
- * @author    PrestaShop SA and Contributors <contact@prestashop.com>
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ */
+
+/**
+ * @return void
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_update_tabs()
 {
@@ -36,7 +45,7 @@ function ps_update_tabs()
                 $tab_class_name[$tab['class_name']] = $tab['@attributes']['id'];
             }
 
-            $tabs = Db::getInstance()->executeS('SELECT * FROM `' . _DB_PREFIX_ . 'tab`', true, false);
+            $tabs = DbWrapper::executeS('SELECT * FROM `' . _DB_PREFIX_ . 'tab`', true, false);
             if (!empty($tabs)) {
                 foreach ($tabs as $tab) {
                     if (isset($tab_class_name[$tab['class_name']])) {
@@ -49,7 +58,7 @@ function ps_update_tabs()
         }
 
         if (!empty($tab_class_name)) {
-            $langs = Db::getInstance()->executeS('SELECT * FROM `' . _DB_PREFIX_ . 'lang` WHERE `iso_code` != "en" ', true, false);
+            $langs = DbWrapper::executeS('SELECT * FROM `' . _DB_PREFIX_ . 'lang` WHERE `iso_code` != "en" ', true, false);
 
             if (!empty($langs)) {
                 foreach ($langs as $lang) {
@@ -66,7 +75,7 @@ function ps_update_tabs()
 
                         // store DB data
                         $tab_db_data = [];
-                        $results = Db::getInstance()->executeS('
+                        $results = DbWrapper::executeS('
                           SELECT t.`id_tab`, tl.`id_lang`, t.`class_name`, tl.`name` FROM `' . _DB_PREFIX_ . 'tab` t
                             INNER JOIN `' . _DB_PREFIX_ . 'tab_lang` tl ON tl.`id_tab` = t.`id_tab`
                             WHERE tl.`id_lang` = ' . (int) $lang['id_lang'], true, false);
@@ -91,7 +100,7 @@ function ps_update_tabs()
                                             (`id_tab`, `id_lang`, `name`)
                                             VALUES (' . (int) $tmp_class_id . ',' . (int) $lang['id_lang'] . ',"' . pSQL($tab) . '")';
 
-                                            Db::getInstance()->execute($sql);
+                                            DbWrapper::execute($sql);
                                         } else {
                                             // if DB is != XML
                                             if ($tab_db_data[$tmp_class_name] != $tab) {
@@ -101,7 +110,7 @@ function ps_update_tabs()
                                                             `id_lang` = ' . (int) $lang['id_lang'] . ' AND
                                                             `name`  = "' . pSQL($tab_db_data[$tmp_class_name]) . '" ';
 
-                                                Db::getInstance()->execute($sql);
+                                                DbWrapper::execute($sql);
                                             }
                                         }
                                     }

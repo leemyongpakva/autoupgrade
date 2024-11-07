@@ -1,4 +1,7 @@
 <?php
+
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
 /**
  * Copyright since 2007 PrestaShop SA and Contributors
  * PrestaShop is an International Registered Trademark & Property of PrestaShop SA
@@ -19,20 +22,26 @@
  * versions in the future. If you wish to customize PrestaShop for your
  * needs please refer to https://devdocs.prestashop.com/ for more information.
  *
- * @author    PrestaShop SA and Contributors <contact@prestashop.com>
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
+ * @author    PrestaShop SA and Contributors <contact@prestashop.com>
+ */
+
+/**
+ * @return bool
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
  */
 function ps_1770_update_charset()
 {
     $adminFilterTableExists = $adminFilterFilterIdExists = $moduleHistoryTableExists = $translationTableExists = false;
 
     try {
-        $adminFilterTableExists = (bool) Db::getInstance()->executeS(
+        $adminFilterTableExists = (bool) DbWrapper::executeS(
             'SELECT count(*) FROM ' . _DB_PREFIX_ . 'admin_filter'
         );
         if ($adminFilterTableExists) {
-            $adminFilterFilterIdExists = (bool) Db::getInstance()->executeS(
+            $adminFilterFilterIdExists = (bool) DbWrapper::executeS(
                 'SELECT count(filter_id) FROM ' . _DB_PREFIX_ . 'admin_filter'
             );
         }
@@ -40,14 +49,14 @@ function ps_1770_update_charset()
     }
 
     try {
-        $moduleHistoryTableExists = (bool) Db::getInstance()->executeS(
+        $moduleHistoryTableExists = (bool) DbWrapper::executeS(
             'SELECT count(*) FROM ' . _DB_PREFIX_ . 'module_history'
         );
     } catch (Exception $e) {
     }
 
     try {
-        $translationTableExists = (bool) Db::getInstance()->executeS(
+        $translationTableExists = (bool) DbWrapper::executeS(
             'SELECT count(*) FROM ' . _DB_PREFIX_ . 'translation'
         );
     } catch (Exception $e) {
@@ -57,29 +66,29 @@ function ps_1770_update_charset()
 
     if ($adminFilterTableExists) {
         if ($adminFilterFilterIdExists) {
-            $result &= Db::getInstance()->execute(
+            $result = $result && DbWrapper::execute(
                 'UPDATE ' . _DB_PREFIX_ . '`admin_filter` SET `filter_id` = SUBSTRING(`filter_id`, 1, 191)'
             );
-            $result &= Db::getInstance()->execute(
+            $result = $result && DbWrapper::execute(
                 'ALTER TABLE ' . _DB_PREFIX_ . '`admin_filter` CHANGE `filter_id` `filter_id` VARCHAR(191) NOT NULL'
             );
         }
-        $result &= Db::getInstance()->execute(
+        $result = $result && DbWrapper::execute(
             'ALTER TABLE ' . _DB_PREFIX_ . '`admin_filter` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci'
         );
     }
 
     if ($moduleHistoryTableExists) {
-        $result &= Db::getInstance()->execute(
+        $result = $result && DbWrapper::execute(
             'ALTER TABLE ' . _DB_PREFIX_ . '`module_history` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci'
         );
     }
 
     if ($translationTableExists) {
-        $result &= Db::getInstance()->execute(
+        $result = $result && DbWrapper::execute(
             'ALTER TABLE ' . _DB_PREFIX_ . '`translation` CONVERT TO CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci'
         );
     }
 
-    return (bool) $result;
+    return $result;
 }
