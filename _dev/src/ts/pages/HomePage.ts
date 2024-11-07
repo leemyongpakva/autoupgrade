@@ -42,8 +42,14 @@ export default class HomePage extends PageAbstract {
     const routeToSubmit = this.form?.dataset.routeToSubmit;
 
     if (routeToSubmit) {
+      this.submitButton?.classList.add('btn--loading');
+      this.submitButton?.setAttribute('inert', '');
+
       const formData = new FormData(this.form);
       await api.post(routeToSubmit, formData);
+
+      this.submitButton?.classList.remove('btn--loading');
+      this.submitButton?.removeAttribute('inert');
     }
   };
 
