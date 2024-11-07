@@ -30,7 +30,6 @@ namespace PrestaShop\Module\AutoUpgrade\Task\Runner;
 use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponse;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
-use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use UnexpectedValueException;
 
 /**
@@ -123,7 +122,6 @@ class AllUpdateTasks extends ChainedTasks
     {
         if ($this->step === self::initialTask) {
             parent::init();
-            $this->container->getState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION));
         }
     }
 }

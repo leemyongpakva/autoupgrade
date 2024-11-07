@@ -54,7 +54,6 @@ class UpdateInitialization extends AbstractTask
         );
 
         $upgrader = $this->container->getUpgrader();
-
         if ($upgrader->isLastVersion()) {
             $this->next = TaskName::TASK_COMPLETE;
             $this->logger->info($this->translator->trans('Your shop is currently running the latest compatible version. No updates are needed at this time.'));
@@ -62,7 +61,7 @@ class UpdateInitialization extends AbstractTask
             return ExitCode::SUCCESS;
         }
 
-        $this->logger->info($this->translator->trans('Destination version: %s', [$upgrader->getDestinationVersion()]));
+        $this->logger->info($this->translator->trans('Destination version: %s', [$this->container->getState()->getDestinationVersion()]));
 
         switch ($upgrader->getChannel()) {
             case Upgrader::CHANNEL_LOCAL:

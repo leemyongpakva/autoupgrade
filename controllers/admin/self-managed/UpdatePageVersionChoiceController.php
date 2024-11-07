@@ -162,7 +162,7 @@ class UpdatePageVersionChoiceController extends AbstractPageController
         $phpVersionResolverService = new PhpVersionResolverService(
             $distributionApiService,
             $this->upgradeContainer->getFileLoader(),
-            $this->upgradeContainer->getState()->getOriginVersion()
+            $this->upgradeContainer->getState()->getCurrentVersion()
         );
 
         $upgradeSelfCheck = new UpgradeSelfCheck(
@@ -174,7 +174,7 @@ class UpdatePageVersionChoiceController extends AbstractPageController
             _PS_ROOT_DIR_,
             _PS_ADMIN_DIR_,
             $this->upgradeContainer->getProperty(UpgradeContainer::WORKSPACE_PATH),
-            $this->upgradeContainer->getState()->getOriginVersion()
+            $this->upgradeContainer->getState()->getCurrentVersion()
         );
 
         $warnings = $upgradeSelfCheck->getWarnings();

@@ -32,6 +32,7 @@ use PrestaShop\Module\AutoUpgrade\AjaxResponse;
 use PrestaShop\Module\AutoUpgrade\Analytics;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
+use PrestaShop\Module\AutoUpgrade\Upgrader;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
 abstract class AbstractTask
@@ -184,6 +185,23 @@ abstract class AbstractTask
     public function init(): void
     {
         $this->container->initPrestaShopCore();
+        $this->setupEnvironment();
+    }
+
+    /**
+     * @throws Exception
+     */
+    protected function setupEnvironment(): void
+    {
+        if ($this::TASK_TYPE === TaskType::TASK_TYPE_UPDATE && $this->container->getUpgrader()->getChannel() === Upgrader::CHANNEL_LOCAL) {
+            $archiveXml = $this->container->getUpgradeConfiguration()->getLocalChannelXml();
+            $this->container->getFileLoader()->addXmlMd5File($this->container->getUpgrader()->getDestinationVersion(), $this->container->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $archiveXml);
+        }
+
+        if ($this::TASK_TYPE !== TaskType::TASK_TYPE_RESTORE && !$this->container->getState()->isInitialized()) {
+            $this->container->getState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION), $this->container->getUpgrader()->getDestinationVersion());
+            $this->logger->debug($this->translator->trans('Successfully initialized state.'));
+        }
     }
 
     abstract public function run(): int;

@@ -28,10 +28,10 @@
 namespace PrestaShop\Module\AutoUpgrade\Commands;
 
 use Exception;
+use InvalidArgumentException;
 use PrestaShop\Module\AutoUpgrade\ErrorHandler;
 use PrestaShop\Module\AutoUpgrade\Log\CliLogger;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
-use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\Miscellaneous\UpdateConfig;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use Symfony\Component\Console\Command\Command;
@@ -94,17 +94,13 @@ abstract class AbstractCommand extends Command
             $this->logger->debug('Loading configuration from ' . $configPath);
             $configFile = file_get_contents($configPath);
             if (!$configFile) {
-                $this->logger->error('Configuration file not found a location ' . $configPath);
-
-                return ExitCode::FAIL;
+                throw new InvalidArgumentException('Configuration file not found a location ' . $configPath);
             }
 
             $inputData = json_decode($configFile, true);
 
             if (!$inputData) {
-                $this->logger->error('An error occurred during the json decode process, please check the content and syntax of the file content');
-
-                return ExitCode::FAIL;
+                throw new InvalidArgumentException('An error occurred during the json decode process, please check the content and syntax of the file content');
             }
 
             $this->logger->debug('Configuration file content: ' . json_encode($inputData));

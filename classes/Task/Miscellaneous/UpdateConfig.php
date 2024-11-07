@@ -109,9 +109,6 @@ class UpdateConfig extends AbstractTask
             return ExitCode::FAIL;
         }
 
-        $this->container->getState()->setInstallVersion($this->container->getUpgrader()->getDestinationVersion());
-        $this->container->getState()->setOriginVersion($this->container->getProperty(UpgradeContainer::PS_VERSION));
-
         return ExitCode::SUCCESS;
     }
 
@@ -174,5 +171,10 @@ class UpdateConfig extends AbstractTask
         $this->container->getLogger()->debug('Configuration update: ' . json_encode($classConfig->toArray(), JSON_PRETTY_PRINT));
 
         return (new UpgradeConfigurationStorage($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR))->save($classConfig, UpgradeFileNames::CONFIG_FILENAME);
+    }
+
+    public function init(): void
+    {
+        $this->container->initPrestaShopCore();
     }
 }

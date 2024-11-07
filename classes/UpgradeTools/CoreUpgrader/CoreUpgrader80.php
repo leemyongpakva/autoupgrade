@@ -41,7 +41,6 @@ class CoreUpgrader80 extends CoreUpgrader
     {
         $this->forceRemovingFiles();
         parent::initConstants();
-
         // Container may be needed to run upgrade scripts
         $this->container->getSymfonyAdapter()->initKernel();
     }

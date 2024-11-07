@@ -45,7 +45,7 @@ class UpgradeContainerTest extends TestCase
             ->setMethods(['getDb', 'getUpgrader'])
             ->getMock();
 
-        $container->getState()->setInstallVersion('1.7.1.0');
+        $container->getState()->setDestinationVersion('1.7.1.0');
         $actualClass = get_class(call_user_func([$container, $functionName]));
         $this->assertSame($actualClass, $expectedClass);
     }

@@ -33,8 +33,8 @@ class AnalyticsTest extends TestCase
     public function testProperties()
     {
         $state = (new State())
-            ->setOriginVersion('8.8.8')
-            ->setInstallVersion('8.8.808')
+            ->setCurrentVersion('8.8.8')
+            ->setDestinationVersion('8.8.808')
             ->setRestoreName('V1.2.3_blablabla-🐶');
         $upgradeConfiguration = (new UpgradeConfiguration([
             'PS_AUTOUP_CUSTOM_MOD_DESACT' => 0,

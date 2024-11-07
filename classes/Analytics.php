@@ -119,8 +119,8 @@ class Analytics
                 break;
             case self::WITH_UPDATE_PROPERTIES:
                 $additionalProperties = [
-                    'from_ps_version' => $this->state->getOriginVersion(),
-                    'to_ps_version' => $this->state->getInstallVersion(),
+                    'from_ps_version' => $this->state->getCurrentVersion(),
+                    'to_ps_version' => $this->state->getDestinationVersion(),
                     'upgrade_channel' => $this->upgradeConfiguration->getChannel(),
                     'disable_non_native_modules' => $this->upgradeConfiguration->shouldDeactivateCustomModules(),
                     'switch_to_default_theme' => $this->upgradeConfiguration->shouldSwitchToDefaultTheme(),
