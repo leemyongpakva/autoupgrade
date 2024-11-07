@@ -92,22 +92,64 @@ class FileConfigurationStorage
     /**
      * @return array<string, string> Temporary files path & name
      */
-    public function getFilesList(): array
+    public function getUpdateFilesList(): array
     {
         $files = [];
-        foreach (UpgradeFileNames::$tmp_files as $file) {
-            $files[$file] = $this->getFilePath(constant('PrestaShop\\Module\\AutoUpgrade\\Parameters\\UpgradeFileNames::' . $file));
+        foreach (UpgradeFileNames::$update_tmp_files as $key => $file) {
+            $files[$key] = $this->getFilePath($file);
         }
 
         return $files;
     }
 
     /**
-     * Delete all temporary files in the config folder.
+     * @return array<string, string> Temporary files path & name
      */
-    public function cleanAll(): void
+    public function getBackupFilesList(): array
     {
-        $this->filesystem->remove(self::getFilesList());
+        $files = [];
+        foreach (UpgradeFileNames::$backup_tmp_files as $key => $file) {
+            $files[$key] = $this->getFilePath($file);
+        }
+
+        return $files;
+    }
+
+    /**
+     * @return array<string, string> Temporary files path & name
+     */
+    public function getRestoreFilesList(): array
+    {
+        $files = [];
+        foreach (UpgradeFileNames::$restore_tmp_files as $key => $file) {
+            $files[$key] = $this->getFilePath($file);
+        }
+
+        return $files;
+    }
+
+    /**
+     * Delete all temporary files in the config folder for update process.
+     */
+    public function cleanAllUpdateFiles(): void
+    {
+        $this->filesystem->remove(self::getUpdateFilesList());
+    }
+
+    /**
+     * Delete all temporary files in the config folder for backup process.
+     */
+    public function cleanAllBackupFiles(): void
+    {
+        $this->filesystem->remove(self::getBackupFilesList());
+    }
+
+    /**
+     * Delete all temporary files in the config folder for restore process.
+     */
+    public function cleanAllRestoreFiles(): void
+    {
+        $this->filesystem->remove(self::getRestoreFilesList());
     }
 
     /**

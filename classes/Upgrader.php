@@ -38,13 +38,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 class Upgrader
 {
-    const CHANNEL_ONLINE = 'online';
-    const CHANNEL_LOCAL = 'local';
-
     const DEFAULT_CHECK_VERSION_DELAY_HOURS = 12;
-
-    /** @var self::CHANNEL_* */
-    private $channel;
 
     /** @var PrestashopRelease */
     private $onlineDestinationRelease;
@@ -62,7 +56,6 @@ class Upgrader
     ) {
         $this->currentPsVersion = $currentPsVersion;
         $this->phpVersionResolverService = $phpRequirementService;
-        $this->channel = $upgradeConfiguration->getChannel() ? $upgradeConfiguration->getChannel() : UpgradeConfiguration::DEFAULT_CHANNEL;
         $this->upgradeConfiguration = $upgradeConfiguration;
     }
 
@@ -145,7 +138,7 @@ class Upgrader
      */
     public function getDestinationVersion(): ?string
     {
-        if ($this->channel === self::CHANNEL_LOCAL) {
+        if ($this->upgradeConfiguration->isChannelLocal()) {
             return $this->upgradeConfiguration->getLocalChannelVersion();
         } else {
             return $this->getOnlineDestinationRelease() ? $this->getOnlineDestinationRelease()->getVersion() : null;
@@ -178,13 +171,5 @@ class Upgrader
         }
 
         return true;
-    }
-
-    /**
-     * @return self::CHANNEL_*
-     */
-    public function getChannel(): string
-    {
-        return $this->channel;
     }
 }

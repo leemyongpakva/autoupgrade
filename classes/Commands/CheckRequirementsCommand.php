@@ -86,14 +86,15 @@ class CheckRequirementsCommand extends AbstractCommand
 
         $this->upgradeSelfCheck = new UpgradeSelfCheck(
             $this->upgradeContainer->getUpgrader(),
+            $this->upgradeContainer->getState(),
+            $this->upgradeContainer->getUpgradeConfiguration(),
             $this->upgradeContainer->getPrestaShopConfiguration(),
             $this->upgradeContainer->getTranslator(),
             $phpVersionResolverService,
             $this->upgradeContainer->getChecksumCompare(),
             _PS_ROOT_DIR_,
             _PS_ADMIN_DIR_,
-            $moduleConfigPath,
-            $this->upgradeContainer->getState()->getCurrentVersion()
+            $moduleConfigPath
         );
 
         $output->writeln('Result of prerequisite checks:');

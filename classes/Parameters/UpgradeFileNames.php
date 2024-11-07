@@ -149,27 +149,39 @@ class UpgradeFileNames
     const MODULE_SOURCE_PROVIDER_CACHE_DISTRIBUTION_API = 'moduleSourcesDistribution.cache';
 
     /**
-     * tmp_files contains an array of filename which will be removed
+     * update_tmp_files contains an array of filename which will be removed
      * at the beginning of the upgrade process.
      *
-     * @var string[]
+     * @var array<string, string>
      */
-    public static $tmp_files = [
-        'QUERIES_TO_UPGRADE_LIST', // used ?
-        'FILES_TO_UPGRADE_LIST',
-        'FILES_TO_BACKUP_LIST',
-        'DB_TABLES_TO_BACKUP_LIST',
-        'QUERIES_TO_RESTORE_LIST',
-        'DB_TABLES_TO_CLEAN_LIST',
-        'FILES_TO_REMOVE_LIST',
-        'FILES_FROM_ARCHIVE_LIST',
-        'MAILS_CUSTOM_LIST',
-        'TRANSLATION_FILES_CUSTOM_LIST',
-        'MODULES_TO_UPGRADE_LIST',
-        'MODULE_SOURCE_PROVIDER_CACHE_LOCAL',
-        'MODULE_SOURCE_PROVIDER_CACHE_COMPOSER',
-        'MODULE_SOURCE_PROVIDER_CACHE_MARKETPLACE_API',
-        'MODULE_SOURCE_PROVIDER_CACHE_DISTRIBUTION_API',
-        'SQL_TO_EXECUTE_LIST',
+    public static $update_tmp_files = [
+        'QUERIES_TO_UPGRADE_LIST' => self::QUERIES_TO_UPGRADE_LIST, // used ?
+        'FILES_TO_UPGRADE_LIST' => self::FILES_TO_UPGRADE_LIST,
+        'DB_TABLES_TO_CLEAN_LIST' => self::DB_TABLES_TO_CLEAN_LIST,
+        'FILES_TO_REMOVE_LIST' => self::FILES_TO_REMOVE_LIST,
+        'MAILS_CUSTOM_LIST' => self::MAILS_CUSTOM_LIST,
+        'TRANSLATION_FILES_CUSTOM_LIST' => self::TRANSLATION_FILES_CUSTOM_LIST,
+        'MODULES_TO_UPGRADE_LIST' => self::MODULES_TO_UPGRADE_LIST,
+        'MODULE_SOURCE_PROVIDER_CACHE_LOCAL' => self::MODULE_SOURCE_PROVIDER_CACHE_LOCAL,
+        'MODULE_SOURCE_PROVIDER_CACHE_COMPOSER' => self::MODULE_SOURCE_PROVIDER_CACHE_COMPOSER,
+        'MODULE_SOURCE_PROVIDER_CACHE_MARKETPLACE_API' => self::MODULE_SOURCE_PROVIDER_CACHE_MARKETPLACE_API,
+        'MODULE_SOURCE_PROVIDER_CACHE_DISTRIBUTION_API' => self::MODULE_SOURCE_PROVIDER_CACHE_DISTRIBUTION_API,
+        'SQL_TO_EXECUTE_LIST' => self::SQL_TO_EXECUTE_LIST,
+    ];
+
+    /**
+     * @var array<string, string>
+     */
+    public static $backup_tmp_files = [
+        'FILES_TO_BACKUP_LIST' => self::FILES_TO_BACKUP_LIST,
+        'DB_TABLES_TO_BACKUP_LIST' => self::DB_TABLES_TO_BACKUP_LIST,
+    ];
+
+    /**
+     * @var array<string, string>
+     */
+    public static $restore_tmp_files = [
+        'QUERIES_TO_RESTORE_LIST' => self::QUERIES_TO_RESTORE_LIST,
+        'FILES_FROM_ARCHIVE_LIST' => self::FILES_FROM_ARCHIVE_LIST,
     ];
 }

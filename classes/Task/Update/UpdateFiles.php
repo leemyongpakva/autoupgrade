@@ -226,7 +226,7 @@ class UpdateFiles extends AbstractTask
 
         $destinationVersion = $this->container->getState()->getDestinationVersion();
         $originVersion = $this->container->getState()->getCurrentVersion();
-        $this->logger->debug(sprintf('Generate diff file list between %s and %s.', $originVersion, $destinationVersion));
+        $this->logger->debug($this->translator->trans('Generate diff file list between %s and %s.', [$originVersion, $destinationVersion]));
         $diffFileList = $this->container->getChecksumCompare()->getFilesDiffBetweenVersions($originVersion, $destinationVersion);
         if (!is_array($diffFileList)) {
             $this->logger->error($this->translator->trans('Unable to generate diff file list between %s and %s.', [$originVersion, $destinationVersion]));

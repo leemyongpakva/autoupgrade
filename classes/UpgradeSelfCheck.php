@@ -30,8 +30,8 @@ namespace PrestaShop\Module\AutoUpgrade;
 use Configuration;
 use ConfigurationTest;
 use Exception;
-use PrestaShop\Module\AutoUpgrade\Exceptions\DistributionApiException;
 use PrestaShop\Module\AutoUpgrade\Exceptions\UpgradeException;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 use PrestaShop\Module\AutoUpgrade\Xml\ChecksumCompare;
@@ -63,6 +63,8 @@ class UpgradeSelfCheck
     private $maxExecutionTime;
     /** @var Upgrader */
     private $upgrader;
+    /** @var State */
+    private $state;
     /**
      * Path to the root folder of PS
      *
@@ -81,10 +83,10 @@ class UpgradeSelfCheck
      * @var string
      */
     private $autoUpgradePath;
-    /** @var string */
-    private $originVersion;
     /** @var PrestashopConfiguration */
     private $prestashopConfiguration;
+    /** @var UpgradeConfiguration */
+    private $upgradeConfiguration;
     /** @var PhpVersionResolverService */
     private $phpRequirementService;
     /** @var Translator */
@@ -118,16 +120,19 @@ class UpgradeSelfCheck
 
     public function __construct(
         Upgrader $upgrader,
+        State $state,
+        UpgradeConfiguration $upgradeConfiguration,
         PrestashopConfiguration $prestashopConfiguration,
         Translator $translator,
         PhpVersionResolverService $phpRequirementService,
         ChecksumCompare $checksumCompare,
         string $prodRootPath,
         string $adminPath,
-        string $autoUpgradePath,
-        string $originVersion
+        string $autoUpgradePath
     ) {
         $this->upgrader = $upgrader;
+        $this->state = $state;
+        $this->upgradeConfiguration = $upgradeConfiguration;
         $this->prestashopConfiguration = $prestashopConfiguration;
         $this->translator = $translator;
         $this->phpRequirementService = $phpRequirementService;
@@ -135,7 +140,6 @@ class UpgradeSelfCheck
         $this->prodRootPath = $prodRootPath;
         $this->adminPath = $adminPath;
         $this->autoUpgradePath = $autoUpgradePath;
-        $this->originVersion = $originVersion;
     }
 
     /**
@@ -164,7 +168,7 @@ class UpgradeSelfCheck
             self::SHOP_VERSION_NOT_MATCHING_VERSION_IN_DATABASE => !$this->isShopVersionMatchingVersionInDatabase(),
         ];
 
-        if ($this->upgrader->getChannel() === Upgrader::CHANNEL_LOCAL) {
+        if ($this->upgradeConfiguration->isChannelLocal()) {
             $errors[self::PHP_COMPATIBILITY_INVALID] = $this->getPhpRequirementsState() === PhpVersionResolverService::COMPATIBILITY_INVALID;
         }
 
@@ -175,7 +179,6 @@ class UpgradeSelfCheck
      * @return array<int, bool>
      *
      * @throws UpgradeException
-     * @throws DistributionApiException
      */
     public function getWarnings(): array
     {
@@ -184,7 +187,7 @@ class UpgradeSelfCheck
             self::TEMPERED_FILES_LIST_NOT_EMPTY => !empty($this->getTamperedFiles()),
         ];
 
-        if ($this->upgrader->getChannel() === Upgrader::CHANNEL_LOCAL) {
+        if ($this->upgradeConfiguration->isChannelLocal()) {
             $warnings[self::PHP_COMPATIBILITY_UNKNOWN] = $this->getPhpRequirementsState() === PhpVersionResolverService::COMPATIBILITY_UNKNOWN;
         }
 
@@ -195,13 +198,10 @@ class UpgradeSelfCheck
      * @param int $requirement
      *
      * @return string
-     *
-     * @throws UpgradeException
-     * @throws DistributionApiException
      */
     public function getRequirementWording(int $requirement): string
     {
-        $version = $this->upgrader->getDestinationVersion();
+        $version = $this->state->getDestinationVersion();
         $phpCompatibilityRange = $this->phpRequirementService->getPhpCompatibilityRange($version);
 
         switch ($requirement) {
@@ -297,7 +297,7 @@ class UpgradeSelfCheck
      */
     public function getTamperedFiles(): array
     {
-        $tamperedFiles = $this->checksumCompare->getTamperedFilesOnShop($this->originVersion);
+        $tamperedFiles = $this->checksumCompare->getTamperedFilesOnShop($this->state->getCurrentVersion());
 
         return array_merge($tamperedFiles['core'], $tamperedFiles['mail']);
     }
@@ -436,14 +436,10 @@ class UpgradeSelfCheck
         return true;
     }
 
-    /**
-     * @throws DistributionApiException
-     * @throws UpgradeException
-     */
     public function checkKeyGeneration(): bool
     {
         // Check if key is needed on the version we are upgrading to, if lower, not needed
-        if (version_compare($this->upgrader->getDestinationVersion(), '8.1.0', '<')) {
+        if (version_compare($this->state->getDestinationVersion(), '8.1.0', '<')) {
             return true;
         }
 
@@ -522,13 +518,9 @@ class UpgradeSelfCheck
         return (bool) ConfigurationTest::test_upload();
     }
 
-    /**
-     * @throws DistributionApiException
-     * @throws UpgradeException
-     */
     public function getPhpRequirementsState(): int
     {
-        $version = $this->upgrader->getDestinationVersion();
+        $version = $this->state->getDestinationVersion();
 
         return $this->phpRequirementService->getPhpRequirementsState(PHP_VERSION_ID, $version);
     }

@@ -44,6 +44,9 @@ class RestoreComplete extends AbstractTask
     {
         $this->logger->info($this->translator->trans('Restoration process done. Congratulations! You can now reactivate your shop.'));
         $this->next = TaskName::TASK_COMPLETE;
+
+        $this->container->getFileConfigurationStorage()->cleanAllRestoreFiles();
+        $this->container->getFileConfigurationStorage()->cleanAllUpdateFiles();
         $this->container->getAnalytics()->track('Restore Succeeded', Analytics::WITH_RESTORE_PROPERTIES);
 
         $this->container->getState()->setProgressPercentage(

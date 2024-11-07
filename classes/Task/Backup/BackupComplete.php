@@ -50,7 +50,9 @@ class BackupComplete extends AbstractTask
         $this->stepDone = true;
         $this->next = TaskName::TASK_COMPLETE;
 
+        $this->container->getFileConfigurationStorage()->cleanAllBackupFiles();
         $this->container->getAnalytics()->track('Backup Succeeded', Analytics::WITH_BACKUP_PROPERTIES);
+
         $this->logger->info($this->translator->trans('Backup completed successfully.'));
 
         return ExitCode::SUCCESS;

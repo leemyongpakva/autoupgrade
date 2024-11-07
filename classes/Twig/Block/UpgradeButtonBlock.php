@@ -103,12 +103,11 @@ class UpgradeButtonBlock
         $upgradeLink = '';
         $changelogLink = '';
         $skipActions = [];
-        $channel = $this->upgrader->getChannel();
 
         // decide to display "Start Upgrade" or not
         if ($this->selfCheck->isOkForUpgrade() && !$this->upgrader->isLastVersion()) {
             $showUpgradeButton = true;
-            if ($this->upgrader->getChannel() === Upgrader::CHANNEL_ONLINE) {
+            if ($this->config->isChannelOnline()) {
                 $showUpgradeLink = true;
                 $upgradeLink = $this->upgrader->getOnlineDestinationRelease()->getZipDownloadUrl();
                 $changelogLink = $this->upgrader->getOnlineDestinationRelease()->getReleaseNoteUrl();
@@ -125,7 +124,7 @@ class UpgradeButtonBlock
             'currentPsVersion' => _PS_VERSION_,
             'isLastVersion' => $this->upgrader->isLastVersion(),
             'destinationVersion' => $this->upgrader->getDestinationVersion(),
-            'channel' => $channel,
+            'channel' => $this->config->getChannelOrDefault(),
             'showUpgradeButton' => $showUpgradeButton,
             'upgradeLink' => $upgradeLink,
             'showUpgradeLink' => $showUpgradeLink,
@@ -168,8 +167,8 @@ class UpgradeButtonBlock
         $translator = $this->translator;
 
         return [
-            ['useOnline', Upgrader::CHANNEL_ONLINE, $translator->trans('Online')],
-            ['useLocal', Upgrader::CHANNEL_LOCAL, $translator->trans('Local archive')],
+            ['useOnline', UpgradeConfiguration::CHANNEL_ONLINE, $translator->trans('Online')],
+            ['useLocal', UpgradeConfiguration::CHANNEL_LOCAL, $translator->trans('Local archive')],
         ];
     }
 }
