@@ -45,25 +45,6 @@ abstract class AbstractGlobalController
     {
         $this->upgradeContainer = $upgradeContainer;
         $this->request = $request;
-
-        $state = $this->upgradeContainer->getState();
-
-        if (!$this->upgradeContainer->getFileConfigurationStorage()->exists(UpgradeFileNames::STATE_FILENAME)) {
-            try {
-                $currentVersion = $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION);
-                $destinationVersion = $this->upgradeContainer->getUpgrader()->getDestinationVersion();
-                $state->initDefault(
-                    $currentVersion,
-                    $destinationVersion
-                );
-                $this->upgradeContainer->getFileConfigurationStorage()->save($state->export(), UpgradeFileNames::STATE_FILENAME);
-            } catch (\Exception $e) {
-                return AjaxResponseBuilder::errorResponse($e, 500);
-            }
-        } else {
-            $importedState = $this->upgradeContainer->getFileConfigurationStorage()->load(UpgradeFileNames::STATE_FILENAME);
-            $state->importFromArray($importedState);
-        }
     }
 
     protected function getTwig()

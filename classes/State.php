@@ -29,6 +29,8 @@ namespace PrestaShop\Module\AutoUpgrade;
 
 use InvalidArgumentException;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 
 /**
  * Class storing the temporary data to keep between 2 ajax requests.
@@ -108,8 +110,23 @@ class State
     /** @var ?string */
     private $processTimestamp;
 
-    /** @var bool Allows you to know if the state has been initialized using the initDefault method */
-    private $initialized = false;
+    /** @var FileConfigurationStorage */
+    private $fileConfigurationStorage;
+
+    public function __construct(FileConfigurationStorage $fileConfigurationStorage)
+    {
+        $this->fileConfigurationStorage = $fileConfigurationStorage;
+    }
+
+    /**
+     * @return void
+     */
+    public function load()
+    {
+        $state = $this->fileConfigurationStorage->load(UpgradeFileNames::STATE_FILENAME);
+
+        $this->importFromArray($state);
+    }
 
     /**
      * @param array<string, mixed> $savedState from another request
@@ -136,11 +153,21 @@ class State
     }
 
     /**
+     * @return bool
+     */
+    public function save(): bool
+    {
+        return $this->fileConfigurationStorage->save($this->export(), UpgradeFileNames::STATE_FILENAME);
+    }
+
+    /**
      * @return array<string, mixed> of class properties for export
      */
     public function export(): array
     {
-        return get_object_vars($this);
+        $state = get_object_vars($this);
+        unset($state['fileConfigurationStorage']);
+        return $state;
     }
 
     public function initDefault(string $currentVersion, ?string $destinationVersion): void
@@ -160,7 +187,7 @@ class State
         $this->setBackupName($backupName);
         $this->setCurrentVersion($currentVersion);
         $this->setDestinationVersion($destinationVersion);
-        $this->initialized = true;
+        $this->save();
     }
 
     // GETTERS
@@ -251,6 +278,21 @@ class State
         return $this->processTimestamp;
     }
 
+    /**
+     * Pick version from restoration file name in the format v[version]_[date]-[time]-[random]
+     */
+    public function getRestoreVersion(): ?string
+    {
+        $matches = [];
+        preg_match(
+            '/^V(?<version>[1-9\.]+)_/',
+            $this->getRestoreName(),
+            $matches
+        );
+
+        return $matches[1] ?? null;
+    }
+
     // SETTERS
     public function setCurrentVersion(string $currentVersion): State
     {
@@ -259,7 +301,7 @@ class State
         return $this;
     }
 
-    public function setDestinationVersion(?string $destinationVersion): State
+    public function setDestinationVersion(string $destinationVersion): State
     {
         $this->destinationVersion = $destinationVersion;
 
@@ -345,21 +387,6 @@ class State
     }
 
     /**
-     * Pick version from restoration file name in the format v[version]_[date]-[time]-[random]
-     */
-    public function getRestoreVersion(): ?string
-    {
-        $matches = [];
-        preg_match(
-            '/^V(?<version>[1-9\.]+)_/',
-            $this->getRestoreName(),
-            $matches
-        );
-
-        return $matches[1] ?? null;
-    }
-
-    /**
      * @param string[] $installedLanguagesIso
      */
     public function setInstalledLanguagesIso(array $installedLanguagesIso): State
@@ -394,6 +421,6 @@ class State
 
     public function isInitialized(): bool
     {
-        return $this->initialized;
+        return $this->fileConfigurationStorage->exists(UpgradeFileNames::STATE_FILENAME);
     }
 }

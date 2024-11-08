@@ -217,6 +217,8 @@ class UpdatePageVersionChoiceController extends AbstractPageController
             $config->merge($requestConfig);
 
             $this->upgradeContainer->getUpgradeConfigurationStorage()->save($config, UpgradeFileNames::CONFIG_FILENAME);
+            $state = $this->upgradeContainer->getState()->setDestinationVersion($this->upgradeContainer->getUpgrader()->getDestinationVersion());
+            $state->save();
 
             if ($channel !== null) {
                 $params[$channel . '_requirements'] = $this->getRequirements();
