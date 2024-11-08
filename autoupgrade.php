@@ -89,7 +89,7 @@ class Autoupgrade extends Module
         if (!Tab::getIdFromClassName('AdminSelfUpgrade')) {
             $tab = new Tab();
             $tab->class_name = 'AdminSelfUpgrade';
-            $tab->icon = 'upgrade';
+            $tab->icon = 'arrow_upward';
             $tab->module = 'autoupgrade';
 
             // We use DEFAULT to add Upgrade tab as a standalone tab in the back office menu
