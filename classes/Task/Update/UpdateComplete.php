@@ -29,6 +29,7 @@ namespace PrestaShop\Module\AutoUpgrade\Task\Update;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\Analytics;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Task\AbstractTask;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
@@ -75,6 +76,7 @@ class UpdateComplete extends AbstractTask
 
         // removing temporary files
         $this->container->getFileConfigurationStorage()->cleanAllUpdateFiles();
+        $this->container->getFileConfigurationStorage()->clean(UpgradeFileNames::STATE_FILENAME);
         $this->container->getAnalytics()->track('Upgrade Succeeded', Analytics::WITH_UPDATE_PROPERTIES);
 
         return ExitCode::SUCCESS;
