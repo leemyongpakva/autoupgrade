@@ -27,6 +27,8 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
+use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,6 +45,25 @@ abstract class AbstractGlobalController
     {
         $this->upgradeContainer = $upgradeContainer;
         $this->request = $request;
+
+        $state = $this->upgradeContainer->getState();
+
+        if (!$this->upgradeContainer->getFileConfigurationStorage()->exists(UpgradeFileNames::STATE_FILENAME)) {
+            try {
+                $currentVersion = $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION);
+                $destinationVersion = $this->upgradeContainer->getUpgrader()->getDestinationVersion();
+                $state->initDefault(
+                    $currentVersion,
+                    $destinationVersion
+                );
+                $this->upgradeContainer->getFileConfigurationStorage()->save($state->export(), UpgradeFileNames::STATE_FILENAME);
+            } catch (\Exception $e) {
+                return AjaxResponseBuilder::errorResponse($e, 500);
+            }
+        } else {
+            $importedState = $this->upgradeContainer->getFileConfigurationStorage()->load(UpgradeFileNames::STATE_FILENAME);
+            $state->importFromArray($importedState);
+        }
     }
 
     protected function getTwig()

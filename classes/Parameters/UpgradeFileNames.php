@@ -33,6 +33,13 @@ namespace PrestaShop\Module\AutoUpgrade\Parameters;
 class UpgradeFileNames
 {
     /**
+     * stateFilename contains all state specific to the autoupgrade module.
+     *
+     * @var string
+     */
+    const STATE_FILENAME = 'state.var';
+
+    /**
      * configFilename contains all configuration specific to the autoupgrade module.
      *
      * @var string
