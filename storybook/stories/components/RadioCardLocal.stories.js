@@ -34,6 +34,8 @@ export default {
 export const Local = {
   args: {
     ...LocalArchive.args,
+    updateAssistantDocs: 
+      "https://devdocs.prestashop-project.org/8/basics/keeping-up-to-date/use-autoupgrade-module/",
     disabled: false,
     disabledMessage: "No backup file found on your store.",
     required: false,
@@ -45,8 +47,8 @@ export const Local = {
     },
     form_fields: {
       channel: "local",
-      archive_zip: "local_zip",
-      archive_xml: "local_xml",
+      archive_zip: "archive.zip",
+      archive_xml: "archive.xml",
     },
     current_values: {
       channel: "local",
