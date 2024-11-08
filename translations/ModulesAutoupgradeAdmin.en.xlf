@@ -696,9 +696,9 @@ Comment: directory already exists</note>
         <target>Module %s does not need to be migrated. Module is up to date.</target>
         <note>Line: 101</note>
       </trans-unit>
-      <trans-unit id="f88f4492f3805f4732cda67d58b70cc4">
-        <source>%s modules left to update.</source>
-        <target>%s modules left to update.</target>
+      <trans-unit id="cf131dfbf6e4bd352b1e5ed65b169b0e">
+        <source>%s modules left to check.</source>
+        <target>%s modules left to check.</target>
         <note>Line: 129</note>
       </trans-unit>
       <trans-unit id="d47b7d2553af843c2c037185c0279268">
