@@ -5,6 +5,7 @@ html {
   &:has(#{$ua-id}) {
     // Need class use in #ua_step_content to make it work
     container-type: size;
+
     &:has(.update-page, .restore-page) {
       container-name: html-height;
 
