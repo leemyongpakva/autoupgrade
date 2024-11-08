@@ -8,12 +8,12 @@
 
 {% block content %}
   <div class="content__container">
-    {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
-      title: "Your store is up to date",
-      message: "Before continuing with your tasks, please review the following checklist to ensure smooth operation after recent updates.",
-      alertStatus: "success",
-      buttonLabel: "",
-      buttonUrl: "",
+    {% include '@ModuleAutoUpgrade/components/alert.html.twig' with {
+      title: 'Your store is up to date'|trans({}),
+      message: 'Before continuing with your tasks, please review the following checklist to ensure smooth operation after recent updates.'|trans({}),
+      alertStatus: 'success',
+      buttonLabel: '',
+      buttonUrl: '',
     } %}
 
     <div class="content__section">
@@ -23,16 +23,28 @@
 
       <ul>
         <li>
-          {{ '<b>Open the developer documentation</b> to keep this checklist at-hand.'|trans({})|raw }}
+          {{ '%startbold%Open the developer documentation%endbold% to keep this checklist at-hand.'|trans({
+            '%startbold%': '<b>',
+            '%endbold%': '</b>'
+          })|raw }}
         </li>
         <li>
-          {{ '<b>Re-enable and check your modules</b> one by one to prevent any compatibility issue.'|trans({})|raw }}
+          {{ '%startbold%Re-enable and check your modules%endbold% one by one to prevent any compatibility issue.'|trans({
+            '%startbold%': '<b>',
+            '%endbold%': '</b>'
+          })|raw }}
         </li>
         <li>
-          {{ '<b>Make sure your store\'s front office is working properly:</b> try to create an account, place an order, add a product, etc.'|trans({})|raw }}
+          {{ '%startbold%Make sure your store\'s front office is working properly:%endbold% try to create an account, place an order, add a product, etc.'|trans({
+            '%startbold%': '<b>',
+            '%endbold%': '</b>'
+          })|raw }}
         </li>
         <li>
-          {{ '<b>Disable the maintenance mode</b> in General settings > Maintenance.'|trans({})|raw }}
+          {{ '%startbold%Disable the maintenance mode%endbold% in General settings > Maintenance.'|trans({
+            '%startbold%': '<b>',
+            '%endbold%': '</b>'
+          })|raw }}
         </li>
       </ul>
     </div>
@@ -44,13 +56,13 @@
 
       <ul>
         <li>
-          {{ "If some images don't appear in the front office, try regenerating thumbnails in Preferences > Images."|trans({}) }}
+          {{ 'If some images don\'t appear in the front office, try regenerating thumbnails in Preferences > Images.'|trans({}) }}
         </li>
         <li>
-          {{ "If something's wrong, you can restore a backup with this module. Your backup is available at {admin}/autoupgrade/backup."|trans({}) }}
+          {{ 'If something\'s wrong, you can restore a backup with this module. Your backup is available at {admin}/autoupgrade/backup.'|trans({}) }}
         </li>
         <li>
-          {{ "If you can't access your back office, try enabling the debug mode manually in config/defines.inc.php by setting _PS_MODE_DEV_ to true."|trans({}) }}
+          {{ 'If you can\'t access your back office, try enabling the debug mode manually in config/defines.inc.php by setting _PS_MODE_DEV_ to true.'|trans({}) }}
         </li>
       </ul>
     </div>

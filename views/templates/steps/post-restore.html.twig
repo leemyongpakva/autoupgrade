@@ -23,10 +23,16 @@
 
       <ul>
         <li>
-          {{ '<b>Open the developer documentation</b> to keep this checklist at-hand.'|trans({})|raw }}
+          {{ '%startbold%Open the developer documentation%endbold% to keep this checklist at-hand.'|trans({
+            '%startbold%': '<b>',
+            '%endbold%': '</b>'
+          })|raw }}
         </li>
         <li>
-          {{ '<b>Disable the maintenance mode</b> in General settings > Maintenance.'|trans({})|raw }}
+          {{ '%startbold%Disable the maintenance mode%endbold% in General settings > Maintenance.'|trans({
+            '%startbold%': '<b>',
+            '%endbold%': '</b>'
+          })|raw }}
         </li>
       </ul>
     </div>
