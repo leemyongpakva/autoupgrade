@@ -30,7 +30,7 @@ export default class UpdatePageUpdateOptions extends UpdatePage {
     return form;
   }
 
-  private readonly onChange = (ev: Event) => {
+  private readonly onChange = async (ev: Event) => {
     const optionInput = ev.target as HTMLInputElement;
 
     optionInput.setAttribute('disabled', 'true');
@@ -38,14 +38,14 @@ export default class UpdatePageUpdateOptions extends UpdatePage {
     const data = new FormData();
     data.append('name', optionInput.name);
     data.append('value', JSON.stringify(optionInput.checked));
-    api.post(this.form.dataset.routeToSave!, data);
+    await api.post(this.form.dataset.routeToSave!, data);
 
     optionInput.removeAttribute('disabled');
   };
 
-  private readonly onSubmit = (event: Event) => {
+  private readonly onSubmit = async (event: Event) => {
     event.preventDefault();
 
-    api.post(this.form.dataset.routeToSubmit!, new FormData(this.form));
+    await api.post(this.form.dataset.routeToSubmit!, new FormData(this.form));
   };
 }
