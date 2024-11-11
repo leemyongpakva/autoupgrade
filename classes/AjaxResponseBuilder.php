@@ -6,7 +6,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class AjaxResponseBuilder
 {
-    public static function hydrationResponse(string $parentToUpdate, string $newContent, ?string $newRoute = null): JsonResponse
+    /**
+     * @param array{newRoute?:string, addScript?:string} $options
+     */
+    public static function hydrationResponse(string $parentToUpdate, string $newContent, ?array $options = []): JsonResponse
     {
         $arrayToReturn = [
             'hydration' => true,
@@ -14,8 +17,12 @@ class AjaxResponseBuilder
             'new_content' => $newContent,
         ];
 
-        if ($newRoute) {
-            $arrayToReturn['new_route'] = $newRoute;
+        if ($options['newRoute']) {
+            $arrayToReturn['new_route'] = $options['newRoute'];
+        }
+
+        if ($options['addScript']) {
+            $arrayToReturn['add_script'] = $options['addScript'];
         }
 
         return new JsonResponse($arrayToReturn);

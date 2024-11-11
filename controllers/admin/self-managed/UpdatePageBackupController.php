@@ -68,6 +68,8 @@ class UpdatePageBackupController extends AbstractPageWithStepController
             'noBackUp' => !$this->request->request->getBoolean('backupDone', false),
             'modalId' => 'modal-confirm-update',
 
+            'form_route_to_confirm' => Routes::UPDATE_STEP_BACKUP_CONFIRM_UPDATE,
+
             // TODO: assets_base_path is provided by all controllers. What about a asset() twig function instead?
             'assets_base_path' => $this->upgradeContainer->getAssetsEnvironment()->getAssetsBaseUrl($this->request),
         ]);
@@ -123,7 +125,6 @@ class UpdatePageBackupController extends AbstractPageWithStepController
                 'form_route_to_submit_backup' => Routes::UPDATE_STEP_BACKUP_SUBMIT_BACKUP,
                 'form_route_to_submit_update' => Routes::UPDATE_STEP_BACKUP_SUBMIT_UPDATE,
                 'form_route_to_confirm_backup' => Routes::UPDATE_STEP_BACKUP_CONFIRM_BACKUP,
-                'form_route_to_confirm_update' => Routes::UPDATE_STEP_BACKUP_CONFIRM_UPDATE,
 
                 'form_fields' => [
                     'include_images' => [
@@ -143,18 +144,21 @@ class UpdatePageBackupController extends AbstractPageWithStepController
                 '@ModuleAutoUpgrade/steps/' . $this->getStepTemplate() . '.html.twig',
                 $params
             ),
-            $this->displayRouteInUrl()
+            ['newRoute' => $this->displayRouteInUrl()]
         );
     }
 
     private function displayModal(string $modalName, array $params): JsonResponse
     {
+        $options = $modalName === 'modal-update' ? ['addScript' => 'start-update-modal'] : null;
+
         return AjaxResponseBuilder::hydrationResponse(
             PageSelectors::MODAL_PARENT_ID,
             $this->getTwig()->render(
                 '@ModuleAutoUpgrade/modals/' . $modalName . '.html.twig',
                 $params
-            )
+            ),
+            $options
         );
     }
 }

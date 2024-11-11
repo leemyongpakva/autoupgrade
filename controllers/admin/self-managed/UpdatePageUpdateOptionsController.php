@@ -131,7 +131,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
                 '@ModuleAutoUpgrade/steps/' . $this->getStepTemplate() . '.html.twig',
                 $params
             ),
-            $this->displayRouteInUrl()
+            ['newRoute' => $this->displayRouteInUrl()]
         );
     }
 }

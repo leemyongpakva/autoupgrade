@@ -1,7 +1,7 @@
-import PageAbstract from './PageAbstract';
+import ComponentAbstract from '../types/ComponentAbstract';
 import api from '../api/RequestHandler';
 
-export default class HomePage extends PageAbstract {
+export default class HomePage extends ComponentAbstract {
   constructor() {
     super();
     if (!this.form) {

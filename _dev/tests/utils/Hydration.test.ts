@@ -6,6 +6,7 @@ import ScriptHandler from '../../src/ts/routing/ScriptHandler';
 const setNewRouteMock = jest.spyOn(RouteHandler.prototype, 'setNewRoute');
 const updateRouteScriptMock = jest.spyOn(ScriptHandler.prototype, 'updateRouteScript');
 const unloadRouteScriptMock = jest.spyOn(ScriptHandler.prototype, 'unloadRouteScript');
+const loadScriptMock = jest.spyOn(ScriptHandler.prototype, 'loadScript');
 
 jest.mock('../../src/ts/pages/HomePage', () => {
   return jest.fn().mockImplementation(() => {
@@ -73,6 +74,21 @@ describe('Hydration', () => {
     expect(updateRouteScriptMock).toHaveBeenCalledWith('new_route_value');
   });
 
+  it('should call scriptHandler.loadScript when add_script is provided', () => {
+    const response: ApiResponseHydration = {
+      hydration: true,
+      new_content: `<p>New Content</p>`,
+      parent_to_update: 'parent',
+      add_script: 'additional_script'
+    };
+
+    hydration.hydrate(response);
+
+    expect(updateRouteScriptMock).not.toHaveBeenCalled();
+    expect(loadScriptMock).toHaveBeenCalledWith('additional_script');
+
+  });
+
   it('should call routeHandler.setNewRoute when new_route is provided and fromPopState is false', () => {
     const response: ApiResponseHydration = {
       hydration: true,
@@ -132,6 +148,31 @@ describe('Hydration', () => {
         type: Hydration.hydrationEventName
       })
     );
+  });
+
+  it('should refresh the modal container if the DOM has been updated', () => {
+    const response: ApiResponseHydration = {
+      hydration: true,
+      new_content: `<p>New Content</p>`,
+      parent_to_update: 'parent',
+      new_route: undefined
+    };
+
+    hydration.hydrate(response);
+
+    expect(modalContainer.init).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not refresh the modal container if the DOM is untouched', () => {
+    const response: ApiResponseHydration = {
+      hydration: true,
+      new_content: `<p>New Content</p>`,
+      parent_to_update: 'non_existent_id',
+    };
+
+    hydration.hydrate(response);
+
+    expect(modalContainer.init).toHaveBeenCalledTimes(0);
   });
 });
 

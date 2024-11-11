@@ -3,6 +3,13 @@
 {% set title = 'Start update?'|trans({}) %}
 
 {% block modal_content %}
+  <form 
+    class="update-backup-page__field-list"
+    action=""
+    data-route-to-submit="{{ form_route_to_confirm }}"
+    id="form-confirm-update"
+    name="form-confirm-update"
+  >
   {% if noBackUp %}
     <p>
       {{ 'Before starting the update, make sure you have a complete and recent backup of your store (database, files, and images).'|trans({}) }}
@@ -17,7 +24,7 @@
   {% if noBackUp %}
     <div class="modal__no-backup checkbox">
       <label>
-        <input type="checkbox" value="" />
+        <input type="checkbox" value="" id="modal-start-update-own-backup" />
         {{ 'I have made my own backup and can restore it manually if a problem occur.'|trans({}) }}
       </label>
     </div>
@@ -31,7 +38,11 @@
         {{ 'Cancel'|trans({}) }}
       </button>
 
-      <button type="button" class="btn btn-primary">
+      <button
+        type="submit"
+        class="btn btn-primary"
+        form="form-confirm-update"
+      >
         <img
           class="modal__rocket-icon rocket-icon"
           src="{{ assets_base_path }}/img/rocket_white.svg"

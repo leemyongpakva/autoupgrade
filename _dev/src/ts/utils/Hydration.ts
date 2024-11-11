@@ -32,14 +32,18 @@ export default class Hydration {
       }
 
       elementToUpdate.innerHTML = data.new_content;
+      modalContainer.init();
 
       if (data.new_route) {
         scriptHandler.updateRouteScript(data.new_route);
-        modalContainer.init();
 
         if (!fromPopState) {
           routeHandler.setNewRoute(data.new_route);
         }
+      }
+
+      if (data.add_script) {
+        scriptHandler.loadScript(data.add_script);
       }
 
       elementToUpdate.dispatchEvent(this.hydrationEvent);

@@ -2,7 +2,7 @@
  * @abstract
  * @description Base abstract class defining the structure for page components, requiring implementation of lifecycle methods for mounting and destruction.
  */
-export default abstract class PageAbstract {
+export default abstract class ComponentAbstract {
   /**
    * @abstract
    * @description Method to initialize and mount the page component. Should be implemented by subclasses to set up event listeners, render content, etc.

@@ -1,7 +1,7 @@
-import PageAbstract from './PageAbstract';
+import ComponentAbstract from '../types/ComponentAbstract';
 import Stepper from '../utils/Stepper';
 
-export default class UpdatePage extends PageAbstract {
+export default class UpdatePage extends ComponentAbstract {
   protected stepCode = 'version-choice';
 
   constructor() {

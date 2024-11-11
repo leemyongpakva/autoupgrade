@@ -12,13 +12,15 @@ export default class UpdatePageBackup extends UpdatePage {
     this.form.addEventListener('change', this.onInputChange);
 
     document.getElementById('ua_container')?.addEventListener('click', this.onClick);
-    document.getElementById(ModalContainer.containerId)?.addEventListener(ModalContainer.okEvent, (ev) => {
-      if (ev.target.id === 'modal-confirm-backup') {
-        api.post(this.form.dataset.routeToConfirmBackup!);
-      } else if (ev.target.id === 'modal-confirm-update') {
-        api.post(this.form.dataset.routeToConfirmUpdate!);
-      }
-    });
+    document
+      .getElementById(ModalContainer.containerId)
+      ?.addEventListener(ModalContainer.okEvent, (ev) => {
+        // We handle the backup confirmation modal as it is really basic
+        if ((ev.target as HTMLElement).id === 'modal-confirm-backup') {
+          api.post(this.form.dataset.routeToConfirmBackup!);
+        }
+        // The update confirmation modal gets its logic in a dedicated script
+      });
   }
 
   public beforeDestroy() {
@@ -32,17 +34,19 @@ export default class UpdatePageBackup extends UpdatePage {
       throw new Error('Form not found');
     }
 
-    ['routeToSave', 'routeToSubmitBackup', 'routeToSubmitUpdate', 'routeToConfirmBackup', 'routeToConfirmUpdate'].forEach((data) => {
-      if (!form.dataset[data]) {
-        throw new Error(`Missing data ${data} from form dataset.`);
+    ['routeToSave', 'routeToSubmitBackup', 'routeToSubmitUpdate', 'routeToConfirmBackup'].forEach(
+      (data) => {
+        if (!form.dataset[data]) {
+          throw new Error(`Missing data ${data} from form dataset.`);
+        }
       }
-    });
+    );
 
     return form;
   }
 
   private onClick = async (ev: Event) => {
-    if (ev.target.id === 'update-backup-page-skip-btn') {
+    if ((ev.target as HTMLElement).id === 'update-backup-page-skip-btn') {
       const formData = new FormData();
       formData.append('backupDone', JSON.stringify(false));
       await api.post(this.form.dataset.routeToSubmitUpdate!, formData);

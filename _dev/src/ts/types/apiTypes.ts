@@ -2,6 +2,7 @@ interface ApiResponseHydration {
   hydration: boolean;
   new_content: string;
   new_route?: string;
+  add_script?: string;
   parent_to_update: string;
 }
 
