@@ -31,7 +31,7 @@
           name: form_fields.include_images.field,
           title: 'Include images in your backup'|trans({}),
           value: form_fields.include_images.value,
-          error_message: error[form_fields.include_images.field] is defined ? error[form_fields.include_images.field] : null,
+          error_message: errors[form_fields.include_images.field] is defined ? errors[form_fields.include_images.field] : null,
         } %}
       </form>
     </div>

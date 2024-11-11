@@ -91,21 +91,19 @@ class UpdatePageBackupController extends AbstractPageWithStepController
         $name = $this->request->request->get('name');
 
         $config = [
-            $name => $this->request->request->getBoolean('value'),
+            $name => $this->request->request->get('value'),
         ];
 
-        // TODO: Remove after rebase
-        $upgradeConfiguration->validate($config);
-        $error = null;
-        // TODO: Uncomment after rebase
-        // $error = $this->upgradeContainer->getConfigurationValidator()->validate($config);
-
-        if (empty($error)) {
+        $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
+        if (empty($errors)) {
             $upgradeConfiguration->merge($config);
             $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+        } else {
+            // TODO: Improve this with a helper in update options PR
+            $errors = array_column($errors, 'message', 'target');
         }
 
-        return $this->getRefreshOfForm(array_merge($this->getParams(), ['error' => $error]));
+        return $this->getRefreshOfForm(array_merge($this->getParams(), ['errors' => $errors]));
     }
 
     /**
