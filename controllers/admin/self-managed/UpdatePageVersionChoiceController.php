@@ -36,6 +36,7 @@ use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\UpgradeSelfCheck;
 use PrestaShop\Module\AutoUpgrade\VersionUtils;
@@ -222,24 +223,13 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
             if ($channel !== null) {
                 $params[$channel . '_requirements'] = $this->getRequirements();
             }
-        } else {
-            $errors = array_column(
-                array_map(function ($error) {
-                    return [
-                        'key' => $error['target'] ?? 'global',
-                        'value' => $error['message'],
-                    ];
-                }, $errors),
-                'value',
-                'key'
-            );
         }
 
         $params = array_merge(
             $params,
             [
                 'current_values' => $requestConfig,
-                'errors' => $errors,
+                'errors' => ValidatorToFormFormater::format($errors),
             ]
         );
 

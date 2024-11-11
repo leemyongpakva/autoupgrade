@@ -33,6 +33,7 @@ use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
@@ -65,9 +66,9 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
             $name => $this->request->request->get('value'),
         ];
 
-        $error = $this->upgradeContainer->getConfigurationValidator()->validate($config);
+        $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
 
-        if (empty($error)) {
+        if (empty($errors)) {
             if ($name === 'PS_DISABLE_OVERRIDES') {
                 $this->upgradeContainer->initPrestaShopCore();
                 UpgradeConfiguration::updatePSDisableOverrides($this->request->request->getBoolean('value'));
@@ -77,7 +78,10 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
             }
         }
 
-        return $this->getRefreshOfForm(array_merge($this->getParams(), ['error' => $error]));
+        return $this->getRefreshOfForm(array_merge(
+            $this->getParams(),
+            ['errors' => ValidatorToFormFormater::format($errors)]
+        ));
     }
 
     public function submit(): JsonResponse
