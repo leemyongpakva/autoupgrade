@@ -5,49 +5,50 @@ export default class ModalContainer {
     public static okEvent = 'ok';
 
     public static containerId = 'ua_modal';
-    public init(): void
-    {
-        const modalContainer = document.getElementById(ModalContainer.containerId);
 
-        if (modalContainer) {
-            modalContainer.addEventListener(
-                Hydration.hydrationEventName, () => this.displayModal(),
-            );
-            // Event delegation
-            modalContainer.addEventListener('click', (ev: Event) => {
-                const modal = ev.target?.closest(".modal");
-                if (modal && ev.target?.closest("[data-dismiss='modal']")) {
-                    modal.dispatchEvent(new Event(ModalContainer.cancelEvent, {bubbles: true}));
-                } else if(modal && ev.target?.closest(".modal-footer button:not([data-dismiss='modal'])")) {
-                    modal.dispatchEvent(new Event(ModalContainer.okEvent, {bubbles: true}))
-                }
-            });
+    public init(): void {
+        // Avoid reattaching the same event listener several times.
+        this.unset();
+        this.modalContainer.addEventListener(Hydration.hydrationEventName, this.displayModal);
+        this.modalContainer.addEventListener('click', this.setupModal);
+        this.modalContainer.addEventListener(ModalContainer.cancelEvent, this.closeModal);
+        this.modalContainer.addEventListener(ModalContainer.okEvent, this.closeModal);
+    }
 
-            modalContainer.addEventListener(
-                ModalContainer.cancelEvent, this.closeModal,
-            );
-            modalContainer.addEventListener(
-                ModalContainer.okEvent, this.closeModal,
-            );
-        }
+    public unset(): void {
+        this.modalContainer.removeEventListener(Hydration.hydrationEventName, this.displayModal);
+        this.modalContainer.removeEventListener('click', this.setupModal);
+        this.modalContainer.removeEventListener(ModalContainer.cancelEvent, this.closeModal);
+        this.modalContainer.removeEventListener(ModalContainer.okEvent, this.closeModal);
     }
 
     private displayModal(): void {
-        Array.from(
-            document.getElementById(ModalContainer.containerId)?.getElementsByClassName('modal') || []
-        ).forEach((modal: HTMLElement) => {
-            modal.style.display = 'block';
-            // Need to wait a bit to make sure the DOM is refreshed to trigger the animation
-            setTimeout(() => modal.classList.add('in'), 50);
-        });
+        $(document.getElementById(ModalContainer.containerId)?.getElementsByClassName('modal') || [])
+            .modal('show');
+    }
+
+    private setupModal(ev: Event) {
+        const modal = ev.target?.closest(".modal");
+        if (modal && ev.target?.closest("[data-dismiss='modal']")) {
+            modal.dispatchEvent(new Event(ModalContainer.cancelEvent, {bubbles: true}));
+        } else if(modal && ev.target?.closest(".modal-footer button:not([data-dismiss='modal'])")) {
+            modal.dispatchEvent(new Event(ModalContainer.okEvent, {bubbles: true}))
+        }
     }
 
     private closeModal(ev: Event): void {
         const modal = ev.target;
         if (modal) {
-            modal.classList.remove('in');
-            // Let the animation play before hiding the modal
-            setTimeout(() => modal.style.display = null, 500);
+            $(modal).modal('hide');
         }
+    }
+
+    private get modalContainer(): HTMLElement {
+        const container = document.getElementById(ModalContainer.containerId);
+
+        if (!container) {
+            throw new Error('Cannot find modal container to initialize.');
+        }
+        return container;
     }
 }

@@ -1,5 +1,5 @@
 import { ApiResponseHydration } from '../types/apiTypes';
-import { routeHandler, scriptHandler } from '../autoUpgrade';
+import { modalContainer, routeHandler, scriptHandler } from '../autoUpgrade';
 
 export default class Hydration {
   /**
@@ -35,6 +35,7 @@ export default class Hydration {
 
       if (data.new_route) {
         scriptHandler.updateRouteScript(data.new_route);
+        modalContainer.init();
 
         if (!fromPopState) {
           routeHandler.setNewRoute(data.new_route);
