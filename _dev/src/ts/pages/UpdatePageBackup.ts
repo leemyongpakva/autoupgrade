@@ -45,7 +45,7 @@ export default class UpdatePageBackup extends UpdatePage {
     return form;
   }
 
-  private onClick = async (ev: Event) => {
+  private readonly onClick = async (ev: Event) => {
     if ((ev.target as HTMLElement).id === 'update-backup-page-skip-btn') {
       const formData = new FormData();
       formData.append('backupDone', JSON.stringify(false));
@@ -53,7 +53,7 @@ export default class UpdatePageBackup extends UpdatePage {
     }
   };
 
-  private onInputChange = async (ev: Event) => {
+  private readonly onInputChange = async (ev: Event) => {
     const optionInput = ev.target as HTMLInputElement;
 
     optionInput.setAttribute('disabled', 'true');
@@ -66,7 +66,7 @@ export default class UpdatePageBackup extends UpdatePage {
     optionInput.removeAttribute('disabled');
   };
 
-  private onFormSubmit = async (event: Event) => {
+  private readonly onFormSubmit = async (event: Event) => {
     event.preventDefault();
 
     await api.post(this.form.dataset.routeToSubmitBackup!, new FormData(this.form));

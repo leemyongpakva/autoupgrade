@@ -86,7 +86,6 @@ describe('Hydration', () => {
 
     expect(updateRouteScriptMock).not.toHaveBeenCalled();
     expect(loadScriptMock).toHaveBeenCalledWith('additional_script');
-
   });
 
   it('should call routeHandler.setNewRoute when new_route is provided and fromPopState is false', () => {
@@ -167,7 +166,7 @@ describe('Hydration', () => {
     const response: ApiResponseHydration = {
       hydration: true,
       new_content: `<p>New Content</p>`,
-      parent_to_update: 'non_existent_id',
+      parent_to_update: 'non_existent_id'
     };
 
     hydration.hydrate(response);

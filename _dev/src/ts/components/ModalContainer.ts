@@ -1,10 +1,10 @@
 import Hydration from '../utils/Hydration';
 
 export default class ModalContainer {
-  public static cancelEvent = 'cancel';
-  public static okEvent = 'ok';
+  public static readonly cancelEvent = 'cancel';
+  public static readonly okEvent = 'ok';
 
-  public static containerId = 'ua_modal';
+  public static readonly containerId = 'ua_modal';
 
   public init(): void {
     // Avoid reattaching the same event listener several times.
@@ -29,7 +29,7 @@ export default class ModalContainer {
   }
 
   private onClick(ev: Event) {
-    const target = ev.target ? ev.target as HTMLElement : null;
+    const target = ev.target ? (ev.target as HTMLElement) : null;
     const modal = target?.closest('.modal');
 
     if (modal && target?.closest("[data-dismiss='modal']")) {

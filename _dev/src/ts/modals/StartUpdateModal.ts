@@ -9,10 +9,15 @@ export default class StartUpdateModal extends ComponentAbstract {
     this.form.addEventListener('submit', this.onSubmit);
     this.form.addEventListener('change', this.onChange);
 
-    this.updateSubmitButtonStatus(document.getElementById('modal-start-update-own-backup') as HTMLInputElement | undefined);
+    this.updateSubmitButtonStatus(
+      document.getElementById('modal-start-update-own-backup') as HTMLInputElement | undefined
+    );
   }
 
-  public beforeDestroy() {}
+  public beforeDestroy() {
+    this.form.removeEventListener('submit', this.onSubmit);
+    this.form.removeEventListener('change', this.onChange);
+  }
 
   private get form(): HTMLFormElement {
     const form = document.forms.namedItem('form-confirm-update');
@@ -56,8 +61,7 @@ export default class StartUpdateModal extends ComponentAbstract {
   };
 
   private updateSubmitButtonStatus(input?: HTMLInputElement): void {
-    console.log(input);
-    if (input && input.checked) {
+    if (!input || input.checked) {
       this.submitButton.removeAttribute('disabled');
     } else {
       this.submitButton.setAttribute('disabled', 'true');

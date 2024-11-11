@@ -72,9 +72,7 @@ describe('ScriptHandler', () => {
 
     scriptHandler = new ScriptHandler();
 
-    expect(consoleDebugSpy).toHaveBeenCalledWith(
-      `No matching class found for ID: ${route}`
-    );
+    expect(consoleDebugSpy).toHaveBeenCalledWith(`No matching class found for ID: ${route}`);
   });
 
   it('should catch and log errors if page instantiation or mount fails', () => {

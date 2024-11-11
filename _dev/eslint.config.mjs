@@ -27,7 +27,8 @@ export default [
       sourceType: 'module',
       globals: {
         ...globals.browser,
-        ...globals.node
+        ...globals.node,
+        ...globals.jquery
       },
       parser: tseslintParser,
       parserOptions: {
