@@ -57,6 +57,12 @@ $e: ".modal";
     }
 
     // Custom modals
+    &__spacer {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
     &__no-backup {
       margin-block: 0;
 
