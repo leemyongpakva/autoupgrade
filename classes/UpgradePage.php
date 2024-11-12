@@ -277,7 +277,7 @@ class UpgradePage
             'ajaxUpgradeTabExists' => file_exists($this->autoupgradePath . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php'),
             'currentIndex' => $this->currentIndex,
             'tab' => 'AdminSelfUpgrade',
-            UpgradeConfiguration::CHANNEL => $this->config->get(UpgradeConfiguration::CHANNEL),
+            UpgradeConfiguration::CHANNEL => $this->config->getChannel(),
             'autoupgrade' => [
                 'version' => $this->upgradeSelfCheck->getModuleVersion(),
             ],

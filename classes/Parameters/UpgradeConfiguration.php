@@ -119,6 +119,7 @@ class UpgradeConfiguration extends ArrayCollection
 
     /**
      * Get channel selected on config panel (Minor, major ...).
+     * @return Upgrader::CHANNEL_*|null
      */
     public function getChannel(): ?string
     {

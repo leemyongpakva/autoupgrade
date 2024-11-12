@@ -47,9 +47,9 @@ class UpdatePageVersionChoiceController extends AbstractPageController
     const CURRENT_STEP = UpdateSteps::STEP_VERSION_CHOICE;
     const FORM_NAME = 'version_choice';
     const FORM_FIELDS = [
-        'channel' => UpgradeConfiguration::CHANNEL,
-        'archive_zip' => UpgradeConfiguration::ARCHIVE_ZIP,
-        'archive_xml' => UpgradeConfiguration::ARCHIVE_XML,
+        UpgradeConfiguration::CHANNEL => UpgradeConfiguration::CHANNEL,
+        UpgradeConfiguration::ARCHIVE_ZIP => UpgradeConfiguration::ARCHIVE_ZIP,
+        UpgradeConfiguration::ARCHIVE_XML => UpgradeConfiguration::ARCHIVE_XML,
     ];
     const FORM_OPTIONS = [
         'online_value' => Upgrader::CHANNEL_ONLINE,

@@ -83,7 +83,7 @@ class ConfigurationValidatorTest extends TestCase
 
     public function testValidateZipFail()
     {
-        $result = $this->validator->validate(['channel' => 'local', UpgradeConfiguration::ARCHIVE_ZIP => '']);
+        $result = $this->validator->validate([UpgradeConfiguration::CHANNEL => 'local', UpgradeConfiguration::ARCHIVE_ZIP => '']);
         $this->assertEquals([
             [
                 'message' => 'No zip archive provided',
