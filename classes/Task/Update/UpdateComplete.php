@@ -62,13 +62,13 @@ class UpdateComplete extends AbstractTask
 
         $this->next = TaskName::TASK_COMPLETE;
 
-        if ($this->container->getUpgradeConfiguration()->get('channel') != Upgrader::CHANNEL_LOCAL && file_exists($this->container->getFilePath()) && unlink($this->container->getFilePath())) {
+        if ($this->container->getUpgradeConfiguration()->getChannel() != Upgrader::CHANNEL_LOCAL && file_exists($this->container->getFilePath()) && unlink($this->container->getFilePath())) {
             $this->logger->debug($this->translator->trans('%s removed', [$this->container->getFilePath()]));
         } elseif (is_file($this->container->getFilePath())) {
             $this->logger->debug('<strong>' . $this->translator->trans('Please remove %s by FTP', [$this->container->getFilePath()]) . '</strong>');
         }
 
-        if ($this->container->getUpgradeConfiguration()->get('channel') != 'directory' && file_exists($this->container->getProperty(UpgradeContainer::LATEST_PATH)) && FilesystemAdapter::deleteDirectory($this->container->getProperty(UpgradeContainer::LATEST_PATH))) {
+        if (file_exists($this->container->getProperty(UpgradeContainer::LATEST_PATH)) && FilesystemAdapter::deleteDirectory($this->container->getProperty(UpgradeContainer::LATEST_PATH))) {
             $this->logger->debug($this->translator->trans('%s removed', [$this->container->getProperty(UpgradeContainer::LATEST_PATH)]));
         } elseif (is_dir($this->container->getProperty(UpgradeContainer::LATEST_PATH))) {
             $this->logger->debug('<strong>' . $this->translator->trans('Please remove %s by FTP', [$this->container->getProperty(UpgradeContainer::LATEST_PATH)]) . '</strong>');

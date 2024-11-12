@@ -29,6 +29,7 @@ namespace PrestaShop\Module\AutoUpgrade\Commands;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\DeveloperDocumentation;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\Runner\AllUpdateTasks;
 use Symfony\Component\Console\Input\InputArgument;
@@ -93,7 +94,7 @@ class UpdateCommand extends AbstractCommand
             $controller->setOptions([
                 'data' => $input->getOption('data'),
                 'action' => $input->getOption('action'),
-                'channel' => $input->getOption('channel'),
+                UpgradeConfiguration::CHANNEL => $input->getOption('channel'),
             ]);
             $controller->init();
             $exitCode = $controller->run();

@@ -66,14 +66,14 @@ class UpdateConfig extends AbstractTask
                 continue;
             }
             // The PS_DISABLE_OVERRIDES variable must only be updated on the database side
-            if ($key === 'PS_DISABLE_OVERRIDES') {
+            if ($key === UpgradeConfiguration::PS_DISABLE_OVERRIDES) {
                 UpgradeConfiguration::updatePSDisableOverrides((bool) $configurationData[$key]);
             } else {
                 $config[$key] = $configurationData[$key];
             }
         }
 
-        $isLocal = $config['channel'] === Upgrader::CHANNEL_LOCAL;
+        $isLocal = $config[UpgradeConfiguration::CHANNEL] === Upgrader::CHANNEL_LOCAL;
 
         $error = $this->container->getConfigurationValidator()->validate($config);
 
@@ -89,7 +89,7 @@ class UpdateConfig extends AbstractTask
         }
 
         if ($isLocal) {
-            $file = $config['archive_zip'];
+            $file = $config[UpgradeConfiguration::ARCHIVE_ZIP];
             $fullFilePath = $this->container->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $file;
             try {
                 $config['archive_version_num'] = $this->container->getPrestashopVersionService()->extractPrestashopVersionFromZip($fullFilePath);

@@ -51,23 +51,23 @@ class ConfigurationValidator
     {
         $errors = [];
 
-        $isLocal = isset($array['channel']) && $array['channel'] === Upgrader::CHANNEL_LOCAL;
+        $isLocal = isset($array[UpgradeConfiguration::CHANNEL]) && $array[UpgradeConfiguration::CHANNEL] === Upgrader::CHANNEL_LOCAL;
 
         foreach ($array as $key => $value) {
             switch ($key) {
-                case 'channel':
+                case UpgradeConfiguration::CHANNEL:
                     $error = $this->validateChannel($value);
                     break;
-                case 'archive_zip':
+                case UpgradeConfiguration::ARCHIVE_ZIP:
                     $error = $this->validateArchiveZip($value, $isLocal);
                     break;
-                case 'archive_xml':
+                case UpgradeConfiguration::ARCHIVE_XML:
                     $error = $this->validateArchiveXml($value, $isLocal);
                     break;
-                case 'PS_AUTOUP_CUSTOM_MOD_DESACT':
-                case 'PS_AUTOUP_KEEP_MAILS':
-                case 'PS_AUTOUP_KEEP_IMAGES':
-                case 'PS_DISABLE_OVERRIDES':
+                case UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT:
+                case UpgradeConfiguration::PS_AUTOUP_KEEP_MAILS:
+                case UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES:
+                case UpgradeConfiguration::PS_DISABLE_OVERRIDES:
                     $error = $this->validateBool($value, $key);
                     break;
             }

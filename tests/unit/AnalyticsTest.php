@@ -37,13 +37,13 @@ class AnalyticsTest extends TestCase
             ->setDestinationVersion('8.8.808')
             ->setRestoreName('V1.2.3_blablabla-🐶');
         $upgradeConfiguration = (new UpgradeConfiguration([
-            'PS_AUTOUP_CUSTOM_MOD_DESACT' => 0,
-            'PS_AUTOUP_CHANGE_DEFAULT_THEME' => 1,
-            'PS_AUTOUP_KEEP_MAILS' => 0,
-            'PS_AUTOUP_BACKUP' => 1,
-            'PS_AUTOUP_KEEP_IMAGES' => 0,
-            'channel' => 'major',
-            'archive_zip' => 'zip.zip',
+            UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => 0,
+            UpgradeConfiguration::PS_AUTOUP_CHANGE_DEFAULT_THEME => 1,
+            UpgradeConfiguration::PS_AUTOUP_KEEP_MAILS => 0,
+            UpgradeConfiguration::PS_AUTOUP_BACKUP => 1,
+            UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => 0,
+            UpgradeConfiguration::CHANNEL => 'major',
+            UpgradeConfiguration::ARCHIVE_ZIP => 'zip.zip',
         ]));
 
         $analytics = new Analytics(

@@ -77,12 +77,12 @@ class LocalChannelConfigurationValidator
 
         $errors = [];
 
-        $zipErrors = $this->validateZipFile($array['archive_zip']);
+        $zipErrors = $this->validateZipFile($array[UpgradeConfiguration::ARCHIVE_ZIP]);
         if ($zipErrors) {
             $errors[] = $zipErrors;
         }
 
-        $xmlErrors = $this->validateXmlFile($array['archive_xml']);
+        $xmlErrors = $this->validateXmlFile($array[UpgradeConfiguration::ARCHIVE_XML]);
         if ($xmlErrors) {
             $errors[] = $xmlErrors;
         }
@@ -107,7 +107,7 @@ class LocalChannelConfigurationValidator
         if (!file_exists($fullFilePath)) {
             return [
                 'message' => $this->translator->trans('File %s does not exist. Unable to select that channel.', [$file]),
-                'target' => 'archive_zip',
+                'target' => UpgradeConfiguration::ARCHIVE_ZIP,
             ];
         }
 
@@ -116,7 +116,7 @@ class LocalChannelConfigurationValidator
         } catch (Exception $exception) {
             return [
                 'message' => $this->translator->trans('We couldn\'t find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.'),
-                'target' => 'archive_zip',
+                'target' => UpgradeConfiguration::ARCHIVE_ZIP,
             ];
         }
 
@@ -133,7 +133,7 @@ class LocalChannelConfigurationValidator
         if (!file_exists($fullXmlPath)) {
             return [
                 'message' => $this->translator->trans('File %s does not exist. Unable to select that channel.', [$file]),
-                'target' => 'archive_xml',
+                'target' => UpgradeConfiguration::ARCHIVE_XML,
             ];
         }
 
@@ -142,7 +142,7 @@ class LocalChannelConfigurationValidator
         } catch (Exception $exception) {
             return [
                 'message' => $this->translator->trans('We couldn\'t find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.'),
-                'target' => 'archive_xml',
+                'target' => UpgradeConfiguration::ARCHIVE_XML,
             ];
         }
 

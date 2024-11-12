@@ -26,6 +26,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 
 class FilesystemAdapterTest extends TestCase
@@ -76,7 +77,7 @@ class FilesystemAdapterTest extends TestCase
 
     public function testListFilesInDirForBackupWithImages()
     {
-        $this->container->getUpgradeConfiguration()->set('PS_AUTOUP_KEEP_IMAGES', true);
+        $this->container->getUpgradeConfiguration()->set(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, true);
         $expected = $this->loadFixtureAndAddPrefixToFilePaths(
             __DIR__ . '/../../fixtures/listOfFiles-backup-with-images.json',
             self::$pathToFakeShop
@@ -93,7 +94,7 @@ class FilesystemAdapterTest extends TestCase
 
     public function testListFilesInDirForBackupWithoutImages()
     {
-        $this->container->getUpgradeConfiguration()->set('PS_AUTOUP_KEEP_IMAGES', false);
+        $this->container->getUpgradeConfiguration()->set(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, false);
         $expected = $this->loadFixtureAndAddPrefixToFilePaths(
             __DIR__ . '/../../fixtures/listOfFiles-backup-without-images.json',
             self::$pathToFakeShop
@@ -110,7 +111,7 @@ class FilesystemAdapterTest extends TestCase
 
     public function testListFilesInDirForRestoreWithImages()
     {
-        $this->container->getUpgradeConfiguration()->set('PS_AUTOUP_KEEP_IMAGES', true);
+        $this->container->getUpgradeConfiguration()->set(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, true);
         $expected = $this->loadFixtureAndAddPrefixToFilePaths(
             __DIR__ . '/../../fixtures/listOfFiles-restore-with-images.json',
             self::$pathToFakeShop
@@ -127,7 +128,7 @@ class FilesystemAdapterTest extends TestCase
 
     public function testListFilesInDirForRestoreWithoutImages()
     {
-        $this->container->getUpgradeConfiguration()->set('PS_AUTOUP_KEEP_IMAGES', false);
+        $this->container->getUpgradeConfiguration()->set(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, false);
         $expected = $this->loadFixtureAndAddPrefixToFilePaths(
             __DIR__ . '/../../fixtures/listOfFiles-restore-without-images.json',
             self::$pathToFakeShop

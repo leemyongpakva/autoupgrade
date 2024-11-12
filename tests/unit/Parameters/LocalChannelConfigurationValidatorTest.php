@@ -2,6 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\AutoUpgrade\Parameters\LocalChannelConfigurationValidator;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 
 class LocalChannelConfigurationValidatorTest extends TestCase
@@ -26,51 +27,51 @@ class LocalChannelConfigurationValidatorTest extends TestCase
 
     public function testValidateReturnsErrorIfZipFileDoesNotExist()
     {
-        $data = ['archive_zip' => 'non_existent.zip', 'archive_xml' => 'versioned_8.1.0.xml'];
+        $data = [UpgradeConfiguration::ARCHIVE_ZIP => 'non_existent.zip', UpgradeConfiguration::ARCHIVE_XML => 'versioned_8.1.0.xml'];
         $result = $this->validator->validate($data);
 
         $this->assertSame([
-            'message' => 'File ' . $data['archive_zip'] . ' does not exist. Unable to select that channel.',
-            'target' => 'archive_zip',
+            'message' => 'File ' . $data[UpgradeConfiguration::ARCHIVE_ZIP] . ' does not exist. Unable to select that channel.',
+            'target' => UpgradeConfiguration::ARCHIVE_ZIP,
         ], $result[0]);
     }
 
     public function testValidateReturnsErrorIfNotVersionedZipFile()
     {
-        $data = ['archive_zip' => 'not_versioned_8.2.0.zip', 'archive_xml' => 'versioned_8.1.0.xml'];
+        $data = [UpgradeConfiguration::ARCHIVE_ZIP => 'not_versioned_8.2.0.zip', UpgradeConfiguration::ARCHIVE_XML => 'versioned_8.1.0.xml'];
         $result = $this->validator->validate($data);
 
         $this->assertSame([
             'message' => 'We couldn\'t find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.',
-            'target' => 'archive_zip',
+            'target' => UpgradeConfiguration::ARCHIVE_ZIP,
         ], $result[0]);
     }
 
     public function testValidateReturnsErrorIfXmlFileDoesNotExist()
     {
-        $data = ['archive_zip' => 'versioned_8.2.0.zip', 'archive_xml' => 'non_existent.xml'];
+        $data = [UpgradeConfiguration::ARCHIVE_ZIP => 'versioned_8.2.0.zip', UpgradeConfiguration::ARCHIVE_XML => 'non_existent.xml'];
         $result = $this->validator->validate($data);
 
         $this->assertSame([
-            'message' => 'File ' . $data['archive_xml'] . ' does not exist. Unable to select that channel.',
-            'target' => 'archive_xml',
+            'message' => 'File ' . $data[UpgradeConfiguration::ARCHIVE_XML] . ' does not exist. Unable to select that channel.',
+            'target' => UpgradeConfiguration::ARCHIVE_XML,
         ], $result[0]);
     }
 
     public function testValidateReturnsErrorIfNotVersionedXmlFile()
     {
-        $data = ['archive_zip' => 'versioned_8.2.0.zip', 'archive_xml' => 'not_versioned_8.2.0.xml'];
+        $data = [UpgradeConfiguration::ARCHIVE_ZIP => 'versioned_8.2.0.zip', UpgradeConfiguration::ARCHIVE_XML => 'not_versioned_8.2.0.xml'];
         $result = $this->validator->validate($data);
 
         $this->assertSame([
             'message' => 'We couldn\'t find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.',
-            'target' => 'archive_xml',
+            'target' => UpgradeConfiguration::ARCHIVE_XML,
         ], $result[0]);
     }
 
     public function testValidateReturnsErrorIfVersionsDoNotMatch()
     {
-        $data = ['archive_zip' => 'versioned_8.2.0.zip', 'archive_xml' => 'versioned_8.1.0.xml'];
+        $data = [UpgradeConfiguration::ARCHIVE_ZIP => 'versioned_8.2.0.zip', UpgradeConfiguration::ARCHIVE_XML => 'versioned_8.1.0.xml'];
         $result = $this->validator->validate($data);
 
         $this->assertSame([
@@ -80,7 +81,7 @@ class LocalChannelConfigurationValidatorTest extends TestCase
 
     public function testValidatePassesWithValidFiles()
     {
-        $data = ['archive_zip' => 'versioned_8.2.0.zip', 'archive_xml' => 'versioned_8.2.0.xml'];
+        $data = [UpgradeConfiguration::ARCHIVE_ZIP => 'versioned_8.2.0.zip', UpgradeConfiguration::ARCHIVE_XML => 'versioned_8.2.0.xml'];
         $result = $this->validator->validate($data);
 
         $this->assertEmpty($result);

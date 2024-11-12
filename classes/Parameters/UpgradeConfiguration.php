@@ -40,25 +40,36 @@ use UnexpectedValueException;
  */
 class UpgradeConfiguration extends ArrayCollection
 {
+    const PS_AUTOUP_CUSTOM_MOD_DESACT = 'PS_AUTOUP_CUSTOM_MOD_DESACT';
+    const PS_AUTOUP_CHANGE_DEFAULT_THEME = 'PS_AUTOUP_CHANGE_DEFAULT_THEME';
+    const PS_AUTOUP_KEEP_MAILS = 'PS_AUTOUP_KEEP_MAILS';
+    const PS_AUTOUP_BACKUP = 'PS_AUTOUP_BACKUP';
+    const PS_AUTOUP_KEEP_IMAGES = 'PS_AUTOUP_KEEP_IMAGES';
+    const PS_DISABLE_OVERRIDES = 'PS_DISABLE_OVERRIDES';
+    const CHANNEL = 'channel';
+    const ARCHIVE_ZIP = 'archive_zip';
+    const ARCHIVE_XML = 'archive_xml';
+    const ARCHIVE_VERSION_NUM = 'archive_version_num';
+
     const UPGRADE_CONST_KEYS = [
-        'PS_AUTOUP_CUSTOM_MOD_DESACT',
-        'PS_AUTOUP_CHANGE_DEFAULT_THEME',
-        'PS_AUTOUP_KEEP_MAILS',
-        'PS_AUTOUP_BACKUP',
-        'PS_AUTOUP_KEEP_IMAGES',
-        'PS_DISABLE_OVERRIDES',
-        'channel',
-        'archive_zip',
-        'archive_xml',
-        'archive_version_num',
+        self::PS_AUTOUP_CUSTOM_MOD_DESACT,
+        self::PS_AUTOUP_CHANGE_DEFAULT_THEME,
+        self::PS_AUTOUP_KEEP_MAILS,
+        self::PS_AUTOUP_BACKUP,
+        self::PS_AUTOUP_KEEP_IMAGES,
+        self::PS_DISABLE_OVERRIDES,
+        self::CHANNEL,
+        self::ARCHIVE_ZIP,
+        self::ARCHIVE_XML,
+        self::ARCHIVE_VERSION_NUM,
     ];
 
     const PS_CONST_DEFAULT_VALUE = [
-        'PS_AUTOUP_CUSTOM_MOD_DESACT' => true,
-        'PS_AUTOUP_CHANGE_DEFAULT_THEME' => false,
-        'PS_AUTOUP_KEEP_MAILS' => false,
-        'PS_AUTOUP_BACKUP' => true,
-        'PS_AUTOUP_KEEP_IMAGES' => true,
+        self::PS_AUTOUP_CUSTOM_MOD_DESACT => true,
+        self::PS_AUTOUP_CHANGE_DEFAULT_THEME => false,
+        self::PS_AUTOUP_KEEP_MAILS => false,
+        self::PS_AUTOUP_BACKUP => true,
+        self::PS_AUTOUP_KEEP_IMAGES => true,
     ];
 
     const DEFAULT_CHANNEL = Upgrader::CHANNEL_ONLINE;
@@ -81,7 +92,7 @@ class UpgradeConfiguration extends ArrayCollection
      */
     public function getLocalChannelZip(): ?string
     {
-        return $this->get('archive_zip');
+        return $this->get(self::ARCHIVE_ZIP);
     }
 
     public function getChannelZip(): ?string
@@ -95,7 +106,7 @@ class UpgradeConfiguration extends ArrayCollection
 
     public function getLocalChannelXml(): ?string
     {
-        return $this->get('archive_xml');
+        return $this->get(self::ARCHIVE_XML);
     }
 
     /**
@@ -103,15 +114,17 @@ class UpgradeConfiguration extends ArrayCollection
      */
     public function getLocalChannelVersion(): ?string
     {
-        return $this->get('archive_version_num');
+        return $this->get(self::ARCHIVE_VERSION_NUM);
     }
 
     /**
      * Get channel selected on config panel (Minor, major ...).
+     *
+     * @return Upgrader::CHANNEL_*|null
      */
     public function getChannel(): ?string
     {
-        return $this->get('channel');
+        return $this->get(self::CHANNEL);
     }
 
     /**
@@ -148,7 +161,7 @@ class UpgradeConfiguration extends ArrayCollection
 
     public function shouldBackupFilesAndDatabase(): bool
     {
-        return $this->computeBooleanConfiguration('PS_AUTOUP_BACKUP');
+        return $this->computeBooleanConfiguration(self::PS_AUTOUP_BACKUP);
     }
 
     /**
@@ -156,7 +169,7 @@ class UpgradeConfiguration extends ArrayCollection
      */
     public function shouldBackupImages(): bool
     {
-        return $this->computeBooleanConfiguration('PS_AUTOUP_KEEP_IMAGES');
+        return $this->computeBooleanConfiguration(self::PS_AUTOUP_KEEP_IMAGES);
     }
 
     /**
@@ -164,7 +177,7 @@ class UpgradeConfiguration extends ArrayCollection
      */
     public function shouldDeactivateCustomModules(): bool
     {
-        return $this->computeBooleanConfiguration('PS_AUTOUP_CUSTOM_MOD_DESACT');
+        return $this->computeBooleanConfiguration(self::PS_AUTOUP_CUSTOM_MOD_DESACT);
     }
 
     /**
@@ -172,7 +185,7 @@ class UpgradeConfiguration extends ArrayCollection
      */
     public function shouldKeepMails(): bool
     {
-        return $this->computeBooleanConfiguration('PS_AUTOUP_KEEP_MAILS');
+        return $this->computeBooleanConfiguration(self::PS_AUTOUP_KEEP_MAILS);
     }
 
     /**
@@ -180,7 +193,7 @@ class UpgradeConfiguration extends ArrayCollection
      */
     public function shouldSwitchToDefaultTheme(): bool
     {
-        return $this->computeBooleanConfiguration('PS_AUTOUP_CHANGE_DEFAULT_THEME');
+        return $this->computeBooleanConfiguration(self::PS_AUTOUP_CHANGE_DEFAULT_THEME);
     }
 
     private function computeBooleanConfiguration(string $const): bool
@@ -199,15 +212,15 @@ class UpgradeConfiguration extends ArrayCollection
 
     public static function isOverrideAllowed(): bool
     {
-        return (bool) Configuration::get('PS_DISABLE_OVERRIDES');
+        return (bool) Configuration::get(self::PS_DISABLE_OVERRIDES);
     }
 
     public static function updateDisabledOverride(bool $value, ?int $shopId = null): void
     {
         if ($shopId) {
-            Configuration::updateValue('PS_DISABLE_OVERRIDES', $value, false, null, (int) $shopId);
+            Configuration::updateValue(self::PS_DISABLE_OVERRIDES, $value, false, null, (int) $shopId);
         } else {
-            Configuration::updateGlobalValue('PS_DISABLE_OVERRIDES', $value);
+            Configuration::updateGlobalValue(self::PS_DISABLE_OVERRIDES, $value);
         }
     }
 

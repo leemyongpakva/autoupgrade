@@ -27,6 +27,7 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Twig\Form;
 
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
 class UpgradeOptionsForm
@@ -52,7 +53,7 @@ class UpgradeOptionsForm
         $this->formRenderer = $formRenderer;
 
         $this->fields = [
-            'PS_AUTOUP_CUSTOM_MOD_DESACT' => [
+            UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => [
                 'title' => $translator->trans('Disable non-native modules'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
@@ -61,7 +62,7 @@ class UpgradeOptionsForm
                         'As non-native modules can experience some compatibility issues, we recommend to disable them by default.') . '<br />' .
                     $translator->trans('Keeping them enabled might prevent you from loading the "Modules" page properly after the upgrade.'),
             ],
-            'PS_DISABLE_OVERRIDES' => [
+            UpgradeConfiguration::PS_DISABLE_OVERRIDES => [
                 'title' => $translator->trans('Disable all overrides'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
@@ -69,7 +70,7 @@ class UpgradeOptionsForm
                 'desc' => $translator->trans('Enable or disable all classes and controllers overrides.'),
             ],
 
-            'PS_AUTOUP_CHANGE_DEFAULT_THEME' => [
+            UpgradeConfiguration::PS_AUTOUP_CHANGE_DEFAULT_THEME => [
                 'title' => $translator->trans('Switch to the default theme'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
@@ -78,7 +79,7 @@ class UpgradeOptionsForm
                 'desc' => $translator->trans('This will change your theme: your shop will then use the default theme of the version of PrestaShop you are upgrading to.'),
             ],
 
-            'PS_AUTOUP_KEEP_MAILS' => [
+            UpgradeConfiguration::PS_AUTOUP_KEEP_MAILS => [
                 'title' => $translator->trans('Keep the customized email templates'),
                 'cast' => 'intval',
                 'validation' => 'isBool',
