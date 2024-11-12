@@ -69,7 +69,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
 
         if (empty($errors)) {
-            if ($name === 'PS_DISABLE_OVERRIDES') {
+            if ($name === UpgradeConfiguration::PS_DISABLE_OVERRIDES) {
                 $this->upgradeContainer->initPrestaShopCore();
                 UpgradeConfiguration::updatePSDisableOverrides($this->request->request->getBoolean('value'));
             } else {
@@ -108,15 +108,15 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
 
                 'form_fields' => [
                     'deactive_non_native_modules' => [
-                        'field' => 'PS_AUTOUP_CUSTOM_MOD_DESACT',
+                        'field' => UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT,
                         'value' => $upgradeConfiguration->shouldDeactivateCustomModules(),
                     ],
                     'regenerate_email_templates' => [
-                        'field' => 'PS_AUTOUP_REGEN_EMAIL',
+                        'field' => UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL,
                         'value' => $upgradeConfiguration->shouldRegenerateMailTemplates(),
                     ],
                     'disable_all_overrides' => [
-                        'field' => 'PS_DISABLE_OVERRIDES',
+                        'field' => UpgradeConfiguration::PS_DISABLE_OVERRIDES,
                         'value' => !$upgradeConfiguration->isOverrideAllowed(),
                     ],
                 ],
