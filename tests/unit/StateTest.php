@@ -25,27 +25,46 @@
  */
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\AutoUpgrade\State;
+use PrestaShop\Module\AutoUpgrade\FileConfigurationStorage;
 
 class StateTest extends TestCase
 {
+    /**
+     * @var State
+     */
+    private $state;
+
+    protected function setUp(): void
+    {
+        $fixturesDir = __DIR__ . '/../../fixtures/config/';
+        $fileStorage = new FileConfigurationStorage($fixturesDir);
+
+        $this->state = new State($fileStorage);
+
+        array_map('unlink', glob($fixturesDir . '*.var'));
+    }
+
+    protected function tearDown(): void
+    {
+        array_map('unlink', glob(__DIR__ . '/../../fixtures/config/*.var'));
+    }
+
     public function testClassReceivesProperty()
     {
-        $state = new State();
-        $state->importFromArray(['backupName' => 'doge']);
-        $exported = $state->export();
+        $this->state->importFromArray(['backupName' => 'doge']);
+        $exported =  $this->state->export();
 
-        $this->assertSame('doge', $state->getBackupName());
+        $this->assertSame('doge',  $this->state->getBackupName());
         $this->assertSame('doge', $exported['backupName']);
     }
 
     public function testClassIgnoresRandomData()
     {
-        $state = new State();
-        $state->importFromArray([
+        $this->state->importFromArray([
             'wow' => 'epic',
             'backupName' => 'doge',
         ]);
-        $exported = $state->export();
+        $exported =  $this->state->export();
 
         $this->assertArrayNotHasKey('wow', $exported);
         $this->assertSame('doge', $exported['backupName']);
@@ -66,46 +85,42 @@ class StateTest extends TestCase
             ],
         ];
         $encodedData = base64_encode(json_encode($data));
-        $state = new State();
-        $state->importFromEncodedData($encodedData);
-        $exported = $state->export();
+        $this->state->importFromEncodedData($encodedData);
+        $exported = $this->state->export();
 
-        $this->assertSame('doge', $state->getBackupName());
+        $this->assertSame('doge',  $this->state->getBackupName());
         $this->assertSame('doge', $exported['backupName']);
     }
 
     public function testGetRestoreVersion()
     {
-        $state = new State();
-
         $this->assertSame(
             '1.7.8.11',
-            $state->setRestoreName('V1.7.8.11_20240604-170048-3ceb32b2')
+            $this->state->setRestoreName('V1.7.8.11_20240604-170048-3ceb32b2')
                 ->getRestoreVersion()
         );
 
         $this->assertSame(
             '8.1.6',
-            $state->setRestoreName('V8.1.6_20240604-170048-3ceb32b2')
+            $this->state->setRestoreName('V8.1.6_20240604-170048-3ceb32b2')
                 ->getRestoreVersion()
         );
     }
 
     public function testProgressionValue()
     {
-        $state = new State();
-        $this->assertSame(null, $state->getProgressPercentage());
+        $this->assertSame(null,  $this->state->getProgressPercentage());
 
-        $state->setProgressPercentage(0);
-        $this->assertSame(0, $state->getProgressPercentage());
+        $this->state->setProgressPercentage(0);
+        $this->assertSame(0,  $this->state->getProgressPercentage());
 
-        $state->setProgressPercentage(55);
-        $this->assertSame(55, $state->getProgressPercentage());
+        $this->state->setProgressPercentage(55);
+        $this->assertSame(55,  $this->state->getProgressPercentage());
 
         // Percentage cannot go down, an exception will be thrown
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Updated progress percentage cannot be lower than the currently set one.');
 
-        $state->setProgressPercentage(10);
+        $this->state->setProgressPercentage(10);
     }
 }
