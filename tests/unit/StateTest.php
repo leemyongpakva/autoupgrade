@@ -24,8 +24,8 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 use PHPUnit\Framework\TestCase;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\State;
-use PrestaShop\Module\AutoUpgrade\FileConfigurationStorage;
 
 class StateTest extends TestCase
 {
@@ -52,9 +52,9 @@ class StateTest extends TestCase
     public function testClassReceivesProperty()
     {
         $this->state->importFromArray(['backupName' => 'doge']);
-        $exported =  $this->state->export();
+        $exported = $this->state->export();
 
-        $this->assertSame('doge',  $this->state->getBackupName());
+        $this->assertSame('doge', $this->state->getBackupName());
         $this->assertSame('doge', $exported['backupName']);
     }
 
@@ -64,7 +64,7 @@ class StateTest extends TestCase
             'wow' => 'epic',
             'backupName' => 'doge',
         ]);
-        $exported =  $this->state->export();
+        $exported = $this->state->export();
 
         $this->assertArrayNotHasKey('wow', $exported);
         $this->assertSame('doge', $exported['backupName']);
@@ -88,7 +88,7 @@ class StateTest extends TestCase
         $this->state->importFromEncodedData($encodedData);
         $exported = $this->state->export();
 
-        $this->assertSame('doge',  $this->state->getBackupName());
+        $this->assertSame('doge', $this->state->getBackupName());
         $this->assertSame('doge', $exported['backupName']);
     }
 
@@ -109,13 +109,13 @@ class StateTest extends TestCase
 
     public function testProgressionValue()
     {
-        $this->assertSame(null,  $this->state->getProgressPercentage());
+        $this->assertSame(null, $this->state->getProgressPercentage());
 
         $this->state->setProgressPercentage(0);
-        $this->assertSame(0,  $this->state->getProgressPercentage());
+        $this->assertSame(0, $this->state->getProgressPercentage());
 
         $this->state->setProgressPercentage(55);
-        $this->assertSame(55,  $this->state->getProgressPercentage());
+        $this->assertSame(55, $this->state->getProgressPercentage());
 
         // Percentage cannot go down, an exception will be thrown
         $this->expectException(InvalidArgumentException::class);
