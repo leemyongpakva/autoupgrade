@@ -167,6 +167,7 @@ class State
     {
         $state = get_object_vars($this);
         unset($state['fileConfigurationStorage']);
+
         return $state;
     }
 
