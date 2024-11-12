@@ -86,8 +86,8 @@ const preview: Preview = {
       const calledStory = story();
       calledStory.template = twig(`
         <div id="main">
-          <div id="content" class="bootstrap update-assistant ${selectedThemeClass}">
-            <div id="update_assistant">
+          <div id="content" class="bootstrap update-assistant">
+            <div id="update_assistant" class="${selectedThemeClass}">
               ${calledStory.template.getSource()}
               ${cssContents.map((cssFile) => `<link rel="stylesheet" type="text/css" href="${cssFile}" />`)}
             </div>
