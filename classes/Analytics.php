@@ -124,7 +124,7 @@ class Analytics
                     'upgrade_channel' => $this->upgradeConfiguration->getChannel(),
                     'disable_non_native_modules' => $this->upgradeConfiguration->shouldDeactivateCustomModules(),
                     'switch_to_default_theme' => $this->upgradeConfiguration->shouldSwitchToDefaultTheme(),
-                    'keep_customized_email_templates' => !$this->upgradeConfiguration->shouldRegenerateMailTemplates(),
+                    'regenerate_customized_email_templates' => $this->upgradeConfiguration->shouldRegenerateMailTemplates(),
                 ];
                 $upgradeProperties = $this->properties[self::WITH_UPDATE_PROPERTIES] ?? [];
                 $additionalProperties = array_merge($upgradeProperties, $additionalProperties);

@@ -97,7 +97,7 @@ class AnalyticsTest extends TestCase
                     'upgrade_channel' => 'major',
                     'disable_non_native_modules' => false,
                     'switch_to_default_theme' => true,
-                    'keep_customized_email_templates' => false,
+                    'regenerate_customized_email_templates' => true,
                     'regenerate_rtl_stylesheet' => false,
                 ],
             ],
