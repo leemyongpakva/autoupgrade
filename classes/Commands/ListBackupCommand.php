@@ -27,9 +27,9 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Commands;
 
-use DateTime;
 use Exception;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
+use PrestaShop\Module\AutoUpgrade\Exceptions\BackupException;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use Symfony\Component\Console\Helper\Table;
@@ -59,7 +59,8 @@ class ListBackupCommand extends AbstractCommand
             $this->setupContainer($input, $output);
 
             $backupPath = $this->upgradeContainer->getProperty(UpgradeContainer::BACKUP_PATH);
-            $backups = (new BackupFinder($backupPath))->getAvailableBackups();
+            $backupFinder = new BackupFinder($backupPath);
+            $backups = $backupFinder->getAvailableBackups();
 
             if (empty($backups)) {
                 $this->logger->info('No store backup files found in your dedicated directory');
@@ -67,7 +68,7 @@ class ListBackupCommand extends AbstractCommand
                 return ExitCode::SUCCESS;
             }
 
-            $rows = $this->getRows($backups);
+            $rows = $this->getRows($backupFinder, $backups);
             $table = new Table($output);
             $table
                 ->setHeaders(['Date', 'Version', 'File name'])
@@ -77,9 +78,8 @@ class ListBackupCommand extends AbstractCommand
 
             return ExitCode::SUCCESS;
         } catch (Exception $e) {
-            $this->logger->error('An error occurred during the backup process: ' . $e->getMessage());
-
-            return ExitCode::FAIL;
+            $this->logger->error('An error occurred during the backup listing process');
+            throw $e;
         }
     }
 
@@ -87,39 +87,19 @@ class ListBackupCommand extends AbstractCommand
      * @param string[] $backups
      *
      * @return array<int, array{datetime: string, version:string, filename: string}>
+     *
+     * @throws BackupException
      */
-    private function getRows(array $backups): array
+    private function getRows(BackupFinder $backupFinder, array $backups): array
     {
-        $rows = [];
-        foreach ($backups as $backup) {
-            $filename = $backup;
-            $pattern = '/V(\d+(\.\d+){1,3})_([0-9]{8})-([0-9]{6})/';
-            if (preg_match($pattern, $filename, $matches)) {
-                $version = $matches[1];
-                $datePart = $matches[3];
-                $timePart = $matches[4];
+        $rows = array_map(function ($backupName) use ($backupFinder) {
+            return $backupFinder->parseBackupMetadata($backupName);
+        }, $backups);
 
-                $dateTime = DateTime::createFromFormat('Ymd His', $datePart . ' ' . $timePart);
+        $backupFinder->sortBackupsByNewest($rows);
 
-                $rows[] =
-                    [
-                        'datetime' => $dateTime->getTimestamp(),
-                        'version' => $version,
-                        'filename' => $filename,
-                    ];
-            }
-        }
-
-        // Most recent first
-        usort($rows, function ($a, $b) {
-            return $b['datetime'] <=> $a['datetime'];
-        });
-
-        setlocale(LC_TIME, '');
-        // Reassigning dates format
-        foreach ($rows as $key => $row) {
-            $formattedDateTime = strftime('%x %X', $row['datetime']);
-            $rows[$key]['datetime'] = $formattedDateTime;
+        foreach ($rows as &$row) {
+            unset($row['timestamp']);
         }
 
         return $rows;

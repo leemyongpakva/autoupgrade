@@ -23,8 +23,10 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
+
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
+use PrestaShop\Module\AutoUpgrade\Exceptions\BackupException;
 use Symfony\Component\Filesystem\Filesystem;
 
 class BackupFinderTest extends TestCase
@@ -65,5 +67,107 @@ class BackupFinderTest extends TestCase
             @mkdir($destinationPath . substr($filePath, 0, strrpos($filePath, '/')), 0777, true);
             touch($destinationPath . $filePath);
         }
+    }
+
+    public function testParseBackupMetadata()
+    {
+        $backupFinder = new BackupFinder(self::$pathToBackup);
+
+        $backups = [
+            'V1.7.5.0_20240927-115034-19c6d35c',
+            'V1.7.5.0_20240927-115350-466afd74',
+            'V8.1.0_20240927-122157-25f311e3',
+        ];
+
+        $backupsMetadata = array_map(function ($backupName) use ($backupFinder) {
+            return $backupFinder->parseBackupMetadata($backupName);
+        }, $backups);
+
+        $expected = [
+            [
+                'timestamp' => 1727437834,
+                'datetime' => '09/27/24 11:50:34',
+                'version' => '1.7.5.0',
+                'filename' => 'V1.7.5.0_20240927-115034-19c6d35c',
+            ],
+            [
+                'timestamp' => 1727438030,
+                'datetime' => '09/27/24 11:53:50',
+                'version' => '1.7.5.0',
+                'filename' => 'V1.7.5.0_20240927-115350-466afd74',
+            ],
+            [
+                'timestamp' => 1727439717,
+                'datetime' => '09/27/24 12:21:57',
+                'version' => '8.1.0',
+                'filename' => 'V8.1.0_20240927-122157-25f311e3',
+            ],
+        ];
+
+        $this->assertEquals($expected, $backupsMetadata);
+    }
+
+    /**
+     * @throws BackupException
+     */
+    public function testParseBackupMetadataError()
+    {
+        $backupFinder = new BackupFinder(self::$pathToBackup);
+
+        $this->expectException(BackupException::class);
+        $this->expectExceptionMessage('An error occurred while formatting the backup name.');
+
+        $backupFinder->parseBackupMetadata('V1.7.5.0_toto_20240927-115034-19c6d35c');
+    }
+
+    public function testSortBackups()
+    {
+        $backupFinder = new BackupFinder(self::$pathToBackup);
+
+        $actual = [
+            [
+                'timestamp' => 1727437834,
+                'datetime' => '09/27/24 11:50:34',
+                'version' => '1.7.5.0',
+                'filename' => 'V1.7.5.0_20240927-115034-19c6d35c',
+            ],
+            [
+                'timestamp' => 1727438030,
+                'datetime' => '09/27/24 11:53:50',
+                'version' => '1.7.5.0',
+                'filename' => 'V1.7.5.0_20240927-115350-466afd74',
+            ],
+            [
+                'timestamp' => 1727439717,
+                'datetime' => '09/27/24 12:21:57',
+                'version' => '8.1.0',
+                'filename' => 'V8.1.0_20240927-122157-25f311e3',
+            ],
+        ];
+
+        $expected = [
+            [
+                'timestamp' => 1727439717,
+                'datetime' => '09/27/24 12:21:57',
+                'version' => '8.1.0',
+                'filename' => 'V8.1.0_20240927-122157-25f311e3',
+            ],
+            [
+                'timestamp' => 1727438030,
+                'datetime' => '09/27/24 11:53:50',
+                'version' => '1.7.5.0',
+                'filename' => 'V1.7.5.0_20240927-115350-466afd74',
+            ],
+            [
+                'timestamp' => 1727437834,
+                'datetime' => '09/27/24 11:50:34',
+                'version' => '1.7.5.0',
+                'filename' => 'V1.7.5.0_20240927-115034-19c6d35c',
+            ],
+        ];
+
+        $backupFinder->sortBackupsByNewest($actual);
+
+        $this->assertEquals($expected, $actual);
     }
 }
