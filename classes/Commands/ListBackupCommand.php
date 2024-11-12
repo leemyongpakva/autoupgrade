@@ -37,7 +37,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ListBackupCommand extends AbstractCommand
+class ListBackupCommand extends AbstractBackupCommand
 {
     /** @var string */
     protected static $defaultName = 'backup:list';

@@ -28,9 +28,9 @@
 namespace PrestaShop\Module\AutoUpgrade\Commands;
 
 use Exception;
-use InvalidArgumentException;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
 use PrestaShop\Module\AutoUpgrade\Exceptions\BackupException;
+use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\Runner\AllRestoreTasks;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use Symfony\Component\Console\Input\InputArgument;
@@ -39,7 +39,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
 
-class RestoreCommand extends AbstractCommand
+class RestoreCommand extends AbstractBackupCommand
 {
     /**
      * @var string
