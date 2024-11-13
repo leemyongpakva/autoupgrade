@@ -31,7 +31,15 @@ use Symfony\Component\HttpFoundation\Request;
 
 class AssetsEnvironment
 {
-    const DEV_BASE_URL = 'http://localhost:5173/';
+    const DEV_BASE_URL = 'http://localhost:5173';
+
+    /** @var string */
+    private $shopBasePath;
+
+    public function __construct(string $shopBasePath)
+    {
+        $this->shopBasePath = $shopBasePath;
+    }
 
     public function isDevMode(): bool
     {
@@ -49,9 +57,21 @@ class AssetsEnvironment
 
     private function getShopUrlFromRequest(Request $request): string
     {
-        // The calls are made from the admin folder. We remove it from the caller URL to get the shop path.
+        $subDirs = explode(
+            DIRECTORY_SEPARATOR,
+            trim(
+                str_replace(
+                    $this->shopBasePath,
+                    '',
+                    dirname($request->server->get('SCRIPT_FILENAME', '')
+                )
+            ), DIRECTORY_SEPARATOR)
+        );
+        $numberOfSubDirs = count($subDirs);
+
         $path = explode('/', $request->getBasePath());
-        array_pop($path);
+
+        $path = array_splice($path, 0, -$numberOfSubDirs);
 
         return $request->getSchemeAndHttpHost() . implode('/', $path);
     }
