@@ -28,10 +28,12 @@
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UpdatePageBackupController extends AbstractPageWithStepController
@@ -90,22 +92,20 @@ class UpdatePageBackupController extends AbstractPageWithStepController
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
 
-        $name = $this->request->request->get('name');
-
         $config = [
-            $name => $this->request->request->get('value'),
+            UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, false),
         ];
 
         $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
         if (empty($errors)) {
             $upgradeConfiguration->merge($config);
             $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
-        } else {
-            // TODO: Improve this with a helper in update options PR
-            $errors = array_column($errors, 'message', 'target');
         }
 
-        return $this->getRefreshOfForm(array_merge($this->getParams(), ['errors' => $errors]));
+        return $this->getRefreshOfForm(array_merge(
+            $this->getParams(),
+            ['errors' => ValidatorToFormFormater::format($errors)]
+        ));
     }
 
     /**
