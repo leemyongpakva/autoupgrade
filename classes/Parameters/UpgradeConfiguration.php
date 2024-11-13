@@ -262,9 +262,7 @@ class UpgradeConfiguration extends ArrayCollection
     public function merge(array $array = []): void
     {
         foreach ($array as $key => $value) {
-            if (in_array($key, self::UPGRADE_CONST_KEYS)) {
-                $this->set($key, $value);
-            }
+            $this->set($key, $value);
         }
     }
 }
