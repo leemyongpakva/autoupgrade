@@ -52,8 +52,8 @@ class UpdatePageVersionChoiceController extends AbstractPageController
         UpgradeConfiguration::ARCHIVE_XML => UpgradeConfiguration::ARCHIVE_XML,
     ];
     const FORM_OPTIONS = [
-        'online_value' => Upgrader::CHANNEL_ONLINE,
-        'local_value' => Upgrader::CHANNEL_LOCAL,
+        'online_value' => UpgradeConfiguration::CHANNEL_ONLINE,
+        'local_value' => UpgradeConfiguration::CHANNEL_LOCAL,
     ];
 
     protected function getPageTemplate(): string
