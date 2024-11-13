@@ -57,6 +57,10 @@ class AssetsEnvironment
 
     private function getShopUrlFromRequest(Request $request): string
     {
+        // Determine the subdirectories of the PHP entry point (the script being executed)
+        // relative to the shop root folder.
+        // This calculation helps generate a base path that correctly accounts for any subfolder in which
+        // the shop might be installed.
         $subDirs = explode(
             DIRECTORY_SEPARATOR,
             trim(
