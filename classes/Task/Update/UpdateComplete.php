@@ -76,7 +76,6 @@ class UpdateComplete extends AbstractTask
 
         // removing temporary files
         $this->container->getFileConfigurationStorage()->cleanAllUpdateFiles();
-        $this->container->getFileConfigurationStorage()->clean(UpgradeFileNames::STATE_FILENAME);
         $this->container->getAnalytics()->track('Upgrade Succeeded', Analytics::WITH_UPDATE_PROPERTIES);
 
         return ExitCode::SUCCESS;

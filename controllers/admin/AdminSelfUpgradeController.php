@@ -292,12 +292,15 @@ class AdminSelfUpgradeController extends ModuleAdminController
             empty($_REQUEST['params']) ? [] : $_REQUEST['params']
         );
 
-        if (!$this->upgradeContainer->getState()->isInitialized()) {
-            $this->upgradeContainer->getState()->initDefault(
-                $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION),
-                $this->upgradeContainer->getUpgrader()->getDestinationVersion()
-            );
+        if (!$this->ajax) {
+            // removing temporary files before init state to make sure state is already available
+            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
         }
+
+        $this->upgradeContainer->getState()->initDefault(
+            $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION),
+            $this->upgradeContainer->getUpgrader()->getDestinationVersion()
+        );
 
         // If you have defined this somewhere, you know what you do
         // load options from configuration if we're not in ajax mode
@@ -315,8 +318,6 @@ class AdminSelfUpgradeController extends ModuleAdminController
                 $upgrader->clearXmlMd5File($upgrader->getDestinationVersion());
                 Tools14::redirectAdmin(self::$currentIndex . '&conf=5&token=' . Tools14::getValue('token'));
             }
-            // removing temporary files
-            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
         }
     }
 

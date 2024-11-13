@@ -162,6 +162,7 @@ class UpgradeFileNames
      * @var array<string, string>
      */
     public static $update_tmp_files = [
+        'STATE_FILENAME' => self::STATE_FILENAME,
         'QUERIES_TO_UPGRADE_LIST' => self::QUERIES_TO_UPGRADE_LIST, // used ?
         'FILES_TO_UPGRADE_LIST' => self::FILES_TO_UPGRADE_LIST,
         'DB_TABLES_TO_CLEAN_LIST' => self::DB_TABLES_TO_CLEAN_LIST,
@@ -180,6 +181,7 @@ class UpgradeFileNames
      * @var array<string, string>
      */
     public static $backup_tmp_files = [
+        'STATE_FILENAME' => self::STATE_FILENAME,
         'FILES_TO_BACKUP_LIST' => self::FILES_TO_BACKUP_LIST,
         'DB_TABLES_TO_BACKUP_LIST' => self::DB_TABLES_TO_BACKUP_LIST,
     ];
@@ -188,6 +190,7 @@ class UpgradeFileNames
      * @var array<string, string>
      */
     public static $restore_tmp_files = [
+        'STATE_FILENAME' => self::STATE_FILENAME,
         'QUERIES_TO_RESTORE_LIST' => self::QUERIES_TO_RESTORE_LIST,
         'FILES_FROM_ARCHIVE_LIST' => self::FILES_FROM_ARCHIVE_LIST,
     ];
