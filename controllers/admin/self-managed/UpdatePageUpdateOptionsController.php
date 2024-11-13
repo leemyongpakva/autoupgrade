@@ -60,22 +60,21 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
 
-        $name = $this->request->request->get('name');
-
         $config = [
-            $name => $this->request->request->get('value'),
+            UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT, false),
+            UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL, false),
+            UpgradeConfiguration::PS_DISABLE_OVERRIDES => $this->request->request->getBoolean(UpgradeConfiguration::PS_DISABLE_OVERRIDES, false),
         ];
 
         $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
 
         if (empty($errors)) {
-            if ($name === UpgradeConfiguration::PS_DISABLE_OVERRIDES) {
+            if (isset($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES])) {
                 $this->upgradeContainer->initPrestaShopCore();
-                UpgradeConfiguration::updatePSDisableOverrides($this->request->request->getBoolean('value'));
-            } else {
-                $upgradeConfiguration->merge($config);
-                $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+                UpgradeConfiguration::updatePSDisableOverrides($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES]);
             }
+            $upgradeConfiguration->merge($config);
+            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
         }
 
         return $this->getRefreshOfForm(array_merge(

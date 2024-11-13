@@ -106,9 +106,12 @@ class ConfigurationValidator
         return null;
     }
 
-    private function validateBool(string $boolValue, string $key): ?string
+    /**
+     * @param string|bool $boolValue
+     */
+    private function validateBool($boolValue, string $key): ?string
     {
-        if ($boolValue === '' || filter_var($boolValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null) {
+        if (!is_bool($boolValue) && ($boolValue === '' || filter_var($boolValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null)) {
             return $this->translator->trans('Value must be a boolean for %s', [$key]);
         }
 

@@ -33,13 +33,9 @@ export default class UpdatePageUpdateOptions extends UpdatePage {
   private readonly onChange = async (ev: Event) => {
     const optionInput = ev.target as HTMLInputElement;
 
+    const data = new FormData(this.form);
     optionInput.setAttribute('disabled', 'true');
-
-    const data = new FormData();
-    data.append('name', optionInput.name);
-    data.append('value', JSON.stringify(optionInput.checked));
     await api.post(this.form.dataset.routeToSave!, data);
-
     optionInput.removeAttribute('disabled');
   };
 
