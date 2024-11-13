@@ -36,4 +36,16 @@ $e: ".log-progress";
       border-radius: 999px;
     }
   }
+
+  &.v1-7-8-0,
+  &.v1-7-3-0 {
+    #{$e} {
+      &__icon {
+        i {
+          scale: 1 -1;
+          animation: rotate-invert 1.5s linear infinite;
+        }
+      }
+    }
+  }
 }
