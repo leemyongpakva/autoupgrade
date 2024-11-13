@@ -11,8 +11,12 @@ export default class UpdatePageUpdateOptions extends UpdatePage {
   }
 
   public beforeDestroy() {
-    this.form.removeEventListener('submit', this.onSubmit);
-    this.form.removeEventListener('change', this.onChange);
+    try {
+      this.form.removeEventListener('submit', this.onSubmit);
+      this.form.removeEventListener('change', this.onChange);
+    } catch {
+      // Do Nothing, page is likely removed from the DOM already
+    }
   }
 
   private get form(): HTMLFormElement {

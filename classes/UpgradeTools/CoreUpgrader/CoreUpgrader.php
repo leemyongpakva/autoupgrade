@@ -136,10 +136,10 @@ abstract class CoreUpgrader
         $this->cleanXmlFiles();
 
         if (UpgradeConfiguration::isOverrideAllowed()) {
+            $this->logger->info($this->container->getTranslator()->trans('Keeping overrides in place'));
+        } else {
             $this->logger->info($this->container->getTranslator()->trans('Disabling overrides'));
             $this->disableOverrides();
-        } else {
-            $this->logger->info($this->container->getTranslator()->trans('Keeping overrides in place'));
         }
 
         $this->updateTheme();
