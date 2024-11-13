@@ -5,22 +5,22 @@
       <trans-unit id="494e9240706355902c051f7edbff16d8">
         <source>Unknown channel %s</source>
         <target>Unknown channel %s</target>
-        <note>Line: 86</note>
+        <note>Line: 85</note>
       </trans-unit>
       <trans-unit id="a1e2f27f691acb7eff72046d0c6d15b9">
         <source>No zip archive provided</source>
         <target>No zip archive provided</target>
-        <note>Line: 95</note>
+        <note>Line: 94</note>
       </trans-unit>
       <trans-unit id="08ecdfa1e85ff7b6cc146b6a61690840">
         <source>No xml archive provided</source>
         <target>No xml archive provided</target>
-        <note>Line: 104</note>
+        <note>Line: 103</note>
       </trans-unit>
       <trans-unit id="8f6819dd1d8ef2e214833f667fe994b0">
         <source>Value must be a boolean for %s</source>
         <target>Value must be a boolean for %s</target>
-        <note>Line: 113</note>
+        <note>Line: 112</note>
       </trans-unit>
     </body>
   </file>
@@ -53,12 +53,12 @@
       <trans-unit id="435d516735dbf7f622c7d14585f66840">
         <source>Action %s skipped</source>
         <target>Action %s skipped</target>
-        <note>Line: 151</note>
+        <note>Line: 150</note>
       </trans-unit>
       <trans-unit id="daafa671e5cd581e6c8af2af28846b66">
         <source>Successfully initialized state.</source>
         <target>Successfully initialized state.</target>
-        <note>Line: 203</note>
+        <note>Line: 202</note>
       </trans-unit>
     </body>
   </file>
@@ -67,7 +67,7 @@
       <trans-unit id="88b3ca1ea582b35668b5ed49bbf8206b">
         <source>Backup completed successfully.</source>
         <target>Backup completed successfully.</target>
-        <note>Line: 54</note>
+        <note>Line: 56</note>
       </trans-unit>
     </body>
   </file>
@@ -211,22 +211,22 @@
       <trans-unit id="ab232f4b20c0e50dad9081bc39382569">
         <source>Upgrade process will use archive.</source>
         <target>Upgrade process will use archive.</target>
-        <note>Line: 96</note>
+        <note>Line: 95</note>
       </trans-unit>
       <trans-unit id="1fe9dd96f646eaa0cd3a0fcc7632ce12">
         <source>Error on saving configuration</source>
         <target>Error on saving configuration</target>
-        <note>Line: 107</note>
+        <note>Line: 106</note>
       </trans-unit>
       <trans-unit id="f2ff9d001d0a553c78da73443e7fcd97">
         <source>Configuration successfully updated.</source>
         <target>Configuration successfully updated.</target>
-        <note>Line: 169</note>
+        <note>Line: 168</note>
       </trans-unit>
       <trans-unit id="40b980e89ae332507380470cd26cdf4d">
         <source>This page will now be reloaded and the module will check if a new version is available.</source>
         <target>This page will now be reloaded and the module will check if a new version is available.</target>
-        <note>Line: 169</note>
+        <note>Line: 168</note>
       </trans-unit>
     </body>
   </file>
@@ -457,22 +457,22 @@
       <trans-unit id="64d7e13ba8bcd0c4a6977cf271577a03">
         <source>Shop updated to %s, but some warnings have been found.</source>
         <target>Shop updated to %s, but some warnings have been found.</target>
-        <note>Line: 59</note>
+        <note>Line: 58</note>
       </trans-unit>
       <trans-unit id="f14a0e3c163ebd24ef367ac1079cf000">
         <source>Shop updated to %s. Congratulations! You can now reactivate your shop.</source>
         <target>Shop updated to %s. Congratulations! You can now reactivate your shop.</target>
-        <note>Line: 60</note>
+        <note>Line: 59</note>
       </trans-unit>
       <trans-unit id="d2b9f1e39aa8e96bb61f3a4bfe133f58">
         <source>%s removed</source>
         <target>%s removed</target>
-        <note>Line: 72</note>
+        <note>Line: 71</note>
       </trans-unit>
       <trans-unit id="75802ba44ba3369defd92ef897bf2f21">
         <source>Please remove %s by FTP</source>
         <target>Please remove %s by FTP</target>
-        <note>Line: 74</note>
+        <note>Line: 73</note>
       </trans-unit>
     </body>
   </file>
@@ -613,6 +613,11 @@ Comment: directory already exists</note>
         <target>A file may be missing, or the release is stored in a subfolder by mistake.</target>
         <note>Line: 208</note>
       </trans-unit>
+      <trans-unit id="fa5d2fc42275582a8b7be9935084ad45">
+        <source>Generate diff file list between %s and %s.</source>
+        <target>Generate diff file list between %s and %s.</target>
+        <note>Line: 229</note>
+      </trans-unit>
       <trans-unit id="a845839e72a2af510180c93273119199">
         <source>Unable to generate diff file list between %s and %s.</source>
         <target>Unable to generate diff file list between %s and %s.</target>
@@ -718,7 +723,7 @@ Comment: directory already exists</note>
       <trans-unit id="54f664c70c22054ea0d8d26fc3997ce7">
         <source>Online</source>
         <target>Online</target>
-        <note>Line: 171</note>
+        <note>Line: 170</note>
       </trans-unit>
     </body>
   </file>
