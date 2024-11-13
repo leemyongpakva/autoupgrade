@@ -29,7 +29,6 @@ namespace PrestaShop\Module\AutoUpgrade\Parameters;
 
 use Configuration;
 use Doctrine\Common\Collections\ArrayCollection;
-use PrestaShop\Module\AutoUpgrade\Upgrader;
 use Shop;
 use UnexpectedValueException;
 
@@ -50,6 +49,9 @@ class UpgradeConfiguration extends ArrayCollection
     const ARCHIVE_ZIP = 'archive_zip';
     const ARCHIVE_XML = 'archive_xml';
     const ARCHIVE_VERSION_NUM = 'archive_version_num';
+
+    const CHANNEL_ONLINE = 'online';
+    const CHANNEL_LOCAL = 'local';
 
     const UPGRADE_CONST_KEYS = [
         self::PS_AUTOUP_CUSTOM_MOD_DESACT,
@@ -72,7 +74,7 @@ class UpgradeConfiguration extends ArrayCollection
         self::PS_AUTOUP_KEEP_IMAGES => true,
     ];
 
-    const DEFAULT_CHANNEL = Upgrader::CHANNEL_ONLINE;
+    const DEFAULT_CHANNEL = self::CHANNEL_ONLINE;
     const ONLINE_CHANNEL_ZIP = 'prestashop.zip';
 
     /**
@@ -97,7 +99,7 @@ class UpgradeConfiguration extends ArrayCollection
 
     public function getChannelZip(): ?string
     {
-        if ($this->getChannel() === Upgrader::CHANNEL_LOCAL) {
+        if ($this->getChannel() === self::CHANNEL_LOCAL) {
             return $this->getLocalChannelZip();
         }
 
@@ -120,11 +122,29 @@ class UpgradeConfiguration extends ArrayCollection
     /**
      * Get channel selected on config panel (Minor, major ...).
      *
-     * @return Upgrader::CHANNEL_*|null
+     * @return UpgradeConfiguration::CHANNEL_*|null
      */
     public function getChannel(): ?string
     {
         return $this->get(self::CHANNEL);
+    }
+
+    /**
+     * @return UpgradeConfiguration::CHANNEL_*
+     */
+    public function getChannelOrDefault(): string
+    {
+        return $this->getChannel() ?? self::DEFAULT_CHANNEL;
+    }
+
+    public function isChannelLocal(): bool
+    {
+        return $this->getChannelOrDefault() === UpgradeConfiguration::CHANNEL_LOCAL;
+    }
+
+    public function isChannelOnline(): bool
+    {
+        return $this->getChannelOrDefault() === UpgradeConfiguration::CHANNEL_ONLINE;
     }
 
     /**

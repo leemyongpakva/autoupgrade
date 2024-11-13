@@ -168,14 +168,15 @@ class UpdatePageVersionChoiceController extends AbstractPageController
 
         $upgradeSelfCheck = new UpgradeSelfCheck(
             $this->upgradeContainer->getUpgrader(),
+            $this->upgradeContainer->getState(),
+            $this->upgradeContainer->getUpgradeConfiguration(),
             $this->upgradeContainer->getPrestaShopConfiguration(),
             $this->upgradeContainer->getTranslator(),
             $phpVersionResolverService,
             $this->upgradeContainer->getChecksumCompare(),
             _PS_ROOT_DIR_,
             _PS_ADMIN_DIR_,
-            $this->upgradeContainer->getProperty(UpgradeContainer::WORKSPACE_PATH),
-            $this->upgradeContainer->getState()->getCurrentVersion()
+            $this->upgradeContainer->getProperty(UpgradeContainer::WORKSPACE_PATH)
         );
 
         $warnings = $upgradeSelfCheck->getWarnings();

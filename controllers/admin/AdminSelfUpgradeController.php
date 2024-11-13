@@ -316,7 +316,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
                 Tools14::redirectAdmin(self::$currentIndex . '&conf=5&token=' . Tools14::getValue('token'));
             }
             // removing temporary files
-            $this->upgradeContainer->getFileConfigurationStorage()->cleanAll();
+            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
         }
     }
 
@@ -486,14 +486,15 @@ class AdminSelfUpgradeController extends ModuleAdminController
         );
         $upgradeSelfCheck = new UpgradeSelfCheck(
             $upgrader,
+            $this->upgradeContainer->getState(),
+            $this->upgradeContainer->getUpgradeConfiguration(),
             $this->upgradeContainer->getPrestaShopConfiguration(),
             $this->upgradeContainer->getTranslator(),
             $phpVersionResolverService,
             $this->upgradeContainer->getChecksumCompare(),
             $this->prodRootDir,
             $this->adminDir,
-            $this->autoupgradePath,
-            $this->upgradeContainer->getState()->getCurrentVersion()
+            $this->autoupgradePath
         );
         $response = new AjaxResponse($this->upgradeContainer->getState(), $this->upgradeContainer->getLogger());
         $this->content = (new UpgradePage(

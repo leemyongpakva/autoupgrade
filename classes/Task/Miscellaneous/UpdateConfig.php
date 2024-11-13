@@ -35,7 +35,6 @@ use PrestaShop\Module\AutoUpgrade\Task\AbstractTask;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
-use PrestaShop\Module\AutoUpgrade\Upgrader;
 
 /**
  * update configuration after validating the new values.
@@ -73,7 +72,7 @@ class UpdateConfig extends AbstractTask
             }
         }
 
-        $isLocal = $config[UpgradeConfiguration::CHANNEL] === Upgrader::CHANNEL_LOCAL;
+        $isLocal = $config[UpgradeConfiguration::CHANNEL] === UpgradeConfiguration::CHANNEL_LOCAL;
 
         $error = $this->container->getConfigurationValidator()->validate($config);
 

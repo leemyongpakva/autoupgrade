@@ -29,11 +29,11 @@ namespace PrestaShop\Module\AutoUpgrade\Task\Update;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\Analytics;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Task\AbstractTask;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
-use PrestaShop\Module\AutoUpgrade\Upgrader;
 
 /**
  * very first step of the upgrade process. The only thing done is the selection
@@ -63,8 +63,8 @@ class UpdateInitialization extends AbstractTask
 
         $this->logger->info($this->translator->trans('Destination version: %s', [$this->container->getState()->getDestinationVersion()]));
 
-        switch ($upgrader->getChannel()) {
-            case Upgrader::CHANNEL_LOCAL:
+        switch ($this->container->getUpgradeConfiguration()->getChannelOrDefault()) {
+            case UpgradeConfiguration::CHANNEL_LOCAL:
                 $this->next = TaskName::TASK_UNZIP;
                 $this->logger->debug($this->translator->trans('Downloading step has been skipped, upgrade process will now unzip the local archive.'));
                 $this->logger->info($this->translator->trans('Shop deactivated. Extracting files...'));

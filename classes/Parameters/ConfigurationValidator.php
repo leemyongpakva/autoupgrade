@@ -27,7 +27,6 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Parameters;
 
-use PrestaShop\Module\AutoUpgrade\Upgrader;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
 class ConfigurationValidator
@@ -51,7 +50,7 @@ class ConfigurationValidator
     {
         $errors = [];
 
-        $isLocal = isset($array[UpgradeConfiguration::CHANNEL]) && $array[UpgradeConfiguration::CHANNEL] === Upgrader::CHANNEL_LOCAL;
+        $isLocal = isset($array[UpgradeConfiguration::CHANNEL]) && $array[UpgradeConfiguration::CHANNEL] === UpgradeConfiguration::CHANNEL_LOCAL;
 
         foreach ($array as $key => $value) {
             switch ($key) {
@@ -82,7 +81,7 @@ class ConfigurationValidator
 
     private function validateChannel(string $channel): ?string
     {
-        if ($channel !== Upgrader::CHANNEL_LOCAL && $channel !== Upgrader::CHANNEL_ONLINE) {
+        if ($channel !== UpgradeConfiguration::CHANNEL_LOCAL && $channel !== UpgradeConfiguration::CHANNEL_ONLINE) {
             return $this->translator->trans('Unknown channel %s', [$channel]);
         }
 
