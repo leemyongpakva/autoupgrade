@@ -1752,11 +1752,6 @@ Comment: directory already exists</note>
         <target>Open developer documentation</target>
         <note>Line: 16</note>
       </trans-unit>
-      <trans-unit id="79dc0855e9436fdc704a8f489d82f521">
-        <source><![CDATA[Disable the maintenance mode in General settings > Maintenance.]]></source>
-        <target><![CDATA[Disable the maintenance mode in General settings > Maintenance.]]></target>
-        <note>Line: 27</note>
-      </trans-unit>
       <trans-unit id="ae4a0e3a1c9d80344cf29e3f909861b5">
         <source>Your restoration is complete</source>
         <target>Your restoration is complete</target>
@@ -1772,10 +1767,20 @@ Comment: directory already exists</note>
         <target>If you can't access your back office, try emptying the cache.</target>
         <note>Line: 36</note>
       </trans-unit>
+      <trans-unit id="79dc0855e9436fdc704a8f489d82f521">
+        <source><![CDATA[Disable the maintenance mode in General settings > Maintenance.]]></source>
+        <target><![CDATA[Disable the maintenance mode in General settings > Maintenance.]]></target>
+        <note>Line: 27</note>
+      </trans-unit>
     </body>
   </file>
   <file original="views/templates/block/postUpdateChecklistBlock.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
+      <trans-unit id="91aac5a444c7ad75c9adad01b3253de8">
+        <source>Your store is up to date</source>
+        <target>Your store is up to date</target>
+        <note>Line: 6</note>
+      </trans-unit>
       <trans-unit id="605f8e6688fdd2a7616a3614d741202d">
         <source><![CDATA[If some images don't appear in the front office, try regenerating thumbnails in Preferences > Images.]]></source>
         <target><![CDATA[If some images don't appear in the front office, try regenerating thumbnails in Preferences > Images.]]></target>
@@ -1790,11 +1795,6 @@ Comment: directory already exists</note>
         <source>If you can't access your back office, try enabling the debug mode manually in config/defines.inc.php by setting _PS_MODE_DEV_ to true.</source>
         <target>If you can't access your back office, try enabling the debug mode manually in config/defines.inc.php by setting _PS_MODE_DEV_ to true.</target>
         <note>Line: 42</note>
-      </trans-unit>
-      <trans-unit id="91aac5a444c7ad75c9adad01b3253de8">
-        <source>Your store is up to date</source>
-        <target>Your store is up to date</target>
-        <note>Line: 6</note>
       </trans-unit>
       <trans-unit id="5baecf2062722759d19e978cc8ceaaa4">
         <source>Before continuing with your tasks, please review the following checklist to ensure smooth operation after recent updates</source>
@@ -2239,6 +2239,15 @@ Comment: directory already exists</note>
       </trans-unit>
     </body>
   </file>
+  <file original="views/templates/steps/backup-selection.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="2bd339d85ee3b33e513359ce781b60cc">
+        <source>Restore</source>
+        <target>Restore</target>
+        <note>Line: 15</note>
+      </trans-unit>
+    </body>
+  </file>
   <file original="views/templates/steps/backup.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
       <trans-unit id="9c32ff52925ba5a296f9696cfbb7edcc">
@@ -2246,10 +2255,15 @@ Comment: directory already exists</note>
         <target>Backing up your store's files, database, and images means you can restore to a previous version if something goes wrong during the update. This keeps your data safe and ensures your business stays up and running.</target>
         <note>Line: 13</note>
       </trans-unit>
+      <trans-unit id="b27bea61eb2963cb570ce625b87ea053">
+        <source>Update without backup</source>
+        <target>Update without backup</target>
+        <note>Line: 30</note>
+      </trans-unit>
       <trans-unit id="2284aa8fec405e1dd014326b51cde020">
         <source>Launch backup</source>
         <target>Launch backup</target>
-        <note>Line: 37</note>
+        <note>Line: 34</note>
       </trans-unit>
     </body>
   </file>
@@ -2292,46 +2306,51 @@ Comment: directory already exists</note>
       </trans-unit>
     </body>
   </file>
-  <file original="views/templates/steps/post-update.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
+  <file original="views/templates/steps/post-restore.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="21365dc8650278f56c2c27d349b073ce">
-        <source><![CDATA[<b>Open the developer documentation</b> to keep this checklist at-hand.]]></source>
-        <target><![CDATA[<b>Open the developer documentation</b> to keep this checklist at-hand.]]></target>
+      <trans-unit id="e6196201ba7431ba94d3bac5d6af97c8">
+        <source>%startbold%Open the developer documentation%endbold% to keep this checklist at-hand.</source>
+        <target>%startbold%Open the developer documentation%endbold% to keep this checklist at-hand.</target>
         <note>Line: 26</note>
       </trans-unit>
-      <trans-unit id="864362aa86ace037052914025702ef65">
-        <source><![CDATA[<b>Re-enable and check your modules</b> one by one to prevent any compatibility issue.]]></source>
-        <target><![CDATA[<b>Re-enable and check your modules</b> one by one to prevent any compatibility issue.]]></target>
-        <note>Line: 29</note>
-      </trans-unit>
-      <trans-unit id="ca8245b9f55d6afd2d6e7ecc0d6d317e">
-        <source><![CDATA[<b>Make sure your store's front office is working properly:</b> try to create an account, place an order, add a product, etc.]]></source>
-        <target><![CDATA[<b>Make sure your store's front office is working properly:</b> try to create an account, place an order, add a product, etc.]]></target>
+      <trans-unit id="289390be5b219643de2f47be7d8b9c53">
+        <source><![CDATA[%startbold%Disable the maintenance mode%endbold% in General settings > Maintenance.]]></source>
+        <target><![CDATA[%startbold%Disable the maintenance mode%endbold% in General settings > Maintenance.]]></target>
         <note>Line: 32</note>
-      </trans-unit>
-      <trans-unit id="8049dd4a6a288956d38f40ef992e34b8">
-        <source><![CDATA[<b>Disable the maintenance mode</b> in General settings > Maintenance.]]></source>
-        <target><![CDATA[<b>Disable the maintenance mode</b> in General settings > Maintenance.]]></target>
-        <note>Line: 35</note>
-      </trans-unit>
-      <trans-unit id="ebdbffe8dea73e1e0285fd052f720259">
-        <source>Download update logs</source>
-        <target>Download update logs</target>
-        <note>Line: 60</note>
       </trans-unit>
       <trans-unit id="fef46e5063ce3dc78b8ae64fa474241d">
         <source>Exit</source>
         <target>Exit</target>
-        <note>Line: 70</note>
+        <note>Line: 64</note>
+      </trans-unit>
+      <trans-unit id="deaf32a53ead325a232c297209dc187f">
+        <source>Download restore logs</source>
+        <target>Download restore logs</target>
+        <note>Line: 54</note>
       </trans-unit>
     </body>
   </file>
-  <file original="views/templates/steps/restore.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
+  <file original="views/templates/steps/post-update.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="2bd339d85ee3b33e513359ce781b60cc">
-        <source>Restore</source>
-        <target>Restore</target>
+      <trans-unit id="82460737463ae4ea8d57b1bc7a1997ac">
+        <source>Before continuing with your tasks, please review the following checklist to ensure smooth operation after recent updates.</source>
+        <target>Before continuing with your tasks, please review the following checklist to ensure smooth operation after recent updates.</target>
         <note>Line: 13</note>
+      </trans-unit>
+      <trans-unit id="8d964175f80bfdf13131bec74401ba00">
+        <source>%startbold%Re-enable and check your modules%endbold% one by one to prevent any compatibility issue.</source>
+        <target>%startbold%Re-enable and check your modules%endbold% one by one to prevent any compatibility issue.</target>
+        <note>Line: 32</note>
+      </trans-unit>
+      <trans-unit id="e02d13d319c57ef97c30eb990d857ba5">
+        <source>%startbold%Make sure your store's front office is working properly:%endbold% try to create an account, place an order, add a product, etc.</source>
+        <target>%startbold%Make sure your store's front office is working properly:%endbold% try to create an account, place an order, add a product, etc.</target>
+        <note>Line: 38</note>
+      </trans-unit>
+      <trans-unit id="ebdbffe8dea73e1e0285fd052f720259">
+        <source>Download update logs</source>
+        <target>Download update logs</target>
+        <note>Line: 72</note>
       </trans-unit>
     </body>
   </file>
