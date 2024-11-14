@@ -30,6 +30,7 @@ import { Default as CheckRequirements } from "./CheckRequirements.stories";
 export default {
   component: RadioCard,
   title: "Components/Radio card",
+  excludeStories: ["Default"],
   argTypes: {
     badgeStatus: {
       control: "select",

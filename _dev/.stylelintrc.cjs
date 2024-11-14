@@ -3,6 +3,7 @@ module.exports = {
   rules: {
     'comment-empty-line-before': null,
     'no-unknown-animations': null,
-    'scss/at-import-no-partial-leading-underscore': null
+    'scss/at-import-no-partial-leading-underscore': null,
+    'scss/function-color-relative': null
   }
 };

@@ -23,35 +23,15 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-import Modal from "../../../views/templates/components/modal.html.twig";
+import ErrorCode500 from "../../../views/templates/errors/500.html.twig";
 
 export default {
-  title: "Components/Modal",
-  component: Modal,
-  excludeStories: ["Default"],
-  argTypes: {
-    modalSize: {
-      control: "select",
-      options: ["sm", "md", "lg"],
-    },
-  },
-};
-
-export const Default = {
+  component: ErrorCode500,
+  title: "Layouts/Errors",
   args: {
-    modalId: "modal_id",
-    title: "Title goes here",
-    message: "Message goes here, lorem ipsum dolor site amet",
-    modalSize: "lg",
     psBaseUri: "/",
-    modalDanger: false,
-  },
+    error_code: "500",
+  }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  const modals = document.querySelectorAll(".modal");
-  modals.forEach((modal) => {
-    modal.style.display = "block";
-    modal.classList.add("in");
-  });
-});
+export const Error500 = {};

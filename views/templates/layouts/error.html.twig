@@ -1,0 +1,21 @@
+<div id="error_{{ error_code }}" class="error-page">
+  <div class="error-page__container">
+    {% block img %}
+      {# Default image can go here, or it can be left empty so that children can override it #}
+    {% endblock %}
+
+    <div class="error-page__infos">
+      {% block title %}
+        {# Default title can go here, or it can be left empty so that children can override it #}
+      {% endblock %}
+
+      {% block description %}
+        {# Default description can go here, or it can be left empty so that children can override it #}
+      {% endblock %}
+
+      {% block button %}
+        {# Default button can go here, or it can be left empty so that children can override it #}
+      {% endblock %}
+    </div>
+  </div>
+</div>
