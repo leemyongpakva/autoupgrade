@@ -28,6 +28,7 @@ import Modal from "../../../views/templates/components/modal.html.twig";
 export default {
   title: "Components/Modal",
   component: Modal,
+  excludeStories: ["Default"],
   argTypes: {
     modalSize: {
       control: "select",

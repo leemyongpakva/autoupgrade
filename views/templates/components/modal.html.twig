@@ -19,7 +19,7 @@
 
       <div class="modal-body">
         {% block modal_content %}
-          {# Default content can go here, or it can be left empty for children to override #}
+          {# Default content can go here, or it can be left empty so that children can override it #}
           <p>
             {{ message|raw }}
           </p>
@@ -28,10 +28,7 @@
         {% block modal_extra_content %}
           <div class="modal__extra-content">
             {% block modal_extra_content_inner %}
-              {# Default extra content can go here, or it can be left empty for children to override #}
-              <p>
-                Extra block content if needed
-              </p>
+              {# Default extra content can go here, or it can be left empty so that children can override it #}
             {% endblock %}
           </div>
         {% endblock %}
@@ -40,9 +37,7 @@
       {% block modal_footer %}
         <div class="modal-footer">
           {% block modal_footer_inner %}
-            {# Default footer content can go here, or it can be left empty for children to override #}
-            <button type="button" class="btn btn-link" data-dismiss="modal">Link button</button>
-            <button type="button" class="btn btn-primary">Primary button</button>
+            {# Default footer content can go here, or it can be left empty so that children can override it #}
           {% endblock %}
         </div>
       {% endblock %}

@@ -2,20 +2,20 @@
   <div id="ua_step_content" class="{% block page_class %}default-page{% endblock %}">
     <div class="page__title">
       {% block title %}
-        {# Default title or leave empty for child templates to provide #}
+        {# Default title can go here, or it can be left empty so that children can override it #}
       {% endblock %}
     </div>
 
     <div class="page__content">
       {% block content %}
-        {# Default content or leave empty for child templates to provide #}
+        {# Default content can go here, or it can be left empty so that children can override it #}
       {% endblock %}
     </div>
 
     {% block buttons %}
       <div class="page__buttons">
         {% block buttons_inner %}
-          {# Default buttons or leave empty for child templates to provide #}
+          {# Default buttons can go here, or it can be left empty so that children can override it #}
         {% endblock %}
       </div>
     {% endblock %}
