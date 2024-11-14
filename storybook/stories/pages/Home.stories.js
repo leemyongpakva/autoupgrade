@@ -28,6 +28,7 @@ import { Default as RadioCard } from "../components/RadioCard.stories";
 
 export default {
   component: WelcomePage,
+  id: "20",
   title: "Pages/Home",
 };
 

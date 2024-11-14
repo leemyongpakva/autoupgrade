@@ -24,11 +24,13 @@
  */
 
 import RestorePage from "../../../views/templates/pages/rollback.html.twig";
-import { Default as BackupSelection } from "../components/BackupSelection.stories";
+import { RestoreLogsProgress as LogsProgress } from "../components/LogsProgress.stories";
+import { RestoreLogs as Logs } from "../components/Logs.stories";
 import { Restore as Stepper } from "../components/Stepper.stories";
 
 export default {
   component: RestorePage,
+  id: "41",
   title: "Pages/Rollback",
 };
 
@@ -37,11 +39,12 @@ export const Restore = {
     // Step
     step: {
       code: "restore",
-      title: "Backup selection",
+      title: "Restore",
     },
     step_parent_id: "ua_container",
-    // Backup
-    ...BackupSelection.args,
+    // Logs
+    ...LogsProgress.args,
+    ...Logs.args,
     // Stepper
     ...Stepper.args,
   },

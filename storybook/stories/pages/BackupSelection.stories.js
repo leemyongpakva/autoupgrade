@@ -23,20 +23,27 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-import BackupSelectionComponent from "../../../views/templates/components/backup-selection.html.twig";
+import BackupSelectionPage from "../../../views/templates/pages/rollback.html.twig";
+import { Default as BackupSelectionComponent } from "../components/BackupSelection.stories";
+import { BackupSelection as Stepper } from "../components/Stepper.stories";
 
 export default {
-  component: BackupSelectionComponent,
-  title: "Components/Backup selection",
+  component: BackupSelectionPage,
+  id: "40",
+  title: "Pages/Rollback",
 };
 
-export const Default = {
+export const BackupSelection = {
   args: {
-    availableBackups: [
-      "autoupgrade_save_8.1.6 - 15/07/2024 8:00",
-      "autoupgrade_save_8.1.6 - 05/07/2024 16:30",
-      "autoupgrade_save_8.1.6 - 12/04/2024 22:10",
-    ],
-    showDelete: false,
+    // Step
+    step: {
+      code: "backup-selection",
+      title: "Backup selection",
+    },
+    step_parent_id: "ua_container",
+    // Backup
+    ...BackupSelectionComponent.args,
+    // Stepper
+    ...Stepper.args,
   },
 };

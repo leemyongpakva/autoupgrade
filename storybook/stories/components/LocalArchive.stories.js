@@ -53,5 +53,10 @@ export const Default = {
     unableToFindVersion: false,
     unableToFindVersionInXML: false,
     versionsMismatch: false,
+    errors: {
+      "global": "",
+      "archive.zip": "",
+      "archive.xml": ""
+    }
   },
 };

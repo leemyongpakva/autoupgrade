@@ -9,5 +9,17 @@ $e: ".backup-page";
       flex-direction: column;
       gap: 2rem;
     }
+
+    &__section {
+      &:has(.render-field) {
+        &:not(:has(.render-field:nth-child(2))) {
+          .render-field {
+            padding-block-end: 0;
+            margin-block-end: 0;
+            border-block-end: 0;
+          }
+        }
+      }
+    }
   }
 }

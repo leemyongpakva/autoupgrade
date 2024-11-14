@@ -1,6 +1,6 @@
 {% extends "@ModuleAutoUpgrade/layouts/step-content.html.twig" %}
 
-{% block page_class %}post-update-checklist-page{% endblock %}
+{% block page_class %}post-restore-checklist-page{% endblock %}
 
 {% block title %}
   <h2>{{ step.title }}</h2>
@@ -8,9 +8,9 @@
 
 {% block content %}
   <div class="content__container">
-    {% include '@ModuleAutoUpgrade/components/alert.html.twig' with {
-      title: 'Your store is up to date'|trans({}),
-      message: 'Before continuing with your tasks, please review the following checklist to ensure smooth operation after recent updates.'|trans({}),
+    {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
+      title: 'Your restoration is complete'|trans({}),
+      message: 'Before continuing with your tasks, please review the following checklist to ensure smooth operation after recent recovery.'|trans({}),
       alertStatus: 'success',
       buttonLabel: '',
       buttonUrl: '',
@@ -24,18 +24,6 @@
       <ul>
         <li>
           {{ '%startbold%Open the developer documentation%endbold% to keep this checklist at-hand.'|trans({
-            '%startbold%': '<b>',
-            '%endbold%': '</b>'
-          })|raw }}
-        </li>
-        <li>
-          {{ '%startbold%Re-enable and check your modules%endbold% one by one to prevent any compatibility issue.'|trans({
-            '%startbold%': '<b>',
-            '%endbold%': '</b>'
-          })|raw }}
-        </li>
-        <li>
-          {{ '%startbold%Make sure your store\'s front office is working properly:%endbold% try to create an account, place an order, add a product, etc.'|trans({
             '%startbold%': '<b>',
             '%endbold%': '</b>'
           })|raw }}
@@ -56,20 +44,14 @@
 
       <ul>
         <li>
-          {{ 'If some images don\'t appear in the front office, try regenerating thumbnails in Preferences > Images.'|trans({}) }}
-        </li>
-        <li>
-          {{ 'If something\'s wrong, you can restore a backup with this module. Your backup is available at {admin}/autoupgrade/backup.'|trans({}) }}
-        </li>
-        <li>
-          {{ 'If you can\'t access your back office, try enabling the debug mode manually in config/defines.inc.php by setting _PS_MODE_DEV_ to true.'|trans({}) }}
+          {{ 'If you can\'t access your back office, try emptying the cache.'|trans({}) }}
         </li>
       </ul>
     </div>
 
     <div class="content__section">
       <a class="link" href="{{ backlog_link }}" download>
-        {{ 'Download update logs'|trans({}) }}
+        {{ 'Download restore logs'|trans({}) }}
         <i class="material-icons">file_upload</i>
       </a>
     </div>
