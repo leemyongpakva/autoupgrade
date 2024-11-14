@@ -1485,17 +1485,17 @@ Comment: directory already exists</note>
       <trans-unit id="92a5801448b25f111961462b0b31995d">
         <source>Unable to create file %s</source>
         <target>Unable to create file %s</target>
-        <note>Line: 348</note>
+        <note>Line: 351</note>
       </trans-unit>
       <trans-unit id="56195ded2802813800f43e3be1babe1c">
         <source>Error when trying to delete backups %s</source>
         <target>Error when trying to delete backups %s</target>
-        <note>Line: 383</note>
+        <note>Line: 386</note>
       </trans-unit>
       <trans-unit id="f4eb320e09f7ef88a627229870458454">
         <source>The module %s requires PHP %s to work properly. Please upgrade your server configuration.</source>
         <target>The module %s requires PHP %s to work properly. Please upgrade your server configuration.</target>
-        <note>Line: 432</note>
+        <note>Line: 435</note>
       </trans-unit>
     </body>
   </file>
@@ -1504,17 +1504,17 @@ Comment: directory already exists</note>
       <trans-unit id="001c32426a6cfb48ebb848b13141593c">
         <source>Major version</source>
         <target>Major version</target>
-        <note>Line: 95</note>
+        <note>Line: 94</note>
       </trans-unit>
       <trans-unit id="c5439de366a407641018f189da1ad4a7">
         <source>Minor version</source>
         <target>Minor version</target>
-        <note>Line: 98</note>
+        <note>Line: 97</note>
       </trans-unit>
       <trans-unit id="8a0dd44f366bc5604b8329a87be5f933">
         <source>Patch version</source>
         <target>Patch version</target>
-        <note>Line: 101</note>
+        <note>Line: 100</note>
       </trans-unit>
     </body>
   </file>
