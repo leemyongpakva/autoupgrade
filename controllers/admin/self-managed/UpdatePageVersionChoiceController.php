@@ -37,7 +37,6 @@ use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
-use PrestaShop\Module\AutoUpgrade\Upgrader;
 use PrestaShop\Module\AutoUpgrade\UpgradeSelfCheck;
 use PrestaShop\Module\AutoUpgrade\VersionUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -52,8 +51,8 @@ class UpdatePageVersionChoiceController extends AbstractPageController
         UpgradeConfiguration::ARCHIVE_XML => UpgradeConfiguration::ARCHIVE_XML,
     ];
     const FORM_OPTIONS = [
-        'online_value' => Upgrader::CHANNEL_ONLINE,
-        'local_value' => Upgrader::CHANNEL_LOCAL,
+        'online_value' => UpgradeConfiguration::CHANNEL_ONLINE,
+        'local_value' => UpgradeConfiguration::CHANNEL_LOCAL,
     ];
 
     protected function getPageTemplate(): string
@@ -108,7 +107,7 @@ class UpdatePageVersionChoiceController extends AbstractPageController
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $currentChannel = $upgradeConfiguration->getChannel();
 
-        $params = array_merge(
+        return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),
             [
                 'up_to_date' => !$isNewerVersionAvailableOnline,
@@ -138,18 +137,6 @@ class UpdatePageVersionChoiceController extends AbstractPageController
                 ],
             ]
         );
-
-        if ($currentChannel === self::FORM_OPTIONS['online_value'] ||
-            (
-                $currentChannel === self::FORM_OPTIONS['local_value']
-                && in_array($upgradeConfiguration->getLocalChannelZip(), $archiveRepository->getZipLocalArchive())
-                && in_array($upgradeConfiguration->getLocalChannelXml(), $archiveRepository->getXmlLocalArchive())
-            )
-        ) {
-            $params[$currentChannel . '_requirements'] = $this->getRequirements();
-        }
-
-        return $params;
     }
 
     /**
@@ -159,16 +146,18 @@ class UpdatePageVersionChoiceController extends AbstractPageController
     {
         $this->upgradeContainer->initPrestaShopCore();
 
+        $state = $this->upgradeContainer->getState();
+
         $distributionApiService = new DistributionApiService();
         $phpVersionResolverService = new PhpVersionResolverService(
             $distributionApiService,
             $this->upgradeContainer->getFileLoader(),
-            $this->upgradeContainer->getState()->getCurrentVersion()
+            $state->getCurrentVersion()
         );
 
         $upgradeSelfCheck = new UpgradeSelfCheck(
             $this->upgradeContainer->getUpgrader(),
-            $this->upgradeContainer->getState(),
+            $state,
             $this->upgradeContainer->getUpgradeConfiguration(),
             $this->upgradeContainer->getPrestaShopConfiguration(),
             $this->upgradeContainer->getTranslator(),
@@ -214,6 +203,8 @@ class UpdatePageVersionChoiceController extends AbstractPageController
             $errors = $this->upgradeContainer->getLocalChannelConfigurationValidator()->validate($requestConfig);
         }
 
+        $params = $this->getParams();
+
         if (empty($errors)) {
             if ($isLocal) {
                 $file = $requestConfig[UpgradeConfiguration::ARCHIVE_ZIP];
@@ -225,6 +216,12 @@ class UpdatePageVersionChoiceController extends AbstractPageController
             $config->merge($requestConfig);
 
             $this->upgradeContainer->getUpgradeConfigurationStorage()->save($config, UpgradeFileNames::CONFIG_FILENAME);
+            $state = $this->upgradeContainer->getState()->setDestinationVersion($this->upgradeContainer->getUpgrader()->getDestinationVersion());
+            $state->save();
+
+            if ($channel !== null) {
+                $params[$channel . '_requirements'] = $this->getRequirements();
+            }
         } else {
             $errors = array_column(
                 array_map(function ($error) {
@@ -239,7 +236,7 @@ class UpdatePageVersionChoiceController extends AbstractPageController
         }
 
         $params = array_merge(
-            $this->getParams(),
+            $params,
             [
                 'current_values' => $requestConfig,
                 'errors' => $errors,

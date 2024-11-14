@@ -25,6 +25,7 @@
  */
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\AutoUpgrade\Analytics;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\State;
 
@@ -32,7 +33,10 @@ class AnalyticsTest extends TestCase
 {
     public function testProperties()
     {
-        $state = (new State())
+        $fixturesDir = __DIR__ . '/../../fixtures/config/';
+        $fileStorage = new FileConfigurationStorage($fixturesDir);
+
+        $state = (new State($fileStorage))
             ->setCurrentVersion('8.8.8')
             ->setDestinationVersion('8.8.808')
             ->setRestoreName('V1.2.3_blablabla-🐶');

@@ -574,7 +574,8 @@ class UpgradeContainer
             return $this->state;
         }
 
-        $this->state = new State();
+        $this->state = new State($this->getFileConfigurationStorage());
+        $this->state->load();
 
         return $this->state;
     }

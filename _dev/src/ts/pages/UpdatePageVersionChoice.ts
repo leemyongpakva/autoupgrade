@@ -17,6 +17,8 @@ export default class UpdatePageVersionChoice extends UpdatePage {
     this.form.addEventListener('change', this.saveForm.bind(this));
     this.form.addEventListener('submit', this.handleSubmit);
 
+    this.form.dispatchEvent(new Event('change'));
+
     this.onlineCardParent?.addEventListener(Hydration.hydrationEventName, this.handleHydrate);
     this.localCardParent?.addEventListener(Hydration.hydrationEventName, this.handleHydrate);
 

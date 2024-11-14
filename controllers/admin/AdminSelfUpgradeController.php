@@ -292,6 +292,11 @@ class AdminSelfUpgradeController extends ModuleAdminController
             empty($_REQUEST['params']) ? [] : $_REQUEST['params']
         );
 
+        if (!$this->ajax) {
+            // removing temporary files before init state to make sure state is already available
+            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
+        }
+
         if (!$this->upgradeContainer->getState()->isInitialized()) {
             $this->upgradeContainer->getState()->initDefault(
                 $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION),
@@ -315,8 +320,6 @@ class AdminSelfUpgradeController extends ModuleAdminController
                 $upgrader->clearXmlMd5File($upgrader->getDestinationVersion());
                 Tools14::redirectAdmin(self::$currentIndex . '&conf=5&token=' . Tools14::getValue('token'));
             }
-            // removing temporary files
-            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
         }
     }
 
