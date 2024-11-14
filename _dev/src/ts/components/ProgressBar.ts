@@ -9,8 +9,8 @@ export class ProgressBar extends ComponentAbstract {
   }
 
   /**
-   * @private
-   * @param percentage - Un nombre entre 0 et 100 représentant le pourcentage de progression.
+   * @public
+   * @param percentage - A number between 0 and 100 representing the percentage of progress.
    * @description Update all progress bar attribute from percentage given.
    */
   public setProgressPercentage = (percentage: number) => {
