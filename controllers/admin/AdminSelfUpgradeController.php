@@ -304,7 +304,6 @@ class AdminSelfUpgradeController extends ModuleAdminController
             );
         }
 
-
         // If you have defined this somewhere, you know what you do
         // load options from configuration if we're not in ajax mode
         if (!$this->ajax) {
