@@ -30,57 +30,83 @@ namespace PrestaShop\Module\AutoUpgrade\Commands;
 use DateTime;
 use Exception;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
+use PrestaShop\Module\AutoUpgrade\Backup\BackupManager;
 use PrestaShop\Module\AutoUpgrade\Exceptions\BackupException;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 abstract class AbstractBackupCommand extends AbstractCommand
 {
+    /** @var BackupFinder */
+    protected $backupFinder;
+
+    /** @var BackupManager */
+    protected $backupManager;
+
+    protected function setupEnvironment(InputInterface $input, OutputInterface $output): void
+    {
+        parent::setupEnvironment($input, $output);
+        $this->backupFinder = new BackupFinder($this->upgradeContainer->getProperty(UpgradeContainer::BACKUP_PATH));
+        $this->backupManager = new BackupManager($this->backupFinder);
+    }
+
     /**
      * @throws Exception
-     *
-     * @return string[]
      */
-    protected function getBackups(): array
+    protected function selectBackupInteractive(InputInterface $input, OutputInterface $output): ?string
     {
-        $backupPath = $this->upgradeContainer->getProperty(UpgradeContainer::BACKUP_PATH);
+        $backups = $this->backupFinder->getAvailableBackups();
 
-        return (new BackupFinder($backupPath))->getAvailableBackups();
+        if (empty($backups)) {
+            $this->logger->info('No store backup files found in your dedicated directory');
+
+            return null;
+        }
+
+        $formattedBackups = array_map(function ($backupName) {
+            return $this->backupFinder->parseBackupMetadata($backupName);
+        }, $backups);
+
+        $this->backupFinder->sortBackupsByNewest($formattedBackups);
+
+        $rows = array_map(function ($backup) {
+            return $this->formatBackupRow($backup);
+        }, $formattedBackups);
+
+        $exit = 'Exit the process';
+        $rows[] = $exit;
+
+        $helper = $this->getHelper('question');
+        $question = new ChoiceQuestion(
+            'Please select your backup:',
+            $rows
+        );
+
+        $answer = $helper->ask($input, $output, $question);
+
+        if ($answer === $exit) {
+            return null;
+        }
+
+        $key = array_search($answer, $rows);
+        if ($key === false) {
+            throw new BackupException('Invalid backup selection.');
+        }
+
+        return $formattedBackups[$key]['filename'];
     }
 
     /**
-     * @param string $backupName
+     * Formats a backup row for display in the selection prompt.
      *
-     * @return array{timestamp: int, datetime: string, version:string, filename: string}
+     * @param array{datetime: string, version:string, filename: string} $backups
      *
-     * @throws BackupException
+     * @return string
      */
-    protected function parseBackupMetadata(string $backupName): array
+    private function formatBackupRow(array $backups): string
     {
-        $pattern = '/V(\d+(\.\d+){1,3})_([0-9]{8})-([0-9]{6})/';
-        if (preg_match($pattern, $backupName, $matches)) {
-            $version = $matches[1];
-            $datePart = $matches[3];
-            $timePart = $matches[4];
-
-            $dateTime = DateTime::createFromFormat('Ymd His', $datePart . ' ' . $timePart);
-            $timestamp = $dateTime->getTimestamp();
-
-            return
-                [
-                    'timestamp' => $timestamp,
-                    'datetime' => $this->getFormattedDatetime($timestamp),
-                    'version' => $version,
-                    'filename' => $backupName,
-                ];
-        }
-
-        throw new BackupException('An error occurred while formatting the backup name.');
-    }
-
-    private function getFormattedDatetime(int $timestamp): string
-    {
-        setlocale(LC_TIME, '');
-
-        return strftime('%x %X', $timestamp);
+        return sprintf('Date: %s, Version: %s, File name: %s', $backups['datetime'], $backups['version'], $backups['filename']);
     }
 }

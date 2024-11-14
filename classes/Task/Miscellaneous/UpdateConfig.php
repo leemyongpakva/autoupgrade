@@ -165,7 +165,7 @@ class UpdateConfig extends AbstractTask
         $classConfig = $this->container->getUpgradeConfiguration();
         $classConfig->merge($config);
 
-        $this->logger->info($this->translator->trans('Configuration successfully updated.') . ' <strong>' . $this->translator->trans('This page will now be reloaded and the module will check if a new version is available.') . '</strong>');
+        $this->logger->info($this->translator->trans('Configuration successfully updated.'));
 
         $this->container->getLogger()->debug('Configuration update: ' . json_encode($classConfig->toArray(), JSON_PRETTY_PRINT));
 

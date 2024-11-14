@@ -28,10 +28,8 @@
 namespace PrestaShop\Module\AutoUpgrade\Commands;
 
 use Exception;
-use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
 use PrestaShop\Module\AutoUpgrade\Exceptions\BackupException;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
-use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,11 +54,9 @@ class ListBackupCommand extends AbstractBackupCommand
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         try {
-            $this->setupContainer($input, $output);
+            $this->setupEnvironment($input, $output);
 
-            $backupPath = $this->upgradeContainer->getProperty(UpgradeContainer::BACKUP_PATH);
-            $backupFinder = new BackupFinder($backupPath);
-            $backups = $backupFinder->getAvailableBackups();
+            $backups = $this->backupFinder->getAvailableBackups();
 
             if (empty($backups)) {
                 $this->logger->info('No store backup files found in your dedicated directory');
@@ -68,7 +64,7 @@ class ListBackupCommand extends AbstractBackupCommand
                 return ExitCode::SUCCESS;
             }
 
-            $rows = $this->getRows($backupFinder, $backups);
+            $rows = $this->getRows($backups);
             $table = new Table($output);
             $table
                 ->setHeaders(['Date', 'Version', 'File name'])
@@ -90,13 +86,13 @@ class ListBackupCommand extends AbstractBackupCommand
      *
      * @throws BackupException
      */
-    private function getRows(BackupFinder $backupFinder, array $backups): array
+    private function getRows(array $backups): array
     {
-        $rows = array_map(function ($backupName) use ($backupFinder) {
-            return $backupFinder->parseBackupMetadata($backupName);
+        $rows = array_map(function ($backupName) {
+            return $this->backupFinder->parseBackupMetadata($backupName);
         }, $backups);
 
-        $backupFinder->sortBackupsByNewest($rows);
+        $this->backupFinder->sortBackupsByNewest($rows);
 
         foreach ($rows as &$row) {
             unset($row['timestamp']);

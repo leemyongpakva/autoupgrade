@@ -30,29 +30,27 @@ namespace PrestaShop\Module\AutoUpgrade\Commands;
 use Exception;
 use InvalidArgumentException;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
-use PrestaShop\Module\AutoUpgrade\Task\Runner\AllRestoreTasks;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class RestoreCommand extends AbstractBackupCommand
+class DeleteBackupCommand extends AbstractBackupCommand
 {
     /**
      * @var string
      */
-    protected static $defaultName = 'backup:restore';
+    protected static $defaultName = 'backup:delete';
 
     protected function configure(): void
     {
         $this
-            ->setDescription('Restore the store to a previous state from a backup file.')
+            ->setDescription('Delete a store backup file.')
             ->setHelp(
-                'This command allows you to restore the store to a previous state from a backup file.' .
-                'See https://devdocs.prestashop-project.org/8/basics/keeping-up-to-date/upgrade-module/upgrade-cli/#rollback-cli for more details'
+                'This command allows you to delete a store backup file.'
             )
             ->addArgument('admin-dir', InputArgument::REQUIRED, 'The admin directory name.')
-            ->addOption('backup', null, InputOption::VALUE_REQUIRED, 'Specify the backup name to restore (this can be found in your folder <admin directory>/autoupgrade/backup/)');
+            ->addOption('backup', null, InputOption::VALUE_REQUIRED, 'Specify the backup name to delete. The allowed values can be found with backup:list command)');
     }
 
     /**
@@ -64,6 +62,7 @@ class RestoreCommand extends AbstractBackupCommand
             $this->setupEnvironment($input, $output);
 
             $backup = $input->getOption('backup');
+            $exitCode = ExitCode::SUCCESS;
 
             if (!$backup) {
                 if (!$input->isInteractive()) {
@@ -73,21 +72,18 @@ class RestoreCommand extends AbstractBackupCommand
                 $backup = $this->selectBackupInteractive($input, $output);
 
                 if (!$backup) {
-                    return ExitCode::SUCCESS;
+                    return $exitCode;
                 }
             }
 
-            $controller = new AllRestoreTasks($this->upgradeContainer);
-            $controller->setOptions([
-                'backup' => $backup,
-            ]);
-            $controller->init();
-            $exitCode = $controller->run();
+            $this->backupManager->deleteBackup($backup);
+            $this->logger->info('The backup file has been successfully deleted');
+
             $this->logger->debug('Process completed with exit code: ' . $exitCode);
 
             return $exitCode;
         } catch (Exception $e) {
-            $this->logger->error('An error occurred during the restoration process');
+            $this->logger->error('An error occurred during the delete backup process');
             throw $e;
         }
     }

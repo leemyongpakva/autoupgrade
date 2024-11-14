@@ -53,7 +53,7 @@ class BackupManager
 
         $filesystem = new Filesystem();
         $filesystem->remove([
-            $this->backupFinder->getBackupPath() . DIRECTORY_SEPARATOR . BackupFinder::BACKUP_ZIP_NAME_PREFIX . $backupName,
+            $this->backupFinder->getBackupPath() . DIRECTORY_SEPARATOR . BackupFinder::BACKUP_ZIP_NAME_PREFIX . $backupName . '.zip',
             $this->backupFinder->getBackupPath() . DIRECTORY_SEPARATOR . $backupName,
         ]);
 
