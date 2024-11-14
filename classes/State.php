@@ -302,7 +302,7 @@ class State
         return $this;
     }
 
-    public function setDestinationVersion(string $destinationVersion): State
+    public function setDestinationVersion(?string $destinationVersion): State
     {
         $this->destinationVersion = $destinationVersion;
 

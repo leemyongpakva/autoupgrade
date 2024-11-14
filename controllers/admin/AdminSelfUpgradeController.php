@@ -297,10 +297,13 @@ class AdminSelfUpgradeController extends ModuleAdminController
             $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
         }
 
-        $this->upgradeContainer->getState()->initDefault(
-            $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION),
-            $this->upgradeContainer->getUpgrader()->getDestinationVersion()
-        );
+        if (!$this->upgradeContainer->getState()->isInitialized()) {
+            $this->upgradeContainer->getState()->initDefault(
+                $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION),
+                $this->upgradeContainer->getUpgrader()->getDestinationVersion()
+            );
+        }
+
 
         // If you have defined this somewhere, you know what you do
         // load options from configuration if we're not in ajax mode
