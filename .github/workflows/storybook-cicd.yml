@@ -18,15 +18,15 @@ jobs:
 
   steps:
 
-      - name: Get tag
-        shell: bash
-        id: get_tag
-        run: echo TAG=$(echo $GITHUB_REF | cut -d / -f 3) >> $GITHUB_OUTPUT
+    - name: Get tag
+      shell: bash
+      id: get_tag
+      run: echo TAG=$(echo $GITHUB_REF | cut -d / -f 3) >> $GITHUB_OUTPUT
 
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.AUTOUPGRADE_CD_PAT }}
-          repository: ${{ secrets.AUTOUPGRADE_CD_REPOSITORY }}
-          event-type: storybook
-          client-payload: '{"environment": "${{ github.event.action == release && production || integration }}", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "tag": "${{ steps.get_tag.outputs.TAG }}"}'
+    - name: Repository Dispatch
+      uses: peter-evans/repository-dispatch@v2
+      with:
+        token: ${{ secrets.AUTOUPGRADE_CD_PAT }}
+        repository: ${{ secrets.AUTOUPGRADE_CD_REPOSITORY }}
+        event-type: storybook
+        client-payload: '{"environment": "${{ github.event.action == release && production || integration }}", "ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "tag": "${{ steps.get_tag.outputs.TAG }}"}'
