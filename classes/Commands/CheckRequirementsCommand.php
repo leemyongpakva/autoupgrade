@@ -71,7 +71,7 @@ class CheckRequirementsCommand extends AbstractCommand
             $this->output = $output;
 
             $configPath = $input->getOption('config-file-path');
-            $exitCode = $this->loadConfiguration($configPath, $this->upgradeContainer);
+            $exitCode = $this->loadConfiguration($configPath);
             if ($exitCode !== ExitCode::SUCCESS) {
                 return $exitCode;
             }
