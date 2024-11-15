@@ -1,12 +1,10 @@
 import { ComponentAbstract } from './ComponentAbstract';
 
 export class ProgressBar extends ComponentAbstract {
-  get #progressBar(): HTMLDivElement {
-    const progressBar = this.element.querySelector('[role="progressbar"]') as HTMLDivElement;
-    if (!progressBar) throw new Error('Progress bar not found');
-
-    return progressBar;
-  }
+  #progressBar = this.queryElement<HTMLDivElement>(
+    '[role="progressbar"]',
+    'Progress bar not found'
+  );
 
   /**
    * @public

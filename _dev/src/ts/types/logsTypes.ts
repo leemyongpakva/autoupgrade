@@ -26,9 +26,4 @@ export interface LogEntry {
   message: string;
 }
 
-export interface LogSaved {
-  message: string;
-  id: string;
-}
-
 export type LogsSeverity = SuccessSeverity | WarningSeverity | ErrorSeverity;

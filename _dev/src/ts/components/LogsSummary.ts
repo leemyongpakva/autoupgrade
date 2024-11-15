@@ -1,14 +1,10 @@
 import { ComponentAbstract } from './ComponentAbstract';
 
 export class LogsSummary extends ComponentAbstract {
-  get #logsSummaryText(): HTMLDivElement {
-    const logsSummaryText = this.element.querySelector(
-      '[data-slot-component="text"]'
-    ) as HTMLDivElement;
-    if (!logsSummaryText) throw new Error('Logs summary text not found');
-
-    return logsSummaryText;
-  }
+  #logsSummaryText = this.queryElement<HTMLDivElement>(
+    '[data-slot-component="text"]',
+    'Logs summary text not found'
+  );
 
   /**
    * @public

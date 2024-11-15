@@ -4,10 +4,16 @@
 
 <template id="log-summary">
     <div class="logs__summary">
-        <p class="logs__summary-title h3"></p>
-        <div class="logs__summary-content"></div>
+        <p data-slot-template="title" class="logs__summary-title h3"></p>
     </div>
 </template>
 
 <template id="summary-warning-title">{{ "Warning summary"|trans({}) }}</template>
 <template id="summary-error-title">{{ "Error summary"|trans({}) }}</template>
+
+<template id="summary-warning-link">
+    <a class="logs__summary-anchor link">{{ "See warning"|trans({}) }}</a>
+</template>
+<template id="summary-error-link">
+    <a class="logs__summary-anchor link">{{ "See error"|trans({}) }}</a>
+</template>
