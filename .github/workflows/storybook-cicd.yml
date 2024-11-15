@@ -8,8 +8,7 @@ on:
     branches: 
       - dev
   release:
-    types: [published]
-
+    types: [released]
 
 jobs: 
   storybook-repository-dispatch:
