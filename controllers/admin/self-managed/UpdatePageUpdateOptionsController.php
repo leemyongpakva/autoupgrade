@@ -27,8 +27,14 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
+use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
+use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
 {
@@ -49,6 +55,39 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         return Routes::UPDATE_PAGE_UPDATE_OPTIONS;
     }
 
+    public function saveOption(): JsonResponse
+    {
+        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
+        $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
+
+        $config = [
+            UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT, false),
+            UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL, false),
+            UpgradeConfiguration::PS_DISABLE_OVERRIDES => $this->request->request->getBoolean(UpgradeConfiguration::PS_DISABLE_OVERRIDES, false),
+        ];
+
+        $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
+
+        if (empty($errors)) {
+            if (isset($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES])) {
+                $this->upgradeContainer->initPrestaShopCore();
+                UpgradeConfiguration::updatePSDisableOverrides($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES]);
+            }
+            $upgradeConfiguration->merge($config);
+            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+        }
+
+        return $this->getRefreshOfForm(array_merge(
+            $this->getParams(),
+            ['errors' => ValidatorToFormFormater::format($errors)]
+        ));
+    }
+
+    public function submit(): JsonResponse
+    {
+        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_PAGE_BACKUP);
+    }
+
     /**
      * @return array
      *
@@ -56,16 +95,43 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
+        $this->upgradeContainer->initPrestaShopCore();
+        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
 
         return array_merge(
             $updateSteps->getStepParams(self::CURRENT_STEP),
             [
-                'default_deactive_non_native_modules' => true,
-                'default_regenerate_email_templates' => true,
-                'switch_the_theme' => '1',
-                'disable_all_overrides' => false,
+                'form_route_to_save' => Routes::UPDATE_STEP_UPDATE_OPTIONS_SAVE_OPTION,
+                'form_route_to_submit' => Routes::UPDATE_STEP_UPDATE_OPTIONS_SUBMIT_FORM,
+
+                'form_fields' => [
+                    'deactive_non_native_modules' => [
+                        'field' => UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT,
+                        'value' => $upgradeConfiguration->shouldDeactivateCustomModules(),
+                    ],
+                    'regenerate_email_templates' => [
+                        'field' => UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL,
+                        'value' => $upgradeConfiguration->shouldRegenerateMailTemplates(),
+                    ],
+                    'disable_all_overrides' => [
+                        'field' => UpgradeConfiguration::PS_DISABLE_OVERRIDES,
+                        'value' => !$upgradeConfiguration->isOverrideAllowed(),
+                    ],
+                ],
             ]
+        );
+    }
+
+    private function getRefreshOfForm(array $params): JsonResponse
+    {
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::STEP_PARENT_ID,
+            $this->getTwig()->render(
+                '@ModuleAutoUpgrade/steps/' . $this->getStepTemplate() . '.html.twig',
+                $params
+            ),
+            $this->displayRouteInUrl()
         );
     }
 }

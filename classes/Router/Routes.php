@@ -18,6 +18,8 @@ class Routes
     /* step: update options */
     const UPDATE_PAGE_UPDATE_OPTIONS = 'update-page-update-options';
     const UPDATE_STEP_UPDATE_OPTIONS = 'update-step-update-options';
+    const UPDATE_STEP_UPDATE_OPTIONS_SAVE_OPTION = 'update-step-update-options-save-option';
+    const UPDATE_STEP_UPDATE_OPTIONS_SUBMIT_FORM = 'update-step-update-options-submit-form';
 
     /* step: backup */
     const UPDATE_PAGE_BACKUP = 'update-page-backup';

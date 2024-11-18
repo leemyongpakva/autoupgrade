@@ -117,7 +117,7 @@ class ConfigurationValidatorTest extends TestCase
 
     public function testValidateBoolSuccess()
     {
-        $validValues = ['1', '0', 'true', 'false', 'on', 'off'];
+        $validValues = ['1', '0', 'true', 'false', 'on', 'off', true, false];
 
         foreach ($validValues as $value) {
             $result = $this->validator->validate([UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => $value]);

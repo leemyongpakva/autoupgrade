@@ -64,7 +64,7 @@ class ConfigurationValidator
                     $error = $this->validateArchiveXml($value, $isLocal);
                     break;
                 case UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT:
-                case UpgradeConfiguration::PS_AUTOUP_KEEP_MAILS:
+                case UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL:
                 case UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES:
                 case UpgradeConfiguration::PS_DISABLE_OVERRIDES:
                     $error = $this->validateBool($value, $key);
@@ -106,9 +106,12 @@ class ConfigurationValidator
         return null;
     }
 
-    private function validateBool(string $boolValue, string $key): ?string
+    /**
+     * @param string|bool $boolValue
+     */
+    private function validateBool($boolValue, string $key): ?string
     {
-        if ($boolValue === '' || filter_var($boolValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null) {
+        if (!is_bool($boolValue) && ($boolValue === '' || filter_var($boolValue, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) === null)) {
             return $this->translator->trans('Value must be a boolean for %s', [$key]);
         }
 

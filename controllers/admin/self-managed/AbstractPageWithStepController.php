@@ -40,11 +40,18 @@ abstract class AbstractPageWithStepController extends AbstractPageController
             return new Response('Unexpected call to a step route outside an ajax call.', 404);
         }
 
+        // It may be tempting to move this line inside the parameters of the method
+        // `getTwig()->render()`. Please refrain to do so as this makes Twig
+        // called BEFORE the call to the function sent as parameters. Initiating it too early
+        // can be misleading when rendering the templates as more autoloaders can be loaded
+        // in the meantime (i.e the core).
+        $params = $this->getParams();
+
         return AjaxResponseBuilder::hydrationResponse(
             PageSelectors::STEP_PARENT_ID,
             $this->getTwig()->render(
                 '@ModuleAutoUpgrade/steps/' . $this->getStepTemplate() . '.html.twig',
-                $this->getParams()
+                $params
             ),
             $this->displayRouteInUrl()
         );
