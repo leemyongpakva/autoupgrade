@@ -32,16 +32,6 @@ describe('parseLogWithSeverity', () => {
     });
   });
 
-  it('should return ERROR severity for unknown severity levels', () => {
-    const log = 'UNKNOWN - This is an unknown severity';
-    const result = parseLogWithSeverity(log);
-
-    expect(result).toEqual<LogEntry>({
-      className: SeverityClasses.ERROR,
-      message: 'This is an unknown severity'
-    });
-  });
-
   it('should return ERROR severity for invalid log formats', () => {
     const log = 'This is an invalid log format';
     const result = parseLogWithSeverity(log);

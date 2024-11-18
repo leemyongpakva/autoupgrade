@@ -26,7 +26,7 @@ export const severityToClassMap = {
  */
 export function parseLogWithSeverity(log: string): LogEntry {
   const logTrimed = log.trim();
-  const regex = /^([A-Z]+)\s*-\s*(.*)$/;
+  const regex = /^(DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY)\s*-\s*(.*)$/;
   const match = logTrimed.match(regex);
 
   if (match) {
