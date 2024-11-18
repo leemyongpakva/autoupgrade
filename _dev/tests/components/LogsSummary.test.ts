@@ -27,14 +27,14 @@ describe('LogsSummary', () => {
       logsSummary.setLogsSummaryText(newText);
 
       const textElement = container.querySelector('[data-slot-component="text"]') as HTMLDivElement;
-      expect(textElement!.innerText).toBe(newText);
+      expect(textElement.innerText).toBe(newText);
     });
 
     it('should update the logs summary text to an empty string if provided', () => {
       logsSummary.setLogsSummaryText('');
 
       const textElement = container.querySelector('[data-slot-component="text"]') as HTMLDivElement;
-      expect(textElement!.innerText).toBe('');
+      expect(textElement.innerText).toBe('');
     });
 
     it('should correctly set text containing special characters', () => {
@@ -42,7 +42,7 @@ describe('LogsSummary', () => {
       logsSummary.setLogsSummaryText(specialText);
 
       const textElement = container.querySelector('[data-slot-component="text"]') as HTMLDivElement;
-      expect(textElement!.innerText).toBe(specialText);
+      expect(textElement.innerText).toBe(specialText);
     });
   });
 });

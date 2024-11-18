@@ -34,7 +34,7 @@ export function parseLogWithSeverity(log: string): LogEntry {
   const logTrimed = log.trim();
   const severityPattern = severityValues.join('|');
   const severityRegex = new RegExp(`^(${severityPattern})\\s*-\\s*(.*)$`);
-  const match = logTrimed.match(severityRegex);
+  const match = severityRegex.exec(logTrimed);
 
   if (match) {
     const severityStr = match[1] as LogsSeverity;
