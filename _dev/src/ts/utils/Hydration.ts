@@ -27,6 +27,10 @@ export default class Hydration {
     const elementToUpdate = document.getElementById(data.parent_to_update);
 
     if (elementToUpdate && data.new_content) {
+      if (data.new_route) {
+        scriptHandler.unloadRouteScript();
+      }
+
       elementToUpdate.innerHTML = data.new_content;
 
       if (data.new_route) {

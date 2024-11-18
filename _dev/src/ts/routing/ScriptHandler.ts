@@ -68,4 +68,15 @@ export default class ScriptHandler {
     this.#currentScript?.beforeDestroy();
     this.#loadScript(newRoute);
   }
+
+  /**
+   * @public
+   * @returns void
+   * @description Unloads the currently loaded script.
+   *  Should be called before updating the DOM.
+   */
+  public unloadRouteScript(): void {
+    this.#currentScript?.beforeDestroy();
+    this.#currentScript = undefined;
+  }
 }

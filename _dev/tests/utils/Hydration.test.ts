@@ -5,6 +5,7 @@ import ScriptHandler from '../../src/ts/routing/ScriptHandler';
 
 const setNewRouteMock = jest.spyOn(RouteHandler.prototype, 'setNewRoute');
 const updateRouteScriptMock = jest.spyOn(ScriptHandler.prototype, 'updateRouteScript');
+const unloadRouteScriptMock = jest.spyOn(ScriptHandler.prototype, 'unloadRouteScript');
 
 jest.mock('../../src/ts/pages/HomePage', () => {
   return jest.fn().mockImplementation(() => {
@@ -159,6 +160,9 @@ describe('Hydration and scripts lifecycle', () => {
     };
     hydration.hydrate(initialResponse);
 
+    expect(setNewRouteMock).toHaveBeenCalledTimes(1);
+    expect(unloadRouteScriptMock).toHaveBeenCalledTimes(1);
+
     const nextResponse: ApiResponseHydration = {
       hydration: true,
       new_content: `<p>New Content</p>`,
@@ -166,5 +170,8 @@ describe('Hydration and scripts lifecycle', () => {
       new_route: 'home-page'
     };
     hydration.hydrate(nextResponse);
+
+    expect(setNewRouteMock).toHaveBeenCalledTimes(2);
+    expect(unloadRouteScriptMock).toHaveBeenCalledTimes(2);
   });
 });
