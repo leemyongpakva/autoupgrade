@@ -1,7 +1,7 @@
 import UpdatePage from './UpdatePage';
-import { ProgressBar } from '../components/ProgressBar';
-import { LogsSummary } from '../components/LogsSummary';
-import { LogsViewer } from '../components/LogsViewer';
+import ProgressBar from '../components/ProgressBar';
+import LogsSummary from '../components/LogsSummary';
+import LogsViewer from '../components/LogsViewer';
 
 export default class UpdatePageUpdate extends UpdatePage {
   protected stepCode = 'update';

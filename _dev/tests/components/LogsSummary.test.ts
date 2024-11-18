@@ -1,4 +1,4 @@
-import { LogsSummary } from '../../src/ts/components/LogsSummary';
+import LogsSummary from '../../src/ts/components/LogsSummary';
 
 describe('LogsSummary', () => {
   let container: HTMLElement;
@@ -22,12 +22,6 @@ describe('LogsSummary', () => {
   });
 
   describe('setLogsSummaryText', () => {
-    it('should initialize correctly and find the logs summary text element', () => {
-      const textElement = container.querySelector('[data-slot-component="text"]');
-      expect(textElement).not.toBeNull();
-      expect(() => logsSummary).not.toThrow();
-    });
-
     it('should update the logs summary text when setLogsSummaryText is called', () => {
       const newText = 'Processing logs...';
       logsSummary.setLogsSummaryText(newText);

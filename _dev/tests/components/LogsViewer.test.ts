@@ -1,4 +1,4 @@
-import { LogsViewer } from '../../src/ts/components/LogsViewer';
+import LogsViewer from '../../src/ts/components/LogsViewer';
 
 describe('LogsViewer', () => {
   let logsViewer: LogsViewer;
