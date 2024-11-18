@@ -12,11 +12,17 @@ import {
  * @type {Record<LogsSeverity, SeverityClasses>}
  * @description Maps severity levels to their corresponding CSS classes for styling and process purposes.
  */
-export const severityToClassMap = {
+export const severityToClassMap: Record<LogsSeverity, SeverityClasses> = {
   ...Object.fromEntries(Object.values(SuccessSeverity).map((s) => [s, SeverityClasses.SUCCESS])),
   ...Object.fromEntries(Object.values(WarningSeverity).map((s) => [s, SeverityClasses.WARNING])),
   ...Object.fromEntries(Object.values(ErrorSeverity).map((s) => [s, SeverityClasses.ERROR]))
 } as Record<LogsSeverity, SeverityClasses>;
+
+const severityValues = [
+  ...Object.values(SuccessSeverity),
+  ...Object.values(WarningSeverity),
+  ...Object.values(ErrorSeverity)
+];
 
 /**
  * @public
@@ -26,8 +32,9 @@ export const severityToClassMap = {
  */
 export function parseLogWithSeverity(log: string): LogEntry {
   const logTrimed = log.trim();
-  const regex = /^(DEBUG|INFO|NOTICE|WARNING|ERROR|CRITICAL|ALERT|EMERGENCY)\s*-\s*(.*)$/;
-  const match = logTrimed.match(regex);
+  const severityPattern = severityValues.join('|');
+  const severityRegex = new RegExp(`^(${severityPattern})\\s*-\\s*(.*)$`);
+  const match = logTrimed.match(severityRegex);
 
   if (match) {
     const severityStr = match[1] as LogsSeverity;
