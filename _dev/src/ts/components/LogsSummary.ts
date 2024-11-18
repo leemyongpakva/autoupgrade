@@ -1,6 +1,6 @@
-import { ComponentAbstract } from './ComponentAbstract';
+import ComponentAbstract from './ComponentAbstract';
 
-export class LogsSummary extends ComponentAbstract {
+export default class LogsSummary extends ComponentAbstract {
   #logsSummaryText = this.queryElement<HTMLDivElement>(
     '[data-slot-component="text"]',
     'Logs summary text not found'

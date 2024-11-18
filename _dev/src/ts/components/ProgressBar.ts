@@ -1,6 +1,6 @@
-import { ComponentAbstract } from './ComponentAbstract';
+import ComponentAbstract from './ComponentAbstract';
 
-export class ProgressBar extends ComponentAbstract {
+export default class ProgressBar extends ComponentAbstract {
   #progressBar = this.queryElement<HTMLDivElement>(
     '[role="progressbar"]',
     'Progress bar not found'

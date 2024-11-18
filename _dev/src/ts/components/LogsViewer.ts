@@ -1,8 +1,8 @@
-import { ComponentAbstract } from './ComponentAbstract';
+import ComponentAbstract from './ComponentAbstract';
 import { SeverityClasses, LogEntry } from '../types/logsTypes';
 import { parseLogWithSeverity } from '../utils/logsUtils';
 
-export class LogsViewer extends ComponentAbstract {
+export default class LogsViewer extends ComponentAbstract {
   #warnings: string[] = [];
   #errors: string[] = [];
   #isSummaryDisplayed: boolean = false;

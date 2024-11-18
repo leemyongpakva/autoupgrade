@@ -5,7 +5,6 @@ describe('LogsViewer', () => {
   let container: HTMLElement;
 
   beforeEach(() => {
-    // Set up a DOM container for the tests
     container = document.createElement('div');
     container.innerHTML = `
       <div data-component="logs-viewer" class="logs__inner">

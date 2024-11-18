@@ -1,5 +1,5 @@
-export abstract class ComponentAbstract {
-  protected element: HTMLElement;
+export default abstract class ComponentAbstract {
+  public element: HTMLElement;
 
   public constructor(element: HTMLElement) {
     this.element = element;
