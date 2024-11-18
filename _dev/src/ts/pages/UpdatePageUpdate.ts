@@ -15,22 +15,17 @@ export default class UpdatePageUpdate extends UpdatePage {
 
     // uncomment for dev purpose
 
-    // const progressBarContainer = document.querySelector(
-    //   '[data-component="progress-bar"]'
-    // ) as HTMLElement;
-    //
-    // window.ProgressBar = new ProgressBar(progressBarContainer!);
-    //
-    // const logsSummaryContainer = document.querySelector(
-    //   '[data-component="logs-summary"]'
-    // ) as HTMLElement;
-    //
-    // window.LogsSummary = new LogsSummary(logsSummaryContainer!);
-    //
-    // const logsViewerContainer = document.querySelector(
-    //   '[data-component="logs-viewer"]'
-    // ) as HTMLElement;
-    //
-    // window.LogsViewer = new LogsViewer(logsViewerContainer);
+    const progressBarContainer = document.querySelector(
+      '[data-component="progress-bar"]'
+    ) as HTMLElement;
+    window.ProgressBar = new ProgressBar(progressBarContainer!);
+    const logsSummaryContainer = document.querySelector(
+      '[data-component="logs-summary"]'
+    ) as HTMLElement;
+    window.LogsSummary = new LogsSummary(logsSummaryContainer!);
+    const logsViewerContainer = document.querySelector(
+      '[data-component="logs-viewer"]'
+    ) as HTMLElement;
+    window.LogsViewer = new LogsViewer(logsViewerContainer);
   }
 }

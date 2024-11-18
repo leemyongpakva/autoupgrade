@@ -223,9 +223,9 @@ export default class LogsViewer extends ComponentAbstract {
     if (targetElement) {
       const scrollTop = targetElement.offsetTop - this.#logsScroll.offsetTop;
       this.#logsScroll.scrollTop = scrollTop;
-      targetElement.classList.add('logs__pointed');
+      targetElement.classList.add('logs__line--pointed');
       window.setTimeout(() => {
-        targetElement.classList.remove('logs__pointed');
+        targetElement.classList.remove('logs__line--pointed');
       }, 2000);
     }
   };

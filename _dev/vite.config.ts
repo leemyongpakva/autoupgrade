@@ -5,6 +5,13 @@ import del from 'rollup-plugin-delete';
 
 export default defineConfig({
   base: './',
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler'
+      }
+    }
+  },
   build: {
     assetsInlineLimit: 0,
     cssCodeSplit: true,

@@ -25,7 +25,7 @@
 
 import UpdatePage from "../../../views/templates/pages/update.html.twig";
 import { Default as LogsProgress } from "../components/LogsProgress.stories";
-import { Default as Logs } from "../components/Logs.stories";
+import { Default as LogsViewer } from "../components/LogsViewer.stories";
 import { Update as Stepper } from "../components/Stepper.stories";
 
 export default {
@@ -49,7 +49,7 @@ export const Update = {
     stepper_parent_id: "stepper_content",
     // Logs
     ...LogsProgress.args,
-    ...Logs.args,
+    ...LogsViewer.args,
     // Stepper
     ...Stepper.args,
   },

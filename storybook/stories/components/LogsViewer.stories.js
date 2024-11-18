@@ -23,11 +23,11 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-import Logs from "../../../views/templates/components/logs.html.twig";
+import LogsViewer from "../../../views/templates/components/logs-viewer.html.twig";
 
 export default {
-  component: Logs,
-  title: "Components/Logs",
+  component: LogsViewer,
+  title: "Components/LogsViewer",
 };
 
 export const Default = {
@@ -179,7 +179,7 @@ export const Default = {
   },
 };
 
-export const RestoreLogs = {
+export const RestoreLogsViewer = {
   args: {
     logs: [
       {
@@ -327,33 +327,3 @@ export const RestoreLogs = {
     downloadLogsButtonLabel: "Download restore logs",
   },
 };
-
-document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".logs__summary-anchor").forEach(anchor => {
-    anchor.addEventListener("click", function(e) {
-      e.preventDefault();
-
-      const targetId = this.getAttribute("href").substring(1);
-      const targetElement = document.getElementById(targetId);
-      const logsList = document.querySelector(".logs__list");
-
-      if (logsList && targetElement) {
-        const targetRect = targetElement.getBoundingClientRect();
-        const containerRect = logsList.getBoundingClientRect();
-        const offsetTop = targetRect.top - containerRect.top + logsList.scrollTop;
-
-        logsList.scrollTo({
-          top: offsetTop,
-          behavior: "smooth"
-        });
-      } else {
-        console.error("Element not found:", {
-          logsList: logsList,
-          targetElement: targetElement
-        });
-      }
-    });
-  });
-});
-
-

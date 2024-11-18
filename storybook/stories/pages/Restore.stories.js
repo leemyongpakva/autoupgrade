@@ -25,7 +25,7 @@
 
 import RestorePage from "../../../views/templates/pages/rollback.html.twig";
 import { RestoreLogsProgress as LogsProgress } from "../components/LogsProgress.stories";
-import { RestoreLogs as Logs } from "../components/Logs.stories";
+import { RestoreLogsViewer as LogsViewer } from "../components/LogsViewer.stories";
 import { Restore as Stepper } from "../components/Stepper.stories";
 
 export default {
@@ -44,7 +44,7 @@ export const Restore = {
     step_parent_id: "ua_container",
     // Logs
     ...LogsProgress.args,
-    ...Logs.args,
+    ...LogsViewer.args,
     // Stepper
     ...Stepper.args,
   },
