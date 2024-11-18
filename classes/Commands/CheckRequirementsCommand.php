@@ -43,7 +43,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CheckRequirementsCommand extends AbstractCommand
 {
     /** @var string */
-    protected static $defaultName = 'update:check';
+    protected static $defaultName = 'update:check-requirements';
     const MODULE_CONFIG_DIR = 'autoupgrade';
     /** @var UpgradeSelfCheck */
     private $upgradeSelfCheck;
