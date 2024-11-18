@@ -1,4 +1,5 @@
 import UpdatePage from './UpdatePage';
+import ProgressTracker from "../components/ProgressTracker";
 
 export default class UpdatePageUpdate extends UpdatePage {
   protected stepCode = 'update';
@@ -9,5 +10,11 @@ export default class UpdatePageUpdate extends UpdatePage {
 
   public mount() {
     this.initStepper();
+
+    // uncomment for dev purpose
+
+    const progressTrackerContainer = document.querySelector('[data-component="progress-tracker"]') as HTMLDivElement;
+
+    window.ProgressTracker = new ProgressTracker(progressTrackerContainer);
   }
 }
