@@ -33,7 +33,8 @@ class AssetsEnvironmentTest extends TestCase
 
     protected function setUp()
     {
-        $this->assetsEnvironment = new AssetsEnvironment();
+        $shopBasePath = '/yo/doge';
+        $this->assetsEnvironment = new AssetsEnvironment($shopBasePath);
     }
 
     protected function tearDown()
@@ -69,7 +70,7 @@ class AssetsEnvironmentTest extends TestCase
         $this->assertSame(AssetsEnvironment::DEV_BASE_URL, $this->assetsEnvironment->getAssetsBaseUrl($request));
     }
 
-    public function testGetAssetsBaseUrlReturnsProductionUrlWhenNotInDevMode()
+    public function testGetAssetsBaseUrlReturnsProductionUrl()
     {
         $expectedUrl = 'http://localhost/modules/autoupgrade/views';
         $server = [
@@ -77,7 +78,7 @@ class AssetsEnvironmentTest extends TestCase
             'SERVER_PORT' => '80',
             'QUERY_STRING' => '',
             'PHP_SELF' => '/admin-wololo/index.php',
-            'SCRIPT_FILENAME' => '/yo/doge/index.php',
+            'SCRIPT_FILENAME' => '/yo/doge/admin-wololo/index.php',
             'REQUEST_URI' => 'index.php',
         ];
 
@@ -86,14 +87,14 @@ class AssetsEnvironmentTest extends TestCase
         $this->assertSame($expectedUrl, $this->assetsEnvironment->getAssetsBaseUrl($request));
     }
 
-    public function testGetAssetsBaseUrlReturnsProductionUrlWhenNotInDevModeWithSubFolder()
+    public function testGetAssetsBaseUrlReturnsProductionUrlWithShopInSubFolder()
     {
         $server = [
             'HTTP_HOST' => 'localhost',
             'SERVER_PORT' => '80',
             'QUERY_STRING' => '',
             'PHP_SELF' => '/hello-world/admin-wololo/index.php',
-            'SCRIPT_FILENAME' => '/yo/doge/index.php',
+            'SCRIPT_FILENAME' => '/yo/doge/admin-wololo/index.php',
             'REQUEST_URI' => 'hello-world/index.php',
         ];
 
@@ -103,14 +104,31 @@ class AssetsEnvironmentTest extends TestCase
         $this->assertSame($expectedUrl, $this->assetsEnvironment->getAssetsBaseUrl($request));
     }
 
-    public function testGetAssetsBaseUrlReturnsProductionUrlWhenNotInDevModeWithSubFolderAndParams()
+    public function testGetAssetsBaseUrlReturnsProductionUrlWithCustomEntrypoint()
+    {
+        $server = [
+            'HTTP_HOST' => 'localhost',
+            'SERVER_PORT' => '80',
+            'QUERY_STRING' => '',
+            'PHP_SELF' => '/admin-wololo/autoupgrade/ajax-upgradetab.php',
+            'SCRIPT_FILENAME' => '/yo/doge/admin-wololo/autoupgrade/ajax-upgradetab.php',
+            'REQUEST_URI' => '/admin-wololo/autoupgrade/ajax-upgradetab.php?route=update-step-backup-submit',
+        ];
+
+        $request = new Request([], [], [], [], [], $server);
+
+        $expectedUrl = 'http://localhost/modules/autoupgrade/views';
+        $this->assertSame($expectedUrl, $this->assetsEnvironment->getAssetsBaseUrl($request));
+    }
+
+    public function testGetAssetsBaseUrlReturnsProductionUrlWithShopInSubFolderAndParams()
     {
         $server = [
             'HTTP_HOST' => 'localhost',
             'SERVER_PORT' => '80',
             'QUERY_STRING' => '',
             'PHP_SELF' => '/hello-world/admin-wololo/index.php',
-            'SCRIPT_FILENAME' => '/yo/doge/index.php',
+            'SCRIPT_FILENAME' => '/yo/doge/admin-wololo/index.php',
             'REQUEST_URI' => 'hello-world/admin-wololo/index.php?controller=AdminSelfUpgrade',
         ];
 

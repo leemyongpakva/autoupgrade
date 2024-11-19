@@ -754,7 +754,7 @@ class UpgradeContainer
             return $this->assetsEnvironment;
         }
 
-        return $this->assetsEnvironment = new AssetsEnvironment();
+        return $this->assetsEnvironment = new AssetsEnvironment($this->getProperty(self::PS_ROOT_PATH));
     }
 
     /**
