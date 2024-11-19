@@ -8,13 +8,17 @@ export default class UpdatePageUpdate extends UpdatePage {
     super();
   }
 
-  public mount() {
+  public async mount() {
     this.initStepper();
 
     // uncomment for dev purpose
 
+    const step = 'UpdateInitialization';
+
     const progressTrackerContainer = document.querySelector('[data-component="progress-tracker"]') as HTMLDivElement;
 
-    window.ProgressTracker = new ProgressTracker(progressTrackerContainer);
+    const progressTracker = new ProgressTracker(progressTrackerContainer);
+
+    await progressTracker.launchAction(step);
   }
 }

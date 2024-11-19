@@ -24,6 +24,6 @@ interface ApiResponseAction {
   }
 }
 
-type ApiResponse = ApiResponseHydration | ApiResponseNextRoute;
+type ApiResponse = ApiResponseHydration | ApiResponseNextRoute | ApiResponseAction;
 
 export type { ApiResponseHydration, ApiResponseNextRoute, ApiResponseAction, ApiResponse };
