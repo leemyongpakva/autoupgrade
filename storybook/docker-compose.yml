@@ -1,9 +1,9 @@
 services:
   storybook-php:
     build:
-      context: .
-      dockerfile: ./.docker/Dockerfile
-    command: symfony server:start
+      context: ..
+      dockerfile: storybook/.docker/Dockerfile
+    command: php -S 0.0.0.0:8000 -t public/
     volumes:
       - ./../:/autoupgrade
     working_dir: /autoupgrade/storybook
@@ -12,8 +12,8 @@ services:
 
   storybook-js:
     build:
-      context: .
-      dockerfile: ./.docker/Dockerfile
+      context: ..
+      dockerfile: storybook/.docker/Dockerfile
     command: npm run storybook
     environment:
       IS_IN_DOCKER: true
