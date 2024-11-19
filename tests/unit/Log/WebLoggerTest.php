@@ -101,7 +101,7 @@ class WebLoggerTest extends TestCase
         $logger->log(WebLogger::WARNING, 'Oh no 2');
         $logger->log(WebLogger::INFO, 'INFO #2');
 
-        $this->assertEquals('INFO #2', $logger->getLastInfo());
+        $this->assertEquals('INFO - INFO #2', $logger->getLastInfo());
 
         $this->assertEquals([
             'INFO - INFO #1',
