@@ -25,6 +25,8 @@ export default class StartUpdateModal extends ComponentAbstract {
       throw new Error('Form not found');
     }
 
+    // We implement the same way to check from the other scripts, even though there is only one value.
+    // This will ease any potential refacto.
     ['routeToSubmit'].forEach((data) => {
       if (!form.dataset[data]) {
         throw new Error(`Missing data ${data} from form dataset.`);
