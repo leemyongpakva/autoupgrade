@@ -58,7 +58,7 @@ class WebLoggerTest extends TestCase
 
         $errors = $logger->getErrors();
         $this->assertCount(1, $errors);
-        $this->assertCount(0, $logger->getInfos());
+        $this->assertCount(1, $logger->getInfos());
         $this->assertSame('CRITICAL - Ach!!!', end($errors));
     }
 
