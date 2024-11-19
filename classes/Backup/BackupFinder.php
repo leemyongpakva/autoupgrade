@@ -27,6 +27,9 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Backup;
 
+use DateTime;
+use PrestaShop\Module\AutoUpgrade\Exceptions\BackupException;
+
 class BackupFinder
 {
     const BACKUP_ZIP_NAME_PREFIX = 'auto-backupfiles_';
@@ -117,5 +120,53 @@ class BackupFinder
         }
 
         return $array;
+    }
+
+    /**
+     * @param string $backupName
+     *
+     * @return array{timestamp: int, datetime: string, version:string, filename: string}
+     *
+     * @throws BackupException
+     */
+    public function parseBackupMetadata(string $backupName): array
+    {
+        $pattern = '/V(\d+(\.\d+){1,3})_([0-9]{8})-([0-9]{6})/';
+        if (preg_match($pattern, $backupName, $matches)) {
+            $version = $matches[1];
+            $datePart = $matches[3];
+            $timePart = $matches[4];
+
+            $dateTime = DateTime::createFromFormat('Ymd His', $datePart . ' ' . $timePart);
+            $timestamp = $dateTime->getTimestamp();
+
+            return
+                [
+                    'timestamp' => $timestamp,
+                    'datetime' => $this->getFormattedDatetime($timestamp),
+                    'version' => $version,
+                    'filename' => $backupName,
+                ];
+        }
+
+        throw new BackupException('An error occurred while formatting the backup name.');
+    }
+
+    /**
+     * @param array<mixed, array{timestamp: int}> $backups
+     */
+    public function sortBackupsByNewest(array &$backups): void
+    {
+        // Most recent first
+        usort($backups, function ($a, $b) {
+            return $b['timestamp'] <=> $a['timestamp'];
+        });
+    }
+
+    private function getFormattedDatetime(int $timestamp): string
+    {
+        setlocale(LC_TIME, '');
+
+        return strftime('%x %X', $timestamp);
     }
 }
