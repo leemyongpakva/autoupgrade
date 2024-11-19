@@ -32,10 +32,12 @@ export default class ModalContainer {
     const target = ev.target ? (ev.target as HTMLElement) : null;
     const modal = target?.closest('.modal');
 
-    if (modal && target?.closest("[data-dismiss='modal']")) {
-      modal.dispatchEvent(new Event(ModalContainer.cancelEvent, { bubbles: true }));
-    } else if (modal && target?.closest(".modal-footer button:not([data-dismiss='modal'])")) {
-      modal.dispatchEvent(new Event(ModalContainer.okEvent, { bubbles: true }));
+    if (modal) {
+      if (target?.closest("[data-dismiss='modal']")) {
+        modal.dispatchEvent(new Event(ModalContainer.cancelEvent, { bubbles: true }));
+      } else if (target?.closest(".modal-footer button:not([data-dismiss='modal'])")) {
+        modal.dispatchEvent(new Event(ModalContainer.okEvent, { bubbles: true }));
+      }
     }
   }
 
