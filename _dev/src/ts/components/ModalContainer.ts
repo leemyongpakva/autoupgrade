@@ -28,7 +28,7 @@ export default class ModalContainer {
     ).modal('show');
   }
 
-  private onClick(ev: Event) {
+  private onClick(ev: Event): void {
     const target = ev.target ? (ev.target as HTMLElement) : null;
     const modal = target?.closest('.modal');
 

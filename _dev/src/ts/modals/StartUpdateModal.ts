@@ -5,7 +5,7 @@ export default class StartUpdateModal extends ComponentAbstract {
   protected readonly formId = 'form-confirm-update';
   protected readonly confirmCheckboxId = 'modal-start-update-own-backup';
 
-  public mount() {
+  public mount(): void {
     this.form.addEventListener('submit', this.onSubmit);
     this.form.addEventListener('change', this.onChange);
 
@@ -14,7 +14,7 @@ export default class StartUpdateModal extends ComponentAbstract {
     );
   }
 
-  public beforeDestroy() {
+  public beforeDestroy(): void {
     this.form.removeEventListener('submit', this.onSubmit);
     this.form.removeEventListener('change', this.onChange);
   }

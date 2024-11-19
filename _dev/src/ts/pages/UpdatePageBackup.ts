@@ -23,7 +23,7 @@ export default class UpdatePageBackup extends UpdatePage {
       });
   }
 
-  public beforeDestroy() {
+  public beforeDestroy(): void {
     this.form.removeEventListener('submit', this.onFormSubmit);
     this.form.removeEventListener('change', this.onInputChange);
   }

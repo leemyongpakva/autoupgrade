@@ -128,7 +128,7 @@ class UpdatePageBackupController extends AbstractPageWithStepController
 
                 'form_fields' => [
                     'include_images' => [
-                        'field' => 'PS_AUTOUP_KEEP_IMAGES',
+                        'field' => UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES,
                         'value' => $upgradeConfiguration->shouldBackupImages(),
                     ],
                 ],
