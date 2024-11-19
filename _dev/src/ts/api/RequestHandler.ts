@@ -1,5 +1,5 @@
 import baseApi from './baseApi';
-import { ApiResponse } from '../types/apiTypes';
+import {ApiResponse, ApiResponseAction} from '../types/apiTypes';
 import Hydration from '../utils/Hydration';
 
 export class RequestHandler {
@@ -10,14 +10,14 @@ export class RequestHandler {
    * @param {string} route - Target route for the POST request.
    * @param {FormData}[data=new FormData()] - Form data to send with the request by default we send FormData with admin dir required by backend.
    * @param {boolean} [fromPopState] - Indicates if the request originated from a popstate event need by hydration.
-   * @returns {Promise<void>}
+   * @returns {Promise<ApiResponseAction | void>}
    * @description Sends a POST request to the specified route with optional data and pop state indicator. Cancels any ongoing request before initiating a new one.
    */
   public async post(
     route: string,
     data: FormData = new FormData(),
     fromPopState?: boolean
-  ): Promise<void> {
+  ): Promise<ApiResponseAction | void> {
     // Cancel any previous request if it exists
     if (this.currentRequestAbortController) {
       this.currentRequestAbortController.abort();
@@ -37,7 +37,7 @@ export class RequestHandler {
       });
 
       const responseData = response.data as ApiResponse;
-      await this.#handleResponse(responseData, fromPopState);
+      return await this.#handleResponse(responseData, fromPopState);
     } catch (error) {
       // TODO: catch errors
       console.error(error);
@@ -51,7 +51,10 @@ export class RequestHandler {
    * @returns {Promise<void>}
    * @description Handles the API response by checking for next route or hydration data.
    */
-  async #handleResponse(response: ApiResponse, fromPopState?: boolean): Promise<void> {
+  async #handleResponse(response: ApiResponse, fromPopState?: boolean): Promise<ApiResponseAction | void> {
+    if ('nextQuickInfo' in response) {
+      return response;
+    }
     if ('next_route' in response) {
       await this.post(response.next_route);
     }
