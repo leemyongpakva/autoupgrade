@@ -232,14 +232,14 @@
   </file>
   <file original="classes/Task/Restore/Restore.php" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="d75374f4463479bfc16764f06fc8d33e">
-        <source>[ERROR] File %s is missing: unable to restore files. Operation aborted.</source>
-        <target>[ERROR] File %s is missing: unable to restore files. Operation aborted.</target>
+      <trans-unit id="3fdd2bbfdfb85efef6dd8029183d9311">
+        <source>File %s is missing: unable to restore files. Operation aborted.</source>
+        <target>File %s is missing: unable to restore files. Operation aborted.</target>
         <note>Line: 78</note>
       </trans-unit>
-      <trans-unit id="99db61185a28a3f862dcb99e891b2897">
-        <source>[ERROR] No backup database files found: it would be impossible to restore the database. Operation aborted.</source>
-        <target>[ERROR] No backup database files found: it would be impossible to restore the database. Operation aborted.</target>
+      <trans-unit id="63427da10dfe2dc64d1e9bc666ccc65c">
+        <source>No backup database files found: it would be impossible to restore the database. Operation aborted.</source>
+        <target>No backup database files found: it would be impossible to restore the database. Operation aborted.</target>
         <note>Line: 95</note>
       </trans-unit>
       <trans-unit id="0438424c05d45646dc089ef15df7e0e2">
@@ -251,9 +251,9 @@
   </file>
   <file original="classes/Task/Restore/RestoreComplete.php" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="a520e5cbdc465c7b7d39c98f78fe2506">
-        <source>Restoration process done. Congratulations! You can now reactivate your shop.</source>
-        <target>Restoration process done. Congratulations! You can now reactivate your shop.</target>
+      <trans-unit id="b579142dc2ece4e07e8fcc1f99cd75c8">
+        <source>Restoration process done. Congratulations! You can now reactivate your store.</source>
+        <target>Restoration process done. Congratulations! You can now reactivate your store.</target>
         <note>Line: 45</note>
       </trans-unit>
     </body>
