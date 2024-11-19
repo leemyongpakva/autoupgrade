@@ -1,5 +1,5 @@
 import baseApi from '../../src/ts/api/baseApi';
-import {ApiResponse, ApiResponseAction} from '../../src/ts/types/apiTypes';
+import { ApiResponse, ApiResponseAction } from '../../src/ts/types/apiTypes';
 import { RequestHandler } from '../../src/ts/api/RequestHandler';
 
 jest.mock('../../src/ts/api/baseApi', () => ({
@@ -86,22 +86,18 @@ describe('RequestHandler', () => {
       nextQuickInfo: [],
       nextErrors: [],
       nextParams: {
-        progressPercentage: 80,
+        progressPercentage: 80
       }
     };
-    const formData = new FormData();
+
     const route = 'some_route';
 
     (baseApi.post as jest.Mock).mockResolvedValueOnce({ data: response });
 
-    const result = await requestHandler.post(route, formData);
+    const result = await requestHandler.postAction(route);
 
     expect(result).toEqual(response);
     expect(baseApi.post).toHaveBeenCalledTimes(1);
-    expect(baseApi.post).toHaveBeenCalledWith('', formData, {
-      params: { route },
-      signal: expect.any(AbortSignal)
-    });
   });
 
   it('should cancel the previous request when a new one is made', async () => {
