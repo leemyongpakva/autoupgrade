@@ -33,7 +33,7 @@ class WebLoggerTest extends TestCase
         $logger = new WebLogger();
         $logger->log(WebLogger::INFO, 'Hello');
 
-        $this->assertSame('Hello', $logger->getLastInfo());
+        $this->assertSame('INFO - Hello', $logger->getLastInfo());
     }
 
     public function testSeveralLastInfoAreRegistered()
@@ -42,11 +42,11 @@ class WebLoggerTest extends TestCase
         $logger->log(WebLogger::INFO, 'Hello');
         $logger->log(WebLogger::INFO, 'Good bye');
 
-        $this->assertSame('Good bye', $logger->getLastInfo());
+        $this->assertSame('INFO - Good bye', $logger->getLastInfo());
         $infos = $logger->getInfos();
         $this->assertSame([
-            'Hello',
-            'Good bye',
+            'INFO - Hello',
+            'INFO - Good bye',
         ], $infos);
         $this->assertCount(2, $infos);
     }
@@ -59,7 +59,7 @@ class WebLoggerTest extends TestCase
         $errors = $logger->getErrors();
         $this->assertCount(1, $errors);
         $this->assertCount(0, $logger->getInfos());
-        $this->assertSame('Ach!!!', end($errors));
+        $this->assertSame('CRITICAL - Ach!!!', end($errors));
     }
 
     public function testMessageIsRegistered()
@@ -70,7 +70,7 @@ class WebLoggerTest extends TestCase
         $messages = $logger->getInfos();
         $this->assertCount(1, $messages);
         $this->assertCount(0, $logger->getErrors());
-        $this->assertSame('Some stuff happened', end($messages));
+        $this->assertSame('DEBUG - Some stuff happened', end($messages));
     }
 
     public function testSensitiveDataAreReplaced()
@@ -104,10 +104,10 @@ class WebLoggerTest extends TestCase
         $this->assertEquals('INFO #2', $logger->getLastInfo());
 
         $this->assertEquals([
-            'INFO #1',
-            'Oh no',
-            'Oh no 2',
-            'INFO #2',
+            'INFO - INFO #1',
+            'WARNING - Oh no',
+            'WARNING - Oh no 2',
+            'INFO - INFO #2',
         ], $logger->getInfos());
     }
 }
