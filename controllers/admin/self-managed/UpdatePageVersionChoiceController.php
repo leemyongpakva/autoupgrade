@@ -171,12 +171,12 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
 
         $warnings = $upgradeSelfCheck->getWarnings();
         foreach ($warnings as $warningKey => $warningValue) {
-            $warnings[$warningKey] = $upgradeSelfCheck->getRequirementWording($warningKey);
+            $warnings[$warningKey] = $upgradeSelfCheck->getRequirementWording($warningKey, true);
         }
 
         $errors = $upgradeSelfCheck->getErrors();
         foreach ($errors as $errorKey => $errorValue) {
-            $errors[$errorKey] = $upgradeSelfCheck->getRequirementWording($errorKey);
+            $errors[$errorKey] = $upgradeSelfCheck->getRequirementWording($errorKey, true);
         }
 
         return [
