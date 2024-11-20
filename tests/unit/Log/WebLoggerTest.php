@@ -33,7 +33,7 @@ class WebLoggerTest extends TestCase
         $logger = new WebLogger();
         $logger->log(WebLogger::INFO, 'Hello');
 
-        $this->assertSame('INFO - Hello', $logger->getLastInfo());
+        $this->assertSame('Hello', $logger->getLastInfo());
     }
 
     public function testSeveralLastInfoAreRegistered()
@@ -42,7 +42,7 @@ class WebLoggerTest extends TestCase
         $logger->log(WebLogger::INFO, 'Hello');
         $logger->log(WebLogger::INFO, 'Good bye');
 
-        $this->assertSame('INFO - Good bye', $logger->getLastInfo());
+        $this->assertSame('Good bye', $logger->getLastInfo());
         $infos = $logger->getInfos();
         $this->assertSame([
             'INFO - Hello',
@@ -101,7 +101,7 @@ class WebLoggerTest extends TestCase
         $logger->log(WebLogger::WARNING, 'Oh no 2');
         $logger->log(WebLogger::INFO, 'INFO #2');
 
-        $this->assertEquals('INFO - INFO #2', $logger->getLastInfo());
+        $this->assertEquals('INFO #2', $logger->getLastInfo());
 
         $this->assertEquals([
             'INFO - INFO #1',

@@ -89,11 +89,11 @@ class WebLogger extends Logger
         $message = $this->cleanFromSensitiveData($message);
         parent::log($level, $message, $context);
 
-        $log = $this->formatLog($level, $message);
-
         if ($level === self::INFO) {
-            $this->lastInfo = $log;
+            $this->lastInfo = $message;
         }
+
+        $log = $this->formatLog($level, $message);
 
         $this->normalMessages[] = $log;
 
