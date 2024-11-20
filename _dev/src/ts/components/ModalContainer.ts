@@ -7,15 +7,13 @@ export default class ModalContainer {
   public static readonly containerId = 'ua_modal';
 
   public init(): void {
-    // Avoid reattaching the same event listener several times.
-    this.unset();
     this.modalContainer.addEventListener(Hydration.hydrationEventName, this.displayModal);
     this.modalContainer.addEventListener('click', this.onClick);
     this.modalContainer.addEventListener(ModalContainer.cancelEvent, this.closeModal);
     this.modalContainer.addEventListener(ModalContainer.okEvent, this.closeModal);
   }
 
-  public unset(): void {
+  public unload(): void {
     this.modalContainer.removeEventListener(Hydration.hydrationEventName, this.displayModal);
     this.modalContainer.removeEventListener('click', this.onClick);
     this.modalContainer.removeEventListener(ModalContainer.cancelEvent, this.closeModal);

@@ -2,11 +2,21 @@ import Hydration from '../../src/ts/utils/Hydration';
 import { ApiResponseHydration } from '../../src/ts/types/apiTypes';
 import RouteHandler from '../../src/ts/routing/RouteHandler';
 import ScriptHandler from '../../src/ts/routing/ScriptHandler';
+import { modalContainer } from '../../src/ts/autoUpgrade';
 
 const setNewRouteMock = jest.spyOn(RouteHandler.prototype, 'setNewRoute');
 const updateRouteScriptMock = jest.spyOn(ScriptHandler.prototype, 'updateRouteScript');
 const unloadRouteScriptMock = jest.spyOn(ScriptHandler.prototype, 'unloadRouteScript');
 const loadScriptMock = jest.spyOn(ScriptHandler.prototype, 'loadScript');
+
+jest.mock('../../src/ts/components/ModalContainer', () => {
+  return jest.fn().mockImplementation(() => {
+    return {
+      init: jest.fn(),
+      unload: jest.fn()
+    };
+  });
+});
 
 jest.mock('../../src/ts/pages/HomePage', () => {
   return jest.fn().mockImplementation(() => {
@@ -149,16 +159,17 @@ describe('Hydration', () => {
     );
   });
 
-  it('should refresh the modal container if the DOM has been updated', () => {
+  it('should refresh the modal container if a new page is loaded', () => {
     const response: ApiResponseHydration = {
       hydration: true,
       new_content: `<p>New Content</p>`,
       parent_to_update: 'parent',
-      new_route: undefined
+      new_route: 'new_route_value'
     };
 
     hydration.hydrate(response);
 
+    expect(modalContainer.unload).toHaveBeenCalledTimes(1);
     expect(modalContainer.init).toHaveBeenCalledTimes(1);
   });
 

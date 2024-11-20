@@ -7,6 +7,4 @@ export const routeHandler = new RouteHandler();
 export const scriptHandler = new ScriptHandler();
 export const modalContainer = new ModalContainer();
 
-modalContainer.init();
-
-export default { routeHandler, scriptHandler };
+export default { routeHandler, scriptHandler, modalContainer };
