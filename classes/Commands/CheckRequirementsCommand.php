@@ -30,6 +30,7 @@ namespace PrestaShop\Module\AutoUpgrade\Commands;
 use Exception;
 use PrestaShop\Module\AutoUpgrade\Exceptions\DistributionApiException;
 use PrestaShop\Module\AutoUpgrade\Exceptions\UpgradeException;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
@@ -43,7 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class CheckRequirementsCommand extends AbstractCommand
 {
     /** @var string */
-    protected static $defaultName = 'update:check';
+    protected static $defaultName = 'update:check-requirements';
     const MODULE_CONFIG_DIR = 'autoupgrade';
     /** @var UpgradeSelfCheck */
     private $upgradeSelfCheck;
@@ -58,6 +59,8 @@ class CheckRequirementsCommand extends AbstractCommand
             ->setDescription('Check all prerequisites for an update.')
             ->setHelp('This command allows you to check the prerequisites necessary for the proper functioning of an update.')
             ->addOption('config-file-path', null, InputOption::VALUE_REQUIRED, 'Configuration file location for update.')
+            ->addOption('zip', null, InputOption::VALUE_REQUIRED, 'Sets the archive zip file for a local update.')
+            ->addOption('xml', null, InputOption::VALUE_REQUIRED, 'Sets the archive xml file for a local update.')
             ->addArgument('admin-dir', InputArgument::REQUIRED, 'The admin directory name.');
     }
 
@@ -69,6 +72,17 @@ class CheckRequirementsCommand extends AbstractCommand
         try {
             $this->setupEnvironment($input, $output);
             $this->output = $output;
+
+            $options = [
+                UpgradeConfiguration::ARCHIVE_ZIP => 'zip',
+                UpgradeConfiguration::ARCHIVE_XML => 'xml',
+            ];
+            foreach ($options as $configKey => $optionName) {
+                $optionValue = $input->getOption($optionName);
+                if ($optionValue !== null) {
+                    $this->consoleInputConfiguration[$configKey] = $optionValue;
+                }
+            }
 
             $configPath = $input->getOption('config-file-path');
             $exitCode = $this->loadConfiguration($configPath);
