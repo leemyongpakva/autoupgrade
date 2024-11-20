@@ -211,6 +211,7 @@ export default class LogsViewer extends ComponentAbstract {
   #handleLinkEvent = (event: MouseEvent): void => {
     const target = event.target as HTMLAnchorElement;
 
+    // Checks if the clicked element is an <a> tag
     if (!target || target.tagName !== 'A' || !target.hash) {
       return;
     }

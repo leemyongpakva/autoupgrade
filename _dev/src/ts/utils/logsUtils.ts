@@ -18,11 +18,11 @@ export const severityToClassMap: Record<LogsSeverity, SeverityClasses> = {
   ...Object.fromEntries(Object.values(ErrorSeverity).map((s) => [s, SeverityClasses.ERROR]))
 } as Record<LogsSeverity, SeverityClasses>;
 
-const severityValues = [
+const severityPattern = [
   ...Object.values(SuccessSeverity),
   ...Object.values(WarningSeverity),
   ...Object.values(ErrorSeverity)
-];
+].join('|');
 
 /**
  * @public
@@ -32,7 +32,6 @@ const severityValues = [
  */
 export function parseLogWithSeverity(log: string): LogEntry {
   const logTrimed = log.trim();
-  const severityPattern = severityValues.join('|');
   const severityRegex = new RegExp(`^(${severityPattern})\\s*-\\s*(.*)$`);
   const match = severityRegex.exec(logTrimed);
 
