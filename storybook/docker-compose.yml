@@ -16,7 +16,7 @@ services:
       dockerfile: storybook/.docker/Dockerfile
     command: npm run storybook
     environment:
-      IS_IN_DOCKER: true
+      PHP_URL: http://storybook-php:8000
     volumes:
       - ./../:/autoupgrade
     working_dir: /autoupgrade/storybook
