@@ -5,7 +5,6 @@ import UpdatePage from './UpdatePage';
 
 export default class UpdatePageBackup extends UpdatePage {
   protected stepCode = 'backup';
-  protected formFields: Element[] = [];
 
   public mount() {
     this.initStepper();
