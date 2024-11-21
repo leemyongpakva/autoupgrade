@@ -12,8 +12,8 @@ const loadScriptMock = jest.spyOn(ScriptHandler.prototype, 'loadScript');
 jest.mock('../../src/ts/components/ModalContainer', () => {
   return jest.fn().mockImplementation(() => {
     return {
-      init: jest.fn(),
-      unload: jest.fn()
+      mount: jest.fn(),
+      beforeDestroy: jest.fn()
     };
   });
 });
@@ -169,8 +169,8 @@ describe('Hydration', () => {
 
     hydration.hydrate(response);
 
-    expect(modalContainer.unload).toHaveBeenCalledTimes(1);
-    expect(modalContainer.init).toHaveBeenCalledTimes(1);
+    expect(modalContainer.beforeDestroy).toHaveBeenCalledTimes(1);
+    expect(modalContainer.mount).toHaveBeenCalledTimes(1);
   });
 
   it('should not refresh the modal container if the DOM is untouched', () => {
@@ -182,7 +182,7 @@ describe('Hydration', () => {
 
     hydration.hydrate(response);
 
-    expect(modalContainer.init).toHaveBeenCalledTimes(0);
+    expect(modalContainer.mount).toHaveBeenCalledTimes(0);
   });
 });
 

@@ -1,21 +1,22 @@
+import DomLifecycle from '../types/DomLifecycle';
 import Hydration from '../utils/Hydration';
 
-export default class ModalContainer {
+export default class ModalContainer implements DomLifecycle {
   public static readonly cancelEvent = 'cancel';
   public static readonly okEvent = 'ok';
 
   public static readonly containerId = 'ua_modal';
 
-  public init(): void {
+  public mount(): void {
     this.modalContainer.addEventListener(Hydration.hydrationEventName, this.displayModal);
-    this.modalContainer.addEventListener('click', this.onClick);
+    this.modalContainer.addEventListener('click', this.#onClick);
     this.modalContainer.addEventListener(ModalContainer.cancelEvent, this.closeModal);
     this.modalContainer.addEventListener(ModalContainer.okEvent, this.closeModal);
   }
 
-  public unload(): void {
+  public beforeDestroy(): void {
     this.modalContainer.removeEventListener(Hydration.hydrationEventName, this.displayModal);
-    this.modalContainer.removeEventListener('click', this.onClick);
+    this.modalContainer.removeEventListener('click', this.#onClick);
     this.modalContainer.removeEventListener(ModalContainer.cancelEvent, this.closeModal);
     this.modalContainer.removeEventListener(ModalContainer.okEvent, this.closeModal);
   }
@@ -26,7 +27,7 @@ export default class ModalContainer {
     ).modal('show');
   }
 
-  private onClick(ev: Event): void {
+  #onClick(ev: Event): void {
     const target = ev.target ? (ev.target as HTMLElement) : null;
     const modal = target?.closest('.modal');
 
@@ -46,7 +47,7 @@ export default class ModalContainer {
     }
   }
 
-  private get modalContainer(): HTMLElement {
+  public get modalContainer(): HTMLElement {
     const container = document.getElementById(ModalContainer.containerId);
 
     if (!container) {

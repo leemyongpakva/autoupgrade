@@ -4,13 +4,13 @@ import UpdatePageUpdateOptions from '../pages/UpdatePageUpdateOptions';
 import UpdatePageBackup from '../pages/UpdatePageBackup';
 import UpdatePageUpdate from '../pages/UpdatePageUpdate';
 import UpdatePagePostUpdate from '../pages/UpdatePagePostUpdate';
-import ComponentAbstract from '../types/ComponentAbstract';
+import DomLifecycle from '../types/DomLifecycle';
 import { RoutesMatching } from '../types/scriptHandlerTypes';
 import { routeHandler } from '../autoUpgrade';
 import StartUpdateModal from '../modals/StartUpdateModal';
 
 export default class ScriptHandler {
-  #currentScript: ComponentAbstract | undefined;
+  #currentScript: DomLifecycle | undefined;
 
   /**
    * @private

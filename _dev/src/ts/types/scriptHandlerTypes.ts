@@ -1,7 +1,7 @@
-import ComponentAbstract from './ComponentAbstract';
+import PageAbstract from '../pages/PageAbstract';
 
 interface RoutesMatching {
-  [key: string]: new () => ComponentAbstract;
+  [key: string]: new () => PageAbstract;
 }
 
 export type { RoutesMatching };

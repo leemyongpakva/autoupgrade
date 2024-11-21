@@ -1,7 +1,7 @@
-import ComponentAbstract from '../types/ComponentAbstract';
+import DomLifecycle from '../types/DomLifecycle';
 import api from '../api/RequestHandler';
 
-export default class StartUpdateModal extends ComponentAbstract {
+export default class StartUpdateModal implements DomLifecycle {
   protected readonly formId = 'form-confirm-update';
   protected readonly confirmCheckboxId = 'modal-start-update-own-backup';
 
