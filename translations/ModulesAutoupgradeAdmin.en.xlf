@@ -223,11 +223,6 @@
         <target>Configuration successfully updated.</target>
         <note>Line: 168</note>
       </trans-unit>
-      <trans-unit id="40b980e89ae332507380470cd26cdf4d">
-        <source>This page will now be reloaded and the module will check if a new version is available.</source>
-        <target>This page will now be reloaded and the module will check if a new version is available.</target>
-        <note>Line: 168</note>
-      </trans-unit>
     </body>
   </file>
   <file original="classes/Task/Restore/Restore.php" source-language="en-US" target-language="en-US" datatype="plaintext">
