@@ -8,20 +8,29 @@ export default class ModalContainer implements DomLifecycle {
   public static readonly containerId = 'ua_modal';
 
   public mount(): void {
-    this.modalContainer.addEventListener(Hydration.hydrationEventName, this.displayModal);
+    this.modalContainer.addEventListener(Hydration.hydrationEventName, this.#displayModal);
     this.modalContainer.addEventListener('click', this.#onClick);
-    this.modalContainer.addEventListener(ModalContainer.cancelEvent, this.closeModal);
-    this.modalContainer.addEventListener(ModalContainer.okEvent, this.closeModal);
+    this.modalContainer.addEventListener(ModalContainer.cancelEvent, this.#closeModal);
+    this.modalContainer.addEventListener(ModalContainer.okEvent, this.#closeModal);
   }
 
   public beforeDestroy(): void {
-    this.modalContainer.removeEventListener(Hydration.hydrationEventName, this.displayModal);
+    this.modalContainer.removeEventListener(Hydration.hydrationEventName, this.#displayModal);
     this.modalContainer.removeEventListener('click', this.#onClick);
-    this.modalContainer.removeEventListener(ModalContainer.cancelEvent, this.closeModal);
-    this.modalContainer.removeEventListener(ModalContainer.okEvent, this.closeModal);
+    this.modalContainer.removeEventListener(ModalContainer.cancelEvent, this.#closeModal);
+    this.modalContainer.removeEventListener(ModalContainer.okEvent, this.#closeModal);
   }
 
-  private displayModal(): void {
+  public get modalContainer(): HTMLElement {
+    const container = document.getElementById(ModalContainer.containerId);
+
+    if (!container) {
+      throw new Error('Cannot find modal container to initialize.');
+    }
+    return container;
+  }
+
+  #displayModal(): void {
     $(
       document.getElementById(ModalContainer.containerId)?.getElementsByClassName('modal') || []
     ).modal('show');
@@ -40,19 +49,10 @@ export default class ModalContainer implements DomLifecycle {
     }
   }
 
-  private closeModal(ev: Event): void {
+  #closeModal(ev: Event): void {
     const modal = ev.target;
     if (modal) {
       $(modal).modal('hide');
     }
-  }
-
-  public get modalContainer(): HTMLElement {
-    const container = document.getElementById(ModalContainer.containerId);
-
-    if (!container) {
-      throw new Error('Cannot find modal container to initialize.');
-    }
-    return container;
   }
 }
