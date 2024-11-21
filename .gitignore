@@ -22,3 +22,6 @@ node_modules/
 /views/css/
 /views/img/
 /views/js/
+
+## Storybook
+/storybook/storybook-static/
