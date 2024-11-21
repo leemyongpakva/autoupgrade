@@ -52,7 +52,7 @@ abstract class AbstractCommand extends Command
     /**
      * @throws Exception
      */
-    protected function setupContainer(InputInterface $input, OutputInterface $output): void
+    protected function setupEnvironment(InputInterface $input, OutputInterface $output): void
     {
         $this->logger = new CliLogger($output);
         if ($output->isQuiet()) {

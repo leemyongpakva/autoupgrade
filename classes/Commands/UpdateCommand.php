@@ -75,7 +75,7 @@ class UpdateCommand extends AbstractCommand
         }
 
         try {
-            $this->setupContainer($input, $output);
+            $this->setupEnvironment($input, $output);
 
             // in the case of commands containing the update status, it is not necessary to update the configuration
             // also we do not want to repeat the update of the config in the recursive commands

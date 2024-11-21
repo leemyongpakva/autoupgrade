@@ -28,6 +28,7 @@
 
 use PrestaShop\Module\AutoUpgrade\Commands\CheckRequirementsCommand;
 use PrestaShop\Module\AutoUpgrade\Commands\CreateBackupCommand;
+use PrestaShop\Module\AutoUpgrade\Commands\DeleteBackupCommand;
 use PrestaShop\Module\AutoUpgrade\Commands\ListBackupCommand;
 use PrestaShop\Module\AutoUpgrade\Commands\RestoreCommand;
 use PrestaShop\Module\AutoUpgrade\Commands\UpdateCommand;
@@ -52,6 +53,7 @@ $application->add(new RestoreCommand());
 $application->add(new CheckRequirementsCommand());
 $application->add(new CreateBackupCommand());
 $application->add(new ListBackupCommand());
+$application->add(new DeleteBackupCommand());
 
 $input = new ArgvInput();
 $output = new ConsoleOutput();

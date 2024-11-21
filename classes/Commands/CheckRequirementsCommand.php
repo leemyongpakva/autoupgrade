@@ -33,6 +33,7 @@ use PrestaShop\Module\AutoUpgrade\Exceptions\UpgradeException;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
+use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\UpgradeSelfCheck;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -66,7 +67,7 @@ class CheckRequirementsCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         try {
-            $this->setupContainer($input, $output);
+            $this->setupEnvironment($input, $output);
             $this->output = $output;
 
             $configPath = $input->getOption('config-file-path');
@@ -79,6 +80,7 @@ class CheckRequirementsCommand extends AbstractCommand
 
             $this->upgradeContainer->initPrestaShopAutoloader();
             $this->upgradeContainer->initPrestaShopCore();
+            $this->upgradeContainer->getState()->initDefault($this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION), $this->upgradeContainer->getUpgrader()->getDestinationVersion());
 
             $distributionApiService = new DistributionApiService();
             $phpVersionResolverService = new PhpVersionResolverService(

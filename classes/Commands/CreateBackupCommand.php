@@ -54,7 +54,7 @@ class CreateBackupCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output): ?int
     {
         try {
-            $this->setupContainer($input, $output);
+            $this->setupEnvironment($input, $output);
 
             $controller = new AllBackupTasks($this->upgradeContainer);
             $controller->init();
