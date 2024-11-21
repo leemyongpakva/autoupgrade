@@ -28,6 +28,10 @@ export default class LogsViewer extends ComponentAbstract {
     'Template summary not found'
   );
 
+  public beforeDestroy = () => {
+    this.#logsSummary.removeEventListener('click', this.#handleLinkEvent);
+  };
+
   /**
    * @public
    * @param {string[]} logs - Array of log strings to be added.

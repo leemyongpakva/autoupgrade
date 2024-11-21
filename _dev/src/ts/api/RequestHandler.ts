@@ -44,6 +44,13 @@ export class RequestHandler {
     }
   }
 
+  /**
+   * @public
+   * @param {string} action - The action to be sent to the API.
+   * @returns {Promise<ApiResponseAction | void>} - Resolves to the API response of type `ApiResponseAction` or `void` in case of an error.
+   * @description Sends a POST request to the API with the specified action.
+   *              Automatically includes the `admin_dir` required by the backend.
+   */
   public async postAction(action: string): Promise<ApiResponseAction | void> {
     const data = new FormData();
 
