@@ -74,10 +74,6 @@ class AllUpdateTasks extends ChainedTasks
 
             $this->container->getUpgradeConfiguration()->merge($config);
         }
-
-        if (!empty($options['data'])) {
-            $this->container->getState()->importFromEncodedData($options['data']);
-        }
     }
 
     /**
@@ -101,15 +97,11 @@ class AllUpdateTasks extends ChainedTasks
         $this->logger->info('Restart requested. Please run the following command to continue your upgrade:');
         $args = $_SERVER['argv'];
         foreach ($args as $key => $arg) {
-            if (
-                strpos($arg, '--data') === 0
-                || strpos($arg, '--action') === 0
-                || strpos($arg, '--config-file-path') === 0
-            ) {
+            if (strpos($arg, '--action') === 0 || strpos($arg, '--config-file-path') === 0) {
                 unset($args[$key]);
             }
         }
-        $this->logger->info('$ ' . implode(' ', $args) . ' --action=' . $response->getNext() . ' --data=' . $this->getEncodedResponse());
+        $this->logger->info('$ ' . implode(' ', $args) . ' --action=' . $response->getNext());
 
         return true;
     }

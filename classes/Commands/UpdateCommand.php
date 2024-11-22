@@ -33,6 +33,7 @@ use PrestaShop\Module\AutoUpgrade\DeveloperDocumentation;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\Runner\AllUpdateTasks;
+use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -56,10 +57,9 @@ class UpdateCommand extends AbstractCommand
             ->addArgument('admin-dir', InputArgument::REQUIRED, 'The admin directory name.')
             ->addOption('chain', null, InputOption::VALUE_NONE, 'True by default. Allows you to chain update commands automatically. The command will continue executing subsequent tasks without requiring manual intervention to restart the process.')
             ->addOption('no-chain', null, InputOption::VALUE_NONE, 'Prevents chaining of update commands. The command will execute a task and then stop, logging the next command that needs to be run. You will need to manually restart the process to continue with the next step.')
-            ->addOption('channel', null, InputOption::VALUE_REQUIRED, "Selects what update to run ('local' / 'online')")
+            ->addOption('channel', null, InputOption::VALUE_REQUIRED, "Selects what update to run ('" . UpgradeConfiguration::CHANNEL_LOCAL . "' / '" . UpgradeConfiguration::CHANNEL_ONLINE . "')")
             ->addOption('config-file-path', null, InputOption::VALUE_REQUIRED, 'Configuration file location for update.')
-            ->addOption('action', null, InputOption::VALUE_REQUIRED, 'Advanced users only. Sets the step you want to start from (Default: UpgradeNow, see ' . DeveloperDocumentation::DEV_DOC_UPGRADE_CLI_URL . ' for other values available)')
-            ->addOption('data', null, InputOption::VALUE_REQUIRED, 'Advanced users only. Contains the state of the update process encoded in base64');
+            ->addOption('action', null, InputOption::VALUE_REQUIRED, 'Advanced users only. Sets the step you want to start from. Only the "' . TaskName::TASK_UPDATE_INITIALIZATION . '" task updates the configuration. (Default: ' . TaskName::TASK_UPDATE_INITIALIZATION . ', see ' . DeveloperDocumentation::DEV_DOC_UPGRADE_CLI_URL . ' for other values available)');
     }
 
     /**
@@ -77,9 +77,16 @@ class UpdateCommand extends AbstractCommand
         try {
             $this->setupEnvironment($input, $output);
 
-            // in the case of commands containing the update status, it is not necessary to update the configuration
-            // also we do not want to repeat the update of the config in the recursive commands
-            if ($input->getOption('data') === null) {
+            $action = $input->getOption('action');
+
+            $isFirstUpdateProcess = $action === null || $action === TaskName::TASK_UPDATE_INITIALIZATION;
+            if ($isFirstUpdateProcess) {
+                $this->logger->debug('Cleaning previous state files.');
+                $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
+            }
+
+            // if we are in the 1st step of the update, we update the configuration
+            if ($isFirstUpdateProcess) {
                 $configPath = $input->getOption('config-file-path');
                 $exitCode = $this->loadConfiguration($configPath, $this->upgradeContainer);
                 if ($exitCode !== ExitCode::SUCCESS) {
@@ -91,8 +98,7 @@ class UpdateCommand extends AbstractCommand
             $this->logger->debug('Starting the update process.');
             $controller = new AllUpdateTasks($this->upgradeContainer);
             $controller->setOptions([
-                'data' => $input->getOption('data'),
-                'action' => $input->getOption('action'),
+                'action' => $action,
                 UpgradeConfiguration::CHANNEL => $input->getOption('channel'),
             ]);
             $controller->init();
@@ -125,15 +131,10 @@ class UpdateCommand extends AbstractCommand
             if (preg_match('/--action=(\S+)/', $lastInfo, $actionMatches)) {
                 $action = $actionMatches[1];
                 $this->logger->debug('Action parameter found: ' . $action);
-            }
-
-            if (preg_match('/--data=(\S+)/', $lastInfo, $dataMatches)) {
-                $data = $dataMatches[1];
-                $this->logger->debug('Data parameter found: ' . $data);
-            }
-            if (empty($action) || empty($data)) {
+            } else {
                 throw new InvalidArgumentException('The command does not contain the necessary information to continue the update process.');
             }
+
             $new_string = str_replace('INFO - $ ', '', $lastInfo);
             $decorationParam = $output->isDecorated() ? ' --ansi' : '';
             system('php ' . $new_string . $decorationParam, $exitCode);

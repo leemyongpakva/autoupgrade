@@ -39,10 +39,6 @@ class SingleTask extends ChainedTasks
         if (!empty($options['action'])) {
             $this->step = $options['action'];
         }
-
-        if (!empty($options['data'])) {
-            $this->container->getState()->importFromEncodedData($options['data']);
-        }
     }
 
     protected function canContinue(): bool

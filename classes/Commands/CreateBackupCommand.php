@@ -56,6 +56,7 @@ class CreateBackupCommand extends AbstractCommand
         try {
             $this->setupEnvironment($input, $output);
 
+            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllBackupFiles();
             $controller = new AllBackupTasks($this->upgradeContainer);
             $controller->init();
             $exitCode = $controller->run();
