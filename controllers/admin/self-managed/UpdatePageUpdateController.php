@@ -36,10 +36,11 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
     const CURRENT_STEP = UpdateSteps::STEP_UPDATE;
     const CURRENT_PAGE = 'update';
 
-    public function index(): RedirectResponse
-    {
-        return $this->redirectTo(Routes::UPDATE_PAGE_BACKUP);
-    }
+    // TODO: for dev update page comment need to be removed after dev
+//    public function index(): RedirectResponse
+//    {
+//        return $this->redirectTo(Routes::UPDATE_PAGE_BACKUP);
+//    }
 
     protected function getPageTemplate(): string
     {

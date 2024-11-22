@@ -23,7 +23,7 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-import LogsProgress from "../../../views/templates/components/logs-progress.html.twig";
+import LogsProgress from "../../../views/templates/components/logs-summary.html.twig";
 
 export default {
   component: LogsProgress,

@@ -70,7 +70,7 @@ class ErrorHandlerTest extends TestCase
         $msgs = $this->logger->getInfos();
         $this->assertCount(0, $this->logger->getErrors());
         $this->assertCount(1, $msgs);
-        $this->assertSame(end($msgs), '[INTERNAL] ' . __FILE__ . ' line ' . $line . ' - Trololo');
+        $this->assertSame(end($msgs), 'WARNING - [INTERNAL] ' . __FILE__ . ' line ' . $line . ' - Trololo');
     }
 
     /**

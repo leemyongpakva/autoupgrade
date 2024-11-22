@@ -6,6 +6,13 @@ export default defineConfig({
       strict: false
     }
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler'
+      }
+    }
+  },
   build: {
     rollupOptions: {
       input: {

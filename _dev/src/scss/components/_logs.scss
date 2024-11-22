@@ -1,9 +1,16 @@
 @use "../variables" as *;
 
-$e: ".logs";
+$e-tracker: ".progress-tracker";
+$e-logs: ".logs";
 
 #{$ua-id} {
-  #{$e} {
+  #{$e-tracker} {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  #{$e-logs} {
     --#{$ua-prefix}logs-height: 14rem;
     --#{$ua-prefix}logs-background-color: var(--#{$ua-prefix}muted-background-color);
     display: flex;
@@ -29,10 +36,33 @@ $e: ".logs";
     }
 
     &__scroll {
+      position: relative;
+      display: flex;
+      flex-direction: column;
       flex-grow: 1;
       min-height: var(--#{$ua-prefix}logs-height);
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        display: block;
+        width: 100%;
+        height: 1rem;
+        background-image: linear-gradient(
+          to top,
+          transparent,
+          var(--#{$ua-prefix}muted-background-color)
+        );
+      }
+    }
+
+    &__scroll-inner {
+      height: 100%;
+      padding-block-start: 1rem;
       overflow-y: auto;
       scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
     }
 
     &__list {
@@ -44,27 +74,44 @@ $e: ".logs";
 
     &__line {
       padding-inline-start: 2rem;
+      background-color: rgb(255 255 255 / 0);
       background-repeat: no-repeat;
       background-position: left center;
       background-size: 1.5rem 1.5rem;
       font-size: 0.875rem;
       line-height: 1.4;
       word-break: break-word;
+      transition: background-color 0.3s ease-in-out;
+      scroll-snap-align: start;
+      scroll-margin-block-start: 2.5rem;
 
       &--success {
         background-image: url("../../img/check.svg");
+
+        &#{$e-logs}__line--pointed {
+          color: var(--#{$ua-prefix}green-500);
+        }
       }
 
       &--warning {
         background-image: url("../../img/warning.svg");
+
+        &#{$e-logs}__line--pointed {
+          color: var(--#{$ua-prefix}yellow-500);
+        }
       }
 
       &--error {
         background-image: url("../../img/close.svg");
+
+        &#{$e-logs}__line--pointed {
+          color: var(--#{$ua-prefix}red-500);
+        }
       }
     }
 
     &__summary-anchor {
+      margin-inline-start: 0.25rem;
       font-weight: 700;
     }
 
@@ -72,7 +119,10 @@ $e: ".logs";
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      padding-block-end: 0.5rem;
+
+      &:empty {
+        display: none;
+      }
     }
 
     &__summary {

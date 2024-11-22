@@ -70,6 +70,11 @@ class WebLogger extends Logger
         return $this->lastInfo;
     }
 
+    private function formatLog(int $level, string $message): string
+    {
+        return self::$levels[$level] . ' - ' . $message;
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -88,10 +93,13 @@ class WebLogger extends Logger
             $this->lastInfo = $message;
         }
 
-        if ($level < self::ERROR) {
-            $this->normalMessages[] = $message;
-        } else {
-            $this->severeMessages[] = $message;
+        $log = $this->formatLog($level, $message);
+
+        $this->normalMessages[] = $log;
+
+        // deprecated : todo need to be removed after NEW UI is completed.
+        if ($level > self::ERROR) {
+            $this->severeMessages[] = $log;
         }
     }
 }
