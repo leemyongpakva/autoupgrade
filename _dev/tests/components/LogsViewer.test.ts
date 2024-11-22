@@ -32,6 +32,15 @@ describe('LogsViewer', () => {
       <template id="summary-error-link">
         <a class="logs__summary-anchor link">See error</a>
       </template>
+      
+      <template id="summary-buttons">
+        <div data-slot-template="summary-buttons" class="logs__buttons">
+          <a data-slot-template="download-button" class="btn btn-primary" href="#" download="#">
+            <i class="material-icons">upload</i>
+            Download update logs
+          </a>
+        </div>
+      </template>
     `;
     document.body.appendChild(container);
     logsViewer = new LogsViewer(container);
@@ -127,6 +136,28 @@ describe('LogsViewer', () => {
       expect(consoleSpy).toHaveBeenCalledWith('Cannot display summary because logs are empty');
 
       consoleSpy.mockRestore();
+    });
+
+    it('should display the button if logs link is provided', () => {
+      const logFile = 'logs.txt';
+      const logPath = `http://localhost/path/to/${logFile}`;
+
+      logsViewer.addLogs([
+        'WARNING - First warning',
+        'ERROR - First error',
+        'WARNING - Second warning'
+      ]);
+      logsViewer.displaySummary(logPath);
+
+      const summaryButtons = container.querySelector('[data-slot-template="summary-buttons"]');
+      expect(summaryButtons).not.toBeNull();
+
+      const downloadButton = summaryButtons?.querySelector(
+        '[data-slot-template="download-button"]'
+      ) as HTMLAnchorElement;
+      expect(downloadButton).not.toBeNull();
+      expect(downloadButton.href).toBe(logPath);
+      expect(downloadButton.download).toBe(logFile);
     });
   });
 });

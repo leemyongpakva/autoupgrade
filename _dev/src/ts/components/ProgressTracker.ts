@@ -3,8 +3,9 @@ import ProgressBar from './ProgressBar';
 import LogsSummary from './LogsSummary';
 import LogsViewer from './LogsViewer';
 import { ApiResponseAction } from '../types/apiTypes';
+import { Destroyable } from '../types/DomLifecycle';
 
-export default class ProgressTracker extends ComponentAbstract {
+export default class ProgressTracker extends ComponentAbstract implements Destroyable {
   #logsSummary: NonNullable<LogsSummary> = new LogsSummary(this.#logsSummaryContainer);
   #progressBar: NonNullable<ProgressBar> = new ProgressBar(this.#progressBarContainer);
   #logsViewer: NonNullable<LogsViewer> = new LogsViewer(this.#logsViewerContainer);
@@ -56,6 +57,7 @@ export default class ProgressTracker extends ComponentAbstract {
    * @description Ends the progress tracking and displays a summary of error logs in the logs viewer.
    */
   public endProgress(): void {
-    this.#logsViewer.displaySummary();
+    // Todo: we need to retriew the download link
+    this.#logsViewer.displaySummary('download/logs/link.txt');
   }
 }

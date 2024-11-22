@@ -1,8 +1,9 @@
 import ComponentAbstract from './ComponentAbstract';
 import { SeverityClasses, LogEntry } from '../types/logsTypes';
 import { parseLogWithSeverity } from '../utils/logsUtils';
+import { Destroyable } from '../types/DomLifecycle';
 
-export default class LogsViewer extends ComponentAbstract {
+export default class LogsViewer extends ComponentAbstract implements Destroyable {
   #warnings: string[] = [];
   #errors: string[] = [];
   #isSummaryDisplayed: boolean = false;
@@ -26,6 +27,10 @@ export default class LogsViewer extends ComponentAbstract {
   #templateSummary = this.queryElement<HTMLTemplateElement>(
     '#log-summary',
     'Template summary not found'
+  );
+  #templateSummaryButtons = this.queryElement<HTMLTemplateElement>(
+    '#summary-buttons',
+    'Template summary buttons not found'
   );
 
   public beforeDestroy = () => {
@@ -72,12 +77,13 @@ export default class LogsViewer extends ComponentAbstract {
 
   /**
    * @public
+   * @param {string | null} downloadLogsLink - The link to download update logs.
    * @description Displays a summary of logs, grouping warnings and errors.
    * Summaries include links to the corresponding log lines.
    * Adds a click event listener to handle navigation within the summary.
    * Prevents displaying a summary if no logs are present.
    */
-  public displaySummary(): void {
+  public displaySummary(downloadLogsLink?: string): void {
     if (!this.#logsList.hasChildNodes()) {
       console.warn('Cannot display summary because logs are empty');
       return;
@@ -99,9 +105,38 @@ export default class LogsViewer extends ComponentAbstract {
       this.#logsSummary.addEventListener('click', this.#handleLinkEvent);
     }
 
+    if (downloadLogsLink) {
+      fragment.appendChild(this.#createSummaryButtons(downloadLogsLink));
+    }
+
     this.#appendFragmentElement(fragment, this.#logsSummary);
     this.#isSummaryDisplayed = true;
   }
+
+  /**
+   * @private
+   * @param {string} downloadLogsLink - The link to download update logs.
+   * @returns {HTMLDivElement} - DIV element containing summary buttons.
+   * @description Creates DIV element containing summary buttons.
+   * Applies appropriate href and download attributes to download button.
+   */
+  #createSummaryButtons = (downloadLogsLink: string): HTMLDivElement => {
+    const summaryButtonsFragment = this.#templateSummaryButtons.content.cloneNode(
+      true
+    ) as DocumentFragment;
+    const summaryButtons = summaryButtonsFragment.querySelector(
+      '[data-slot-template="summary-buttons"]'
+    ) as HTMLDivElement;
+
+    const downloadLogsButton = summaryButtons.querySelector(
+      '[data-slot-template="download-button"]'
+    ) as HTMLAnchorElement;
+
+    downloadLogsButton.href = downloadLogsLink;
+    downloadLogsButton.download = downloadLogsLink.split('/').pop()!;
+
+    return summaryButtons;
+  };
 
   /**
    * @private
@@ -215,7 +250,7 @@ export default class LogsViewer extends ComponentAbstract {
   #handleLinkEvent = (event: MouseEvent): void => {
     const target = event.target as HTMLAnchorElement;
 
-    // Checks if the clicked element is an <a> tag
+    // Checks if the clicked element is an <a> tag point to and ID
     if (!target || target.tagName !== 'A' || !target.hash) {
       return;
     }
