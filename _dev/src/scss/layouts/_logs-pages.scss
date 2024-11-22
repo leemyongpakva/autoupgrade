@@ -4,13 +4,17 @@
 html {
   &:has(#{$ua-id}) {
     // Need class use in #ua_step_content to make it work
-    container-type: size;
-
     &:has(.update-page, .restore-page) {
+      container-type: size;
       container-name: html-height;
 
       body {
+        overflow-y: auto;
         background-color: var(--#{$ua-prefix}bo-background-color);
+
+        #nav-sidebar {
+          height: calc(100% - var(--#{$ua-prefix}header-height));
+        }
       }
 
       #main {
