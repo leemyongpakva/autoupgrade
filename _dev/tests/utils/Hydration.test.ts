@@ -170,7 +170,8 @@ describe('Hydration', () => {
     hydration.hydrate(response);
 
     expect(modalContainer.beforeDestroy).toHaveBeenCalledTimes(1);
-    expect(modalContainer.mount).toHaveBeenCalledTimes(1);
+    // Called on Init + refresh
+    expect(modalContainer.mount).toHaveBeenCalledTimes(2);
   });
 
   it('should not refresh the modal container if the DOM is untouched', () => {
@@ -182,7 +183,8 @@ describe('Hydration', () => {
 
     hydration.hydrate(response);
 
-    expect(modalContainer.mount).toHaveBeenCalledTimes(0);
+    // Called on Init
+    expect(modalContainer.mount).toHaveBeenCalledTimes(1);
   });
 });
 

@@ -4,7 +4,7 @@ import ScriptHandler from './routing/ScriptHandler';
 
 export const routeHandler = new RouteHandler();
 
-export const scriptHandler = new ScriptHandler();
 export const modalContainer = new ModalContainer();
+export const scriptHandler = new ScriptHandler();
 
 export default { routeHandler, scriptHandler, modalContainer };

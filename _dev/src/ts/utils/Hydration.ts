@@ -17,6 +17,10 @@ export default class Hydration {
    */
   public hydrationEvent: Event = new Event(Hydration.hydrationEventName);
 
+  public constructor() {
+    modalContainer.mount();
+  }
+
   /**
    * @public
    * @param {ApiResponseHydration} data - The data containing new content and routing information.
