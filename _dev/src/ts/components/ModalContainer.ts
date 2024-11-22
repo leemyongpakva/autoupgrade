@@ -31,17 +31,20 @@ export default class ModalContainer implements DomLifecycle {
   }
 
   #displayModal(): void {
-    $(
-      document.getElementById(ModalContainer.containerId)?.getElementsByClassName('modal') || []
-    ).modal('show');
+    const modal = document.getElementById(ModalContainer.containerId)?.getElementsByClassName('dialog')[0] as HTMLDialogElement;
+    if (modal) {
+      modal.showModal();
+    }
   }
 
   #onClick(ev: Event): void {
     const target = ev.target ? (ev.target as HTMLElement) : null;
-    const modal = target?.closest('.modal');
+    const modal = target?.closest('.dialog');
 
     if (modal) {
       if (target?.closest("[data-dismiss='modal']")) {
+        modal.dispatchEvent(new Event(ModalContainer.cancelEvent, { bubbles: true }));
+      }  else if (!modal.contains(target) || target === modal) {
         modal.dispatchEvent(new Event(ModalContainer.cancelEvent, { bubbles: true }));
       } else if (target?.closest(".modal-footer button:not([data-dismiss='modal'])")) {
         modal.dispatchEvent(new Event(ModalContainer.okEvent, { bubbles: true }));
@@ -50,9 +53,9 @@ export default class ModalContainer implements DomLifecycle {
   }
 
   #closeModal(ev: Event): void {
-    const modal = ev.target;
+    const modal = ev.target as HTMLDialogElement;
     if (modal) {
-      $(modal).modal('hide');
+      modal.close();
     }
   }
 }

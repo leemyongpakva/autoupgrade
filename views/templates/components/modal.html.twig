@@ -1,4 +1,4 @@
-<div class="modal fade {% if modalDanger %}modal--danger{% endif %}"
+<dialog class="dialog {% if modalDanger %}modal--danger{% endif %}"
   {% if modalId %}id="{{ modalId }}"{% endif %}
   aria-label="{{ title }}"
   role="dialog"
@@ -44,4 +44,4 @@
       {% endblock %}
     </div>
   </div>
-</div>
+</dialog>
