@@ -3,11 +3,13 @@ SET NAMES 'utf8mb4';
 
 /* Enable controlling of default language URL prefix - https://github.com/PrestaShop/PrestaShop/pull/37236 */
 /* Add a file separator input to the sql manager settings - https://github.com/PrestaShop/PrestaShop/pull/35843 */
+/* Allow configuring maximum word difference - https://github.com/PrestaShop/PrestaShop/pull/37261 */
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES
   ('PS_DEBUG_COOKIE_NAME', '', NOW(), NOW()),
   ('PS_DEBUG_COOKIE_VALUE', '', NOW(), NOW()),
   ('PS_SEPARATOR_FILE_MANAGER_SQL', ';', NOW(), NOW()),
   ('PS_PRODUCT_BREADCRUMB_CATEGORY', 'default', NOW(), NOW()),
+  ('PS_SEARCH_FUZZY_MAX_DIFFERENCE', 5, NOW(), NOW()),
   ('PS_DEFAULT_LANGUAGE_URL_PREFIX', 1, NOW(), NOW())
 ;
 
