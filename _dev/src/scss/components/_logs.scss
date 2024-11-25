@@ -38,7 +38,8 @@ $e-logs: ".logs";
 
       #{$e-logs}__line {
         font-size: 0.75rem;
-        line-height: 1.375rem;
+        line-height: 1.25rem;
+        padding-inline-start: 2.75rem;
 
         &::before {
           font-size: 1.2rem;
@@ -60,12 +61,12 @@ $e-logs: ".logs";
     &__line {
       position: relative;
       padding-block: 0.125rem;
-      padding-inline: 3rem 1rem;
+      padding-inline: 2.75rem 1rem;
       background-repeat: no-repeat;
       background-position: left center;
       background-size: 1.5rem 1.5rem;
       font-size: 0.875rem;
-      line-height: 1.25rem;
+      line-height: 1.4rem;
       word-break: break-word;
       transition: background-color 0.3s ease-in-out;
 
@@ -137,7 +138,7 @@ $e-logs: ".logs";
         grid-template-columns: minmax(auto, min-content) auto;
         gap: 0.25rem;
         justify-content: start;
-        padding-inline-start: 2rem;
+        padding-inline-start: 1.75rem;
         padding-block: 0;
         line-height: 1.25rem;
 
