@@ -10,7 +10,7 @@ export class RequestHandler {
    * @param {string} route - Target route for the POST request.
    * @param {FormData}[data=new FormData()] - Form data to send with the request by default we send FormData with admin dir required by backend.
    * @param {boolean} [fromPopState] - Indicates if the request originated from a popstate event need by hydration.
-   * @returns {Promise<ApiResponseAction | void>}
+   * @returns {Promise<void>}
    * @description Sends a POST request to the specified route with optional data and pop state indicator. Cancels any ongoing request before initiating a new one.
    */
   public async post(
