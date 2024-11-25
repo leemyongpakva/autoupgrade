@@ -1,0 +1,21 @@
+@use "../variables" as *;
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--#{$ua-prefix}scrollbar-thumb);
+  border-radius: var(--#{$ua-prefix}border-radius);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--#{$ua-prefix}scrollbar-thumb-hover);
+  border-radius: var(--#{$ua-prefix}border-radius);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--#{$ua-prefix}scrollbar-track);
+  border-radius: var(--#{$ua-prefix}border-radius);
+}

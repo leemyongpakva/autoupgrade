@@ -39,6 +39,7 @@ html {
         #{$ua-id} {
           display: grid;
           grid-template-columns: minmax(0, 1fr);
+          grid-template-rows: 1fr;
           min-height: calc(100cqh - var(--#{$ua-prefix}header-offset));
 
           #ua_container {

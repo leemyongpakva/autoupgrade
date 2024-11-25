@@ -16,6 +16,7 @@ $cdk-prefix: "cdk-";
   --#{$ua-prefix}primary-600: var(--#{$cdk-prefix}primary-600, #5e5e5e);
   --#{$ua-prefix}primary-500: var(--#{$cdk-prefix}primary-500, #bbbbbb);
   --#{$ua-prefix}primary-400: var(--#{$cdk-prefix}primary-400, #dddddd);
+  --#{$ua-prefix}primary-300: var(--#{$cdk-prefix}primary-300, #eeeeee);
   --#{$ua-prefix}primary-200: var(--#{$cdk-prefix}primary-200, #f7f7f7);
   --#{$ua-prefix}purple-500: var(--#{$cdk-prefix}purple-500, #decde7);
   --#{$ua-prefix}purple-50: var(--#{$cdk-prefix}purple-50, #f8f0f7);
@@ -57,6 +58,9 @@ $cdk-prefix: "cdk-";
   --#{$ua-prefix}header-offset: 10rem;
   --#{$ua-prefix}bo-background-color: var(--#{$ua-prefix}primary-200);
   --#{$ua-prefix}error-img-filter: none;
+  --#{$ua-prefix}scrollbar-thumb: var(--#{$ua-prefix}primary-500);
+  --#{$ua-prefix}scrollbar-thumb-hover: var(--#{$ua-prefix}primary-600);
+  --#{$ua-prefix}scrollbar-track: var(--#{$ua-prefix}primary-400);
 }
 
 // Update variable at body level

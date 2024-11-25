@@ -1,9 +1,8 @@
 import ComponentAbstract from './ComponentAbstract';
 import { SeverityClasses, LogEntry } from '../types/logsTypes';
 import { parseLogWithSeverity } from '../utils/logsUtils';
-import { Destroyable } from '../types/DomLifecycle';
 
-export default class LogsViewer extends ComponentAbstract implements Destroyable {
+export default class LogsViewer extends ComponentAbstract {
   #warnings: string[] = [];
   #errors: string[] = [];
   #isSummaryDisplayed: boolean = false;
@@ -28,14 +27,6 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
     '#log-summary',
     'Template summary not found'
   );
-  #templateSummaryButtons = this.queryElement<HTMLTemplateElement>(
-    '#summary-buttons',
-    'Template summary buttons not found'
-  );
-
-  public beforeDestroy = () => {
-    this.#logsSummary.removeEventListener('click', this.#handleLinkEvent);
-  };
 
   /**
    * @public
@@ -113,31 +104,6 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
 
   /**
    * @private
-   * @param {string} downloadLogsLink - The link to download update logs.
-   * @returns {HTMLDivElement} - DIV element containing summary buttons.
-   * @description Creates DIV element containing summary buttons.
-   * Applies appropriate href and download attributes to download button.
-   */
-  #createSummaryButtons = (downloadLogsLink: string): HTMLDivElement => {
-    const summaryButtonsFragment = this.#templateSummaryButtons.content.cloneNode(
-      true
-    ) as DocumentFragment;
-    const summaryButtons = summaryButtonsFragment.querySelector(
-      '[data-slot-template="summary-buttons"]'
-    ) as HTMLDivElement;
-
-    const downloadLogsButton = summaryButtons.querySelector(
-      '[data-slot-template="download-button"]'
-    ) as HTMLAnchorElement;
-
-    downloadLogsButton.href = downloadLogsLink;
-    downloadLogsButton.download = downloadLogsLink.split('/').pop()!;
-
-    return summaryButtons;
-  };
-
-  /**
-   * @private
    * @param {LogEntry} logEntry - Parsed log entry containing message and severity information.
    * @returns {HTMLDivElement} - The created log line element.
    * @description Creates an HTML log line element based on the log entry's severity and message.
@@ -146,10 +112,11 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
   #createLogLine = (logEntry: LogEntry): HTMLDivElement => {
     const logLineFragment = this.#templateLogLine.content.cloneNode(true) as DocumentFragment;
     const logLine = logLineFragment.querySelector('.logs__line') as HTMLDivElement;
+    const logLineContent = logLineFragment.querySelector('.logs__line-content') as HTMLDivElement;
 
     logLine.classList.add(`logs__line--${logEntry.className}`);
     logLine.setAttribute('data-status', logEntry.className);
-    logLine.textContent = logEntry.message;
+    logLineContent.textContent = logEntry.message;
 
     return logLine;
   };
@@ -183,6 +150,7 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
   #createSummary(severity: SeverityClasses, logs: string[]): HTMLDivElement {
     const summaryFragment = this.#templateSummary.content.cloneNode(true) as DocumentFragment;
     const summary = summaryFragment.querySelector('.logs__summary') as HTMLDivElement;
+    const summaryScroll = summaryFragment.querySelector('.logs__summary-scroll') as HTMLDivElement;
 
     const title = this.#getSummaryTitle(severity);
     const titleContainer = summary.querySelector('[data-slot-template="title"]') as HTMLDivElement;
@@ -200,7 +168,7 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
 
       cloneLogElement.appendChild(linkClone);
 
-      summary.appendChild(cloneLogElement);
+      summaryScroll.appendChild(cloneLogElement);
     });
 
     return summary;

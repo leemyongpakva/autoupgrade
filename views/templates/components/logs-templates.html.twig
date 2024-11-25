@@ -1,28 +1,34 @@
 <template id="log-line">
-    <div class="logs__line"></div>
+  <div class="logs__line">
+    <div class="logs__line-content"></div>
+  </div>
 </template>
 
 <template id="log-summary">
-    <div class="logs__summary">
-        <p data-slot-template="title" class="logs__summary-title h3"></p>
+  <div class="logs__summary">
+    <div class="logs__summary-top">
+      <p data-slot-template="title" class="logs__summary-title h3"></p>
+      <span class="logs__summary-total badge badge-danger">{{ random(1, 100) }}</span>
     </div>
+    <div class="logs__summary-scroll"></div>
+  </div>
 </template>
 
 <template id="summary-warning-title">{{ "Warning summary"|trans({}) }}</template>
 <template id="summary-error-title">{{ "Error summary"|trans({}) }}</template>
 
 <template id="summary-warning-link">
-    <a class="logs__summary-anchor link">{{ "See warning"|trans({}) }}</a>
+  <a class="logs__summary-anchor link">{{ "See warning"|trans({}) }}</a>
 </template>
 <template id="summary-error-link">
-    <a class="logs__summary-anchor link">{{ "See error"|trans({}) }}</a>
+  <a class="logs__summary-anchor link">{{ "See error"|trans({}) }}</a>
 </template>
 
 <template id="summary-buttons">
-    <div data-slot-template="summary-buttons" class="logs__buttons">
-        <a data-slot-template="download-button" class="btn btn-primary" href="#" download="#">
-            <i class="material-icons">upload</i>
-            {{ 'Download update logs'|trans({}) }}
-        </a>
-    </div>
+  <div data-slot-template="summary-buttons" class="logs__buttons">
+    <a data-slot-template="download-button" class="btn btn-primary" href="#" download="#">
+      <i class="material-icons">file_upload</i>
+      {{ 'Download update logs'|trans({}) }}
+    </a>
+  </div>
 </template>

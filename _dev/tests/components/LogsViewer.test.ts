@@ -20,6 +20,7 @@ describe('LogsViewer', () => {
       <template id="log-summary">
         <div class="logs__summary">
           <p data-slot-template="title" class="logs__summary-title h3"></p>
+          <div class="logs__summary-scroll"></div>
         </div>
       </template>
       
@@ -36,7 +37,7 @@ describe('LogsViewer', () => {
       <template id="summary-buttons">
         <div data-slot-template="summary-buttons" class="logs__buttons">
           <a data-slot-template="download-button" class="btn btn-primary" href="#" download="#">
-            <i class="material-icons">upload</i>
+            <i class="material-icons">file_upload</i>
             Download update logs
           </a>
         </div>
