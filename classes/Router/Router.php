@@ -98,6 +98,26 @@ class Router
             'controller' => UpdatePageBackupController::class,
             'method' => 'step',
         ],
+        Routes::UPDATE_STEP_BACKUP_SAVE_OPTION => [
+            'controller' => UpdatePageBackupController::class,
+            'method' => 'saveOption',
+        ],
+        Routes::UPDATE_STEP_BACKUP_SUBMIT_BACKUP => [
+            'controller' => UpdatePageBackupController::class,
+            'method' => 'submitBackup',
+        ],
+        Routes::UPDATE_STEP_BACKUP_SUBMIT_UPDATE => [
+            'controller' => UpdatePageBackupController::class,
+            'method' => 'submitUpdate',
+        ],
+        Routes::UPDATE_STEP_BACKUP_CONFIRM_BACKUP => [
+            'controller' => UpdatePageBackupController::class,
+            'method' => 'startBackup',
+        ],
+        Routes::UPDATE_STEP_BACKUP_CONFIRM_UPDATE => [
+            'controller' => UpdatePageBackupController::class,
+            'method' => 'startUpdate',
+        ],
         Routes::UPDATE_PAGE_UPDATE => [
             'controller' => UpdatePageUpdateController::class,
             'method' => 'index',

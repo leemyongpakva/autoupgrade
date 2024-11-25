@@ -6,20 +6,20 @@ export default class UpdatePageUpdateOptions extends UpdatePage {
 
   public mount() {
     this.initStepper();
-    this.form.addEventListener('submit', this.onSubmit);
-    this.form.addEventListener('change', this.onChange);
+    this.#form.addEventListener('submit', this.#onSubmit);
+    this.#form.addEventListener('change', this.#onChange);
   }
 
   public beforeDestroy() {
     try {
-      this.form.removeEventListener('submit', this.onSubmit);
-      this.form.removeEventListener('change', this.onChange);
+      this.#form.removeEventListener('submit', this.#onSubmit);
+      this.#form.removeEventListener('change', this.#onChange);
     } catch {
       // Do Nothing, page is likely removed from the DOM already
     }
   }
 
-  private get form(): HTMLFormElement {
+  get #form(): HTMLFormElement {
     const form = document.forms.namedItem('update-options-page-form');
     if (!form) {
       throw new Error('Form not found');
@@ -34,18 +34,18 @@ export default class UpdatePageUpdateOptions extends UpdatePage {
     return form;
   }
 
-  private readonly onChange = async (ev: Event) => {
+  readonly #onChange = async (ev: Event) => {
     const optionInput = ev.target as HTMLInputElement;
 
-    const data = new FormData(this.form);
+    const data = new FormData(this.#form);
     optionInput.setAttribute('disabled', 'true');
-    await api.post(this.form.dataset.routeToSave!, data);
+    await api.post(this.#form.dataset.routeToSave!, data);
     optionInput.removeAttribute('disabled');
   };
 
-  private readonly onSubmit = async (event: Event) => {
+  readonly #onSubmit = async (event: Event) => {
     event.preventDefault();
 
-    await api.post(this.form.dataset.routeToSubmit!, new FormData(this.form));
+    await api.post(this.#form.dataset.routeToSubmit!, new FormData(this.#form));
   };
 }

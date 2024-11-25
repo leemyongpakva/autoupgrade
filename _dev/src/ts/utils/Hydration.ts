@@ -1,5 +1,5 @@
 import { ApiResponseHydration } from '../types/apiTypes';
-import { routeHandler, scriptHandler } from '../autoUpgrade';
+import { modalContainer, routeHandler, scriptHandler } from '../autoUpgrade';
 
 export default class Hydration {
   /**
@@ -17,6 +17,10 @@ export default class Hydration {
    */
   public hydrationEvent: Event = new Event(Hydration.hydrationEventName);
 
+  public constructor() {
+    modalContainer.mount();
+  }
+
   /**
    * @public
    * @param {ApiResponseHydration} data - The data containing new content and routing information.
@@ -29,16 +33,22 @@ export default class Hydration {
     if (elementToUpdate && data.new_content) {
       if (data.new_route) {
         scriptHandler.unloadRouteScript();
+        modalContainer.beforeDestroy();
       }
 
       elementToUpdate.innerHTML = data.new_content;
 
       if (data.new_route) {
+        modalContainer.mount();
         scriptHandler.updateRouteScript(data.new_route);
 
         if (!fromPopState) {
           routeHandler.setNewRoute(data.new_route);
         }
+      }
+
+      if (data.add_script) {
+        scriptHandler.loadScript(data.add_script);
       }
 
       elementToUpdate.dispatchEvent(this.hydrationEvent);

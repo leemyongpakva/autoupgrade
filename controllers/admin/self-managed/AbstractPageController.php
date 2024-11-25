@@ -96,7 +96,7 @@ abstract class AbstractPageController extends AbstractGlobalController
                     $this->getPageTemplate(),
                     $this->getParams()
                 ),
-                $this->displayRouteInUrl()
+                ['newRoute' => $this->displayRouteInUrl()]
             );
         }
 

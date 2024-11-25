@@ -85,7 +85,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
 
     public function submit(): JsonResponse
     {
-        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_PAGE_BACKUP);
+        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_BACKUP);
     }
 
     /**
@@ -131,7 +131,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
                 '@ModuleAutoUpgrade/steps/' . $this->getStepTemplate() . '.html.twig',
                 $params
             ),
-            $this->displayRouteInUrl()
+            ['newRoute' => $this->displayRouteInUrl()]
         );
     }
 }

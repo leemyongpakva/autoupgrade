@@ -1,5 +1,5 @@
-import PageAbstract from './PageAbstract';
 import Stepper from '../utils/Stepper';
+import PageAbstract from './PageAbstract';
 
 export default class UpdatePage extends PageAbstract {
   protected stepCode = 'version-choice';

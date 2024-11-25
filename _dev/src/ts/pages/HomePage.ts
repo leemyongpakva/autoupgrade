@@ -1,5 +1,5 @@
-import PageAbstract from './PageAbstract';
 import api from '../api/RequestHandler';
+import PageAbstract from './PageAbstract';
 
 export default class HomePage extends PageAbstract {
   constructor() {

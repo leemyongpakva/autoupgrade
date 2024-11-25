@@ -72,9 +72,7 @@ describe('ScriptHandler', () => {
 
     scriptHandler = new ScriptHandler();
 
-    expect(consoleDebugSpy).toHaveBeenCalledWith(
-      `No matching page Class found for route: ${route}`
-    );
+    expect(consoleDebugSpy).toHaveBeenCalledWith(`No matching class found for ID: ${route}`);
   });
 
   it('should catch and log errors if page instantiation or mount fails', () => {
@@ -92,7 +90,7 @@ describe('ScriptHandler', () => {
     scriptHandler.updateRouteScript(route);
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(
-      `Failed to load script for route ${route}:`,
+      `Failed to load script with ID ${route}:`,
       expect.any(Error)
     );
   });

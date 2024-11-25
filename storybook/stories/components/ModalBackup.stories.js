@@ -34,8 +34,6 @@ export default {
 export const Backup = {
   args: {
     ...Modal.args,
-    title: "Start backup?",
-    message: "Your files and database will be backed up.",
     modalSize: "md",
   },
 };

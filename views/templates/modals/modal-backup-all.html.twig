@@ -1,18 +1,6 @@
-{% extends "@ModuleAutoUpgrade/components/modal.html.twig" %}
+{% extends "@ModuleAutoUpgrade/modals/modal-backup.html.twig" %}
 
-{% block modal_extra_content %}{% endblock %}
-
-{% block modal_footer %}
-  <div class="modal-footer">
-    {% block modal_footer_inner %}
-      <button type="button" class="btn btn-link" data-dismiss="modal">
-        {{ 'Cancel'|trans({}) }}
-      </button>
-
-      <button type="button" class="btn btn-primary">
-        <i class="material-icons">settings_backup_restore</i>
-        {{ 'Start backup'|trans({}) }}
-      </button>
-    {% endblock %}
-  </div>
+{% block modal_content %}
+  {% set message = 'Your files, database, and images will be backed up.'|trans({}) %}
+  {{ parent() }}
 {% endblock %}

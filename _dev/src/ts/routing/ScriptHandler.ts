@@ -4,12 +4,13 @@ import UpdatePageUpdateOptions from '../pages/UpdatePageUpdateOptions';
 import UpdatePageBackup from '../pages/UpdatePageBackup';
 import UpdatePageUpdate from '../pages/UpdatePageUpdate';
 import UpdatePagePostUpdate from '../pages/UpdatePagePostUpdate';
-import PageAbstract from '../pages/PageAbstract';
+import DomLifecycle from '../types/DomLifecycle';
 import { RoutesMatching } from '../types/scriptHandlerTypes';
 import { routeHandler } from '../autoUpgrade';
+import StartUpdateModal from '../modals/StartUpdateModal';
 
 export default class ScriptHandler {
-  #currentScript: PageAbstract | undefined;
+  #currentScript: DomLifecycle | undefined;
 
   /**
    * @private
@@ -22,7 +23,9 @@ export default class ScriptHandler {
     'update-page-update-options': UpdatePageUpdateOptions,
     'update-page-backup': UpdatePageBackup,
     'update-page-update': UpdatePageUpdate,
-    'update-page-post-update': UpdatePagePostUpdate
+    'update-page-post-update': UpdatePagePostUpdate,
+
+    'start-update-modal': StartUpdateModal
   };
 
   /**
@@ -33,27 +36,27 @@ export default class ScriptHandler {
     const currentRoute = routeHandler.getCurrentRoute();
 
     if (currentRoute) {
-      this.#loadScript(currentRoute);
+      this.loadScript(currentRoute);
     }
   }
 
   /**
-   * @private
+   * @public
    * @param {string} routeName - The name of the route to load his associated script.
    * @returns void
    * @description Loads and mounts the page script associated with the specified route name.
    */
-  #loadScript(routeName: string) {
-    const pageClass = this.#routesMatching[routeName];
-    if (pageClass) {
+  loadScript(scriptID: string) {
+    const classScript = this.#routesMatching[scriptID];
+    if (classScript) {
       try {
-        this.#currentScript = new pageClass();
+        this.#currentScript = new classScript();
         this.#currentScript.mount();
       } catch (error) {
-        console.error(`Failed to load script for route ${routeName}:`, error);
+        console.error(`Failed to load script with ID ${scriptID}:`, error);
       }
     } else {
-      console.debug(`No matching page Class found for route: ${routeName}`);
+      console.debug(`No matching class found for ID: ${scriptID}`);
     }
   }
 
@@ -66,7 +69,7 @@ export default class ScriptHandler {
    */
   public updateRouteScript(newRoute: string) {
     this.#currentScript?.beforeDestroy();
-    this.#loadScript(newRoute);
+    this.loadScript(newRoute);
   }
 
   /**

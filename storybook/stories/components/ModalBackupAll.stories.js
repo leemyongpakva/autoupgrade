@@ -34,8 +34,6 @@ export default {
 export const BackupWithImg = {
   args: {
     ...Modal.args,
-    title: "Start backup?",
-    message: "Your files, database, and images will be backed up.",
     modalSize: "md",
   },
 };
