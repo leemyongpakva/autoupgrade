@@ -127,7 +127,7 @@ $e-logs: ".logs";
     &__summary {
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
+      gap: 1rem;
       padding: 1.5rem;
       border: 1px solid var(--#{$ua-prefix}border-color);
       border-radius: var(--#{$ua-prefix}border-radius);
@@ -167,12 +167,13 @@ $e-logs: ".logs";
 
     &__summary-top {
       display: flex;
-      gap: 0.5rem;
+      gap: 1rem;
       align-items: center;
     }
 
     &__summary-total {
       flex-shrink: 0;
+      min-width: 1.25rem;
     }
   }
 }
