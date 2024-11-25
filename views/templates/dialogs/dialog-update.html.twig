@@ -1,10 +1,10 @@
-{% extends "@ModuleAutoUpgrade/components/modal.html.twig" %}
+{% extends "@ModuleAutoUpgrade/components/dialog.html.twig" %}
 
 {% set title = 'Start update?'|trans({}) %}
 
-{% block modal_content %}
-  <form 
-    class="modal__spacer"
+{% block dialog_content %}
+  <form
+    class="dialog__spacer"
     action=""
     data-route-to-submit="{{ form_route_to_confirm }}"
     id="form-confirm-update"
@@ -20,21 +20,21 @@
   {% endif %}
 {% endblock %}
 
-{% block modal_extra_content %}
+{% block dialog_extra_content %}
   {% if noBackUp %}
-    <div class="modal__no-backup checkbox">
+    <div class="dialog__no-backup checkbox">
       <label>
-        <input type="checkbox" value="" id="modal-start-update-own-backup" />
+        <input type="checkbox" value="" id="dialog-start-update-own-backup" />
         {{ 'I have made my own backup and can restore it manually if a problem occur.'|trans({}) }}
       </label>
     </div>
   {% endif %}
 {% endblock %}
 
-{% block modal_footer %}
-  <div class="modal-footer">
-    {% block modal_footer_inner %}
-      <button type="button" class="btn btn-link" data-dismiss="modal">
+{% block dialog_footer %}
+  <div class="dialog__footer">
+    {% block dialog_footer_inner %}
+      <button type="button" class="btn btn-link" data-dismiss="dialog">
         {{ 'Cancel'|trans({}) }}
       </button>
 
@@ -44,7 +44,7 @@
         form="form-confirm-update"
       >
         <img
-          class="modal__rocket-icon rocket-icon"
+          class="dialog__rocket-icon rocket-icon"
           src="{{ assets_base_path }}/img/rocket_white.svg"
           width="20"
           height="20"

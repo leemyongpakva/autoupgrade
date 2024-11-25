@@ -1,16 +1,16 @@
 import DomLifecycle from '../types/DomLifecycle';
 import api from '../api/RequestHandler';
 
-export default class StartUpdateModal implements DomLifecycle {
+export default class StartUpdateDialog implements DomLifecycle {
   protected readonly formId = 'form-confirm-update';
-  protected readonly confirmCheckboxId = 'modal-start-update-own-backup';
+  protected readonly confirmCheckboxId = 'dialog-start-update-own-backup';
 
   public mount(): void {
     this.#form.addEventListener('submit', this.#onSubmit);
     this.#form.addEventListener('change', this.#onChange);
 
     this.#updateSubmitButtonStatus(
-      document.getElementById('modal-start-update-own-backup') as HTMLInputElement | undefined
+      document.getElementById('dialog-start-update-own-backup') as HTMLInputElement | undefined
     );
   }
 

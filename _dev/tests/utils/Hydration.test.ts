@@ -2,14 +2,14 @@ import Hydration from '../../src/ts/utils/Hydration';
 import { ApiResponseHydration } from '../../src/ts/types/apiTypes';
 import RouteHandler from '../../src/ts/routing/RouteHandler';
 import ScriptHandler from '../../src/ts/routing/ScriptHandler';
-import { modalContainer } from '../../src/ts/autoUpgrade';
+import { dialogContainer } from '../../src/ts/autoUpgrade';
 
 const setNewRouteMock = jest.spyOn(RouteHandler.prototype, 'setNewRoute');
 const updateRouteScriptMock = jest.spyOn(ScriptHandler.prototype, 'updateRouteScript');
 const unloadRouteScriptMock = jest.spyOn(ScriptHandler.prototype, 'unloadRouteScript');
 const loadScriptMock = jest.spyOn(ScriptHandler.prototype, 'loadScript');
 
-jest.mock('../../src/ts/components/ModalContainer', () => {
+jest.mock('../../src/ts/components/DialogContainer', () => {
   return jest.fn().mockImplementation(() => {
     return {
       mount: jest.fn(),
@@ -159,7 +159,7 @@ describe('Hydration', () => {
     );
   });
 
-  it('should refresh the modal container if a new page is loaded', () => {
+  it('should refresh the dialog container if a new page is loaded', () => {
     const response: ApiResponseHydration = {
       hydration: true,
       new_content: `<p>New Content</p>`,
@@ -169,12 +169,12 @@ describe('Hydration', () => {
 
     hydration.hydrate(response);
 
-    expect(modalContainer.beforeDestroy).toHaveBeenCalledTimes(1);
+    expect(dialogContainer.beforeDestroy).toHaveBeenCalledTimes(1);
     // Called on Init + refresh
-    expect(modalContainer.mount).toHaveBeenCalledTimes(2);
+    expect(dialogContainer.mount).toHaveBeenCalledTimes(2);
   });
 
-  it('should not refresh the modal container if the DOM is untouched', () => {
+  it('should not refresh the dialog container if the DOM is untouched', () => {
     const response: ApiResponseHydration = {
       hydration: true,
       new_content: `<p>New Content</p>`,
@@ -184,7 +184,7 @@ describe('Hydration', () => {
     hydration.hydrate(response);
 
     // Called on Init
-    expect(modalContainer.mount).toHaveBeenCalledTimes(1);
+    expect(dialogContainer.mount).toHaveBeenCalledTimes(1);
   });
 });
 

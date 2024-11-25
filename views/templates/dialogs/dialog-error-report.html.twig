@@ -1,7 +1,7 @@
-{% extends "@ModuleAutoUpgrade/components/modal.html.twig" %}
+{% extends "@ModuleAutoUpgrade/components/dialog.html.twig" %}
 
-{% block modal_content %}
-  <div class="modal__error-report-content">
+{% block dialog_content %}
+  <div class="dialog__error-report-content">
     <p>
       {{ 'Help us improve the module by sending us this error report. You can add details in the description if you want to.'|trans({}) }}
     </p>
@@ -16,8 +16,8 @@
   </div>
 {% endblock %}
 
-{% block modal_extra_content_inner %}
-  <div class="modal__error-report-form">
+{% block dialog_extra_content_inner %}
+  <div class="dialog__error-report-form">
     <div class="form-group">
       <label for="userEmail">
         Email (optional)
@@ -44,10 +44,10 @@
   </div>
 {% endblock %}
 
-{% block modal_footer %}
-  <div class="modal-footer">
-    {% block modal_footer_inner %}
-      <button type="button" class="btn btn-link" data-dismiss="modal">
+{% block dialog_footer %}
+  <div class="dialog__footer">
+    {% block dialog_footer_inner %}
+      <button type="button" class="btn btn-link" data-dismiss="dialog">
         Cancel
       </button>
 

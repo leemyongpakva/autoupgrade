@@ -23,20 +23,18 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-import ModalBackupDelete from "../../../views/templates/modals/modal-backup-delete.html.twig";
-import { Default as Modal } from "./Modal.stories";
+import DialogUpdate from "../../../views/templates/dialogs/dialog-update.html.twig";
+import { Default as Dialog } from "./Dialog.stories";
 
 export default {
-  title: "Components/Modal",
-  component: ModalBackupDelete,
+  title: "Components/Dialog",
+  component: DialogUpdate,
 };
 
-export const BackupDelete = {
+export const Update = {
   args: {
-    ...Modal.args,
-    title: "Delete backup",
-    message: "You are about to delete the <b>autoupgrade_save_8.1.6</b> backup made on <b>15/07/2024 8:00</b>. As it's your only backup, you will be redirected to the module's home page.",
-    modalSize: "lg",
-    modalDanger: true,
+    ...Dialog.args,
+    dialogSize: "lg",
+    noBackUp: false,
   },
 };

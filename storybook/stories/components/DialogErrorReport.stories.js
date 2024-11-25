@@ -23,18 +23,21 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-import ModalUpdate from "../../../views/templates/modals/modal-update.html.twig";
-import { Default as Modal } from "./Modal.stories";
+import DialogErrorReport from "../../../views/templates/dialogs/dialog-error-report.html.twig";
+import { Default as Dialog } from "./Dialog.stories";
 
 export default {
-  title: "Components/Modal",
-  component: ModalUpdate,
+  title: "Components/Dialog",
+  component: DialogErrorReport,
 };
 
-export const Update = {
+export const ErrorReport = {
   args: {
-    ...Modal.args,
-    modalSize: "lg",
-    noBackUp: false,
+    ...Dialog.args,
+    dialogId: "errorDialog",
+    title: "Send error report?",
+    message: "",
+    dialogSize: "md",
+    dataPrivacyLink: "#"
   },
 };
