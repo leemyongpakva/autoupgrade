@@ -12,8 +12,8 @@ $e: ".log-progress";
     &__status {
       display: flex;
       gap: 0.5rem;
-      font-size: 0.875rem;
       align-items: center;
+      font-size: 0.875rem;
       color: var(--#{$ua-prefix}primary-600);
     }
 
