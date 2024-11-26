@@ -31,7 +31,9 @@ export default class DialogContainer implements DomLifecycle {
   }
 
   #displayDialog(): void {
-    const dialog = document.getElementById(DialogContainer.containerId)?.getElementsByClassName('dialog')[0] as HTMLDialogElement;
+    const dialog = document
+      .getElementById(DialogContainer.containerId)
+      ?.getElementsByClassName('dialog')[0] as HTMLDialogElement;
     if (dialog) {
       dialog.showModal();
     }
@@ -42,7 +44,11 @@ export default class DialogContainer implements DomLifecycle {
     const dialog = target?.closest('.dialog');
 
     if (dialog) {
-      if (target?.closest("[data-dismiss='dialog']") || !dialog.contains(target) || target === dialog) {
+      if (
+        target?.closest("[data-dismiss='dialog']") ||
+        !dialog.contains(target) ||
+        target === dialog
+      ) {
         dialog.dispatchEvent(new Event(DialogContainer.cancelEvent, { bubbles: true }));
       } else if (target?.closest(".dialog__footer button:not([data-dismiss='dialog'])")) {
         dialog.dispatchEvent(new Event(DialogContainer.okEvent, { bubbles: true }));
