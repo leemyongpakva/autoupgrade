@@ -77,7 +77,7 @@ class UpdateConfig extends AbstractTask
         $error = $this->container->getConfigurationValidator()->validate($config);
 
         if ($isLocal && empty($error)) {
-            $this->container->getLocalChannelConfigurationValidator()->validate($config);
+            $error = $this->container->getLocalChannelConfigurationValidator()->validate($config);
         }
 
         if (!empty($error)) {
