@@ -29,9 +29,7 @@ namespace PrestaShop\Module\AutoUpgrade\Task\Runner;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponse;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
-use UnexpectedValueException;
 
 /**
  * Execute the whole upgrade process in a single request.
@@ -60,19 +58,6 @@ class AllUpdateTasks extends ChainedTasks
     {
         if (!empty($options['action'])) {
             $this->step = $options['action'];
-        }
-
-        if (!empty($options[UpgradeConfiguration::CHANNEL])) {
-            $config = [
-                UpgradeConfiguration::CHANNEL => $options[UpgradeConfiguration::CHANNEL],
-            ];
-            $error = $this->container->getConfigurationValidator()->validate($config);
-
-            if (!empty($error)) {
-                throw new UnexpectedValueException(reset($error)['message']);
-            }
-
-            $this->container->getUpgradeConfiguration()->merge($config);
         }
     }
 
