@@ -10,9 +10,10 @@ $e: ".dialog";
 
 #{$ua-id} {
   #{$e} {
+    padding: 0;
     border: none;
-    border: none;
-    box-shadow: var(--#{$ua-prefix}box-shadow-modal);
+    border-radius: var(--#{$ua-prefix}border-radius);
+    box-shadow: var(--#{$ua-prefix}box-shadow-dialog);
     width: 508px;
     max-width: calc(100% - 2rem);
 
@@ -32,8 +33,11 @@ $e: ".dialog";
       border: none;
 
       .close {
+        display: flex;
+        align-items: center;
         flex-shrink: 0;
         float: none;
+        padding: 0.75rem;
         margin: 0;
         margin-inline-start: auto;
         opacity: 1;
@@ -70,7 +74,7 @@ $e: ".dialog";
       gap: 1rem;
     }
 
-    // Custom modals
+    // Custom dialogs
     &__spacer {
       display: flex;
       flex-direction: column;

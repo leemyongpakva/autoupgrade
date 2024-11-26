@@ -37,7 +37,7 @@ $cdk-prefix: "cdk-";
   --#{$ua-prefix}base-text-color-hover: var(--#{$ua-prefix}primary-700);
   --#{$ua-prefix}disabled-color: var(--#{$ua-prefix}primary-500);
   --#{$ua-prefix}border-color: var(--#{$ua-prefix}primary-400);
-  --#{$ua-prefix}box-shadow-modal: var(
+  --#{$ua-prefix}box-shadow-dialog: var(
     --#{$cdk-prefix}box-shadow-pop-modal,
     0 12px 24px rgb(0 0 0 / 0.1)
   );

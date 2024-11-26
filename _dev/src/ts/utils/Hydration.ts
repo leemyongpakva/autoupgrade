@@ -18,7 +18,7 @@ export default class Hydration {
   public hydrationEvent: Event = new Event(Hydration.hydrationEventName);
 
   public constructor() {
-    modalContainer.mount();
+    dialogContainer.mount();
   }
 
   /**
