@@ -11,7 +11,7 @@ interface ApiResponseNextRoute {
 }
 
 interface ApiResponseAction {
-  error: null |  boolean;
+  error: null | boolean;
   stepDone: null | boolean;
   next: string;
   status: string;
@@ -20,8 +20,8 @@ interface ApiResponseAction {
   nextErrors: string[];
   nextParams: {
     progressPercentage: number;
-    [key: string]: any;
-  }
+    [key: string]: unknown;
+  };
 }
 
 type ApiResponse = ApiResponseHydration | ApiResponseNextRoute | ApiResponseAction;
