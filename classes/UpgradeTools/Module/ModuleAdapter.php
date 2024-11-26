@@ -115,7 +115,7 @@ class ModuleAdapter
      *
      * @return array<array{name:string, version:string}>
      */
-    public function getInstalledVersionOfModules(array $filterOnModuleNames = null): array
+    public function getInstalledVersionOfModules(?array $filterOnModuleNames = null): array
     {
         $sql = 'SELECT name, version FROM ' . _DB_PREFIX_ . 'module';
 
