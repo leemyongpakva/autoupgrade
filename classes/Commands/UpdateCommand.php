@@ -81,7 +81,7 @@ class UpdateCommand extends AbstractCommand
             // also we do not want to repeat the update of the config in the recursive commands
             if ($input->getOption('data') === null) {
                 $configPath = $input->getOption('config-file-path');
-                $exitCode = $this->loadConfiguration($configPath, $this->upgradeContainer);
+                $exitCode = $this->loadConfiguration($configPath);
                 if ($exitCode !== ExitCode::SUCCESS) {
                     return $exitCode;
                 }

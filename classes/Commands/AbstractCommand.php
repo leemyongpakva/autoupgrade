@@ -32,6 +32,7 @@ use InvalidArgumentException;
 use PrestaShop\Module\AutoUpgrade\ErrorHandler;
 use PrestaShop\Module\AutoUpgrade\Log\CliLogger;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
+use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\Miscellaneous\UpdateConfig;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use Symfony\Component\Console\Command\Command;
@@ -48,6 +49,10 @@ abstract class AbstractCommand extends Command
      * @var UpgradeContainer
      */
     protected $upgradeContainer;
+    /**
+     * @var array<string, int|bool|string>
+     */
+    protected $consoleInputConfiguration = [];
 
     /**
      * @throws Exception
@@ -86,9 +91,11 @@ abstract class AbstractCommand extends Command
     /**
      * @throws Exception
      */
-    protected function loadConfiguration(?string $configPath, UpgradeContainer $upgradeContainer): int
+    protected function loadConfiguration(?string $configPath): int
     {
-        $controller = new UpdateConfig($upgradeContainer);
+        $controller = new UpdateConfig($this->upgradeContainer);
+
+        $configurationData = [];
 
         if ($configPath !== null) {
             $this->logger->debug('Loading configuration from ' . $configPath);
@@ -97,19 +104,28 @@ abstract class AbstractCommand extends Command
                 throw new InvalidArgumentException('Configuration file not found a location ' . $configPath);
             }
 
-            $inputData = json_decode($configFile, true);
+            $configurationData = json_decode($configFile, true);
 
-            if (!$inputData) {
+            if (!$configurationData) {
                 throw new InvalidArgumentException('An error occurred during the json decode process, please check the content and syntax of the file content');
             }
 
-            $this->logger->debug('Configuration file content: ' . json_encode($inputData));
-
-            $controller->inputCliParameters($inputData);
+            $this->logger->debug('Configuration file content: ' . json_encode($configurationData));
         }
 
-        $controller->init();
+        if (!empty($this->consoleInputConfiguration)) {
+            $configurationData = array_merge($configurationData, $this->consoleInputConfiguration);
+        }
 
-        return $controller->run();
+        if (!empty($configurationData)) {
+            $this->logger->debug('Following configuration will be used for the process: ' . json_encode($configurationData));
+
+            $controller->inputCliParameters($configurationData);
+            $controller->init();
+
+            return $controller->run();
+        }
+
+        return ExitCode::SUCCESS;
     }
 }
