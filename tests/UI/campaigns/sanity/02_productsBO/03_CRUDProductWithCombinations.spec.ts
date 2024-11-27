@@ -64,7 +64,7 @@ test.describe('BO - Catalog - Products : CRUD product with combinations', async 
       },
       {
         name: 'size',
-        values: ['L', 'XL'],
+        values: ['L'],
       },
     ],
   });
@@ -103,7 +103,7 @@ test.describe('BO - Catalog - Products : CRUD product with combinations', async 
   });
 
   // @todo : https://github.com/PrestaShop/PrestaShop/issues/36097
-  if (semver.lte(psVersion, '8.1.6')) {
+  if (semver.lte(psVersion, '8.1.6') && semver.gte(psVersion, '7.3.0')) {
     test('should close the menu', async () => {
       await utilsTest.addContextItem(test.info(), 'testIdentifier', 'closeMenu', baseContext);
 
@@ -150,7 +150,7 @@ test.describe('BO - Catalog - Products : CRUD product with combinations', async 
       });
     }
 
-    test('should create combinations and check generate combinations button', async () => {
+    test('should create combinations', async () => {
       await utilsTest.addContextItem(test.info(), 'testIdentifier', 'createCombinations', baseContext);
 
       const textResult = await boProductsCreateTabCombinationsPage.setProductAttributes(
@@ -160,6 +160,8 @@ test.describe('BO - Catalog - Products : CRUD product with combinations', async 
 
       if (semver.gte(psVersion, '8.1.0')) {
         expect(textResult).toEqual('Generate 2 combinations');
+      } else if (semver.lte(psVersion, '7.2.1')) {
+        expect(textResult).toEqual(boProductsCreatePage.successfulUpdateMessage);
       } else {
         expect(textResult).toEqual(boProductsCreatePage.successfulUpdateMessage);
       }
@@ -248,7 +250,9 @@ test.describe('BO - Catalog - Products : CRUD product with combinations', async 
       );
 
       if (semver.gte(psVersion, '8.1.0')) {
-        expect(textResult).toEqual('Generate 6 combinations');
+        expect(textResult).toEqual('Generate 3 combinations');
+      } else if (semver.lte(psVersion, '7.2.1')) {
+        expect(textResult).toEqual(boProductsCreatePage.successfulUpdateMessage);
       } else {
         expect(textResult).toEqual(boProductsCreatePage.successfulUpdateMessage);
       }
@@ -259,7 +263,7 @@ test.describe('BO - Catalog - Products : CRUD product with combinations', async 
         await utilsTest.addContextItem(test.info(), 'testIdentifier', 'generateCombinations2', baseContext);
 
         const successMessage = await boProductsCreateTabCombinationsPage.generateCombinations(page);
-        expect(successMessage).toEqual('Successfully generated 6 combinations.');
+        expect(successMessage).toEqual('Successfully generated 3 combinations.');
       });
 
       test('should check that combinations generation modal is closed', async () => {
@@ -309,7 +313,7 @@ test.describe('BO - Catalog - Products : CRUD product with combinations', async 
   });
 
   test.describe('Delete product', async () => {
-    test('should go back to BO to delete product', async () => {
+    test('should go back to BO', async () => {
       await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goBackToBOToDeleteProduct', baseContext);
 
       // Go back to BO

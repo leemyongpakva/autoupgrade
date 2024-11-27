@@ -11,7 +11,9 @@ import {
 import {
   test, expect, Page, BrowserContext,
 } from '@playwright/test';
+import semver from 'semver';
 
+const psVersion = utilsTest.getPSVersion();
 const baseContext: string = 'sanity_catalogFO_filterProducts';
 
 /*
@@ -52,24 +54,39 @@ test.describe('FO - Catalog : Filter Products by categories in Home page', async
     expect(allProductsNumber).toBeGreaterThan(0);
   });
 
-  test('should filter products by the category \'Accessories\' and check result', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'FilterProductByCategory', baseContext);
+  if (semver.gte(psVersion, '7.3.0')) {
+    test('should filter products by category and check result', async () => {
+      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'FilterProductByCategory', baseContext);
 
-    await foClassicCategoryPage.goToCategory(page, dataCategories.accessories.id);
+      if (allProductsNumber > 7) {
+        await foClassicCategoryPage.goToCategory(page, dataCategories.accessories.id);
 
-    const pageTitle = await foClassicCategoryPage.getPageTitle(page);
-    expect(pageTitle).toEqual(dataCategories.accessories.name);
+        const pageTitle = await foClassicCategoryPage.getPageTitle(page);
+        expect(pageTitle).toEqual(dataCategories.accessories.name);
 
-    const numberOfProducts = await foClassicCategoryPage.getNumberOfProducts(page);
-    expect(numberOfProducts).toBeLessThan(allProductsNumber);
-  });
+        const numberOfProducts = await foClassicCategoryPage.getNumberOfProducts(page);
+        expect(numberOfProducts).toBeLessThan(allProductsNumber);
+      } else {
+        await foClassicCategoryPage.goToCategory(page, dataCategories.oldWomen.id);
 
-  test('should filter products by the subcategory \'Stationery\' and check result', async () => {
+        const pageTitle = await foClassicCategoryPage.getPageTitle(page);
+        expect(pageTitle).toEqual(dataCategories.oldWomen.name);
+
+        const numberOfProducts = await foClassicCategoryPage.getNumberOfProducts(page);
+        expect(numberOfProducts).toEqual(allProductsNumber);
+      }
+    });
+  }
+
+  test('should filter products by subcategory and check result', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'FilterProductBySubCategory', baseContext);
 
     await foClassicCategoryPage.reloadPage(page);
-    await foClassicCategoryPage.goToSubCategory(page, dataCategories.accessories.id, dataCategories.stationery.id);
-
+    if (allProductsNumber > 7) {
+      await foClassicCategoryPage.goToSubCategory(page, dataCategories.accessories.id, dataCategories.stationery.id);
+    } else {
+      await foClassicCategoryPage.goToSubCategory(page, dataCategories.oldWomen.id, dataCategories.eveningDresses.id);
+    }
     const numberOfProducts = await foClassicCategoryPage.getNumberOfProducts(page);
     expect(numberOfProducts).toBeLessThan(allProductsNumber);
   });

@@ -121,21 +121,16 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
       expect(isVisible, 'Reset button is visible!').toEqual(false);
     });
 
-    if (semver.lt(psVersion, '8.1.0') || isProductPageV1) {
-      test('should get the number of products', async () => {
-        await utilsTest.addContextItem(test.info(), 'testIdentifier', 'getNumberOfProduct', baseContext);
+    test('should get the number of products', async () => {
+      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'getNumberOfProduct', baseContext);
 
+      if (semver.lt(psVersion, '8.1.0') || isProductPageV1) {
         numberOfProducts = await boProductsPage.getNumberOfProductsFromList(page);
-        expect(numberOfProducts).toBeGreaterThan(0);
-      });
-    } else {
-      test('should get number of products', async () => {
-        await utilsTest.addContextItem(test.info(), 'testIdentifier', 'getNumberOfProduct', baseContext);
-
+      } else {
         numberOfProducts = await boProductsPage.getNumberOfProductsFromHeader(page);
-        expect(numberOfProducts).toBeGreaterThan(0);
-      });
-    }
+      }
+      expect(numberOfProducts).toBeGreaterThan(0);
+    });
 
     [
       {
@@ -143,6 +138,8 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
           identifier: 'filterIDMinMax',
           filterBy: 'id_product',
           filterValue: {min: 5, max: 10},
+          // For PS version <= 1.7.2
+          oldFilterValue: {min: 3, max: 7},
           filterType: 'input',
         },
       },
@@ -151,6 +148,8 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
           identifier: 'filterName',
           filterBy: 'product_name',
           filterValue: dataProducts.demo_14.name,
+          // For PS version <= 1.7.2
+          oldFilterValue: dataProducts.old_demo_4.name,
           filterType: 'input',
         },
       },
@@ -159,6 +158,8 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
           identifier: 'filterReference',
           filterBy: 'reference',
           filterValue: dataProducts.demo_14.reference,
+          // For PS version <= 1.7.2
+          oldFilterValue: dataProducts.old_demo_7.reference,
           filterType: 'input',
         },
       },
@@ -167,6 +168,8 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
           identifier: 'filterCategory',
           filterBy: 'category',
           filterValue: dataCategories.art.name,
+          // For PS version <= 1.7.2
+          oldFilterValue: dataProducts.old_demo_3.category,
           filterType: 'input',
         },
       },
@@ -175,6 +178,8 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
           identifier: 'filterPriceMinMax',
           filterBy: 'price',
           filterValue: {min: 5, max: 10},
+          // For PS version <= 1.7.2
+          oldFilterValue: {min: 20, max: 30},
           filterType: 'input',
         },
       },
@@ -183,6 +188,8 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
           identifier: 'filterQuantityMinMax',
           filterBy: 'quantity',
           filterValue: {min: 1300, max: 1500},
+          // For PS version <= 1.7.2
+          oldFilterValue: {min: 900, max: 1500},
           filterType: 'input',
         },
       },
@@ -191,6 +198,8 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
           identifier: 'filterStatus',
           filterBy: 'active',
           filterValue: 'Yes',
+          // For PS version <= 1.7.2
+          oldFilterValue: 'Yes',
           filterType: 'select',
         },
       },
@@ -198,10 +207,20 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
       test(`should filter list by '${tst.args.filterBy}' and check result`, async () => {
         await utilsTest.addContextItem(test.info(), 'testIdentifier', `${tst.args.identifier}`, baseContext);
 
+        let filterValue: any = '';
+
+        if (numberOfProducts > 7) {
+          // For PS version > 1.7.2
+          filterValue = tst.args.filterValue;
+        } else {
+          // For PS version <= 1.7.2
+          filterValue = tst.args.oldFilterValue;
+        }
+
         if (semver.lt(psVersion, '8.1.0') && tst.args.filterBy === 'active') {
           await boProductsPage.filterProducts(page, tst.args.filterBy, 'Active', tst.args.filterType);
         } else {
-          await boProductsPage.filterProducts(page, tst.args.filterBy, tst.args.filterValue, tst.args.filterType);
+          await boProductsPage.filterProducts(page, tst.args.filterBy, filterValue, tst.args.filterType);
         }
         const numberOfProductsAfterFilter = await boProductsPage.getNumberOfProductsFromList(page);
 
@@ -214,13 +233,13 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
         for (let i = 1; i <= numberOfProductsAfterFilter; i++) {
           const textColumn = await boProductsPage.getTextColumn(page, tst.args.filterBy, i);
 
-          if (typeof tst.args.filterValue !== 'string') {
-            expect(textColumn).toBeGreaterThanOrEqual(tst.args.filterValue.min);
-            expect(textColumn).toBeLessThanOrEqual(tst.args.filterValue.max);
+          if (typeof filterValue !== 'string') {
+            expect(textColumn).toBeGreaterThanOrEqual(filterValue.min);
+            expect(textColumn).toBeLessThanOrEqual(filterValue.max);
           } else if (tst.args.filterBy === 'active') {
             expect(textColumn).toEqual(true);
           } else {
-            expect(textColumn).toContain(tst.args.filterValue);
+            expect(textColumn).toContain(filterValue);
           }
         }
       });

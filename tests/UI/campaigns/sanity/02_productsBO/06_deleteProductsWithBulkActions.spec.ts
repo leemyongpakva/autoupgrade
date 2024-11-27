@@ -81,7 +81,7 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
   });
 
   // @todo : https://github.com/PrestaShop/PrestaShop/issues/36097
-  if (semver.lte(psVersion, '8.1.6')) {
+  if (semver.lte(psVersion, '8.1.6') && semver.gte(psVersion, '7.3.0')) {
     test('should close the menu', async () => {
       await utilsTest.addContextItem(test.info(), 'testIdentifier', 'closeMenu', baseContext);
 

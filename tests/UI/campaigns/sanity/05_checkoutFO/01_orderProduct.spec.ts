@@ -4,6 +4,7 @@ import {
   // Import FO pages
   foClassicHomePage,
   foClassicLoginPage,
+  foClassicCategoryPage,
   foClassicCartPage,
   foClassicCheckoutPage,
   foClassicCheckoutOrderConfirmationPage,
@@ -27,6 +28,7 @@ const baseContext: string = 'sanity_checkoutFO_orderProduct';
 test.describe('BO - Checkout : Order a product and check order confirmation', async () => {
   let browserContext: BrowserContext;
   let page: Page;
+  let allProductsNumber: number = 0;
 
   test.beforeAll(async ({browser}) => {
     browserContext = await browser.newContext();
@@ -77,9 +79,19 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
     expect(result).toEqual(true);
   });
 
+  test('should check and get the products number', async () => {
+    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkNumberOfProducts', baseContext);
+
+    await foClassicHomePage.goToAllProductsPage(page);
+
+    allProductsNumber = await foClassicCategoryPage.getNumberOfProducts(page);
+    expect(allProductsNumber).toBeGreaterThan(0);
+  });
+
   test('should quick view the first product', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'quickViewFirstProduct', baseContext);
 
+    await foClassicHomePage.goToHomePage(page);
     await foClassicHomePage.quickViewProduct(page, 1);
 
     const isQuickViewModalVisible = await foClassicModalQuickViewPage.isQuickViewProductModalVisible(page);
@@ -99,12 +111,23 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   test('should check the cart details', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkCartDetails', baseContext);
 
-    const result = await foClassicCartPage.getProductDetail(page, 1);
-    await Promise.all([
-      expect(result.name).toEqual(dataProducts.demo_1.name),
-      expect(result.price).toEqual(dataProducts.demo_1.finalPrice),
-      expect(result.quantity).toEqual(1),
-    ]);
+    if (allProductsNumber > 7) {
+      const result = await foClassicCartPage.getProductDetail(page, 1);
+      await Promise.all([
+        expect(result.name).toEqual(dataProducts.demo_1.name),
+        expect(result.price).toEqual(dataProducts.demo_1.finalPrice),
+        expect(result.quantity).toEqual(1),
+      ]);
+    } else {
+      const productName = await foClassicCartPage.getProductName(page, 1);
+      expect(productName).toEqual(dataProducts.old_demo_1.name);
+
+      const productPrice = await foClassicCartPage.getProductPrice(page, 1);
+      expect(productPrice).toEqual(dataProducts.old_demo_1.finalPrice);
+
+      const productQuantity = await foClassicCartPage.getProductQuantity(page, 1);
+      expect(productQuantity).toEqual(1);
+    }
   });
 
   test('should proceed to checkout and check Step Address', async () => {
@@ -136,7 +159,7 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
     expect(isStepDeliveryComplete, 'Step Address is not complete').toEqual(true);
   });
 
-  test('should Pay by back wire and confirm order', async () => {
+  test('should Pay by bank wire and confirm order', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'confirmOrder', baseContext);
 
     await foClassicCheckoutPage.choosePaymentAndOrder(page, dataPaymentMethods.wirePayment.moduleName);

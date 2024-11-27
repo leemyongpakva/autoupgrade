@@ -3,6 +3,7 @@ import {
   utilsTest,
   // Import FO pages
   foClassicHomePage,
+  foClassicCategoryPage,
   foClassicProductPage,
   foClassicCartPage,
   // Import data
@@ -28,6 +29,7 @@ const psVersion = utilsTest.getPSVersion();
 test.describe('FO - Cart : Check Cart in FO', async () => {
   let browserContext: BrowserContext;
   let page: Page;
+  let allProductsNumber: number = 0;
   let totalATI: number = 0;
   let itemsNumber: number = 0;
 
@@ -49,20 +51,35 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
     expect(isHomePage).toEqual(true);
   });
 
+  test('should check and get the products number', async () => {
+    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkNumberOfProducts', baseContext);
+
+    await foClassicHomePage.goToAllProductsPage(page);
+
+    allProductsNumber = await foClassicCategoryPage.getNumberOfProducts(page);
+    expect(allProductsNumber).toBeGreaterThan(0);
+  });
+
   test('should go to the first product page', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToProductPage1', baseContext);
 
+    await foClassicHomePage.goToHomePage(page);
     await foClassicHomePage.goToProductPage(page, 1);
 
     const pageTitle = await foClassicProductPage.getPageTitle(page);
-    expect(pageTitle).toContain(dataProducts.demo_1.name);
+
+    if (allProductsNumber > 7) {
+      expect(pageTitle).toContain(dataProducts.demo_1.name);
+    } else {
+      expect(pageTitle).toContain(dataProducts.old_demo_1.name);
+    }
   });
 
   test('should add product to cart and check that the number of products is updated in cart header', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'addProductToCart1', baseContext);
 
     await foClassicProductPage.addProductToTheCart(page);
-    // getNumberFromText is used to get the notifications number in the cart
+
     const notificationsNumber = await foClassicHomePage.getCartNotificationsNumber(page);
     expect(notificationsNumber).toEqual(1);
   });
@@ -82,7 +99,12 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
     await foClassicHomePage.goToProductPage(page, 2);
 
     const pageTitle = await foClassicProductPage.getPageTitle(page);
-    expect(pageTitle).toContain(dataProducts.demo_3.name);
+
+    if (allProductsNumber > 7) {
+      expect(pageTitle).toContain(dataProducts.demo_3.name);
+    } else {
+      expect(pageTitle).toContain(dataProducts.old_demo_2.name);
+    }
   });
 
   test('should add the second product to cart and check that the number of products is updated in cart header', async () => {
@@ -90,7 +112,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
 
     await foClassicProductPage.addProductToTheCart(page);
 
-    // getNumberFromText is used to get the notifications number in the cart
     const notificationsNumber = await foClassicHomePage.getCartNotificationsNumber(page);
     expect(notificationsNumber).toEqual(2);
   });
@@ -98,33 +119,59 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   test('should check the first product details', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkProductDetail1', baseContext);
 
-    const result = await foClassicCartPage.getProductDetail(page, 1);
-    await Promise.all([
-      expect(result.name).toEqual(dataProducts.demo_1.name),
-      expect(result.price).toEqual(dataProducts.demo_1.finalPrice),
-      expect(result.quantity).toEqual(1),
-    ]);
+    if (allProductsNumber > 7) {
+      const result = await foClassicCartPage.getProductDetail(page, 1);
+      await Promise.all([
+        expect(result.name).toEqual(dataProducts.demo_1.name),
+        expect(result.price).toEqual(dataProducts.demo_1.finalPrice),
+        expect(result.quantity).toEqual(1),
+      ]);
+    } else {
+      const productName = await foClassicCartPage.getProductName(page, 1);
+      expect(productName).toEqual(dataProducts.old_demo_1.name);
+
+      const productPrice = await foClassicCartPage.getProductPrice(page, 1);
+      expect(productPrice).toEqual(dataProducts.old_demo_1.finalPrice);
+
+      const productQuantity = await foClassicCartPage.getProductQuantity(page, 1);
+      expect(productQuantity).toEqual(1);
+    }
   });
 
   test('should check the second product details', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkProductDetail2', baseContext);
 
-    const result = await foClassicCartPage.getProductDetail(page, 2);
-    await Promise.all([
-      expect(result.name).toEqual(dataProducts.demo_3.name),
-      expect(result.price).toEqual(dataProducts.demo_3.finalPrice),
-      expect(result.quantity).toEqual(1),
-    ]);
+    if (allProductsNumber > 7) {
+      const result = await foClassicCartPage.getProductDetail(page, 2);
+      await Promise.all([
+        expect(result.name).toEqual(dataProducts.demo_3.name),
+        expect(result.price).toEqual(dataProducts.demo_3.finalPrice),
+        expect(result.quantity).toEqual(1),
+      ]);
+    } else {
+      const productName = await foClassicCartPage.getProductName(page, 2);
+      expect(productName).toEqual(dataProducts.old_demo_2.name);
+
+      const productPrice = await foClassicCartPage.getProductPrice(page, 2);
+      expect(productPrice).toEqual(dataProducts.old_demo_2.finalPrice);
+
+      const productQuantity = await foClassicCartPage.getProductQuantity(page, 2);
+      expect(productQuantity).toEqual(1);
+    }
   });
 
   // @todo : https://github.com/PrestaShop/PrestaShop/issues/9779
   test.skip('should get the ATI price', async () => {
     await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkTotalATI', baseContext);
 
-    // getNumberFromText is used to get the price ATI
     totalATI = await foClassicCartPage.getATIPrice(page);
-    expect(totalATI.toString()).toEqual((dataProducts.demo_3.finalPrice + dataProducts.demo_1.finalPrice)
-      .toFixed(2));
+    if (allProductsNumber > 7) {
+      expect(totalATI.toString()).toEqual((dataProducts.demo_3.finalPrice + dataProducts.demo_1.finalPrice)
+        .toFixed(2));
+    } else {
+      expect(totalATI.toString()).toEqual((dataProducts.old_demo_1.finalPrice + dataProducts.old_demo_2.finalPrice)
+        .toFixed(2));
+    }
   });
 
   test('should get the products number and check that is equal to 2', async () => {
@@ -132,7 +179,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
 
     totalATI = await foClassicCartPage.getATIPrice(page);
 
-    // getNumberFromText is used to get the products number
     itemsNumber = await foClassicCartPage.getProductsNumber(page);
     expect(itemsNumber).toEqual(2);
   });
@@ -142,11 +188,9 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
 
     await foClassicCartPage.editProductQuantity(page, 1, 3);
 
-    // getNumberFromText is used to get the new price ATI
     const totalPrice = await foClassicCartPage.getATIPrice(page);
     expect(totalPrice).toBeGreaterThan(totalATI);
 
-    // getNumberFromText is used to get the new products number
     const productsNumber = await foClassicCartPage.getProductsNumber(page);
     expect(productsNumber).toBeGreaterThan(itemsNumber);
   });
