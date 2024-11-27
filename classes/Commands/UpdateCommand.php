@@ -31,6 +31,7 @@ use Exception;
 use InvalidArgumentException;
 use PrestaShop\Module\AutoUpgrade\DeveloperDocumentation;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\Runner\AllUpdateTasks;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
@@ -88,6 +89,7 @@ class UpdateCommand extends AbstractCommand
             if ($action === null || $action === TaskName::TASK_UPDATE_INITIALIZATION) {
                 $this->logger->debug('Cleaning previous state files.');
                 $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
+                $this->upgradeContainer->getFileConfigurationStorage()->clean(UpgradeFileNames::CONFIG_FILENAME);
 
                 $this->processConsoleInputConfiguration($input);
                 $configPath = $input->getOption('config-file-path');
@@ -129,7 +131,7 @@ class UpdateCommand extends AbstractCommand
             return ExitCode::SUCCESS;
         }
 
-        if (strpos($lastInfo, 'bin/console update:start') !== false) {
+        if (strpos($lastInfo, self::$defaultName) !== false) {
             if (preg_match('/--action=(\S+)/', $lastInfo, $actionMatches)) {
                 $action = $actionMatches[1];
                 $this->logger->debug('Action parameter found: ' . $action);
@@ -137,9 +139,9 @@ class UpdateCommand extends AbstractCommand
                 throw new InvalidArgumentException('The command does not contain the necessary information to continue the update process.');
             }
 
-            $new_string = str_replace('INFO - $ ', '', $lastInfo);
+            $newCommand = str_replace('INFO - $ ', '', $lastInfo);
             $decorationParam = $output->isDecorated() ? ' --ansi' : '';
-            system('php ' . $new_string . $decorationParam, $exitCode);
+            system('php ' . $newCommand . $decorationParam, $exitCode);
 
             return $exitCode;
         }
