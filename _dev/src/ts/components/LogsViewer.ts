@@ -1,8 +1,9 @@
 import ComponentAbstract from './ComponentAbstract';
 import { SeverityClasses, LogEntry } from '../types/logsTypes';
 import { parseLogWithSeverity } from '../utils/logsUtils';
+import { Destroyable } from '../types/DomLifecycle';
 
-export default class LogsViewer extends ComponentAbstract {
+export default class LogsViewer extends ComponentAbstract implements Destroyable {
   #warnings: string[] = [];
   #errors: string[] = [];
   #isSummaryDisplayed: boolean = false;
@@ -27,6 +28,14 @@ export default class LogsViewer extends ComponentAbstract {
     '#log-summary',
     'Template summary not found'
   );
+  #templateSummaryButtons = this.queryElement<HTMLTemplateElement>(
+    '#summary-buttons',
+    'Template summary buttons not found'
+  );
+
+  public beforeDestroy = () => {
+    this.#logsSummary.removeEventListener('click', this.#handleLinkEvent);
+  };
 
   /**
    * @public
@@ -101,6 +110,31 @@ export default class LogsViewer extends ComponentAbstract {
     this.#appendFragmentElement(fragment, this.#logsSummary);
     this.#isSummaryDisplayed = true;
   }
+
+  /**
+   * @private
+   * @param {string} downloadLogsLink - The link to download update logs.
+   * @returns {HTMLDivElement} - DIV element containing summary buttons.
+   * @description Creates DIV element containing summary buttons.
+   * Applies appropriate href and download attributes to download button.
+   */
+  #createSummaryButtons = (downloadLogsLink: string): HTMLDivElement => {
+    const summaryButtonsFragment = this.#templateSummaryButtons.content.cloneNode(
+      true
+    ) as DocumentFragment;
+    const summaryButtons = summaryButtonsFragment.querySelector(
+      '[data-slot-template="summary-buttons"]'
+    ) as HTMLDivElement;
+
+    const downloadLogsButton = summaryButtons.querySelector(
+      '[data-slot-template="download-button"]'
+    ) as HTMLAnchorElement;
+
+    downloadLogsButton.href = downloadLogsLink;
+    downloadLogsButton.download = downloadLogsLink.split('/').pop()!;
+
+    return summaryButtons;
+  };
 
   /**
    * @private
