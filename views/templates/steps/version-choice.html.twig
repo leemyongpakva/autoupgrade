@@ -28,18 +28,20 @@
       </p>
 
       <p class="up-to-date__message">
-        {{ 'Current PrestaShop version:'|trans({}) }}
-        {{ current_prestashop_version }}
+        {{ 'Current PrestaShop version: %currentPrestashopVersion%'|trans({
+          '%currentPrestashopVersion%': current_prestashop_version
+        }) }}
         <br />
-        {{ 'Current PHP version:'|trans({}) }}
-        {{ current_php_version }}
+        {{ 'Current PHP version: %currentPhpVersion%'|trans({
+          '%currentPhpVersion%': current_php_version
+        }) }}
       </p>
     </div>
 
     {% if no_local_archive %}
       {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
         message: "Unlock the local update feature and manually update your store to your preferred upgrade by saving the archive and XML files of the PrestaShop version in the following directory on your server: %pathToLocalArchive%"|trans({
-          '%pathToLocalArchive%': '<b>/admin/autoupgrade/download/</b>'
+          '%pathToLocalArchive%': '<b>/your-admin-directory/autoupgrade/download/</b>'
         })|raw,
         alertStatus: "info",
       } %}
@@ -68,17 +70,19 @@
       </p>
 
       <p class="not-up-to-date__message">
-        {{ 'Current PrestaShop version:'|trans({}) }}
-        {{ current_prestashop_version }}
+        {{ 'Current PrestaShop version: %currentPrestashopVersion%'|trans({
+          '%currentPrestashopVersion%': current_prestashop_version
+        }) }}
         <br />
-        {{ 'Current PHP version:'|trans({}) }}
-        {{ current_php_version }}
+        {{ 'Current PHP version: %currentPhpVersion%'|trans({
+          '%currentPhpVersion%': current_php_version
+        }) }}
       </p>
 
       {% if not no_local_archive %}
         <p>
           <strong>
-            {{ 'Select version:'|trans({}) }}
+            {{ 'Select version'|trans({}) }}
           </strong>
         </p>
 
@@ -103,7 +107,7 @@
       {% if no_local_archive %}
         {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
           message: "Unlock the local update feature and manually update your store to your preferred upgrade by saving the archive and XML files of the PrestaShop version in the following directory on your server: %pathToLocalArchive%"|trans({
-            '%pathToLocalArchive%': '<b>/admin/autoupgrade/download/</b>'
+            '%pathToLocalArchive%': '<b>/your-admin-directory/autoupgrade/download/</b>'
           })|raw,
           alertStatus: "info",
         } %}

@@ -213,18 +213,25 @@ class UpgradeSelfCheck
             case self::PHP_COMPATIBILITY_INVALID:
                 return [
                     'message' => $this->translator->trans(
-                        'Your current PHP version isn\'t compatible with your PrestaShop version. (Expected: %s - %s | Current: %s)',
-                        [$phpCompatibilityRange['php_min_version'], $phpCompatibilityRange['php_max_version'], $phpCompatibilityRange['php_current_version']]
+                        'Your current PHP version isn\'t compatible with PrestaShop %s. (Expected: %s - %s | Current: %s)',
+                        [$version, $phpCompatibilityRange['php_min_version'], $phpCompatibilityRange['php_max_version'], $phpCompatibilityRange['php_current_version']]
                     ),
                 ];
+
             case self::ROOT_DIRECTORY_NOT_WRITABLE:
                 return [
-                    'message' => $this->translator->trans('Your store\'s root directory isn\'t writable. Provide write access to the user running PHP with appropriate permission & ownership.'),
+                    'message' => $this->translator->trans(
+                        'Your store\'s root directory %s isn\'t writable. Provide write access to the user running PHP with appropriate permission & ownership.',
+                        [$this->prodRootPath]
+                    ),
                 ];
 
             case self::ADMIN_UPGRADE_DIRECTORY_NOT_WRITABLE:
                 return [
-                    'message' => $this->translator->trans('The "/admin/autoupgrade" directory isn\'t writable. Provide write access to the user running PHP with appropriate permission & ownership.'),
+                    'message' => $this->translator->trans(
+                        'The %s directory isn\'t writable. Provide write access to the user running PHP with appropriate permission & ownership.',
+                        [$this->autoUpgradePath]
+                    ),
                 ];
 
             case self::SAFE_MODE_ENABLED:
@@ -236,15 +243,17 @@ class UpgradeSelfCheck
                 return [
                     'message' => $this->translator->trans('Files can\'t be downloaded. Enable PHP\'s "allow_url_fopen" option or install PHP extension "cURL".'),
                 ];
+
             case self::ZIP_DISABLED:
                 return [
                     'message' => $this->translator->trans('Missing PHP extension "zip".'),
                 ];
+
             case self::MAINTENANCE_MODE_DISABLED:
                 if ($isWebVersion) {
                     $maintenanceLink = Context::getContext()->link->getAdminLink('AdminMaintenance');
                     $params = [
-                        '[1]' => '<a href=' . $maintenanceLink . ' target="_blank">',
+                        '[1]' => '<a class="link" href=' . $maintenanceLink . ' target="_blank">',
                         '[/1]' => '</a>',
                     ];
                 } else {
@@ -257,15 +266,29 @@ class UpgradeSelfCheck
                 return [
                     'message' => $this->translator->trans('Maintenance mode needs to be enabled. Enable maintenance mode and add your maintenance IP in [1]Shop parameters > General > Maintenance[/1].', $params),
                 ];
+
             case self::CACHE_ENABLED:
+                if ($isWebVersion) {
+                    $cacheLink = Context::getContext()->link->getAdminLink('AdminPerformance');
+                    $params = [
+                        '[1]' => '<a class="link" href=' . $cacheLink . ' target="_blank">',
+                        '[/1]' => '</a>',
+                    ];
+                } else {
+                    $params = [
+                        '[1]' => '',
+                        '[/1]' => '',
+                    ];
+                }
+
                 return [
-                    'message' => $this->translator->trans('PrestaShop\'s caching features needs to be disabled.'),
+                    'message' => $this->translator->trans('PrestaShop\'s caching features needs to be disabled. Disable caching features in [1]Advanced parameters > Performance > Caching[/1].', $params),
                 ];
 
             case self::MAX_EXECUTION_TIME_VALUE_INCORRECT:
                 return [
                     'message' => $this->translator->trans(
-                        'PHP\'s max_execution_time setting needs to have a high value or needs to be disabled entirely (current value: %s seconds)',
+                        'PHP\'s max_execution_time setting needs to have a high value or needs to be disabled entirely (current value: %s seconds).',
                         [$this->getMaxExecutionTime()]
                     ),
                 ];
@@ -296,6 +319,7 @@ class UpgradeSelfCheck
                 return [
                     'message' => $this->translator->trans('PHP file_uploads configuration needs to be enabled.'),
                 ];
+
             case self::KEY_GENERATION_INVALID:
                 return [
                     'message' => $this->translator->trans('Unable to generate private keys using openssl_pkey_new. Check your OpenSSL configuration, especially the path to openssl.cafile.'),
@@ -303,7 +327,7 @@ class UpgradeSelfCheck
 
             case self::NOT_WRITING_DIRECTORY_LIST_NOT_EMPTY:
                 return [
-                    'message' => $this->translator->trans('It\'s not possible to write in the following folders, please provide write access to the user running PHP with appropriate permission & ownership: '),
+                    'message' => $this->translator->trans('It\'s not possible to write in the following folders: Provide write access to the user running PHP with appropriate permission & ownership: '),
                     'list' => $this->getNotWritingDirectories(),
                 ];
 
@@ -313,13 +337,29 @@ class UpgradeSelfCheck
                 ];
 
             case self::MODULE_VERSION_IS_OUT_OF_DATE:
+                if ($isWebVersion) {
+                    $moduleUpdateLink = Context::getContext()->link->getAdminLink('AdminModulesUpdates');
+                    $params = [
+                        '[1]' => '<a class="link" href=' . $moduleUpdateLink . ' target="_blank">',
+                        '[/1]' => '</a>',
+                    ];
+                } else {
+                    $params = [
+                        '[1]' => '',
+                        '[/1]' => '',
+                    ];
+                }
+
                 return [
-                    'message' => $this->translator->trans('Your current version of the module is outdated.'),
+                    'message' => $this->translator->trans('Your current version of the module is out of date. Update now [1]Modules > Module Manager > Updates[/1]', $params),
                 ];
 
             case self::PHP_COMPATIBILITY_UNKNOWN:
                 return [
-                    'message' => $this->translator->trans('We were unable to check your PHP compatibility with the destination PrestaShop version.'),
+                    'message' => $this->translator->trans(
+                        'We were unable to check your PHP compatibility with PrestaShop %s.',
+                        [$version]
+                    ),
                 ];
 
             case self::TEMPERED_FILES_LIST_NOT_EMPTY:

@@ -38,7 +38,7 @@ class UpdateSteps
                 'title' => $this->translator->trans('Update options'),
             ],
             self::STEP_BACKUP => [
-                'title' => $this->translator->trans('Back up your store'),
+                'title' => $this->translator->trans('Backup'),
             ],
             self::STEP_UPDATE => [
                 'title' => $this->translator->trans('Update'),

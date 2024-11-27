@@ -156,7 +156,7 @@ class LocalChannelConfigurationValidator
     {
         if ($this->xmlVersion !== null && $this->xmlVersion !== $this->targetVersion) {
             return [
-                'message' => $this->translator->trans('The PrestaShop version in your archive doesn’t match the one in XML file. Please fix this issue and try again.'),
+                'message' => $this->translator->trans('The PrestaShop version in your archive doesn\'t match the one in XML file. Please fix this issue and try again.'),
             ];
         }
 
