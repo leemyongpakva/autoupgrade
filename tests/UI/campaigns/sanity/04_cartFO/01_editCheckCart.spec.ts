@@ -12,9 +12,9 @@ import {
 import {
   test, expect, Page, BrowserContext,
 } from '@playwright/test';
+import semver from 'semver';
 
 const baseContext: string = 'sanity_cartFO_editCheckCart';
-import semver from 'semver';
 
 const psVersion = utilsTest.getPSVersion();
 
@@ -160,6 +160,7 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
     expect(totalPrice).toBeGreaterThan(totalATI);
 
     let productsNumber: number = 0;
+
     if (semver.gte(psVersion, '7.8.0')) {
       productsNumber = await foClassicCartPage.getCartNotificationsNumber(page);
     } else {

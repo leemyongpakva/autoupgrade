@@ -9,13 +9,14 @@ import {
 import {
   test, expect, Page, BrowserContext,
 } from '@playwright/test';
+import semver from 'semver';
 
 const baseContext: string = 'shopVersion_checkVersion';
 const psVersion = utilsTest.getPSVersion();
 
 /*
  Open BO
- Check new version lin login page
+ Check new version in login page for PS version <= 1.7.2.5
  Login
  Check new version in dashboard page
  */
@@ -41,19 +42,30 @@ test.describe('Check new shop version', () => {
     expect(pageTitle).toContain(boLoginPage.pageTitle);
   });
 
-  test('should login in BO', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'loginBO', baseContext);
+  if (semver.lt(psVersion, '7.4.0')) {
+    test(`should check that the shop version is ${psVersion}`, async () => {
+      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'openBO', baseContext);
 
-    await boLoginPage.successLogin(page, global.BO.EMAIL, global.BO.PASSWD);
+      const shopVersion = await boLoginPage.getShopVersion(page);
+      expect(shopVersion).toContain(psVersion);
+    });
+  }
 
-    const pageTitle = await boDashboardPage.getPageTitle(page);
-    expect(pageTitle).toContain(boDashboardPage.pageTitle);
-  });
+  if (semver.gte(psVersion, '7.4.0')) {
+    test('should login in BO', async () => {
+      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'loginBO', baseContext);
 
-  test(`should check that the new shop version is ${psVersion}`, async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkShopVersionInDashboard', baseContext);
+      await boLoginPage.successLogin(page, global.BO.EMAIL, global.BO.PASSWD);
 
-    const shopVersion = await boDashboardPage.getShopVersion(page);
-    expect(shopVersion).toContain(psVersion);
-  });
+      const pageTitle = await boDashboardPage.getPageTitle(page);
+      expect(pageTitle).toContain(boDashboardPage.pageTitle);
+    });
+
+    test(`should check that the new shop version is ${psVersion}`, async () => {
+      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkShopVersionInDashboard', baseContext);
+
+      const shopVersion = await boDashboardPage.getShopVersion(page);
+      expect(shopVersion).toContain(psVersion);
+    });
+  }
 });
