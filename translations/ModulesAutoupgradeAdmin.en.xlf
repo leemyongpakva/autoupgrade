@@ -817,9 +817,9 @@ Comment: directory already exists</note>
         <target>Update options</target>
         <note>Line: 38</note>
       </trans-unit>
-      <trans-unit id="3500ba09d0538297440ca620c9dd46bf">
-        <source>Backup</source>
-        <target>Backup</target>
+      <trans-unit id="8f54da32d0160f178f08b2530d1e690b">
+        <source>Back up your store</source>
+        <target>Back up your store</target>
         <note>Line: 41</note>
       </trans-unit>
       <trans-unit id="06933067aafd48425d67bcb01bba5cb6">
@@ -2185,10 +2185,10 @@ Comment: directory already exists</note>
   </file>
   <file original="views/templates/modals/modal-backup-all.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="0b69cd55a690bee672a1fb91091222f1">
-        <source>Start backup</source>
-        <target>Start backup</target>
-        <note>Line: 14</note>
+      <trans-unit id="4de1325d17b745018ee0473aa24e40be">
+        <source>Your files, database, and images will be backed up.</source>
+        <target>Your files, database, and images will be backed up.</target>
+        <note>Line: 4</note>
       </trans-unit>
     </body>
   </file>
@@ -2198,6 +2198,25 @@ Comment: directory already exists</note>
         <source>Delete</source>
         <target>Delete</target>
         <note>Line: 13</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="views/templates/modals/modal-backup.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="a55151123e9668d00ca7edbfbaf34b49">
+        <source>Start backup?</source>
+        <target>Start backup?</target>
+        <note>Line: 2</note>
+      </trans-unit>
+      <trans-unit id="c48b010e2f019b37cd748419f50a83c8">
+        <source>Your files and database will be backed up.</source>
+        <target>Your files and database will be backed up.</target>
+        <note>Line: 3</note>
+      </trans-unit>
+      <trans-unit id="0b69cd55a690bee672a1fb91091222f1">
+        <source>Start backup</source>
+        <target>Start backup</target>
+        <note>Line: 20</note>
       </trans-unit>
     </body>
   </file>
@@ -2212,20 +2231,30 @@ Comment: directory already exists</note>
   </file>
   <file original="views/templates/modals/modal-update.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
+      <trans-unit id="2ca0ff94d146821c12f5340b117b9ecf">
+        <source>Start update?</source>
+        <target>Start update?</target>
+        <note>Line: 3</note>
+      </trans-unit>
       <trans-unit id="3d4d2d6f322e7a03fbe59ed1593215c8">
         <source>Before starting the update, make sure you have a complete and recent backup of your store (database, files, and images).</source>
         <target>Before starting the update, make sure you have a complete and recent backup of your store (database, files, and images).</target>
-        <note>Line: 6</note>
+        <note>Line: 15</note>
+      </trans-unit>
+      <trans-unit id="4d7ff7fe82a3cec141ca2f2619b82794">
+        <source>You are about to launch the update, do you want to continue?</source>
+        <target>You are about to launch the update, do you want to continue?</target>
+        <note>Line: 18</note>
       </trans-unit>
       <trans-unit id="3cedd2741ced15002cb3c9429ab45f55">
         <source>I have made my own backup and can restore it manually if a problem occur.</source>
         <target>I have made my own backup and can restore it manually if a problem occur.</target>
-        <note>Line: 18</note>
+        <note>Line: 28</note>
       </trans-unit>
       <trans-unit id="880d6ec7b06e1f403347a16afbca8335">
         <source>Start update</source>
         <target>Start update</target>
-        <note>Line: 39</note>
+        <note>Line: 53</note>
       </trans-unit>
     </body>
   </file>
@@ -2245,15 +2274,20 @@ Comment: directory already exists</note>
         <target>Backing up your store's files, database, and images means you can restore to a previous version if something goes wrong during the update. This keeps your data safe and ensures your business stays up and running.</target>
         <note>Line: 13</note>
       </trans-unit>
+      <trans-unit id="a946e4190a81d83574867d2182261e35">
+        <source>Include images in your backup</source>
+        <target>Include images in your backup</target>
+        <note>Line: 32</note>
+      </trans-unit>
       <trans-unit id="b27bea61eb2963cb570ce625b87ea053">
         <source>Update without backup</source>
         <target>Update without backup</target>
-        <note>Line: 30</note>
+        <note>Line: 45</note>
       </trans-unit>
       <trans-unit id="2284aa8fec405e1dd014326b51cde020">
         <source>Launch backup</source>
         <target>Launch backup</target>
-        <note>Line: 34</note>
+        <note>Line: 50</note>
       </trans-unit>
     </body>
   </file>
