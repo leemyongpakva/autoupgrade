@@ -14,12 +14,17 @@ describe('LogsViewer', () => {
         <div data-slot-component="summary" class="logs__summaries"></div>
       </div>
       <template id="log-line">
-        <div class="logs__line"></div>
+        <div class="logs__line">
+          <div class="logs__line-content"></div>
+        </div>
       </template>
       
       <template id="log-summary">
         <div class="logs__summary">
-          <p data-slot-template="title" class="logs__summary-title h3"></p>
+          <div class="logs__summary-top">
+            <p data-slot-template="title" class="logs__summary-title h3"></p>
+            <span class="logs__summary-total badge badge-danger"></span>
+          </div>
           <div class="logs__summary-scroll"></div>
         </div>
       </template>
@@ -61,15 +66,16 @@ describe('LogsViewer', () => {
 
       const logsList = container.querySelector('[data-slot-component="list"]');
       const logLines = logsList!.querySelectorAll('.logs__line');
+      const logLineContents = logsList!.querySelectorAll('.logs__line-content');
 
       expect(logLines.length).toBe(3);
-      expect(logLines[0].textContent).toBe('Info message');
+      expect(logLineContents[0].textContent).toBe('Info message');
       expect(logLines[0].classList.contains('logs__line--success')).toBe(true);
 
-      expect(logLines[1].textContent).toBe('Warning message');
+      expect(logLineContents[1].textContent).toBe('Warning message');
       expect(logLines[1].classList.contains('logs__line--warning')).toBe(true);
 
-      expect(logLines[2].textContent).toBe('Error message');
+      expect(logLineContents[2].textContent).toBe('Error message');
       expect(logLines[2].classList.contains('logs__line--error')).toBe(true);
     });
 
