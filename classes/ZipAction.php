@@ -250,7 +250,7 @@ class ZipAction
      *
      * @throws ZipActionException
      */
-    public function open(string $zipFile, int $flags = null): ZipArchive
+    public function open(string $zipFile, ?int $flags = null): ZipArchive
     {
         $zip = new ZipArchive();
         if (null === $flags) {

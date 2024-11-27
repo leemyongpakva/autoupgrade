@@ -188,7 +188,7 @@ class FilesystemAdapter
      *
      * @return bool
      */
-    public function isFileSkipped(string $file, string $fullpath, string $way = 'backup', string $temporaryWorkspace = null): bool
+    public function isFileSkipped(string $file, string $fullpath, string $way = 'backup', ?string $temporaryWorkspace = null): bool
     {
         $fullpath = str_replace('\\', '/', $fullpath); // wamp compliant
         $rootpath = str_replace(
