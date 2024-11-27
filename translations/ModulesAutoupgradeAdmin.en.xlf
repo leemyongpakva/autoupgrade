@@ -53,12 +53,12 @@
       <trans-unit id="435d516735dbf7f622c7d14585f66840">
         <source>Action %s skipped</source>
         <target>Action %s skipped</target>
-        <note>Line: 150</note>
+        <note>Line: 142</note>
       </trans-unit>
       <trans-unit id="daafa671e5cd581e6c8af2af28846b66">
         <source>Successfully initialized state.</source>
         <target>Successfully initialized state.</target>
-        <note>Line: 202</note>
+        <note>Line: 194</note>
       </trans-unit>
     </body>
   </file>
@@ -1475,17 +1475,17 @@ Comment: directory already exists</note>
       <trans-unit id="92a5801448b25f111961462b0b31995d">
         <source>Unable to create file %s</source>
         <target>Unable to create file %s</target>
-        <note>Line: 351</note>
+        <note>Line: 353</note>
       </trans-unit>
       <trans-unit id="56195ded2802813800f43e3be1babe1c">
         <source>Error when trying to delete backups %s</source>
         <target>Error when trying to delete backups %s</target>
-        <note>Line: 386</note>
+        <note>Line: 388</note>
       </trans-unit>
       <trans-unit id="f4eb320e09f7ef88a627229870458454">
         <source>The module %s requires PHP %s to work properly. Please upgrade your server configuration.</source>
         <target>The module %s requires PHP %s to work properly. Please upgrade your server configuration.</target>
-        <note>Line: 435</note>
+        <note>Line: 437</note>
       </trans-unit>
     </body>
   </file>
