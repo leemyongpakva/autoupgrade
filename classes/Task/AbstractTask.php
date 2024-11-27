@@ -106,14 +106,6 @@ abstract class AbstractTask
     }
 
     /**
-     * @return string base64 encoded data from AjaxResponse
-     */
-    public function getEncodedResponse(): string
-    {
-        return base64_encode($this->getJsonResponse());
-    }
-
-    /**
      * @return string Json encoded data from AjaxResponse
      */
     public function getJsonResponse(): string

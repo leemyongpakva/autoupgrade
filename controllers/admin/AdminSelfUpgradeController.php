@@ -295,6 +295,8 @@ class AdminSelfUpgradeController extends ModuleAdminController
         if (!$this->ajax) {
             // removing temporary files before init state to make sure state is already available
             $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
+            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllBackupFiles();
+            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllRestoreFiles();
         }
 
         if (!$this->upgradeContainer->getState()->isInitialized()) {
