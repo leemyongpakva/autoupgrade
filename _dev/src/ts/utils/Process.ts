@@ -65,7 +65,7 @@ export default class Process {
       return;
     }
 
-    this.#callbacks.onProcess(response);
+    this.#callbacks.onProcessResponse(response);
 
     if (!response.next) {
       this.#callbacks.onProcessEnd(response);

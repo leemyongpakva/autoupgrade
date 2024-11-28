@@ -80,7 +80,7 @@ describe('LogsViewer', () => {
 
       expect(logLines.length).toBe(0);
 
-      logsViewer.displaySummary();
+      logsViewer.displaySummary('test');
       logsViewer.addLogs(['INFO - Log message']);
 
       expect(consoleSpy).toHaveBeenCalledWith('Cannot display summary because logs are empty');
@@ -97,7 +97,7 @@ describe('LogsViewer', () => {
         'ERROR - First error',
         'WARNING - Second warning'
       ]);
-      logsViewer.displaySummary();
+      logsViewer.displaySummary('test');
 
       const summaryContainer = container.querySelector('[data-slot-component="summary"]');
       expect(summaryContainer).not.toBeNull();
@@ -129,7 +129,7 @@ describe('LogsViewer', () => {
 
     it('should not display summary if no logs are present', () => {
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
-      logsViewer.displaySummary();
+      logsViewer.displaySummary('test');
 
       const summary = container.querySelector('[data-slot-component="summary"]');
       expect(summary!.children.length).toBe(0);
