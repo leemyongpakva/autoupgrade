@@ -2045,6 +2045,11 @@ Comment: directory already exists</note>
   </file>
   <file original="views/templates/components/logs-templates.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
+      <trans-unit id="ebdbffe8dea73e1e0285fd052f720259">
+        <source>Download update logs</source>
+        <target>Download update logs</target>
+        <note>Line: 25</note>
+      </trans-unit>
       <trans-unit id="12b7e9bd62f15c5f79030a36509eedf0">
         <source>Warning summary</source>
         <target>Warning summary</target>
@@ -2370,11 +2375,6 @@ Comment: directory already exists</note>
         <source>%startbold%Make sure your store's front office is working properly:%endbold% try to create an account, place an order, add a product, etc.</source>
         <target>%startbold%Make sure your store's front office is working properly:%endbold% try to create an account, place an order, add a product, etc.</target>
         <note>Line: 38</note>
-      </trans-unit>
-      <trans-unit id="ebdbffe8dea73e1e0285fd052f720259">
-        <source>Download update logs</source>
-        <target>Download update logs</target>
-        <note>Line: 72</note>
       </trans-unit>
     </body>
   </file>
