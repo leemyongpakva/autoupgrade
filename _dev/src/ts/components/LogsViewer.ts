@@ -105,9 +105,7 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
       this.#logsSummary.addEventListener('click', this.#handleLinkEvent);
     }
 
-    if (downloadLogsLink) {
-      fragment.appendChild(this.#createSummaryButtons(downloadLogsLink));
-    }
+    fragment.appendChild(this.#createSummaryButtons(downloadLogsLink));
 
     this.#appendFragmentElement(fragment, this.#logsSummary);
     this.#isSummaryDisplayed = true;
