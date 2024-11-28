@@ -244,7 +244,7 @@ class UpgradeSelfCheck
                 if ($isWebVersion) {
                     $maintenanceLink = Context::getContext()->link->getAdminLink('AdminMaintenance');
                     $params = [
-                        '[1]' => '<a href=' . $maintenanceLink . ' target="_blank">',
+                        '[1]' => '<a class="link" href=' . $maintenanceLink . ' target="_blank">',
                         '[/1]' => '</a>',
                     ];
                 } else {
