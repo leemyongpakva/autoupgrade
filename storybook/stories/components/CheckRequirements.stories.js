@@ -94,7 +94,7 @@ export const Default = {
       ],
       warnings: [
         {
-          message: 'Your current version of the module is out of date. Update now Modules > Module Manager > Updates'
+          message: 'Your current version of the module is out of date. Update now <a class="link">Modules > Module Manager > Updates</a>'
         },
         {
           message: 'We were unable to check your PHP compatibility with PrestaShop 9.0.0'
