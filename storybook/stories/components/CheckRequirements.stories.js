@@ -56,7 +56,7 @@ export const Default = {
           message: 'Missing PHP extension "zip".'
         },
         {
-          message: 'Maintenance mode needs to be enabled. Enable maintenance mode and add your maintenance IP in Shop parameters > General > Maintenance.'
+          message: 'Maintenance mode needs to be enabled. Enable maintenance mode and add your maintenance IP in <a class="link">Shop parameters > General > Maintenance</a>.'
         },
         {
           message: 'PrestaShop\'s caching features needs to be disabled. Disable caching features in Advanced parameters > Performance > Caching'
