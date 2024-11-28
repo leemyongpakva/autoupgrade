@@ -1,5 +1,5 @@
 import baseApi from './baseApi';
-import { ApiResponse } from '../types/apiTypes';
+import { ApiResponse, ApiResponseAction } from '../types/apiTypes';
 import Hydration from '../utils/Hydration';
 
 export class RequestHandler {
@@ -38,6 +38,28 @@ export class RequestHandler {
 
       const responseData = response.data as ApiResponse;
       await this.#handleResponse(responseData, fromPopState);
+    } catch (error) {
+      // TODO: catch errors
+      console.error(error);
+    }
+  }
+
+  /**
+   * @public
+   * @param {string} action - The action to be sent to the API.
+   * @returns {Promise<ApiResponseAction | void>} - Resolves to the API response of type `ApiResponseAction` or `void` in case of an error.
+   * @description Sends a POST request to the API with the specified action.
+   *              Automatically includes the `admin_dir` required by the backend.
+   */
+  public async postAction(action: string): Promise<ApiResponseAction | void> {
+    const data = new FormData();
+
+    data.append('dir', window.AutoUpgradeVariables.admin_dir);
+    data.append('action', action);
+
+    try {
+      const response = await baseApi.post('', data);
+      return response.data as ApiResponseAction;
     } catch (error) {
       // TODO: catch errors
       console.error(error);

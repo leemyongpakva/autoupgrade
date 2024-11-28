@@ -1,4 +1,10 @@
-<div class="progress-tracker">
+<div
+    class="progress-tracker"
+    data-component="progress-tracker"
+    {% if successRoute is defined %}
+        data-sucess-route="{{ successRoute }}"
+    {% endif %}
+>
     <div class="log-progress">
         {% include "@ModuleAutoUpgrade/components/logs-summary.html.twig" %}
         {% include "@ModuleAutoUpgrade/components/progress-bar.html.twig" %}

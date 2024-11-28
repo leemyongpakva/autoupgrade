@@ -61,8 +61,6 @@ $e-logs: ".logs";
       height: 100%;
       padding-block-start: 1rem;
       overflow-y: auto;
-      scroll-behavior: smooth;
-      scroll-snap-type: y mandatory;
     }
 
     &__list {
@@ -82,8 +80,6 @@ $e-logs: ".logs";
       line-height: 1.4;
       word-break: break-word;
       transition: background-color 0.3s ease-in-out;
-      scroll-snap-align: start;
-      scroll-margin-block-start: 2.5rem;
 
       &--success {
         background-image: url("../../img/check.svg");

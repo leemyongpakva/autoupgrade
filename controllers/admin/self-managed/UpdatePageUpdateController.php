@@ -52,6 +52,11 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
         return self::CURRENT_STEP;
     }
 
+    protected function displayRouteInUrl(): ?string
+    {
+        return Routes::UPDATE_PAGE_UPDATE;
+    }
+
     /**
      * @return array
      *

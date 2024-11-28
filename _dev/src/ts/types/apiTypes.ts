@@ -10,6 +10,20 @@ interface ApiResponseNextRoute {
   next_route: string;
 }
 
-type ApiResponse = ApiResponseHydration | ApiResponseNextRoute;
+interface ApiResponseAction {
+  error: null | boolean;
+  stepDone: null | boolean;
+  next: string;
+  status: string;
+  next_desc: null | string;
+  nextQuickInfo: string[];
+  nextErrors: string[];
+  nextParams: {
+    progressPercentage: number;
+    [key: string]: unknown;
+  };
+}
 
-export type { ApiResponseHydration, ApiResponseNextRoute, ApiResponse };
+type ApiResponse = ApiResponseHydration | ApiResponseNextRoute | ApiResponseAction;
+
+export type { ApiResponseHydration, ApiResponseNextRoute, ApiResponseAction, ApiResponse };

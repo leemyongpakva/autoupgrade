@@ -1,5 +1,5 @@
 import baseApi from '../../src/ts/api/baseApi';
-import { ApiResponse } from '../../src/ts/types/apiTypes';
+import { ApiResponse, ApiResponseAction } from '../../src/ts/types/apiTypes';
 import { RequestHandler } from '../../src/ts/api/RequestHandler';
 
 jest.mock('../../src/ts/api/baseApi', () => ({
@@ -74,6 +74,30 @@ describe('RequestHandler', () => {
 
     expect(mockHydrate).toHaveBeenCalledTimes(1);
     expect(mockHydrate).toHaveBeenCalledWith(response, undefined);
+  });
+
+  it('should handle action response', async () => {
+    const response: ApiResponseAction = {
+      error: null,
+      stepDone: false,
+      next: 'Update',
+      status: 'ok',
+      next_desc: 'description step',
+      nextQuickInfo: [],
+      nextErrors: [],
+      nextParams: {
+        progressPercentage: 80
+      }
+    };
+
+    const route = 'some_route';
+
+    (baseApi.post as jest.Mock).mockResolvedValueOnce({ data: response });
+
+    const result = await requestHandler.postAction(route);
+
+    expect(result).toEqual(response);
+    expect(baseApi.post).toHaveBeenCalledTimes(1);
   });
 
   it('should cancel the previous request when a new one is made', async () => {
