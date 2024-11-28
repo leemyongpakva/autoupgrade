@@ -100,7 +100,7 @@ export const Default = {
           message: 'We were unable to check your PHP compatibility with PrestaShop 9.0.0'
         },
         {
-          message: 'Some core files have been altered, customization made on these files will be lost during the update. See the list in Advanced parameters > Information'
+          message: 'Some core files have been altered, customization made on these files will be lost during the update. See the list in <a class="link">Advanced parameters > Information</a>'
         }
       ],
     },
