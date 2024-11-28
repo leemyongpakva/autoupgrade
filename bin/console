@@ -46,7 +46,12 @@ if (!defined('_PS_ROOT_DIR_')) {
     define('_PS_ROOT_DIR_', __DIR__ . '/../../..');
 }
 
+$moduleConfig = @simplexml_load_file(dirname(__DIR__).'/config.xml');
+
 $application = new Application();
+
+$application->setVersion($moduleConfig->version);
+$application->setName($moduleConfig->displayName);
 
 $application->add(new UpdateCommand());
 $application->add(new RestoreCommand());
