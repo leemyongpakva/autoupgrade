@@ -77,13 +77,13 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
 
   /**
    * @public
-   * @param {string | null} downloadLogsLink - The link to download update logs.
+   * @param {string} downloadLogsLink - The link to download update logs.
    * @description Displays a summary of logs, grouping warnings and errors.
    * Summaries include links to the corresponding log lines.
    * Adds a click event listener to handle navigation within the summary.
    * Prevents displaying a summary if no logs are present.
    */
-  public displaySummary(downloadLogsLink?: string): void {
+  public displaySummary(downloadLogsLink: string): void {
     if (!this.#logsList.hasChildNodes()) {
       console.warn('Cannot display summary because logs are empty');
       return;
@@ -250,7 +250,7 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
   #handleLinkEvent = (event: MouseEvent): void => {
     const target = event.target as HTMLAnchorElement;
 
-    // Checks if the clicked element is an <a> tag point to and ID
+    // Checks if the clicked element is an <a> tag pointing towards an ID
     if (!target || target.tagName !== 'A' || !target.hash) {
       return;
     }
@@ -261,8 +261,7 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
     const targetElement = document.getElementById(logId);
 
     if (targetElement) {
-      const scrollTop = targetElement.offsetTop - this.#logsScroll.offsetTop;
-      this.#logsScroll.scrollTop = scrollTop;
+      this.#logsScroll.scrollTop = targetElement.offsetTop - this.#logsScroll.offsetTop;
       targetElement.classList.add('logs__line--pointed');
       window.setTimeout(() => {
         targetElement.classList.remove('logs__line--pointed');

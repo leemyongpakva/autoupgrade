@@ -46,7 +46,7 @@ export default class ProgressTracker extends ComponentAbstract implements Destro
    * - Adds new logs to the logs viewer.
    */
   public updateProgress(data: ApiResponseAction): void {
-    this.#logsSummary.setLogsSummaryText(String(data.next_desc));
+    this.#logsSummary.setLogsSummaryText(data.next_desc ?? '');
     this.#progressBar.setProgressPercentage(data.nextParams.progressPercentage);
     this.#logsViewer.addLogs(data.nextQuickInfo);
   }
@@ -57,7 +57,7 @@ export default class ProgressTracker extends ComponentAbstract implements Destro
    * @description Ends the progress tracking and displays a summary of error logs in the logs viewer.
    */
   public endProgress(): void {
-    // Todo: we need to retriew the download link
+    // Todo: we need to retrieve the download link
     this.#logsViewer.displaySummary('download/logs/link.txt');
   }
 }

@@ -18,7 +18,7 @@ export default class UpdatePageUpdate extends UpdatePage {
     const updateAction = 'UpdateInitialization';
 
     const process = new Process({
-      onProcess: this.#onProcess,
+      onProcessResponse: this.#onProcessResponse,
       onProcessEnd: this.#onProcessEnd,
       onError: this.#onError
     });
@@ -42,7 +42,7 @@ export default class UpdatePageUpdate extends UpdatePage {
     return progressTrackerContainer;
   }
 
-  #onProcess = (response: ApiResponseAction): void => {
+  #onProcessResponse = (response: ApiResponseAction): void => {
     this.#progressTracker.updateProgress(response);
   };
 
