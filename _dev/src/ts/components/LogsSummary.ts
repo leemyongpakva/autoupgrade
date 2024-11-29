@@ -8,6 +8,14 @@ export default class LogsSummary extends ComponentAbstract {
 
   /**
    * @public
+   * @description Removes the associated DOM element from the document.
+   */
+  public selfDestroy = () => {
+    this.element.remove();
+  };
+
+  /**
+   * @public
    * @param text - text summary to display.
    * @description Allows to update the summary text of the logs.
    */

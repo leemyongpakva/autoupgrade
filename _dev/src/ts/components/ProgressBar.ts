@@ -8,6 +8,14 @@ export default class ProgressBar extends ComponentAbstract {
 
   /**
    * @public
+   * @description Removes the associated DOM element from the document.
+   */
+  public selfDestroy = () => {
+    this.element.remove();
+  };
+
+  /**
+   * @public
    * @param percentage - A number between 0 and 100 representing the percentage of progress.
    * @description Update all progress bar attribute from percentage given.
    */

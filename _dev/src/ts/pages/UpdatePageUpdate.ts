@@ -15,7 +15,8 @@ export default class UpdatePageUpdate extends UpdatePage {
   public mount = async () => {
     this.initStepper();
 
-    const updateAction = 'UpdateInitialization';
+    const stepContent = document.getElementById('ua_step_content')!;
+    const updateAction = stepContent.dataset.initialProcessAction!;
 
     const process = new Process({
       onProcessResponse: this.#onProcessResponse,
