@@ -327,7 +327,7 @@ class UpgradeSelfCheck
 
             case self::NOT_WRITING_DIRECTORY_LIST_NOT_EMPTY:
                 return [
-                    'message' => $this->translator->trans('It\'s not possible to write in the following folders: Provide write access to the user running PHP with appropriate permission & ownership: '),
+                    'message' => $this->translator->trans('It\'s not possible to write in the following folders. Provide write access to the user running PHP with appropriate permission & ownership: '),
                     'list' => $this->getNotWritingDirectories(),
                 ];
 
