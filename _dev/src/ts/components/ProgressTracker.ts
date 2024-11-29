@@ -44,11 +44,16 @@ export default class ProgressTracker extends ComponentAbstract implements Destro
    * - Updates the log summary with the next description.
    * - Updates the progress bar with the progress percentage.
    * - Adds new logs to the logs viewer.
+   * - Adds errors if present to logs viewer.
    */
   public updateProgress(data: ApiResponseAction): void {
     this.#logsSummary?.setLogsSummaryText(data.next_desc ?? '');
-    this.#progressBar?.setProgressPercentage(data.nextParams.progressPercentage);
+    this.#progressBar?.setProgressPercentage(data.nextParams?.progressPercentage || 0);
     this.#logsViewer.addLogs(data.nextQuickInfo);
+
+    if (data.nextErrors) {
+      this.#logsViewer.addLogs(data.nextErrors);
+    }
   }
 
   /**

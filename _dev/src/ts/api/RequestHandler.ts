@@ -1,6 +1,7 @@
 import baseApi from './baseApi';
 import { ApiResponse, ApiResponseAction } from '../types/apiTypes';
 import Hydration from '../utils/Hydration';
+import { AxiosError } from 'axios';
 
 export class RequestHandler {
   private currentRequestAbortController: AbortController | null = null;
@@ -60,7 +61,10 @@ export class RequestHandler {
     try {
       const response = await baseApi.post('', data);
       return response.data as ApiResponseAction;
-    } catch (error) {
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error?.response?.data?.error) {
+        return error.response.data as ApiResponseAction;
+      }
       // TODO: catch errors
       console.error(error);
     }

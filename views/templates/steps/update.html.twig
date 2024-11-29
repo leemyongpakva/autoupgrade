@@ -25,12 +25,16 @@
 {% endblock %}
 
 {% block buttons %}
-  <div class="page__buttons" id="error-buttons">
+  <div class="page__buttons hidden" id="error-buttons">
     <form>
       <button class="btn btn-lg btn-default" type="submit">{{ 'Send error report'|trans({}) }}</button>
     </form>
     {% if backup_available %}
-      <form>
+      <form
+        id="restore-button"
+        name="restore-button"
+        data-route-to-submit="{{ restore_route }}"
+      >
         <button class="btn btn-lg btn-primary" type="submit">{{ 'Restore'|trans({}) }}</button>
       </form>
     {% endif %}

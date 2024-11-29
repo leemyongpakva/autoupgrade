@@ -18,16 +18,22 @@
     </div>
 
     {% if buttonLabel %}
-      <{{ formRoute ? 'form' : 'div' }} class="alert__action" {% if formRoute is defined %}data-route-to-submit="{{ formRoute }}" action=""{% endif %}>
+      <{{ formRoute ? 'form' : 'div' }}
+        class="alert__action"
+        {% if formRoute is defined %}
+          data-route-to-submit="{{ formRoute }}"
+          action=""
+        {% endif %}
+        {% if formName %}
+          id="{{ formName }}"
+          name="{{ formName }}"
+        {% endif %}
+      >
         <{{ formRoute ? 'button' : 'a' }}
         class="alert__link btn btn-{% if alertStatus %}{{ alertStatus }}{% else %}info{% endif %}"
         {% if buttonUrl %}href="{{ buttonUrl }}"{% endif %}
         {% if buttonDownload %}download="{{ buttonDownload }}"{% endif %}
         {% if formRoute %}type="submit"{% endif %}
-        {% if formName %}
-          id="{{ formName }}"
-          name="{{ formName }}"
-        {% endif %}
         >
           {{ buttonLabel }}
         </{{ formRoute ? 'button' : 'a' }}>
