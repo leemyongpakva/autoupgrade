@@ -357,7 +357,9 @@ class UpgradeContainer
 
         $this->checksumCompare = new ChecksumCompare(
             $this->getFileLoader(),
-            $this->getFilesystemAdapter()
+            $this->getFilesystemAdapter(),
+            $this->getProperty(self::PS_ROOT_PATH),
+            $this->getProperty(self::PS_ADMIN_PATH)
         );
 
         return $this->checksumCompare;

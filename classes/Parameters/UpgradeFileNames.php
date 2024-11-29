@@ -128,22 +128,6 @@ class UpgradeFileNames
     const FILES_FROM_ARCHIVE_LIST = 'filesFromArchive.list';
 
     /**
-     * mailCustomList contains list of mails files which are customized,
-     * relative to original files for the current PrestaShop version.
-     *
-     * @var string
-     */
-    const MAILS_CUSTOM_LIST = 'mails-custom.list';
-
-    /**
-     * tradCustomList contains list of translation files which are customized,
-     * relative to original files for the current PrestaShop version.
-     *
-     * @var string
-     */
-    const TRANSLATION_FILES_CUSTOM_LIST = 'translations-custom.list';
-
-    /**
      * Module Sources Providers are classes that fetching & compute data
      * from the filesystem or an external resource like an API.
      * Caching the data avoids this computation to happen again before each module.
@@ -167,8 +151,6 @@ class UpgradeFileNames
         'FILES_TO_UPGRADE_LIST' => self::FILES_TO_UPGRADE_LIST,
         'DB_TABLES_TO_CLEAN_LIST' => self::DB_TABLES_TO_CLEAN_LIST,
         'FILES_TO_REMOVE_LIST' => self::FILES_TO_REMOVE_LIST,
-        'MAILS_CUSTOM_LIST' => self::MAILS_CUSTOM_LIST,
-        'TRANSLATION_FILES_CUSTOM_LIST' => self::TRANSLATION_FILES_CUSTOM_LIST,
         'MODULES_TO_UPGRADE_LIST' => self::MODULES_TO_UPGRADE_LIST,
         'MODULE_SOURCE_PROVIDER_CACHE_LOCAL' => self::MODULE_SOURCE_PROVIDER_CACHE_LOCAL,
         'MODULE_SOURCE_PROVIDER_CACHE_COMPOSER' => self::MODULE_SOURCE_PROVIDER_CACHE_COMPOSER,
