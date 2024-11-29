@@ -9,7 +9,7 @@
 {% block content %}
   {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
     id: 'error-alert',
-    hidden: false,
+    hidden: true,
     alertStatus: backup_available ? 'warning' : 'danger',
     title: 'Update failed'|trans({}),
     message: backup_available
