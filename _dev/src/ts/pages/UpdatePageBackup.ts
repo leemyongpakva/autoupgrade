@@ -1,6 +1,6 @@
 import api from '../api/RequestHandler';
-import { modalContainer } from '../autoUpgrade';
-import ModalContainer from '../components/ModalContainer';
+import { dialogContainer } from '../autoUpgrade';
+import DialogContainer from '../components/DialogContainer';
 import UpdatePage from './UpdatePage';
 
 export default class UpdatePageBackup extends UpdatePage {
@@ -12,7 +12,7 @@ export default class UpdatePageBackup extends UpdatePage {
     this.#form.addEventListener('change', this.#onInputChange);
 
     document.getElementById('ua_container')?.addEventListener('click', this.#onClick);
-    modalContainer.modalContainer.addEventListener(ModalContainer.okEvent, this.#onModalOk);
+    dialogContainer.DialogContainer.addEventListener(DialogContainer.okEvent, this.#onDialogOk);
   }
 
   public beforeDestroy(): void {
@@ -20,7 +20,7 @@ export default class UpdatePageBackup extends UpdatePage {
     this.#form.removeEventListener('change', this.#onInputChange);
 
     document.getElementById('ua_container')?.removeEventListener('click', this.#onClick);
-    modalContainer.modalContainer.removeEventListener(ModalContainer.okEvent, this.#onModalOk);
+    dialogContainer.DialogContainer.removeEventListener(DialogContainer.okEvent, this.#onDialogOk);
   }
 
   get #form(): HTMLFormElement {
@@ -49,12 +49,12 @@ export default class UpdatePageBackup extends UpdatePage {
     }
   };
 
-  readonly #onModalOk = async (ev: Event) => {
-    // We handle the backup confirmation modal as it is really basic
-    if ((ev.target as HTMLElement).id === 'modal-confirm-backup') {
+  readonly #onDialogOk = async (ev: Event) => {
+    // We handle the backup confirmation dialog as it is really basic
+    if ((ev.target as HTMLElement).id === 'dialog-confirm-backup') {
       api.post(this.#form.dataset.routeToConfirmBackup!);
     }
-    // The update confirmation modal gets its logic in a dedicated script
+    // The update confirmation dialog gets its logic in a dedicated script
   };
 
   readonly #onInputChange = async (ev: Event) => {

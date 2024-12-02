@@ -59,16 +59,16 @@ class UpdatePageBackupController extends AbstractPageWithStepController
     {
         $imagesIncluded = $this->upgradeContainer->getUpgradeConfiguration()->shouldBackupImages();
 
-        return $this->displayModal($imagesIncluded ? 'modal-backup-all' : 'modal-backup', [
-            'modalId' => 'modal-confirm-backup',
+        return $this->displayDialog($imagesIncluded ? 'dialog-backup-all' : 'dialog-backup', [
+            'dialogId' => 'dialog-confirm-backup',
         ]);
     }
 
     public function submitUpdate(): JsonResponse
     {
-        return $this->displayModal('modal-update', [
+        return $this->displayDialog('dialog-update', [
             'noBackUp' => !$this->request->request->getBoolean('backupDone', false),
-            'modalId' => 'modal-confirm-update',
+            'dialogId' => 'dialog-confirm-update',
 
             'form_route_to_confirm' => Routes::UPDATE_STEP_BACKUP_CONFIRM_UPDATE,
 
@@ -148,14 +148,14 @@ class UpdatePageBackupController extends AbstractPageWithStepController
         );
     }
 
-    private function displayModal(string $modalName, array $params): JsonResponse
+    private function displayDialog(string $dialogName, array $params): JsonResponse
     {
-        $options = $modalName === 'modal-update' ? ['addScript' => 'start-update-modal'] : null;
+        $options = $dialogName === 'dialog-update' ? ['addScript' => 'start-update-dialog'] : null;
 
         return AjaxResponseBuilder::hydrationResponse(
-            PageSelectors::MODAL_PARENT_ID,
+            PageSelectors::DIALOG_PARENT_ID,
             $this->getTwig()->render(
-                '@ModuleAutoUpgrade/modals/' . $modalName . '.html.twig',
+                '@ModuleAutoUpgrade/dialogs/' . $dialogName . '.html.twig',
                 $params
             ),
             $options

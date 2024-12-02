@@ -23,37 +23,17 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-import Modal from "../../../views/templates/components/modal.html.twig";
+import DialogBackup from "../../../views/templates/dialogs/dialog-backup.html.twig";
+import { Default as Dialog } from "./Dialog.stories";
 
 export default {
-  title: "Components/Modal",
-  component: Modal,
-  excludeStories: ["Default"],
-  argTypes: {
-    modalSize: {
-      control: "select",
-      options: ["sm", "md", "lg"],
-    },
-  },
+  title: "Components/Dialog",
+  component: DialogBackup,
 };
 
-export const Default = {
+export const Backup = {
   args: {
-    modalId: "modal_id",
-    title: "Title goes here",
-    message: "Message goes here, lorem ipsum dolor site amet",
-    modalSize: "lg",
-    psBaseUri: "/",
-    modalDanger: false,
-
-    assets_base_path: "",
+    ...Dialog.args,
+    dialogSize: "md",
   },
 };
-
-document.addEventListener("DOMContentLoaded", () => {
-  const modals = document.querySelectorAll(".modal");
-  modals.forEach((modal) => {
-    modal.style.display = "block";
-    modal.classList.add("in");
-  });
-});

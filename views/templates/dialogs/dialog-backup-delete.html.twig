@@ -1,0 +1,17 @@
+{% extends "@ModuleAutoUpgrade/components/dialog.html.twig" %}
+
+{% block dialog_extra_content %}{% endblock %}
+
+{% block dialog_footer %}
+  <div class="dialog__footer">
+    {% block dialog_footer_inner %}
+      <button type="button" class="btn btn-link" data-dismiss="dialog">
+        {{ 'Cancel'|trans({}) }}
+      </button>
+
+      <button type="button" class="btn btn-danger">
+        {{ 'Delete'|trans({}) }}
+      </button>
+    {% endblock %}
+  </div>
+{% endblock %}

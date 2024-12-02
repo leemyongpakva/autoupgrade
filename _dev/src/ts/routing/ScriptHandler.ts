@@ -7,7 +7,7 @@ import UpdatePagePostUpdate from '../pages/UpdatePagePostUpdate';
 import DomLifecycle from '../types/DomLifecycle';
 import { RoutesMatching } from '../types/scriptHandlerTypes';
 import { routeHandler } from '../autoUpgrade';
-import StartUpdateModal from '../modals/StartUpdateModal';
+import StartUpdateDialog from '../dialogs/StartUpdateDialog';
 
 export default class ScriptHandler {
   #currentScript: DomLifecycle | undefined;
@@ -25,7 +25,7 @@ export default class ScriptHandler {
     'update-page-update': UpdatePageUpdate,
     'update-page-post-update': UpdatePagePostUpdate,
 
-    'start-update-modal': StartUpdateModal
+    'start-update-dialog': StartUpdateDialog
   };
 
   /**

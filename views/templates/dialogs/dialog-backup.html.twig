@@ -1,17 +1,17 @@
-{% extends "@ModuleAutoUpgrade/components/modal.html.twig" %}
+{% extends "@ModuleAutoUpgrade/components/dialog.html.twig" %}
 {% set title = 'Start backup?'|trans({}) %}
 {% set message = 'Your files and database will be backed up.'|trans({}) %}
 
-{% block modal_content %}
+{% block dialog_content %}
   {{ parent() }}
 {% endblock %}
 
-{% block modal_extra_content %}{% endblock %}
+{% block dialog_extra_content %}{% endblock %}
 
-{% block modal_footer %}
-  <div class="modal-footer">
-    {% block modal_footer_inner %}
-      <button type="button" class="btn btn-link" data-dismiss="modal">
+{% block dialog_footer %}
+  <div class="dialog__footer">
+    {% block dialog_footer_inner %}
+      <button type="button" class="btn btn-link" data-dismiss="dialog">
         {{ 'Cancel'|trans({}) }}
       </button>
 

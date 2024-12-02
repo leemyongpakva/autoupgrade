@@ -19,7 +19,7 @@
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
-    "types": ["jest", "node", "jquery", "bootstrap"],
+    "types": ["jest", "node"],
   },
   "include": [
     "src/ts/**/*.ts",

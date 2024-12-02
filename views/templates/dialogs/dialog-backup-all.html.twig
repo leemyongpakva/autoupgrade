@@ -1,6 +1,6 @@
-{% extends "@ModuleAutoUpgrade/modals/modal-backup.html.twig" %}
+{% extends "@ModuleAutoUpgrade/dialogs/dialog-backup.html.twig" %}
 
-{% block modal_content %}
+{% block dialog_content %}
   {% set message = 'Your files, database, and images will be backed up.'|trans({}) %}
   {{ parent() }}
 {% endblock %}

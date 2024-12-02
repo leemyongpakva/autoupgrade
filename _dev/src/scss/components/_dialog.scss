@@ -1,18 +1,29 @@
 @use "../variables" as *;
 
-$e: ".modal";
+$e: ".dialog";
+
+@at-root {
+  ::backdrop {
+    background-color: rgb(0 0 0 / 0.5);
+  }
+}
 
 #{$ua-id} {
   #{$e} {
-    &-content {
+    width: 508px;
+    max-width: calc(100% - 2rem);
+    padding: 0;
+    border: none;
+    border-radius: var(--#{$ua-prefix}border-radius);
+    box-shadow: var(--#{$ua-prefix}box-shadow-dialog);
+
+    &__content {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
-      border: none;
-      box-shadow: var(--#{$ua-prefix}box-shadow-modal);
     }
 
-    &-header {
+    &__header {
       display: flex;
       gap: 1rem;
       align-items: center;
@@ -22,8 +33,11 @@ $e: ".modal";
       border: none;
 
       .close {
+        display: flex;
         flex-shrink: 0;
+        align-items: center;
         float: none;
+        padding: 0.75rem;
         margin: 0;
         margin-inline-start: auto;
         opacity: 1;
@@ -40,7 +54,7 @@ $e: ".modal";
       }
     }
 
-    &-body {
+    &__body {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
@@ -50,13 +64,17 @@ $e: ".modal";
       line-height: 1.375;
     }
 
-    &-footer {
+    &__footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: flex-end;
       padding: 1.5rem;
       padding-block-start: 0;
       border: none;
     }
 
-    // Custom modals
+    // Custom dialogs
     &__spacer {
       display: flex;
       flex-direction: column;
@@ -82,8 +100,18 @@ $e: ".modal";
       gap: 0.5rem;
     }
 
+    &--md {
+      width: 904px;
+      max-width: calc(100% - 2rem);
+    }
+
+    &--lg {
+      width: 1127px;
+      max-width: calc(100% - 2rem);
+    }
+
     &--danger {
-      #{$e}-header {
+      #{$e}__header {
         &::before {
           content: "\e872";
           display: flex;

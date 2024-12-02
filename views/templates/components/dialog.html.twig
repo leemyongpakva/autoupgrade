@@ -1,0 +1,42 @@
+<dialog class="dialog {% if dialogDanger %}dialog--danger{% endif %} {% if dialogSize is not empty %}dialog--{{ dialogSize }}{% else %}dialog--md{% endif %}"
+  {% if dialogId %}id="{{ dialogId }}"{% endif %}
+  aria-label="{{ title }}">
+  <div class="dialog__container">
+    <div class="dialog__content">
+      <div class="dialog__header">
+        <p class="dialog__title h2">
+          {{ title }}
+        </p>
+
+        <button type="button" class="close" data-dismiss="dialog" aria-label="Close">
+          <i class="material-icons">close</i>
+        </button>
+      </div>
+
+      <div class="dialog__body">
+        {% block dialog_content %}
+          {# Default content can go here, or it can be left empty so that children can override it #}
+          <p>
+            {{ message|raw }}
+          </p>
+        {% endblock %}
+
+        {% block dialog_extra_content %}
+          <div class="dialog__extra-content">
+            {% block dialog_extra_content_inner %}
+              {# Default extra content can go here, or it can be left empty so that children can override it #}
+            {% endblock %}
+          </div>
+        {% endblock %}
+      </div>
+
+      {% block dialog_footer %}
+        <div class="dialog__footer">
+          {% block dialog_footer_inner %}
+            {# Default footer content can go here, or it can be left empty so that children can override it #}
+          {% endblock %}
+        </div>
+      {% endblock %}
+    </div>
+  </div>
+</dialog>

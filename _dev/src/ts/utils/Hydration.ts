@@ -1,5 +1,5 @@
 import { ApiResponseHydration } from '../types/apiTypes';
-import { modalContainer, routeHandler, scriptHandler } from '../autoUpgrade';
+import { dialogContainer, routeHandler, scriptHandler } from '../autoUpgrade';
 
 export default class Hydration {
   /**
@@ -18,7 +18,7 @@ export default class Hydration {
   public hydrationEvent: Event = new Event(Hydration.hydrationEventName);
 
   public constructor() {
-    modalContainer.mount();
+    dialogContainer.mount();
   }
 
   /**
@@ -33,13 +33,13 @@ export default class Hydration {
     if (elementToUpdate && data.new_content) {
       if (data.new_route) {
         scriptHandler.unloadRouteScript();
-        modalContainer.beforeDestroy();
+        dialogContainer.beforeDestroy();
       }
 
       elementToUpdate.innerHTML = data.new_content;
 
       if (data.new_route) {
-        modalContainer.mount();
+        dialogContainer.mount();
         scriptHandler.updateRouteScript(data.new_route);
 
         if (!fromPopState) {
