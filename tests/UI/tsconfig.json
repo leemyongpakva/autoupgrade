@@ -12,11 +12,13 @@
     "allowJs": true,
     "downlevelIteration": true,
     "baseUrl": "./",
-    "paths": {
-      "@sanity/*": ["sanity/*"],
-    },
-    "typeRoots": ["types", "node_modules/@types"],
+    "paths": {},
+    "typeRoots": [
+      "node_modules/@types"
+    ],
     "skipLibCheck": true,
     "noEmit": true
   },
+  "include": ["types/global.d.ts", "campaigns/**/*"],
+  "exclude": ["node_modules"]
 }
