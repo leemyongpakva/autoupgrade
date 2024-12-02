@@ -187,8 +187,8 @@ class UpgradeSelfCheck
     {
         $warnings = [
             self::MODULE_VERSION_IS_OUT_OF_DATE => !$this->isModuleVersionLatest(),
-            self::CORE_TEMPERED_FILES_LIST_NOT_EMPTY => !empty(array_merge($this->getCoreAlteredFiles(), $this->getCoreMissingFiles())),
-            self::THEME_TEMPERED_FILES_LIST_NOT_EMPTY => !empty(array_merge($this->getThemeAlteredFiles(), $this->getThemeMissingFiles())),
+            self::CORE_TEMPERED_FILES_LIST_NOT_EMPTY => !empty($this->getCoreAlteredFiles()) || !empty($this->getCoreMissingFiles()),
+            self::THEME_TEMPERED_FILES_LIST_NOT_EMPTY => !empty($this->getThemeAlteredFiles()) || !empty($this->getThemeMissingFiles()),
         ];
 
         if ($this->upgradeConfiguration->isChannelLocal()) {
@@ -326,6 +326,7 @@ class UpgradeSelfCheck
 
             case self::CORE_TEMPERED_FILES_LIST_NOT_EMPTY:
                 if ($isWebVersion) {
+                    // TODO the link must be integrated when implementing the modal in the web part
                     $message = $this->translator->trans('Some core files have been altered, customization made on these files will be lost during the update. <a class="link" href="">See the list of alterations.</a>');
                 } else {
                     $message = $this->translator->trans('Some core files have been altered, customization made on these files will be lost during the update.');
@@ -337,6 +338,7 @@ class UpgradeSelfCheck
 
             case self::THEME_TEMPERED_FILES_LIST_NOT_EMPTY:
                 if ($isWebVersion) {
+                    // TODO the link must be integrated when implementing the modal in the web part
                     $message = $this->translator->trans('Some theme files have been altered, customization made on these files will be lost during the update. <a class="link" href="">See the list of alterations.</a>');
                 } else {
                     $message = $this->translator->trans('Some theme files have been altered, customization made on these files will be lost during the update.');
@@ -360,7 +362,7 @@ class UpgradeSelfCheck
     {
         $missingFiles = $this->checksumCompare->getTamperedFilesOnShop($this->state->getCurrentVersion());
 
-        return array_merge($missingFiles['core']['updated'], $missingFiles['mail']['updated']);
+        return array_merge($missingFiles['core']['missing'], $missingFiles['mail']['missing']);
     }
 
     /**

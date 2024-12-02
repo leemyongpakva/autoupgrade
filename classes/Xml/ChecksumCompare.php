@@ -56,7 +56,7 @@ class ChecksumCompare
      *             'themes':array{'missing':string[],'altered':string[]}
      *             }|false
      */
-    private $file_differences = [
+    private $fileDifferences = [
         'mail' => [
             'missing' => [],
             'altered' => [],
@@ -116,16 +116,16 @@ class ChecksumCompare
      */
     public function getTamperedFilesOnShop(string $version)
     {
-        if (is_array($this->file_differences) && count($this->file_differences['core']) == 0) {
+        if (is_array($this->fileDifferences) && count($this->fileDifferences['core']['altered']) == 0) {
             $checksum = $this->fileLoader->getXmlMd5File($version);
             if (!$checksum) {
-                $this->file_differences = false;
+                $this->fileDifferences = false;
             } else {
                 $this->browseXmlAndCompare($checksum->ps_root_dir[0]);
             }
         }
 
-        return $this->file_differences;
+        return $this->fileDifferences;
     }
 
     public function isAuthenticPrestashopVersion(string $version): bool
@@ -188,7 +188,11 @@ class ChecksumCompare
     {
         foreach ($node as $child) {
             if (is_object($child) && $child->getName() === 'dir') {
-                $current_path[$level] = (string) $child['name'];
+                $directoryName = (string) $child['name'];
+                if ($level === 1 && $directoryName === 'install') {
+                    continue;
+                }
+                $current_path[$level] = $directoryName;
                 $this->browseXmlAndCompare($child, $current_path, $level + 1);
             } elseif (is_object($child) && $child->getName() === 'md5file') {
                 // We will store only relative path.
@@ -204,6 +208,7 @@ class ChecksumCompare
 
                 // replace default admin dir by current one
                 $fullPath = str_replace($this->prodPath . DIRECTORY_SEPARATOR . 'admin', $this->adminPath, $fullPath);
+
                 if (!file_exists($fullPath) && !str_contains($fullPath, 'install' . DIRECTORY_SEPARATOR)) {
                     $this->addFileDifferences($relative_path, true);
                 } elseif (!$this->compareChecksum($fullPath, (string) $child) && substr(str_replace(DIRECTORY_SEPARATOR, '-', $relative_path), 0, 7) != 'modules') {
@@ -259,14 +264,14 @@ class ChecksumCompare
         foreach ($categories as $category => $patterns) {
             foreach ($patterns as $pattern) {
                 if (strpos($path, $pattern) !== false) {
-                    $this->file_differences[$category][$key][] = $path;
+                    $this->fileDifferences[$category][$key][] = $path;
 
                     return;
                 }
             }
         }
 
-        $this->file_differences['core'][$key][] = $path;
+        $this->fileDifferences['core'][$key][] = $path;
     }
 
     protected function compareChecksum(string $filepath, string $md5sum): bool

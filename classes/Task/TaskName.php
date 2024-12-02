@@ -56,7 +56,6 @@ class TaskName
     const TASK_UNZIP = 'Unzip';
 
     // MISC
-    const TASK_CHECK_FILES_VERSION = 'CheckFilesVersion';
     const TASK_COMPARE_RELEASES = 'CompareReleases';
     const TASK_UPDATE_CONFIG = 'UpdateConfig';
 }
