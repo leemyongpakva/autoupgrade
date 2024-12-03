@@ -211,17 +211,17 @@
       <trans-unit id="ab232f4b20c0e50dad9081bc39382569">
         <source>Upgrade process will use archive.</source>
         <target>Upgrade process will use archive.</target>
-        <note>Line: 95</note>
+        <note>Line: 101</note>
       </trans-unit>
       <trans-unit id="1fe9dd96f646eaa0cd3a0fcc7632ce12">
         <source>Error on saving configuration</source>
         <target>Error on saving configuration</target>
-        <note>Line: 106</note>
+        <note>Line: 112</note>
       </trans-unit>
       <trans-unit id="f2ff9d001d0a553c78da73443e7fcd97">
         <source>Configuration successfully updated.</source>
         <target>Configuration successfully updated.</target>
-        <note>Line: 168</note>
+        <note>Line: 174</note>
       </trans-unit>
     </body>
   </file>
