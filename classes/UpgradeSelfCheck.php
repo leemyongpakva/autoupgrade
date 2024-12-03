@@ -228,6 +228,7 @@ class UpgradeSelfCheck
 
             case self::ADMIN_UPGRADE_DIRECTORY_NOT_WRITABLE:
                 return [
+                    // TODO: sanitize autoUpgradePath or add generic placeholder for path
                     'message' => $this->translator->trans(
                         'The %s directory isn\'t writable. Provide write access to the user running PHP with appropriate permission & ownership.',
                         [$this->autoUpgradePath]
