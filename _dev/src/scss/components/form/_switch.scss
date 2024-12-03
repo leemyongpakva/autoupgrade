@@ -59,6 +59,7 @@ $e: ".ua-switch";
       width: 0;
       height: 0;
       outline: none;
+      appearance: none;
 
       &:checked {
         + #{$e}__label {
