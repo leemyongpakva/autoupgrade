@@ -315,7 +315,11 @@ DELETE FROM `PREFIX_hook_module_exceptions` WHERE `id_hook` NOT IN (SELECT id_ho
 /* PHP:add_column('feature_value', 'position', 'int(10) unsigned NOT NULL DEFAULT \'0\''); */;
 INSERT INTO `PREFIX_configuration` (`name`, `value`, `date_add`, `date_upd`) VALUES ('PS_FEATURE_VALUES_ORDER', 'name', NOW(), NOW());
 
-/* Upgrade attachment champs length */
+/* Upgrade attachment names length */
 /* https://github.com/PrestaShop/PrestaShop/pull/37598 */
 ALTER TABLE `PREFIX_attachment` MODIFY COLUMN `file_name` varchar(255) NOT NULL;
 ALTER TABLE `PREFIX_attachment_lang` MODIFY COLUMN `name` varchar(255) DEFAULT NULL;
+
+/* Fix category thumbnail images */
+/* https://github.com/PrestaShop/PrestaShop/pull/36877 */
+/* PHP:ps_900_migrate_category_images(); */;
