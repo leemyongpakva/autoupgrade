@@ -25,6 +25,16 @@ class LocalChannelConfigurationValidatorTest extends TestCase
         );
     }
 
+    public function testValidateReturnsErrorIfNoConfigurationExists()
+    {
+        $data = [];
+        $result = $this->validator->validate($data);
+
+        $this->assertSame([
+            'message' => "Both 'xml' and 'zip' files attributes must be provided to use the local channel.",
+        ], $result[0]);
+    }
+
     public function testValidateReturnsErrorIfZipFileDoesNotExist()
     {
         $data = [UpgradeConfiguration::ARCHIVE_ZIP => 'non_existent.zip', UpgradeConfiguration::ARCHIVE_XML => 'versioned_8.1.0.xml'];

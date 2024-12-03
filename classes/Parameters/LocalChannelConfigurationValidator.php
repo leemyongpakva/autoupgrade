@@ -77,6 +77,13 @@ class LocalChannelConfigurationValidator
 
         $errors = [];
 
+        $configErrors = $this->validateConfigExist($array);
+        if ($configErrors) {
+            $errors[] = $configErrors;
+
+            return $errors;
+        }
+
         $zipErrors = $this->validateZipFile($array[UpgradeConfiguration::ARCHIVE_ZIP]);
         if ($zipErrors) {
             $errors[] = $zipErrors;
@@ -95,6 +102,25 @@ class LocalChannelConfigurationValidator
         }
 
         return $errors;
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     *
+     * @return array{'message': string}|null
+     */
+    private function validateConfigExist(array $config): ?array
+    {
+        $zipExist = isset($config[UpgradeConfiguration::ARCHIVE_ZIP]);
+        $xmlExist = isset($config[UpgradeConfiguration::ARCHIVE_XML]);
+
+        if (!$zipExist || !$xmlExist) {
+            return [
+                'message' => $this->translator->trans("Both 'xml' and 'zip' files attributes must be provided to use the local channel."),
+            ];
+        }
+
+        return null;
     }
 
     /**
