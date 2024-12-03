@@ -126,6 +126,10 @@ class Router
             'controller' => UpdatePageUpdateController::class,
             'method' => 'step',
         ],
+        Routes::UPDATE_STEP_UPDATE_DOWNLOAD_LOGS => [
+            'controller' => UpdatePageUpdateController::class,
+            'method' => 'getDownloadLogsButton',
+        ],
         Routes::UPDATE_PAGE_POST_UPDATE => [
             'controller' => UpdatePagePostUpdateController::class,
             'method' => 'index',

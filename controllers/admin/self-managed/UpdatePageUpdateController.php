@@ -27,9 +27,13 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
+use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
+use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UpdatePageUpdateController extends AbstractPageWithStepController
@@ -55,6 +59,27 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
     protected function displayRouteInUrl(): ?string
     {
         return Routes::UPDATE_PAGE_UPDATE;
+    }
+
+    public function getDownloadLogsButton(): JsonResponse
+    {
+        try {
+            $logsPath = $this->upgradeContainer->getLogsPath(TaskType::TASK_TYPE_UPDATE);
+        } catch (\Exception $e) {
+            return AjaxResponseBuilder::errorResponse('Impossible to retrieve logs path');
+        }
+
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
+            $this->getTwig()->render(
+                '@ModuleAutoUpgrade/components/download_logs.html.twig',
+                [
+                    'button_label' => $this->upgradeContainer->getTranslator()->trans('Download update logs'),
+                    'download_path' => $logsPath,
+                    'filename' => basename($logsPath),
+                ]
+            )
+        );
     }
 
     /**

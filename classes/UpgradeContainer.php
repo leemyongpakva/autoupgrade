@@ -66,6 +66,7 @@ use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 
 /**
  * Class responsible of the easy (& Lazy) loading of the different services
@@ -858,6 +859,7 @@ class UpgradeContainer
 
     /**
      * @throws Exception
+     * @param TaskType::TASK_TYPE_* $task
      */
     public function getLogsPath(string $task): ?string
     {
