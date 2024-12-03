@@ -112,6 +112,8 @@ class State
 
     /** @var FileConfigurationStorage */
     private $fileConfigurationStorage;
+    /** @var bool */
+    private $disableSave = false;
 
     public function __construct(FileConfigurationStorage $fileConfigurationStorage)
     {
@@ -152,12 +154,13 @@ class State
         return $this->importFromArray($decodedData['nextParams']);
     }
 
-    /**
-     * @return bool
-     */
     public function save(): bool
     {
-        return $this->fileConfigurationStorage->save($this->export(), UpgradeFileNames::STATE_FILENAME);
+        if (!$this->disableSave) {
+            return $this->fileConfigurationStorage->save($this->export(), UpgradeFileNames::STATE_FILENAME);
+        }
+
+        return true;
     }
 
     /**
@@ -173,6 +176,7 @@ class State
 
     public function initDefault(string $currentVersion, ?string $destinationVersion): void
     {
+        $this->disableSave = true;
         // installedLanguagesIso is used to merge translations files
         $installedLanguagesIso = array_map(
             function ($v) { return $v['iso_code']; },
@@ -188,6 +192,7 @@ class State
         $this->setBackupName($backupName);
         $this->setCurrentVersion($currentVersion);
         $this->setDestinationVersion($destinationVersion);
+        $this->disableSave = false;
         $this->save();
     }
 
@@ -298,6 +303,7 @@ class State
     public function setCurrentVersion(string $currentVersion): State
     {
         $this->currentVersion = $currentVersion;
+        $this->save();
 
         return $this;
     }
@@ -305,6 +311,7 @@ class State
     public function setDestinationVersion(?string $destinationVersion): State
     {
         $this->destinationVersion = $destinationVersion;
+        $this->save();
 
         return $this;
     }
@@ -312,22 +319,10 @@ class State
     public function setBackupName(string $backupName): State
     {
         $this->backupName = $backupName;
-        $this->setBackupFilesFilename(BackupFinder::BACKUP_ZIP_NAME_PREFIX . $backupName . '.zip')
-            ->setBackupDbFilename(BackupFinder::BACKUP_DB_FOLDER_NAME_PREFIX . 'XXXXXX_' . $backupName . '.sql');
+        $this->backupFilesFilename = BackupFinder::BACKUP_ZIP_NAME_PREFIX . $backupName . '.zip';
+        $this->backupDbFilename = BackupFinder::BACKUP_DB_FOLDER_NAME_PREFIX . 'XXXXXX_' . $backupName . '.sql';
 
-        return $this;
-    }
-
-    public function setBackupFilesFilename(string $backupFilesFilename): State
-    {
-        $this->backupFilesFilename = $backupFilesFilename;
-
-        return $this;
-    }
-
-    public function setBackupDbFilename(string $backupDbFilename): State
-    {
-        $this->backupDbFilename = $backupDbFilename;
+        $this->save();
 
         return $this;
     }
@@ -338,6 +333,7 @@ class State
     public function setBackupLines(?array $backup_lines): State
     {
         $this->backup_lines = $backup_lines;
+        $this->save();
 
         return $this;
     }
@@ -345,6 +341,7 @@ class State
     public function setBackupLoopLimit(?int $backup_loop_limit): State
     {
         $this->backup_loop_limit = $backup_loop_limit;
+        $this->save();
 
         return $this;
     }
@@ -352,6 +349,7 @@ class State
     public function setBackupTable(?string $backup_table): State
     {
         $this->backup_table = $backup_table;
+        $this->save();
 
         return $this;
     }
@@ -359,6 +357,7 @@ class State
     public function setDbStep(int $dbStep): State
     {
         $this->dbStep = $dbStep;
+        $this->save();
 
         return $this;
     }
@@ -366,6 +365,7 @@ class State
     public function setRestoreName(string $restoreName): State
     {
         $this->restoreName = $restoreName;
+        $this->save();
 
         return $this;
     }
@@ -373,6 +373,7 @@ class State
     public function setRestoreFilesFilename(string $restoreFilesFilename): State
     {
         $this->restoreFilesFilename = $restoreFilesFilename;
+        $this->save();
 
         return $this;
     }
@@ -383,6 +384,7 @@ class State
     public function setRestoreDbFilenames(array $restoreDbFilenames): State
     {
         $this->restoreDbFilenames = $restoreDbFilenames;
+        $this->save();
 
         return $this;
     }
@@ -393,6 +395,7 @@ class State
     public function setInstalledLanguagesIso(array $installedLanguagesIso): State
     {
         $this->installedLanguagesIso = $installedLanguagesIso;
+        $this->save();
 
         return $this;
     }
@@ -400,6 +403,7 @@ class State
     public function setWarningExists(bool $warning_exists): State
     {
         $this->warning_exists = $warning_exists;
+        $this->save();
 
         return $this;
     }
@@ -411,6 +415,7 @@ class State
         }
 
         $this->progressPercentage = $progressPercentage;
+        $this->save();
 
         return $this;
     }
@@ -418,6 +423,7 @@ class State
     public function setProcessTimestamp(string $processTimestamp): void
     {
         $this->processTimestamp = $processTimestamp;
+        $this->save();
     }
 
     public function isInitialized(): bool
