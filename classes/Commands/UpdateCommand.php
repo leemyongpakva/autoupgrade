@@ -58,6 +58,11 @@ class UpdateCommand extends AbstractCommand
             ->addOption('chain', null, InputOption::VALUE_NONE, 'True by default. Allows you to chain update commands automatically. The command will continue executing subsequent tasks without requiring manual intervention to restart the process.')
             ->addOption('no-chain', null, InputOption::VALUE_NONE, 'Prevents chaining of update commands. The command will execute a task and then stop, logging the next command that needs to be run. You will need to manually restart the process to continue with the next step.')
             ->addOption('channel', null, InputOption::VALUE_REQUIRED, "Selects what update to run ('" . UpgradeConfiguration::CHANNEL_LOCAL . "' / '" . UpgradeConfiguration::CHANNEL_ONLINE . "')")
+            ->addOption('zip', null, InputOption::VALUE_REQUIRED, 'Sets the archive zip file for a local update')
+            ->addOption('xml', null, InputOption::VALUE_REQUIRED, 'Sets the archive xml file for a local update')
+            ->addOption('disable-non-native-modules', null, InputOption::VALUE_REQUIRED, 'Disable all modules installed after the store creation (1 for yes, 0 for no)')
+            ->addOption('regenerate-email-templates', null, InputOption::VALUE_REQUIRED, "Regenerate email templates. If you've customized email templates, your changes will be lost if you activate this option (1 for yes, 0 for no)")
+            ->addOption('disable-all-overrides', null, InputOption::VALUE_REQUIRED, 'Overriding is a way to replace business behaviors (class files and controller files) to target only one method or as many as you need. This option disables all classes & controllers overrides, allowing you to avoid conflicts during and after updates (1 for yes, 0 for no)')
             ->addOption('config-file-path', null, InputOption::VALUE_REQUIRED, 'Configuration file location for update.')
             ->addOption('action', null, InputOption::VALUE_REQUIRED, 'Advanced users only. Sets the step you want to start from. Only the "' . TaskName::TASK_UPDATE_INITIALIZATION . '" task updates the configuration. (Default: ' . TaskName::TASK_UPDATE_INITIALIZATION . ', see ' . DeveloperDocumentation::DEV_DOC_UPGRADE_CLI_URL . ' for other values available)');
     }
@@ -79,14 +84,12 @@ class UpdateCommand extends AbstractCommand
 
             $action = $input->getOption('action');
 
-            $isFirstUpdateProcess = $action === null || $action === TaskName::TASK_UPDATE_INITIALIZATION;
-            if ($isFirstUpdateProcess) {
+            // if we are in the 1st step of the update, we update the configuration
+            if ($action === null || $action === TaskName::TASK_UPDATE_INITIALIZATION) {
                 $this->logger->debug('Cleaning previous state files.');
                 $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
-            }
 
-            // if we are in the 1st step of the update, we update the configuration
-            if ($isFirstUpdateProcess) {
+                $this->processConsoleInputConfiguration($input);
                 $configPath = $input->getOption('config-file-path');
                 $exitCode = $this->loadConfiguration($configPath);
                 if ($exitCode !== ExitCode::SUCCESS) {
@@ -99,7 +102,6 @@ class UpdateCommand extends AbstractCommand
             $controller = new AllUpdateTasks($this->upgradeContainer);
             $controller->setOptions([
                 'action' => $action,
-                UpgradeConfiguration::CHANNEL => $input->getOption('channel'),
             ]);
             $controller->init();
             $exitCode = $controller->run();
@@ -143,5 +145,23 @@ class UpdateCommand extends AbstractCommand
         }
 
         return ExitCode::SUCCESS;
+    }
+
+    private function processConsoleInputConfiguration(InputInterface $input): void
+    {
+        $options = [
+            UpgradeConfiguration::CHANNEL => 'channel',
+            UpgradeConfiguration::ARCHIVE_ZIP => 'zip',
+            UpgradeConfiguration::ARCHIVE_XML => 'xml',
+            UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => 'disable-non-native-modules',
+            UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL => 'regenerate-email-templates',
+            UpgradeConfiguration::PS_DISABLE_OVERRIDES => 'disable-all-overrides',
+        ];
+        foreach ($options as $configKey => $optionName) {
+            $optionValue = $input->getOption($optionName);
+            if ($optionValue !== null) {
+                $this->consoleInputConfiguration[$configKey] = $optionValue;
+            }
+        }
     }
 }
