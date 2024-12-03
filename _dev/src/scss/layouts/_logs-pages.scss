@@ -38,6 +38,7 @@ html {
       @container html-height (min-width: 0) {
         #{$ua-id} {
           display: grid;
+          grid-template-rows: 1fr;
           grid-template-columns: minmax(0, 1fr);
           min-height: calc(100cqh - var(--#{$ua-prefix}header-offset));
 

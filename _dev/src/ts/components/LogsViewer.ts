@@ -146,10 +146,11 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
   #createLogLine = (logEntry: LogEntry): HTMLDivElement => {
     const logLineFragment = this.#templateLogLine.content.cloneNode(true) as DocumentFragment;
     const logLine = logLineFragment.querySelector('.logs__line') as HTMLDivElement;
+    const logLineContent = logLineFragment.querySelector('.logs__line-content') as HTMLDivElement;
 
     logLine.classList.add(`logs__line--${logEntry.className}`);
     logLine.setAttribute('data-status', logEntry.className);
-    logLine.textContent = logEntry.message;
+    logLineContent.textContent = logEntry.message;
 
     return logLine;
   };
@@ -183,6 +184,7 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
   #createSummary(severity: SeverityClasses, logs: string[]): HTMLDivElement {
     const summaryFragment = this.#templateSummary.content.cloneNode(true) as DocumentFragment;
     const summary = summaryFragment.querySelector('.logs__summary') as HTMLDivElement;
+    const summaryScroll = summaryFragment.querySelector('.logs__summary-scroll') as HTMLDivElement;
 
     const title = this.#getSummaryTitle(severity);
     const titleContainer = summary.querySelector('[data-slot-template="title"]') as HTMLDivElement;
@@ -200,7 +202,7 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
 
       cloneLogElement.appendChild(linkClone);
 
-      summary.appendChild(cloneLogElement);
+      summaryScroll.appendChild(cloneLogElement);
     });
 
     return summary;

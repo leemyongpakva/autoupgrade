@@ -27,23 +27,44 @@ $e: ".check-requirements";
     }
 
     &__requirement {
-      padding-inline-start: 2rem;
-      background-repeat: no-repeat;
-      background-position: left center;
-      background-size: 1.5rem 1.5rem;
+      position: relative;
+      padding-inline-start: 1.75rem;
       font-size: 0.875rem;
       line-height: 1.4;
 
-      &--error {
-        background-image: url("../../img/close.svg");
-      }
-
-      &--warning {
-        background-image: url("../../img/warning.svg");
+      &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        display: block;
+        width: 1.375rem;
+        height: 1.25rem;
+        font-family: var(--#{$ua-prefix}font-family-material-icons);
+        font-size: 1.25rem;
+        line-height: 1;
+        transform: translateY(-50%);
       }
 
       &--success {
-        background-image: url("../../img/check.svg");
+        &::before {
+          content: "check";
+          color: var(--#{$ua-prefix}green-500);
+        }
+      }
+
+      &--warning {
+        &::before {
+          content: "warning";
+          color: var(--#{$ua-prefix}yellow-500);
+        }
+      }
+
+      &--error {
+        &::before {
+          content: "close";
+          color: var(--#{$ua-prefix}red-500);
+        }
       }
     }
 
