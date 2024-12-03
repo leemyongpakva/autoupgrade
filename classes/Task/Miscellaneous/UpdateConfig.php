@@ -72,6 +72,12 @@ class UpdateConfig extends AbstractTask
             }
         }
 
+        // If no channel is specified, and there is a configuration relating to archive files, we deduce that the channel is local
+        $archiveFilesConfExist = isset($config[UpgradeConfiguration::ARCHIVE_XML]) || isset($config[UpgradeConfiguration::ARCHIVE_ZIP]);
+        if (!isset($config[UpgradeConfiguration::CHANNEL]) && $archiveFilesConfExist) {
+            $config[UpgradeConfiguration::CHANNEL] = UpgradeConfiguration::CHANNEL_LOCAL;
+        }
+
         $isLocal = $config[UpgradeConfiguration::CHANNEL] === UpgradeConfiguration::CHANNEL_LOCAL;
 
         $error = $this->container->getConfigurationValidator()->validate($config);
