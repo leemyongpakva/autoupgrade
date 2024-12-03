@@ -44,6 +44,7 @@ use PrestaShop\Module\AutoUpgrade\Services\ComposerService;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\AssetsEnvironment;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension3;
@@ -66,7 +67,6 @@ use Twig\Error\LoaderError;
 use Twig\Loader\FilesystemLoader;
 use Twig_Environment;
 use Twig_Loader_Filesystem;
-use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 
 /**
  * Class responsible of the easy (& Lazy) loading of the different services
@@ -859,6 +859,7 @@ class UpgradeContainer
 
     /**
      * @throws Exception
+     *
      * @param TaskType::TASK_TYPE_* $task
      */
     public function getLogsPath(string $task): ?string
