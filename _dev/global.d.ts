@@ -5,6 +5,7 @@ interface AutoUpgradeVariables {
   admin_url: string;
   admin_dir: string;
   stepper_parent_id: string;
+  module_version: string;
 }
 
 declare global {

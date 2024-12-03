@@ -539,6 +539,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
             'admin_url' => __PS_BASE_URI__ . $adminDir,
             'admin_dir' => $adminDir,
             'stepper_parent_id' => \PrestaShop\Module\AutoUpgrade\Twig\PageSelectors::STEPPER_PARENT_ID,
+            'module_version' => $this->module->version,
         ];
     }
 
