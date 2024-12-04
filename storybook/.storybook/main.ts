@@ -42,9 +42,7 @@ const config: StorybookConfig = {
     options: {
       // 👇 Here configure the framework
       symfony: {
-        server: process.env.IS_IN_DOCKER
-          ? "http://storybook-php:8000"
-          : "http://localhost:8003",
+        server: process.env.PHP_URL || "http://localhost:8003",
         proxyPaths: ["/assets"],
         additionalWatchPaths: ["assets"],
       },

@@ -1,20 +1,23 @@
-FROM php:8.2-fpm
+FROM composer:2.4 AS build
 
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    libxml2-dev
+COPY . /autoupgrade
 
-RUN docker-php-ext-install dom xml
+WORKDIR /autoupgrade
+RUN composer install --no-dev --no-interaction --optimize-autoloader
 
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+WORKDIR /autoupgrade/storybook
+RUN composer install --no-dev --no-interaction --optimize-autoloader
 
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs
 
-RUN node --version
-RUN npm --version
+FROM node:20
+ENV PHP_URL http://storybook-php:8000
 
-RUN curl -1sLf 'https://dl.cloudsmith.io/public/symfony/stable/setup.deb.sh' | bash
-RUN apt-get install -y symfony-cli
+RUN apt update \
+    && apt install -y php8.2 php-dom \
+    && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /var/www/html
+COPY --from=build /autoupgrade /autoupgrade
+
+WORKDIR /autoupgrade/storybook
+
+RUN npm install

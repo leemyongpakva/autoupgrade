@@ -1,5 +1,6 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    app.version: '%env(PS_APP_VERSION)%'
 
 services:
     _defaults:
