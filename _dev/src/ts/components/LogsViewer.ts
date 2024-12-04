@@ -8,6 +8,8 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
   #errors: string[] = [];
   #isSummaryDisplayed: boolean = false;
 
+  #timeLastReflow: number = 0;
+
   #logsList = this.queryElement<HTMLDivElement>(
     '[data-slot-component="list"]',
     'Logs list not found'
@@ -170,7 +172,13 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
    * @description Automatically scrolls the logs container to the bottom of the list.
    */
   #scrollToBottom = () => {
-    this.#logsScroll.scrollTop = this.#logsScroll.scrollHeight;
+    const currentTime = Date.now();
+
+    // We defer scrolls to the bottom if they are happening too frequently
+    if (currentTime - this.#timeLastReflow > 500) {
+      this.#timeLastReflow = currentTime;
+      this.#logsScroll.scrollTop = this.#logsScroll.scrollHeight;
+    }
   };
 
   /**
