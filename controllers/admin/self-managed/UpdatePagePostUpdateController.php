@@ -27,12 +27,12 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
+use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 
 class UpdatePagePostUpdateController extends AbstractPageWithStepController
 {
     const CURRENT_STEP = UpdateSteps::STEP_POST_UPDATE;
-    const CURRENT_PAGE = 'update';
 
     protected function getPageTemplate(): string
     {
@@ -42,6 +42,11 @@ class UpdatePagePostUpdateController extends AbstractPageWithStepController
     protected function getStepTemplate(): string
     {
         return self::CURRENT_STEP;
+    }
+
+    protected function displayRouteInUrl(): ?string
+    {
+        return Routes::UPDATE_PAGE_POST_UPDATE;
     }
 
     /**
