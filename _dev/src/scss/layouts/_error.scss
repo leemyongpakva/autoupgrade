@@ -29,13 +29,18 @@ $e: ".error-page";
     }
 
     &__desc {
+      margin-block-end: 2rem;
       font-size: 1rem;
       font-weight: 500;
     }
 
+    &__buttons {
+      display: flex;
+      gap: 1rem 2rem;
+    }
+
     &__button {
       padding: 0.875rem 1rem;
-      margin-block-start: 2rem;
       font-size: 0.875rem;
       font-weight: 400;
       white-space: initial;
@@ -56,6 +61,11 @@ $e: ".error-page";
 
       &__infos {
         justify-self: center;
+        width: 100%;
+      }
+
+      &__buttons {
+        flex-direction: column;
       }
     }
   }

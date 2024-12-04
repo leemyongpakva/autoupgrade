@@ -2,7 +2,7 @@
   <div class="local-archive">
     <div class="form-group">
       <label for="{{ form_fields.archive_zip }}">
-        {{ 'Archive to use:'|trans({}) }}
+        {{ 'Archive to use'|trans({}) }}
         <span class="require-star">*</span>
       </label>
 
@@ -12,7 +12,7 @@
         name="{{ form_fields.archive_zip }}"
         required
       >
-        <option value="">{{ 'Choose an archive'|trans({}) }}</option>
+        <option value="">{{ 'Select an archive'|trans({}) }}</option>
         {% for fileName in archiveFiles %}
           <option
             {% if current_values is defined and current_values.archive_zip == fileName %}
@@ -35,7 +35,7 @@
 
     <div class="form-group">
       <label for="{{ form_fields.archive_xml }}">
-        {{ 'XML file to use:'|trans({}) }}
+        {{ 'XML file to use'|trans({}) }}
         <span class="require-star">*</span>
       </label>
 
@@ -45,7 +45,7 @@
         name="{{ form_fields.archive_xml }}"
         required
       >
-        <option value="">{{ 'Choose an XML file'|trans({}) }}</option>
+        <option value="">{{ 'Select a file'|trans({}) }}</option>
         {% for fileName in xmlFiles %}
           <option
             {% if current_values is defined and current_values.archive_xml == fileName %}
@@ -79,7 +79,11 @@
     </div>
   </div>
 {% else %}
-  <div class="alert alert-warning">
-    {{ 'No archive found in your admin/autoupgrade/download directory'|trans({}) }}
-  </div>
+  {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
+    title: '',
+    message: 'No archive found in the following directory: /your-admin-directory/autoupgrade/download/'|trans({}),
+    alertStatus: 'warning',
+    buttonLabel: '',
+    buttonUrl: '',
+  } %}
 {% endif %}

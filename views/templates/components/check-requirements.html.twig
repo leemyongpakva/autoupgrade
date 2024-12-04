@@ -37,8 +37,12 @@
   </div>
 {% else %}
   <div class="check-requirements check-requirements--success">
-    <div class="alert alert-success">
-      {{ 'The requirements check is complete, you can update your store to this version of PrestaShop.'|trans({}) }}
-    </div>
+    {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
+      title: '',
+      message: 'The requirements check is complete, you can update your store to this version of PrestaShop.'|trans({}),
+      alertStatus: 'success',
+      buttonLabel: '',
+      buttonUrl: '',
+    } %}
   </div>
 {% endif %}

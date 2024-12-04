@@ -75,7 +75,7 @@ class LocalChannelConfigurationValidatorTest extends TestCase
         $result = $this->validator->validate($data);
 
         $this->assertSame([
-            'message' => 'The PrestaShop version in your archive doesn’t match the one in XML file. Please fix this issue and try again.',
+            'message' => 'The PrestaShop version in your archive doesn\'t match the one in XML file. Please fix this issue and try again.',
         ], $result[0]);
     }
 
