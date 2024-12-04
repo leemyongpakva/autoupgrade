@@ -77,6 +77,6 @@ class AssetsEnvironment
 
         $path = array_splice($path, 0, -$numberOfSubDirs);
 
-        return $request->getSchemeAndHttpHost() . implode('/', $path);
+        return implode('/', $path);
     }
 }
