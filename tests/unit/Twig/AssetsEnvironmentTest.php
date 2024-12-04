@@ -72,7 +72,7 @@ class AssetsEnvironmentTest extends TestCase
 
     public function testGetAssetsBaseUrlReturnsProductionUrl()
     {
-        $expectedUrl = 'http://localhost/modules/autoupgrade/views';
+        $expectedUrl = '/modules/autoupgrade/views';
         $server = [
             'HTTP_HOST' => 'localhost',
             'SERVER_PORT' => '80',
@@ -100,7 +100,7 @@ class AssetsEnvironmentTest extends TestCase
 
         $request = new Request([], [], [], [], [], $server);
 
-        $expectedUrl = 'http://localhost/hello-world/modules/autoupgrade/views';
+        $expectedUrl = '/hello-world/modules/autoupgrade/views';
         $this->assertSame($expectedUrl, $this->assetsEnvironment->getAssetsBaseUrl($request));
     }
 
@@ -117,7 +117,7 @@ class AssetsEnvironmentTest extends TestCase
 
         $request = new Request([], [], [], [], [], $server);
 
-        $expectedUrl = 'http://localhost/modules/autoupgrade/views';
+        $expectedUrl = '/modules/autoupgrade/views';
         $this->assertSame($expectedUrl, $this->assetsEnvironment->getAssetsBaseUrl($request));
     }
 
@@ -134,7 +134,7 @@ class AssetsEnvironmentTest extends TestCase
 
         $request = new Request([], [], [], [], [], $server);
 
-        $expectedUrl = 'http://localhost/hello-world/modules/autoupgrade/views';
+        $expectedUrl = '/hello-world/modules/autoupgrade/views';
         $this->assertSame($expectedUrl, $this->assetsEnvironment->getAssetsBaseUrl($request));
     }
 }
