@@ -64,7 +64,7 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
     public function getDownloadLogsButton(): JsonResponse
     {
         try {
-            $logsPath = $this->upgradeContainer->getLogsPath(TaskType::TASK_TYPE_UPDATE);
+            $logsPath = $this->upgradeContainer->getDownloadLogsPath(TaskType::TASK_TYPE_UPDATE);
         } catch (\Exception $e) {
             return AjaxResponseBuilder::errorResponse('Impossible to retrieve logs path');
         }

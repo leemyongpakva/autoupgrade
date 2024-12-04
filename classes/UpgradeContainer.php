@@ -872,4 +872,17 @@ class UpgradeContainer
 
         return $logPath;
     }
+
+    /**
+     * @throws Exception
+     *
+     * @param TaskType::TASK_TYPE_* $task
+     */
+    public function getDownloadLogsPath(string $task): ?string
+    {
+        $logPath = $this->getLogsPath($task);
+        $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+
+        return str_replace($documentRoot, '', $logPath);
+    }
 }
