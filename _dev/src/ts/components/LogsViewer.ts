@@ -103,7 +103,7 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
       this.#logsSummary.addEventListener('click', this.#handleLinkEvent);
     }
 
-    await api.post('update-step-update-download-logs');
+    await api.post(this.element.dataset.downloadLogsRoute!);
 
     this.#appendFragmentElement(fragment, this.#logsSummary);
     this.#isSummaryDisplayed = true;

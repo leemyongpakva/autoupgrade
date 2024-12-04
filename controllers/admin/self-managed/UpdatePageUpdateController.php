@@ -96,6 +96,7 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
             $updateSteps->getStepParams($this::CURRENT_STEP),
             [
                 'success_route' => Routes::UPDATE_STEP_POST_UPDATE,
+                'download_logs_route' => Routes::UPDATE_STEP_UPDATE_DOWNLOAD_LOGS,
                 'restore_route' => Routes::RESTORE_PAGE_BACKUP_SELECTION,
                 'initial_process_action' => TaskName::TASK_UPDATE_INITIALIZATION,
                 'backup_available' => !empty($backupFinder->getAvailableBackups()),
