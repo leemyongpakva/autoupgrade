@@ -28,13 +28,13 @@
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
+use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UpdatePageUpdateController extends AbstractPageWithStepController
 {
     const CURRENT_STEP = UpdateSteps::STEP_UPDATE;
-    const CURRENT_PAGE = 'update';
 
     // TODO: for dev update page comment need to be removed after dev
 //    public function index(): RedirectResponse
@@ -65,10 +65,16 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
     protected function getParams(): array
     {
         $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
+        $backupFinder = $this->upgradeContainer->getBackupFinder();
 
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),
-            []
+            [
+                'success_route' => Routes::UPDATE_STEP_POST_UPDATE,
+                'restore_route' => Routes::RESTORE_PAGE_BACKUP_SELECTION,
+                'initial_process_action' => TaskName::TASK_UPDATE_INITIALIZATION,
+                'backup_available' => !empty($backupFinder->getAvailableBackups()),
+            ]
         );
     }
 }

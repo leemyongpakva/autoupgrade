@@ -198,6 +198,9 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
     const titleContainer = summary.querySelector('[data-slot-template="title"]') as HTMLDivElement;
     titleContainer.textContent = title;
 
+    const countContainer = summary.querySelector('[data-slot-template="count"]') as HTMLDivElement;
+    countContainer.textContent = String(logs.length);
+
     const linkElement = this.#createSummaryLinkElement(severity);
 
     logs.forEach((logId) => {

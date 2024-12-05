@@ -4,6 +4,10 @@ $e-tracker: ".progress-tracker";
 $e-logs: ".logs";
 
 #{$ua-id} {
+  #error-alert ~ #{$e-tracker} {
+    margin-block-start: 0.5rem;
+  }
+
   #{$e-tracker} {
     display: flex;
     flex-direction: column;

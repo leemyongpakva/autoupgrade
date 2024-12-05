@@ -1,10 +1,19 @@
 import ComponentAbstract from './ComponentAbstract';
+import { Destroyable } from '../types/DomLifecycle';
 
-export default class ProgressBar extends ComponentAbstract {
+export default class ProgressBar extends ComponentAbstract implements Destroyable {
   #progressBar = this.queryElement<HTMLDivElement>(
     '[role="progressbar"]',
     'Progress bar not found'
   );
+
+  /**
+   * @public
+   * @description Removes the associated DOM element from the document.
+   */
+  public beforeDestroy = () => {
+    this.element.remove();
+  };
 
   /**
    * @public

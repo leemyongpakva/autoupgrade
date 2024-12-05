@@ -1,5 +1,12 @@
 {% if title or message %}
-  <div class="alert alert-{% if alertStatus %}{{ alertStatus }}{% else %}info{% endif %}">
+  <div
+    class="
+      alert
+      alert-{% if alertStatus %}{{ alertStatus }}{% else %}info{% endif %}
+      {% if hidden is defined and hidden == true %}hidden{% endif %}
+    "
+    {% if id is defined %}id="{{ id }}"{% endif %}
+  >
     <div class="alert__infos">
       {% if title %}
         <p class="alert__title">{{ title }}</p>
@@ -10,12 +17,27 @@
       {% endif %}
     </div>
 
-    {% if buttonLabel and buttonUrl %}
-      <div class="alert__action">
-        <a class="alert__link btn btn-{% if alertStatus %}{{ alertStatus }}{% else %}info{% endif %}" href="{{ buttonUrl }}">
+    {% if buttonLabel %}
+      <{{ formRoute ? 'form' : 'div' }}
+        class="alert__action"
+        {% if formRoute is defined %}
+          data-route-to-submit="{{ formRoute }}"
+          action=""
+        {% endif %}
+        {% if formName %}
+          id="{{ formName }}"
+          name="{{ formName }}"
+        {% endif %}
+      >
+        <{{ formRoute ? 'button' : 'a' }}
+        class="alert__link btn btn-{% if alertStatus %}{{ alertStatus }}{% else %}info{% endif %}"
+        {% if buttonUrl %}href="{{ buttonUrl }}"{% endif %}
+        {% if buttonDownload %}download="{{ buttonDownload }}"{% endif %}
+        {% if formRoute %}type="submit"{% endif %}
+        >
           {{ buttonLabel }}
-        </a>
-      </div>
+        </{{ formRoute ? 'button' : 'a' }}>
+      </{{ formRoute ? 'form' : 'div' }}>
     {% endif %}
   </div>
 {% endif %}

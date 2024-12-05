@@ -8,7 +8,7 @@
   <div class="logs__summary">
     <div class="logs__summary-top">
       <p data-slot-template="title" class="logs__summary-title h3"></p>
-      <span class="logs__summary-total badge badge-danger">{{ random(1, 100) }}</span>
+      <span data-slot-template="count" class="logs__summary-total badge badge-danger"></span>
     </div>
     <div class="logs__summary-scroll"></div>
   </div>

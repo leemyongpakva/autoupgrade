@@ -1,5 +1,9 @@
 {% block step_content %}
-  <div id="ua_step_content" class="{% block page_class %}default-page{% endblock %}">
+  <div
+    id="ua_step_content"
+    class="{% block page_class %}default-page{% endblock %}"
+    {% if initial_process_action is defined %}data-initial-process-action="{{ initial_process_action }}"{% endif %}
+  >
     <div class="page__title">
       {% block title %}
         {# Default title can go here, or it can be left empty so that children can override it #}

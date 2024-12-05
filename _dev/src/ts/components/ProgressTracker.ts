@@ -6,8 +6,8 @@ import { ApiResponseAction } from '../types/apiTypes';
 import { Destroyable } from '../types/DomLifecycle';
 
 export default class ProgressTracker extends ComponentAbstract implements Destroyable {
-  #logsSummary: NonNullable<LogsSummary> = new LogsSummary(this.#logsSummaryContainer);
-  #progressBar: NonNullable<ProgressBar> = new ProgressBar(this.#progressBarContainer);
+  #logsSummary: LogsSummary | null = new LogsSummary(this.#logsSummaryContainer);
+  #progressBar: ProgressBar | null = new ProgressBar(this.#progressBarContainer);
   #logsViewer: NonNullable<LogsViewer> = new LogsViewer(this.#logsViewerContainer);
 
   public beforeDestroy = () => {
@@ -44,19 +44,31 @@ export default class ProgressTracker extends ComponentAbstract implements Destro
    * - Updates the log summary with the next description.
    * - Updates the progress bar with the progress percentage.
    * - Adds new logs to the logs viewer.
+   * - Adds errors if present to logs viewer.
    */
   public updateProgress(data: ApiResponseAction): void {
-    this.#logsSummary.setLogsSummaryText(data.next_desc ?? '');
-    this.#progressBar.setProgressPercentage(data.nextParams.progressPercentage);
+    this.#logsSummary?.setLogsSummaryText(data.next_desc ?? '');
+    this.#progressBar?.setProgressPercentage(data.nextParams?.progressPercentage || 0);
     this.#logsViewer.addLogs(data.nextQuickInfo);
+
+    if (data.nextErrors) {
+      this.#logsViewer.addLogs(data.nextErrors);
+    }
   }
 
   /**
    * @public
    * @returns {void}
-   * @description Ends the progress tracking and displays a summary of error logs in the logs viewer.
+   * @description Displays a summary of error logs in the logs viewer.
+   *              Destroy and null logsSummary and ProgressBar.
    */
   public endProgress(): void {
+    this.#logsSummary?.beforeDestroy();
+    this.#logsSummary = null;
+
+    this.#progressBar?.beforeDestroy();
+    this.#progressBar = null;
+
     // Todo: we need to retrieve the download link
     this.#logsViewer.displaySummary('download/logs/link.txt');
   }

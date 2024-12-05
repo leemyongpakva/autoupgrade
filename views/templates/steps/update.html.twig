@@ -7,14 +7,42 @@
 {% endblock %}
 
 {% block content %}
+  {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
+    id: 'error-alert',
+    hidden: true,
+    alertStatus: backup_available ? 'warning' : 'danger',
+    title: 'Update failed'|trans({}),
+    message: backup_available
+    ? 'Your store may not work properly anymore. Select the backup you want to use and restore it to avoid any data loss.'|trans({})
+    : 'You didn’t back up your store with the Update assistant module but you can restore using your own manual backup.'|trans({}),
+    buttonLabel: backup_available ? 'Restore'|trans({}) : null,
+    formRoute: backup_available ? restore_route : null,
+    formName: 'restore-alert',
+  } %}
   {% include "@ModuleAutoUpgrade/components/progress-tracker.html.twig" with {
-    successRoute: 'update-step-post-update'
+    successRoute: success_route
   } %}
 {% endblock %}
 
-{% block buttons_inner %}
-  <button class="btn btn-lg btn-primary" type="button">
-    {{ 'Next'|trans({}) }}
-    <i class="material-icons">arrow_forward</i>
-  </button>
+{% block buttons %}
+  <div class="page__buttons hidden" id="error-buttons">
+    <form>
+      <button class="btn btn-lg btn-default" type="submit">
+        <i class="material-icons">send</i>
+        {{ 'Send error report'|trans({}) }}
+      </button>
+    </form>
+    {% if backup_available %}
+      <form
+        id="restore-button"
+        name="restore-button"
+        data-route-to-submit="{{ restore_route }}"
+      >
+        <button class="btn btn-lg btn-primary" type="submit">
+          <i class="material-icons">settings_backup_restore</i>
+          {{ 'Restore'|trans({}) }}
+        </button>
+      </form>
+    {% endif %}
+  </div>
 {% endblock %}
