@@ -151,17 +151,19 @@ class AdminSelfUpgradeController extends ModuleAdminController
                 return;
             }
 
-            // If a previous version of ajax-upgradetab.php exists, delete it
-            if (file_exists($this->autoupgradePath . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php')) {
-                @unlink($this->autoupgradePath . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php');
-            }
-
             $file_tab = @filemtime($this->autoupgradePath . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php');
             $file = @filemtime(_PS_ROOT_DIR_ . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $this->autoupgradeDir . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php');
 
             if ($file_tab < $file) {
+                // If a previous version of ajax-upgradetab.php exists, delete it
+                if (file_exists($this->autoupgradePath . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php')) {
+                    @unlink($this->autoupgradePath . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php');
+                }
+                // copy new version
                 @copy(_PS_ROOT_DIR_ . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR . $this->autoupgradeDir . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php',
                     $this->autoupgradePath . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php');
+                // adjust file modification time
+                @touch($this->autoupgradePath . DIRECTORY_SEPARATOR . 'ajax-upgradetab.php', $file);
             }
 
             // Make sure that the XML config directory exists
