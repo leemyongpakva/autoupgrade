@@ -9,6 +9,7 @@ export default class UpdatePageUpdate extends UpdatePage {
   #progressTracker: ProgressTracker = new ProgressTracker(this.#progressTrackerContainer);
   #restoreAlertForm: null | HTMLFormElement = null;
   #restoreButtonForm: null | HTMLFormElement = null;
+  #submitErrorReportForm: null | HTMLFormElement = null;
 
   constructor() {
     super();
@@ -32,8 +33,9 @@ export default class UpdatePageUpdate extends UpdatePage {
   public beforeDestroy = () => {
     this.#progressTracker.beforeDestroy();
 
-    this.#restoreAlertForm?.removeEventListener('submit', this.#handleRestoreSubmit);
-    this.#restoreButtonForm?.removeEventListener('submit', this.#handleRestoreSubmit);
+    this.#restoreAlertForm?.removeEventListener('submit', this.#handleSubmit);
+    this.#restoreButtonForm?.removeEventListener('submit', this.#handleSubmit);
+    this.#submitErrorReportForm?.addEventListener('submit', this.#handleSubmit);
   };
 
   get #progressTrackerContainer(): HTMLDivElement {
@@ -77,7 +79,7 @@ export default class UpdatePageUpdate extends UpdatePage {
     alertContainer.classList.remove('hidden');
 
     this.#restoreAlertForm = document.forms.namedItem('restore-alert');
-    this.#restoreAlertForm?.addEventListener('submit', this.#handleRestoreSubmit);
+    this.#restoreAlertForm?.addEventListener('submit', this.#handleSubmit);
   };
 
   #displayErrorButtons = () => {
@@ -89,11 +91,14 @@ export default class UpdatePageUpdate extends UpdatePage {
 
     buttonsContainer.classList.remove('hidden');
 
+    this.#submitErrorReportForm = document.forms.namedItem('submit-error-report');
+    this.#submitErrorReportForm?.addEventListener('submit', this.#handleSubmit);
+
     this.#restoreButtonForm = document.forms.namedItem('restore-button');
-    this.#restoreButtonForm?.addEventListener('submit', this.#handleRestoreSubmit);
+    this.#restoreButtonForm?.addEventListener('submit', this.#handleSubmit);
   };
 
-  #handleRestoreSubmit = async (event: SubmitEvent) => {
+  #handleSubmit = async (event: SubmitEvent) => {
     event.preventDefault();
 
     const form = event.target as HTMLFormElement;

@@ -162,7 +162,10 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
    */
   #createSummary(severity: SeverityClasses, logs: string[]): HTMLDivElement {
     const summaryFragment = this.#templateSummary.content.cloneNode(true) as DocumentFragment;
+
     const summary = summaryFragment.querySelector('.logs__summary') as HTMLDivElement;
+    summary.setAttribute('data-summary-severity', severity);
+
     const summaryScroll = summaryFragment.querySelector('.logs__summary-scroll') as HTMLDivElement;
 
     const title = this.#getSummaryTitle(severity);

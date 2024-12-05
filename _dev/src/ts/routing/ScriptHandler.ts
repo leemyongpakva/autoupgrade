@@ -4,10 +4,13 @@ import UpdatePageUpdateOptions from '../pages/UpdatePageUpdateOptions';
 import UpdatePageBackup from '../pages/UpdatePageBackup';
 import UpdatePageUpdate from '../pages/UpdatePageUpdate';
 import UpdatePagePostUpdate from '../pages/UpdatePagePostUpdate';
+
+import StartUpdateDialog from '../dialogs/StartUpdateDialog';
+import SendErrorReportDialog from '../dialogs/SendErrorReportDialog';
+
 import DomLifecycle from '../types/DomLifecycle';
 import { RoutesMatching } from '../types/scriptHandlerTypes';
 import { routeHandler } from '../autoUpgrade';
-import StartUpdateDialog from '../dialogs/StartUpdateDialog';
 
 export default class ScriptHandler {
   #currentScript: DomLifecycle | undefined;
@@ -25,7 +28,8 @@ export default class ScriptHandler {
     'update-page-update': UpdatePageUpdate,
     'update-page-post-update': UpdatePagePostUpdate,
 
-    'start-update-dialog': StartUpdateDialog
+    'start-update-dialog': StartUpdateDialog,
+    'send-error-report-dialog': SendErrorReportDialog
   };
 
   /**
@@ -42,7 +46,7 @@ export default class ScriptHandler {
 
   /**
    * @public
-   * @param {string} routeName - The name of the route to load his associated script.
+   * @param {string} scriptID - The name of the route to load his associated script.
    * @returns void
    * @description Loads and mounts the page script associated with the specified route name.
    */
