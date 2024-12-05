@@ -34,7 +34,12 @@ export default {
 export const Update = {
   args: {
     ...Dialog.args,
-    dialogSize: "lg",
+    dialogSize: "md",
     noBackUp: false,
+    form_route_to_confirm: "/",
+  },
+  play: async () => {
+    const dialog = document.querySelector('.dialog');
+    dialog.showModal();
   },
 };

@@ -34,6 +34,10 @@ export default {
 export const Backup = {
   args: {
     ...Dialog.args,
-    dialogSize: "md",
+    dialogSize: "sm",
+  },
+  play: async () => {
+    const dialog = document.querySelector('.dialog');
+    dialog.showModal();
   },
 };

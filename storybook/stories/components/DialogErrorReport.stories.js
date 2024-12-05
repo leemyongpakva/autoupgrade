@@ -37,7 +37,11 @@ export const ErrorReport = {
     dialogId: "errorDialog",
     title: "Send error report?",
     message: "",
-    dialogSize: "md",
+    dialogSize: "sm",
     dataPrivacyLink: "#"
+  },
+  play: async () => {
+    const dialog = document.querySelector('.dialog');
+    dialog.showModal();
   },
 };

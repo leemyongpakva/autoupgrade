@@ -7,9 +7,9 @@
 {% endblock %}
 
 {% block content %}
-  {% include "@ModuleAutoUpgrade/components/logs-progress.html.twig" %}
-
-  {% include "@ModuleAutoUpgrade/components/logs.html.twig" %}
+  {% include "@ModuleAutoUpgrade/components/progress-tracker.html.twig" with {
+    successRoute: 'restore-step-post-restore'
+  } %}
 {% endblock %}
 
 {% block buttons_inner %}

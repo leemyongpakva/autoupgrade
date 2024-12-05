@@ -34,6 +34,10 @@ export default {
 export const BackupWithImg = {
   args: {
     ...Dialog.args,
-    dialogSize: "md",
+    dialogSize: "sm",
+  },
+  play: async () => {
+    const dialog = document.querySelector('.dialog');
+    dialog.showModal();
   },
 };

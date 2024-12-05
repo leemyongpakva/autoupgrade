@@ -36,7 +36,11 @@ export const BackupDelete = {
     ...Dialog.args,
     title: "Delete backup",
     message: "You are about to delete the <b>autoupgrade_save_8.1.6</b> backup made on <b>15/07/2024 8:00</b>. As it's your only backup, you will be redirected to the module's home page.",
-    dialogSize: "lg",
+    dialogSize: "md",
     dialogDanger: true,
+  },
+  play: async () => {
+    const dialog = document.querySelector('.dialog');
+    dialog.showModal();
   },
 };

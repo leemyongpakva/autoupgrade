@@ -45,15 +45,6 @@ export const Default = {
     dialogSize: "lg",
     psBaseUri: "/",
     dialogDanger: false,
-
     assets_base_path: "",
   },
 };
-
-document.addEventListener("DOMContentLoaded", () => {
-  const dialogs = document.querySelectorAll(".dialog");
-  dialogs.forEach((dialog) => {
-    dialog.style.display = "block";
-    dialog.classList.add("in");
-  });
-});
