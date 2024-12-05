@@ -1,6 +1,7 @@
 import ComponentAbstract from './ComponentAbstract';
+import { Destroyable } from '../types/DomLifecycle';
 
-export default class LogsSummary extends ComponentAbstract {
+export default class LogsSummary extends ComponentAbstract implements Destroyable {
   #logsSummaryText = this.queryElement<HTMLDivElement>(
     '[data-slot-component="text"]',
     'Logs summary text not found'
@@ -10,7 +11,7 @@ export default class LogsSummary extends ComponentAbstract {
    * @public
    * @description Removes the associated DOM element from the document.
    */
-  public selfDestroy = () => {
+  public beforeDestroy = () => {
     this.element.remove();
   };
 

@@ -63,10 +63,10 @@ export default class ProgressTracker extends ComponentAbstract implements Destro
    *              Destroy and null logsSummary and ProgressBar.
    */
   public endProgress(): void {
-    this.#logsSummary?.selfDestroy();
+    this.#logsSummary?.beforeDestroy();
     this.#logsSummary = null;
 
-    this.#progressBar?.selfDestroy();
+    this.#progressBar?.beforeDestroy();
     this.#progressBar = null;
 
     // Todo: we need to retrieve the download link
