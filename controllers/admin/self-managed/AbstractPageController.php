@@ -28,6 +28,7 @@
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\DocumentationLinks;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -62,6 +63,7 @@ abstract class AbstractPageController extends AbstractGlobalController
                 [
                     'page' => $page,
                     'ps_version' => $this->getPsVersionClass(),
+                    'data_transparency_link' => DocumentationLinks::PRESTASHOP_PROJECT_DATA_TRANSPARENCY_URL,
                 ],
                 $pageSelectors::getAllSelectors(),
                 $params
