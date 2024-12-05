@@ -126,6 +126,10 @@ class Router
             'controller' => UpdatePageUpdateController::class,
             'method' => 'step',
         ],
+        Routes::UPDATE_STEP_UPDATE_SUBMIT_ERROR_REPORT => [
+            'controller' => UpdatePageUpdateController::class,
+            'method' => 'submitErrorReport',
+        ],
         Routes::UPDATE_STEP_UPDATE_DOWNLOAD_LOGS => [
             'controller' => UpdatePageUpdateController::class,
             'method' => 'getDownloadLogsButton',

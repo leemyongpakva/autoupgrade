@@ -33,6 +33,7 @@ class Routes
     /* step: update */
     const UPDATE_PAGE_UPDATE = 'update-page-update';
     const UPDATE_STEP_UPDATE = 'update-step-update';
+    const UPDATE_STEP_UPDATE_SUBMIT_ERROR_REPORT = 'update-step-update-submit-error-report';
     const UPDATE_STEP_UPDATE_DOWNLOAD_LOGS = 'update-step-update-download-logs';
 
     /* step: post update */

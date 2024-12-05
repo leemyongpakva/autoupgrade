@@ -35,16 +35,13 @@ use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use PrestaShop\Module\AutoUpgrade\Traits\displayErrorReportDialogTrait;
 
 class UpdatePageUpdateController extends AbstractPageWithStepController
 {
-    const CURRENT_STEP = UpdateSteps::STEP_UPDATE;
+    use displayErrorReportDialogTrait;
 
-    // TODO: for dev update page comment need to be removed after dev
-//    public function index(): RedirectResponse
-//    {
-//        return $this->redirectTo(Routes::UPDATE_PAGE_BACKUP);
-//    }
+    const CURRENT_STEP = UpdateSteps::STEP_UPDATE;
 
     protected function getPageTemplate(): string
     {
@@ -98,6 +95,7 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
                 'success_route' => Routes::UPDATE_STEP_POST_UPDATE,
                 'download_logs_route' => Routes::UPDATE_STEP_UPDATE_DOWNLOAD_LOGS,
                 'restore_route' => Routes::RESTORE_PAGE_BACKUP_SELECTION,
+                'submit_error_report_route' => Routes::UPDATE_STEP_UPDATE_SUBMIT_ERROR_REPORT,
                 'initial_process_action' => TaskName::TASK_UPDATE_INITIALIZATION,
                 'backup_available' => !empty($backupFinder->getAvailableBackups()),
                 'download_logs_parent_id' => PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
