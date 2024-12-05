@@ -178,7 +178,7 @@ class CheckRequirementsCommand extends AbstractCommand
                 default:
                     if (isset($wording['list'])) {
                         foreach ($wording['list'] as $item) {
-                            $this->output->writeln('    ' . $item);
+                            $this->output->writeln("\t" . $item);
                         }
                     }
             }

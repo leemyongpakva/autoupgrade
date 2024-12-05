@@ -53,7 +53,7 @@ class AppKernel extends Kernel
      */
     public function registerBundles()
     {
-        $bundles = [
+        $bundles = array(
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
@@ -68,9 +68,9 @@ class AppKernel extends Kernel
             new TranslationToolsBundle(),
             new League\Tactician\Bundle\TacticianBundle(),
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
-        ];
+        );
 
-        if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
+        if (in_array($this->getEnvironment(), array('dev', 'test'), true)) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
         }
@@ -101,7 +101,7 @@ class AppKernel extends Kernel
      * Perform a lock on a file before cache clear is performed, this lock will be unlocked once the cache has been cleared.
      * Until then any other process will have to wait until the file is unlocked.
      *
-     * @return bool returns boolean indicating if the lock file was successfully locked
+     * @return bool Returns boolean indicating if the lock file was successfully locked.
      */
     public function locksCacheClear(): bool
     {
@@ -117,7 +117,6 @@ class AppKernel extends Kernel
         if (false === $clearCacheLocked) {
             // Clear cache is already locked by another process, so we simply return
             fclose($lockStream);
-
             return false;
         }
 
@@ -171,7 +170,7 @@ class AppKernel extends Kernel
 
         return array_merge(
             $kernelParameters,
-            ['kernel.active_modules' => $this->getActiveModules()]
+            array('kernel.active_modules' => $this->getActiveModules())
         );
     }
 

@@ -94,7 +94,7 @@ class ChecksumCompareTest extends TestCase
 
         $expected = [
             'mail' => ['missing' => [], 'altered' => []],
-            'translation' => ['missing' => [], 'altered' => []],
+            'translation' => ['missing' => [], 'altered' => ['translations/default/AdminActions.xlf']],
             'core' => ['missing' => ['admin/init.php'], 'altered' => ['admin/.htaccess']],
             'themes' => ['missing' => [], 'altered' => ['themes/classic/config/theme.yml']],
         ];
