@@ -2082,6 +2082,15 @@ Comment: directory already exists</note>
       </trans-unit>
     </body>
   </file>
+  <file original="views/templates/components/logs-summary.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="c2efe4bbd13e6cb0db293e72884273c0">
+        <source>Starting</source>
+        <target>Starting</target>
+        <note>Line: 7</note>
+      </trans-unit>
+    </body>
+  </file>
   <file original="views/templates/components/logs-templates.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
       <trans-unit id="ebdbffe8dea73e1e0285fd052f720259">
@@ -2272,15 +2281,15 @@ Comment: directory already exists</note>
   </file>
   <file original="views/templates/errors/500.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="5368f5827707bbb2b9142d25d1f9b493">
-        <source>The module is no longer responding. You can try again in a few moments.</source>
-        <target>The module is no longer responding. You can try again in a few moments.</target>
-        <note>Line: 15</note>
-      </trans-unit>
       <trans-unit id="f685da009437ded5271e842075eaf743">
         <source>Send error report</source>
         <target>Send error report</target>
         <note>Line: 21</note>
+      </trans-unit>
+      <trans-unit id="5368f5827707bbb2b9142d25d1f9b493">
+        <source>The module is no longer responding. You can try again in a few moments.</source>
+        <target>The module is no longer responding. You can try again in a few moments.</target>
+        <note>Line: 15</note>
       </trans-unit>
     </body>
   </file>
@@ -2473,6 +2482,25 @@ Comment: directory already exists</note>
         <source><![CDATA[Overriding is a way to replace business behaviors (class files and controller files) to target only one method or as many as you need. This option disables all classes & controllers overrides, allowing you to avoid conflicts during and after updates.]]></source>
         <target><![CDATA[Overriding is a way to replace business behaviors (class files and controller files) to target only one method or as many as you need. This option disables all classes & controllers overrides, allowing you to avoid conflicts during and after updates.]]></target>
         <note>Line: 40</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="views/templates/steps/update.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="6d7d82d9c1d7f68064d14e673d53eb19">
+        <source>Update failed</source>
+        <target>Update failed</target>
+        <note>Line: 14</note>
+      </trans-unit>
+      <trans-unit id="332353244a1a1fb11835b6b06fc16da3">
+        <source>Your store may not work properly anymore. Select the backup you want to use and restore it to avoid any data loss.</source>
+        <target>Your store may not work properly anymore. Select the backup you want to use and restore it to avoid any data loss.</target>
+        <note>Line: 16</note>
+      </trans-unit>
+      <trans-unit id="e5648ebb64955fd371f7506445ec724d">
+        <source>You didn’t back up your store with the Update assistant module but you can restore using your own manual backup.</source>
+        <target>You didn’t back up your store with the Update assistant module but you can restore using your own manual backup.</target>
+        <note>Line: 17</note>
       </trans-unit>
     </body>
   </file>
