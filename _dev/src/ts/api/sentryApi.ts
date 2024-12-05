@@ -77,7 +77,7 @@ export function sendUserFeedback(
       {
         associatedEventId: eventId,
         email: feedback.email,
-        message: feedback.comments || ''
+        message: feedback.comments ?? ''
       },
       {
         captureContext: {
