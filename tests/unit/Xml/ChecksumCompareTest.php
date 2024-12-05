@@ -31,6 +31,13 @@ use PrestaShop\Module\AutoUpgrade\Xml\FileLoader;
 
 class ChecksumCompareTest extends TestCase
 {
+    public function setUp()
+    {
+        if (PHP_VERSION_ID >= 80000) {
+            $this->markTestSkipped('An issue with this version of PHPUnit and PHP 8+ prevents this test to run.');
+        }
+    }
+
     public function testCompareReleases()
     {
         // Simplest test
