@@ -36,6 +36,7 @@ use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use PrestaShop\Module\AutoUpgrade\Traits\displayErrorReportDialogTrait;
+use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 
 class UpdatePageUpdateController extends AbstractPageWithStepController
 {
