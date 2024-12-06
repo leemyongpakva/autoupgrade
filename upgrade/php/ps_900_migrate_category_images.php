@@ -41,7 +41,7 @@ function ps_900_migrate_category_images()
     $formattedNameMedium = ImageType::getFormattedName('medium');
 
     // Get categories on shop
-    $categoryIds = Db::getInstance()->executeS('SELECT id_category FROM `' . _DB_PREFIX_ . 'category`');
+    $categoryIds = DbWrapper::executeS('SELECT id_category FROM `' . _DB_PREFIX_ . 'category`');
     if (empty($categoryIds)) {
         return;
     }
