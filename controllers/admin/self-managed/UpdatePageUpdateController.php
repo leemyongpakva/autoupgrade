@@ -31,12 +31,10 @@ use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
+use PrestaShop\Module\AutoUpgrade\Traits\displayErrorReportDialogTrait;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use PrestaShop\Module\AutoUpgrade\Traits\displayErrorReportDialogTrait;
-use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 
 class UpdatePageUpdateController extends AbstractPageWithStepController
 {
