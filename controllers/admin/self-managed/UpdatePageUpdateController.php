@@ -100,6 +100,7 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
                 'restore_route' => Routes::RESTORE_PAGE_BACKUP_SELECTION,
                 'initial_process_action' => TaskName::TASK_UPDATE_INITIALIZATION,
                 'backup_available' => !empty($backupFinder->getAvailableBackups()),
+                'download_logs_parent_id' => PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
             ]
         );
     }
