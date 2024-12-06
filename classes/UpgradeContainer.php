@@ -44,6 +44,7 @@ use PrestaShop\Module\AutoUpgrade\Services\ComposerService;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\AssetsEnvironment;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension3;
@@ -858,6 +859,8 @@ class UpgradeContainer
 
     /**
      * @throws Exception
+     *
+     * @param TaskType::TASK_TYPE_* $task
      */
     public function getLogsPath(string $task): ?string
     {
@@ -868,5 +871,18 @@ class UpgradeContainer
         }
 
         return $logPath;
+    }
+
+    /**
+     * @throws Exception
+     *
+     * @param TaskType::TASK_TYPE_* $task
+     */
+    public function getDownloadLogsPath(string $task): ?string
+    {
+        $logPath = $this->getLogsPath($task);
+        $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+
+        return str_replace($documentRoot, '', $logPath);
     }
 }

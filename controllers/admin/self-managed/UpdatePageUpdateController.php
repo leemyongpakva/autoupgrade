@@ -27,9 +27,13 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
+use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
+use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class UpdatePageUpdateController extends AbstractPageWithStepController
@@ -57,6 +61,27 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
         return Routes::UPDATE_PAGE_UPDATE;
     }
 
+    public function getDownloadLogsButton(): JsonResponse
+    {
+        try {
+            $logsPath = $this->upgradeContainer->getDownloadLogsPath(TaskType::TASK_TYPE_UPDATE);
+        } catch (\Exception $e) {
+            return AjaxResponseBuilder::errorResponse('Impossible to retrieve logs path');
+        }
+
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
+            $this->getTwig()->render(
+                '@ModuleAutoUpgrade/components/download_logs.html.twig',
+                [
+                    'button_label' => $this->upgradeContainer->getTranslator()->trans('Download update logs'),
+                    'download_path' => $logsPath,
+                    'filename' => basename($logsPath),
+                ]
+            )
+        );
+    }
+
     /**
      * @return array
      *
@@ -71,9 +96,11 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
             $updateSteps->getStepParams($this::CURRENT_STEP),
             [
                 'success_route' => Routes::UPDATE_STEP_POST_UPDATE,
+                'download_logs_route' => Routes::UPDATE_STEP_UPDATE_DOWNLOAD_LOGS,
                 'restore_route' => Routes::RESTORE_PAGE_BACKUP_SELECTION,
                 'initial_process_action' => TaskName::TASK_UPDATE_INITIALIZATION,
                 'backup_available' => !empty($backupFinder->getAvailableBackups()),
+                'download_logs_parent_id' => PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
             ]
         );
     }

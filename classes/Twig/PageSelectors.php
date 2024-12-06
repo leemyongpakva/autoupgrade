@@ -10,6 +10,7 @@ class PageSelectors
     public const DIALOG_PARENT_ID = 'ua_dialog';
     public const RADIO_CARD_ONLINE_PARENT_ID = 'radio_card_online';
     public const RADIO_CARD_ARCHIVE_PARENT_ID = 'radio_card_archive';
+    public const DOWNLOAD_LOGS_PARENT_ID = 'download_logs';
 
     /**
      * @return array<string, string>
@@ -23,6 +24,7 @@ class PageSelectors
             'dialog_parent_id' => self::DIALOG_PARENT_ID,
             'radio_card_online_parent_id' => self::RADIO_CARD_ONLINE_PARENT_ID,
             'radio_card_archive_parent_id' => self::RADIO_CARD_ARCHIVE_PARENT_ID,
+            'download_logs_parent_id' => self::DOWNLOAD_LOGS_PARENT_ID,
         ];
     }
 }

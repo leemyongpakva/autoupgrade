@@ -20,7 +20,8 @@
     formName: 'restore-alert',
   } %}
   {% include "@ModuleAutoUpgrade/components/progress-tracker.html.twig" with {
-    successRoute: success_route
+    successRoute: success_route,
+    downloadLogsRoute: download_logs_route,
   } %}
 {% endblock %}
 
