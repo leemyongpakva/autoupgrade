@@ -72,6 +72,11 @@ abstract class AbstractCommand extends Command
         $this->logger->debug('Production root directory: ' . $prodRootDir);
 
         $adminDir = _PS_ROOT_DIR_ . DIRECTORY_SEPARATOR . $input->getArgument('admin-dir');
+
+        if (!is_dir($adminDir)) {
+            throw new InvalidArgumentException(sprintf('Admin directory "%s" does not exist', $adminDir));
+        }
+
         $this->logger->debug('Admin directory: ' . $adminDir);
         define('_PS_ADMIN_DIR_', $adminDir);
 
