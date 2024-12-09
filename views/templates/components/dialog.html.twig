@@ -1,5 +1,5 @@
-<dialog class="dialog {% if dialogDanger %}dialog--danger{% endif %} {% if dialogSize is not empty %}dialog--{{ dialogSize }}{% else %}dialog--md{% endif %}"
-  {% if dialogId %}id="{{ dialogId }}"{% endif %}
+<dialog class="dialog {% if dialogDanger is defined and dialogDanger %}dialog--danger{% endif %} {% if dialogSize is defined and dialogSize is not empty %}dialog--{{ dialogSize }}{% else %}dialog--md{% endif %}"
+  {% if dialogId is defined and dialogId is not empty %}id="{{ dialogId }}"{% endif %}
   aria-label="{{ title }}">
   <div class="dialog__container">
     <div class="dialog__content">

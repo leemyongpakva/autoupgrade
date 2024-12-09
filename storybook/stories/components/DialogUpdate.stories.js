@@ -34,7 +34,6 @@ export default {
 export const Update = {
   args: {
     ...Dialog.args,
-    dialogSize: "md",
     noBackUp: false,
     form_route_to_confirm: "/",
   },

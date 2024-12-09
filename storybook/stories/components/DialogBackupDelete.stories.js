@@ -24,7 +24,6 @@
  */
 
 import DialogBackupDelete from "../../../views/templates/dialogs/dialog-backup-delete.html.twig";
-import { Default as Dialog } from "./Dialog.stories";
 
 export default {
   title: "Components/Dialog",
@@ -33,11 +32,9 @@ export default {
 
 export const BackupDelete = {
   args: {
-    ...Dialog.args,
-    title: "Delete backup",
-    message: "You are about to delete the <b>autoupgrade_save_8.1.6</b> backup made on <b>15/07/2024 8:00</b>. As it's your only backup, you will be redirected to the module's home page.",
-    dialogSize: "md",
-    dialogDanger: true,
+    backup_name: "autoupgrade_save_8.1.6",
+    backup_date: "15/07/2024 8:00",
+    is_only_backup: true,
   },
   play: async () => {
     const dialog = document.querySelector('.dialog');

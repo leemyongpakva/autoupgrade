@@ -33,12 +33,7 @@ export default {
 
 export const ErrorReport = {
   args: {
-    ...Dialog.args,
-    dialogId: "errorDialog",
-    title: "Send error report?",
-    message: "",
-    dialogSize: "sm",
-    dataPrivacyLink: "#"
+    dataPrivacyLink: "#",
   },
   play: async () => {
     const dialog = document.querySelector('.dialog');

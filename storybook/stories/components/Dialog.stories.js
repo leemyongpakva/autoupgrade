@@ -29,22 +29,10 @@ export default {
   title: "Components/Dialog",
   component: Dialog,
   excludeStories: ["Default"],
-  argTypes: {
-    dialogSize: {
-      control: "select",
-      options: ["sm", "md", "lg"],
-    },
-  },
 };
 
 export const Default = {
   args: {
-    dialogId: "dialog_id",
-    title: "Title goes here",
-    message: "Message goes here, lorem ipsum dolor site amet",
-    dialogSize: "lg",
-    psBaseUri: "/",
-    dialogDanger: false,
     assets_base_path: "",
   },
 };
