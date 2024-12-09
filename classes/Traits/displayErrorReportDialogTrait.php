@@ -32,7 +32,7 @@ use PrestaShop\Module\AutoUpgrade\DocumentationLinks;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-trait displayErrorReportDialogTrait
+trait DisplayErrorReportDialogTrait
 {
     public function submitErrorReport(): JsonResponse
     {
@@ -42,7 +42,7 @@ trait displayErrorReportDialogTrait
                 '@ModuleAutoUpgrade/dialogs/dialog-error-report.html.twig',
                 [
                     'dialogSize' => 'sm',
-                    'title' => $this->upgradeContainer->getTranslator()->trans('Send error report?'),
+                    'title' => $this->upgradeContainer->getTranslator()->trans('Send error report ?'),
                     'data_transparency_link' => DocumentationLinks::PRESTASHOP_PROJECT_DATA_TRANSPARENCY_URL,
                 ]
             ),
