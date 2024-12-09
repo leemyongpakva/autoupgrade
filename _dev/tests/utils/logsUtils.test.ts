@@ -7,7 +7,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      className: SeverityClasses.SUCCESS,
+      severity: SeverityClasses.SUCCESS,
       message: 'Operation completed successfully'
     });
   });
@@ -17,7 +17,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      className: SeverityClasses.WARNING,
+      severity: SeverityClasses.WARNING,
       message: 'Disk space is low'
     });
   });
@@ -27,7 +27,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      className: SeverityClasses.ERROR,
+      severity: SeverityClasses.ERROR,
       message: 'System failure occurred'
     });
   });
@@ -37,7 +37,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      className: SeverityClasses.ERROR,
+      severity: SeverityClasses.ERROR,
       message: 'This is an invalid log format'
     });
   });
@@ -47,7 +47,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      className: SeverityClasses.SUCCESS,
+      severity: SeverityClasses.SUCCESS,
       message: 'Operation completed'
     });
   });
@@ -57,7 +57,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      className: SeverityClasses.ERROR,
+      severity: SeverityClasses.ERROR,
       message: ''
     });
   });

@@ -18,6 +18,8 @@ export default class UpdatePageUpdate extends UpdatePage {
   public mount = async () => {
     this.initStepper();
 
+    this.#progressTracker.mount();
+
     const stepContent = document.getElementById('ua_step_content')!;
     const updateAction = stepContent.dataset.initialProcessAction!;
 
@@ -55,11 +57,11 @@ export default class UpdatePageUpdate extends UpdatePage {
   };
 
   #onProcessEnd = async (response: ApiResponseAction): Promise<void> => {
-    if (response.error) {
-      this.#onError(response);
-    } else {
-      await api.post(this.#progressTrackerContainer.dataset.successRoute!);
-    }
+    // if (response.error) {
+    this.#onError(response);
+    // } else {
+    //   await api.post(this.#progressTrackerContainer.dataset.successRoute!);
+    // }
   };
 
   #onError = (response: ApiResponseAction): void => {

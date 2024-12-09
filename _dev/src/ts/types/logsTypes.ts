@@ -22,8 +22,14 @@ export enum SeverityClasses {
 }
 
 export interface LogEntry {
-  className: SeverityClasses;
+  severity: SeverityClasses;
   message: string;
+}
+
+export interface Log extends LogEntry {
+  height: number;
+  offsetTop: number;
+  HTMLElement?: HTMLDivElement;
 }
 
 export type LogsSeverity = SuccessSeverity | WarningSeverity | ErrorSeverity;

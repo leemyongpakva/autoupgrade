@@ -38,10 +38,10 @@ export function parseLogWithSeverity(log: string): LogEntry {
   if (match) {
     const severityStr = match[1] as LogsSeverity;
     const message = match[2];
-    const className = severityToClassMap[severityStr] || SeverityClasses.ERROR;
+    const severity = severityToClassMap[severityStr] || SeverityClasses.ERROR;
 
-    return { className, message };
+    return { severity, message };
   }
 
-  return { className: SeverityClasses.ERROR, message: log };
+  return { severity: SeverityClasses.ERROR, message: log };
 }
