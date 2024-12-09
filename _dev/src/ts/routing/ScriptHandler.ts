@@ -1,6 +1,7 @@
 import HomePage from '../pages/HomePage';
 import UpdatePageVersionChoice from '../pages/UpdatePageVersionChoice';
 import UpdatePageUpdateOptions from '../pages/UpdatePageUpdateOptions';
+import UpdatePageBackupOptions from '../pages/UpdatePageBackupOptions';
 import UpdatePageBackup from '../pages/UpdatePageBackup';
 import UpdatePageUpdate from '../pages/UpdatePageUpdate';
 import UpdatePagePostUpdate from '../pages/UpdatePagePostUpdate';
@@ -24,6 +25,7 @@ export default class ScriptHandler {
     'home-page': HomePage,
     'update-page-version-choice': UpdatePageVersionChoice,
     'update-page-update-options': UpdatePageUpdateOptions,
+    'update-page-backup-options': UpdatePageBackupOptions,
     'update-page-backup': UpdatePageBackup,
     'update-page-update': UpdatePageUpdate,
     'update-page-post-update': UpdatePagePostUpdate,

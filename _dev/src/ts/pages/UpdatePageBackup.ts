@@ -1,74 +1,84 @@
-import api from '../api/RequestHandler';
-import { dialogContainer } from '../autoUpgrade';
-import DialogContainer from '../components/DialogContainer';
 import UpdatePage from './UpdatePage';
+import ProgressTracker from '../components/ProgressTracker';
+import { ApiResponseAction } from '../types/apiTypes';
+import Process from '../utils/Process';
+import api from '../api/RequestHandler';
 
 export default class UpdatePageBackup extends UpdatePage {
   protected stepCode = 'backup';
+  #progressTracker: ProgressTracker = new ProgressTracker(this.#progressTrackerContainer);
 
-  public mount() {
+  constructor() {
+    super();
+  }
+
+  public mount = async () => {
     this.initStepper();
-    this.#form.addEventListener('submit', this.#onFormSubmit);
-    this.#form.addEventListener('change', this.#onInputChange);
 
-    document.getElementById('ua_container')?.addEventListener('click', this.#onClick);
-    dialogContainer.DialogContainer.addEventListener(DialogContainer.okEvent, this.#onDialogOk);
-  }
+    const stepContent = document.getElementById('ua_step_content')!;
+    const updateAction = stepContent.dataset.initialProcessAction!;
 
-  public beforeDestroy(): void {
-    this.#form.removeEventListener('submit', this.#onFormSubmit);
-    this.#form.removeEventListener('change', this.#onInputChange);
+    const process = new Process({
+      onProcessResponse: this.#onProcessResponse,
+      onProcessEnd: this.#onProcessEnd,
+      onError: this.#onError
+    });
 
-    document.getElementById('ua_container')?.removeEventListener('click', this.#onClick);
-    dialogContainer.DialogContainer.removeEventListener(DialogContainer.okEvent, this.#onDialogOk);
-  }
+    await process.startProcess(updateAction);
+  };
 
-  get #form(): HTMLFormElement {
-    const form = document.forms.namedItem('update-backup-page-form');
-    if (!form) {
-      throw new Error('Form not found');
+  public beforeDestroy = () => {
+    this.#progressTracker.beforeDestroy();
+  };
+
+  get #progressTrackerContainer(): HTMLDivElement {
+    const progressTrackerContainer = document.querySelector(
+      '[data-component="progress-tracker"]'
+    ) as HTMLDivElement;
+
+    if (!progressTrackerContainer) {
+      throw new Error('Progress tracker container not found');
     }
 
-    ['routeToSave', 'routeToSubmitBackup', 'routeToSubmitUpdate', 'routeToConfirmBackup'].forEach(
-      (data) => {
-        if (!form.dataset[data]) {
-          throw new Error(`Missing data ${data} from form dataset.`);
-        }
-      }
-    );
-
-    return form;
+    return progressTrackerContainer;
   }
 
-  readonly #onClick = async (ev: Event) => {
-    if ((ev.target as HTMLElement).id === 'update-backup-page-skip-btn') {
-      const formData = new FormData();
-      // TODO: Value currently hardcoded until management of backups is implemented
-      formData.append('backupDone', JSON.stringify(false));
-      await api.post(this.#form.dataset.routeToSubmitUpdate!, formData);
+  #onProcessResponse = (response: ApiResponseAction): void => {
+    this.#progressTracker.updateProgress(response);
+  };
+
+  #onProcessEnd = async (response: ApiResponseAction): Promise<void> => {
+    if (response.error) {
+      this.#onError(response);
+    } else {
+      await api.post(this.#progressTrackerContainer.dataset.successRoute!);
     }
   };
 
-  readonly #onDialogOk = async (ev: Event) => {
-    // We handle the backup confirmation dialog as it is really basic
-    if ((ev.target as HTMLElement).id === 'dialog-confirm-backup') {
-      api.post(this.#form.dataset.routeToConfirmBackup!);
+  #onError = (response: ApiResponseAction): void => {
+    this.#progressTracker.updateProgress(response);
+    this.#progressTracker.endProgress();
+    this.#displayErrorAlert();
+    this.#displayErrorButtons();
+  };
+
+  #displayErrorAlert = () => {
+    const alertContainer = document.getElementById('error-alert');
+
+    if (!alertContainer) {
+      throw new Error('Error alert container not found');
     }
-    // The update confirmation dialog gets its logic in a dedicated script
+
+    alertContainer.classList.remove('hidden');
   };
 
-  readonly #onInputChange = async (ev: Event) => {
-    const optionInput = ev.target as HTMLInputElement;
+  #displayErrorButtons = () => {
+    const buttonsContainer = document.getElementById('error-buttons');
 
-    const data = new FormData(this.#form);
-    optionInput.setAttribute('disabled', 'true');
-    await api.post(this.#form.dataset.routeToSave!, data);
-    optionInput.removeAttribute('disabled');
-  };
+    if (!buttonsContainer) {
+      throw new Error('Error buttons container not found');
+    }
 
-  readonly #onFormSubmit = async (event: Event) => {
-    event.preventDefault();
-
-    await api.post(this.#form.dataset.routeToSubmitBackup!, new FormData(this.#form));
+    buttonsContainer.classList.remove('hidden');
   };
 }

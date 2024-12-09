@@ -63,7 +63,7 @@ abstract class AbstractPageWithStepController extends AbstractPageController
      *
      * @see step()
      *
-     * @return UpdateSteps::STEP_*
+     * @return string
      */
     abstract protected function getStepTemplate(): string;
 }

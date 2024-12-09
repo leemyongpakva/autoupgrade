@@ -27,7 +27,7 @@ jest.mock('../../src/ts/pages/HomePage', () => {
   });
 });
 
-jest.mock('../../src/ts/pages/UpdatePageBackup', () => {
+jest.mock('../../src/ts/pages/UpdatePageBackupOptions', () => {
   return jest.fn().mockImplementation(() => ({
     mount: () => {},
     beforeDestroy: () => {
@@ -209,7 +209,7 @@ describe('Hydration and scripts lifecycle', () => {
       hydration: true,
       new_content: `<p id="my_paragraph">Old Content</p>`,
       parent_to_update: 'parent',
-      new_route: 'update-page-backup'
+      new_route: 'update-page-backup-options'
     };
     hydration.hydrate(initialResponse);
 

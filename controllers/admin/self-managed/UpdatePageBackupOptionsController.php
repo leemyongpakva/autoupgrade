@@ -36,9 +36,9 @@ use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
+class UpdatePageBackupOptionsController extends AbstractPageWithStepController
 {
-    const CURRENT_STEP = UpdateSteps::STEP_UPDATE_OPTIONS;
+    const CURRENT_STEP = UpdateSteps::STEP_BACKUP;
 
     protected function getPageTemplate(): string
     {
@@ -52,7 +52,39 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
 
     protected function displayRouteInUrl(): ?string
     {
-        return Routes::UPDATE_PAGE_UPDATE_OPTIONS;
+        return Routes::UPDATE_PAGE_BACKUP_OPTIONS;
+    }
+
+    public function submitBackup(): JsonResponse
+    {
+        $imagesIncluded = $this->upgradeContainer->getUpgradeConfiguration()->shouldBackupImages();
+
+        return $this->displayDialog($imagesIncluded ? 'dialog-backup-all' : 'dialog-backup', [
+            'dialogId' => 'dialog-confirm-backup',
+        ]);
+    }
+
+    public function submitUpdate(): JsonResponse
+    {
+        return $this->displayDialog('dialog-update', [
+            'noBackUp' => !$this->request->request->getBoolean('backupDone', false),
+            'dialogId' => 'dialog-confirm-update',
+
+            'form_route_to_confirm' => Routes::UPDATE_STEP_BACKUP_CONFIRM_UPDATE,
+
+            // TODO: assets_base_path is provided by all controllers. What about a asset() twig function instead?
+            'assets_base_path' => $this->upgradeContainer->getAssetsEnvironment()->getAssetsBaseUrl($this->request),
+        ]);
+    }
+
+    public function startBackup(): JsonResponse
+    {
+        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_BACKUP);
+    }
+
+    public function startUpdate(): JsonResponse
+    {
+        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_UPDATE);
     }
 
     public function saveOption(): JsonResponse
@@ -61,18 +93,11 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
 
         $config = [
-            UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT, false),
-            UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL, false),
-            UpgradeConfiguration::PS_DISABLE_OVERRIDES => $this->request->request->getBoolean(UpgradeConfiguration::PS_DISABLE_OVERRIDES, false),
+            UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, false),
         ];
 
         $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
-
         if (empty($errors)) {
-            // One specific option requires the Core to store the value in database.
-            $this->upgradeContainer->initPrestaShopCore();
-            UpgradeConfiguration::updatePSDisableOverrides($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES]);
-
             $upgradeConfiguration->merge($config);
             $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
         }
@@ -83,11 +108,6 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         ));
     }
 
-    public function submit(): JsonResponse
-    {
-        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_BACKUP_OPTIONS);
-    }
-
     /**
      * @return array<string, mixed>
      *
@@ -95,28 +115,21 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
-        $this->upgradeContainer->initPrestaShopCore();
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
 
         return array_merge(
-            $updateSteps->getStepParams(self::CURRENT_STEP),
+            $updateSteps->getStepParams($this::CURRENT_STEP),
             [
-                'form_route_to_save' => Routes::UPDATE_STEP_UPDATE_OPTIONS_SAVE_OPTION,
-                'form_route_to_submit' => Routes::UPDATE_STEP_UPDATE_OPTIONS_SUBMIT_FORM,
+                'form_route_to_save' => Routes::UPDATE_STEP_BACKUP_SAVE_OPTION,
+                'form_route_to_submit_backup' => Routes::UPDATE_STEP_BACKUP_SUBMIT_BACKUP,
+                'form_route_to_submit_update' => Routes::UPDATE_STEP_BACKUP_SUBMIT_UPDATE,
+                'form_route_to_confirm_backup' => Routes::UPDATE_STEP_BACKUP_CONFIRM_BACKUP,
 
                 'form_fields' => [
-                    'deactive_non_native_modules' => [
-                        'field' => UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT,
-                        'value' => $upgradeConfiguration->shouldDeactivateCustomModules(),
-                    ],
-                    'regenerate_email_templates' => [
-                        'field' => UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL,
-                        'value' => $upgradeConfiguration->shouldRegenerateMailTemplates(),
-                    ],
-                    'disable_all_overrides' => [
-                        'field' => UpgradeConfiguration::PS_DISABLE_OVERRIDES,
-                        'value' => !$upgradeConfiguration->isOverrideAllowed(),
+                    'include_images' => [
+                        'field' => UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES,
+                        'value' => $upgradeConfiguration->shouldBackupImages(),
                     ],
                 ],
             ]
@@ -135,6 +148,23 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
                 $params
             ),
             ['newRoute' => $this->displayRouteInUrl()]
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $params
+     */
+    private function displayDialog(string $dialogName, array $params): JsonResponse
+    {
+        $options = $dialogName === 'dialog-update' ? ['addScript' => 'start-update-dialog'] : null;
+
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::DIALOG_PARENT_ID,
+            $this->getTwig()->render(
+                '@ModuleAutoUpgrade/dialogs/' . $dialogName . '.html.twig',
+                $params
+            ),
+            $options
         );
     }
 }

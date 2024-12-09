@@ -29,6 +29,7 @@ namespace PrestaShop\Module\AutoUpgrade\Router;
 
 use PrestaShop\Module\AutoUpgrade\Controller\HomePageController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageBackupController;
+use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageBackupOptionsController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePagePostUpdateController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageUpdateController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageUpdateOptionsController;
@@ -90,6 +91,34 @@ class Router
             'controller' => UpdatePageUpdateOptionsController::class,
             'method' => 'submit',
         ],
+        Routes::UPDATE_PAGE_BACKUP_OPTIONS => [
+            'controller' => UpdatePageBackupOptionsController::class,
+            'method' => 'index',
+        ],
+        Routes::UPDATE_STEP_BACKUP_OPTIONS => [
+            'controller' => UpdatePageBackupOptionsController::class,
+            'method' => 'step',
+        ],
+        Routes::UPDATE_STEP_BACKUP_SAVE_OPTION => [
+            'controller' => UpdatePageBackupOptionsController::class,
+            'method' => 'saveOption',
+        ],
+        Routes::UPDATE_STEP_BACKUP_SUBMIT_BACKUP => [
+            'controller' => UpdatePageBackupOptionsController::class,
+            'method' => 'submitBackup',
+        ],
+        Routes::UPDATE_STEP_BACKUP_SUBMIT_UPDATE => [
+            'controller' => UpdatePageBackupOptionsController::class,
+            'method' => 'submitUpdate',
+        ],
+        Routes::UPDATE_STEP_BACKUP_CONFIRM_BACKUP => [
+            'controller' => UpdatePageBackupOptionsController::class,
+            'method' => 'startBackup',
+        ],
+        Routes::UPDATE_STEP_BACKUP_CONFIRM_UPDATE => [
+            'controller' => UpdatePageBackupOptionsController::class,
+            'method' => 'startUpdate',
+        ],
         Routes::UPDATE_PAGE_BACKUP => [
             'controller' => UpdatePageBackupController::class,
             'method' => 'index',
@@ -97,26 +126,6 @@ class Router
         Routes::UPDATE_STEP_BACKUP => [
             'controller' => UpdatePageBackupController::class,
             'method' => 'step',
-        ],
-        Routes::UPDATE_STEP_BACKUP_SAVE_OPTION => [
-            'controller' => UpdatePageBackupController::class,
-            'method' => 'saveOption',
-        ],
-        Routes::UPDATE_STEP_BACKUP_SUBMIT_BACKUP => [
-            'controller' => UpdatePageBackupController::class,
-            'method' => 'submitBackup',
-        ],
-        Routes::UPDATE_STEP_BACKUP_SUBMIT_UPDATE => [
-            'controller' => UpdatePageBackupController::class,
-            'method' => 'submitUpdate',
-        ],
-        Routes::UPDATE_STEP_BACKUP_CONFIRM_BACKUP => [
-            'controller' => UpdatePageBackupController::class,
-            'method' => 'startBackup',
-        ],
-        Routes::UPDATE_STEP_BACKUP_CONFIRM_UPDATE => [
-            'controller' => UpdatePageBackupController::class,
-            'method' => 'startUpdate',
         ],
         Routes::UPDATE_PAGE_UPDATE => [
             'controller' => UpdatePageUpdateController::class,

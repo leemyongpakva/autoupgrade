@@ -28,17 +28,24 @@
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
+use PrestaShop\Module\AutoUpgrade\Task\TaskName;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
-use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UpdatePageBackupController extends AbstractPageWithStepController
 {
     const CURRENT_STEP = UpdateSteps::STEP_BACKUP;
+
+    /**
+     * @inheritdoc
+     */
+    public function index()
+    {
+        return $this->redirectTo(Routes::UPDATE_PAGE_BACKUP_OPTIONS);
+    }
 
     protected function getPageTemplate(): string
     {
@@ -47,7 +54,8 @@ class UpdatePageBackupController extends AbstractPageWithStepController
 
     protected function getStepTemplate(): string
     {
-        return self::CURRENT_STEP;
+        // Different from self::CURRENT_STEP, because a refresh should return to the backup options.
+        return 'backup';
     }
 
     protected function displayRouteInUrl(): ?string
@@ -55,57 +63,25 @@ class UpdatePageBackupController extends AbstractPageWithStepController
         return Routes::UPDATE_PAGE_BACKUP;
     }
 
-    public function submitBackup(): JsonResponse
+    public function getDownloadLogsButton(): JsonResponse
     {
-        $imagesIncluded = $this->upgradeContainer->getUpgradeConfiguration()->shouldBackupImages();
-
-        return $this->displayDialog($imagesIncluded ? 'dialog-backup-all' : 'dialog-backup', [
-            'dialogId' => 'dialog-confirm-backup',
-        ]);
-    }
-
-    public function submitUpdate(): JsonResponse
-    {
-        return $this->displayDialog('dialog-update', [
-            'noBackUp' => !$this->request->request->getBoolean('backupDone', false),
-            'dialogId' => 'dialog-confirm-update',
-
-            'form_route_to_confirm' => Routes::UPDATE_STEP_BACKUP_CONFIRM_UPDATE,
-
-            // TODO: assets_base_path is provided by all controllers. What about a asset() twig function instead?
-            'assets_base_path' => $this->upgradeContainer->getAssetsEnvironment()->getAssetsBaseUrl($this->request),
-        ]);
-    }
-
-    public function startBackup(): JsonResponse
-    {
-        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_BACKUP);
-    }
-
-    public function startUpdate(): JsonResponse
-    {
-        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_UPDATE);
-    }
-
-    public function saveOption(): JsonResponse
-    {
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
-        $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
-
-        $config = [
-            UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, false),
-        ];
-
-        $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
-        if (empty($errors)) {
-            $upgradeConfiguration->merge($config);
-            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+        try {
+            $logsPath = $this->upgradeContainer->getDownloadLogsPath(TaskType::TASK_TYPE_BACKUP);
+        } catch (\Exception $e) {
+            return AjaxResponseBuilder::errorResponse('Impossible to retrieve logs path');
         }
 
-        return $this->getRefreshOfForm(array_merge(
-            $this->getParams(),
-            ['errors' => ValidatorToFormFormater::format($errors)]
-        ));
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
+            $this->getTwig()->render(
+                '@ModuleAutoUpgrade/components/download_logs.html.twig',
+                [
+                    'button_label' => $this->upgradeContainer->getTranslator()->trans('Download backup logs'),
+                    'download_path' => $logsPath,
+                    'filename' => basename($logsPath),
+                ]
+            )
+        );
     }
 
     /**
@@ -115,56 +91,16 @@ class UpdatePageBackupController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
 
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),
             [
-                'form_route_to_save' => Routes::UPDATE_STEP_BACKUP_SAVE_OPTION,
-                'form_route_to_submit_backup' => Routes::UPDATE_STEP_BACKUP_SUBMIT_BACKUP,
-                'form_route_to_submit_update' => Routes::UPDATE_STEP_BACKUP_SUBMIT_UPDATE,
-                'form_route_to_confirm_backup' => Routes::UPDATE_STEP_BACKUP_CONFIRM_BACKUP,
-
-                'form_fields' => [
-                    'include_images' => [
-                        'field' => UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES,
-                        'value' => $upgradeConfiguration->shouldBackupImages(),
-                    ],
-                ],
+                'success_route' => Routes::UPDATE_PAGE_POST_BACKUP,
+                'download_logs_route' => Routes::UPDATE_STEP_UPDATE_DOWNLOAD_LOGS,
+                'initial_process_action' => TaskName::TASK_BACKUP_INITIALIZATION,
+                'download_logs_parent_id' => PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
             ]
-        );
-    }
-
-    /**
-     * @param array<string, mixed> $params
-     */
-    private function getRefreshOfForm(array $params): JsonResponse
-    {
-        return AjaxResponseBuilder::hydrationResponse(
-            PageSelectors::STEP_PARENT_ID,
-            $this->getTwig()->render(
-                '@ModuleAutoUpgrade/steps/' . $this->getStepTemplate() . '.html.twig',
-                $params
-            ),
-            ['newRoute' => $this->displayRouteInUrl()]
-        );
-    }
-
-    /**
-     * @param array<string, mixed> $params
-     */
-    private function displayDialog(string $dialogName, array $params): JsonResponse
-    {
-        $options = $dialogName === 'dialog-update' ? ['addScript' => 'start-update-dialog'] : null;
-
-        return AjaxResponseBuilder::hydrationResponse(
-            PageSelectors::DIALOG_PARENT_ID,
-            $this->getTwig()->render(
-                '@ModuleAutoUpgrade/dialogs/' . $dialogName . '.html.twig',
-                $params
-            ),
-            $options
         );
     }
 }

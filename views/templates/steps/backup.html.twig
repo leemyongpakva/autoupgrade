@@ -1,52 +1,49 @@
 {% extends "@ModuleAutoUpgrade/layouts/step-content.html.twig" %}
 
-{% block page_class %}backup-page{% endblock %}
+{% block page_class %}update-page{% endblock %}
 
 {% block title %}
-  <h2>{{ 'Back up your store'|trans({}) }}</h2>
+  <h2>{{ step.title }}</h2>
 {% endblock %}
 
 {% block content %}
-  <div class="backup-page__container">
-    <div class="backup-page__section">
-      <p>
-        {{ "Backing up your store's files, database, and images means you can restore to a previous version if something goes wrong during the update. This keeps your data safe and ensures your business stays up and running."|trans({}) }}
-      </p>
-    </div>
-
-    <div class="backup-page__section">
-      <form 
-        class="update-backup-page__field-list"
-        action=""
-        data-route-to-save="{{ form_route_to_save }}"
-        data-route-to-submit-backup="{{ form_route_to_submit_backup }}"
-        data-route-to-submit-update="{{ form_route_to_submit_update }}"
-        data-route-to-confirm-backup="{{ form_route_to_confirm_backup }}"
-        data-route-to-confirm-update="{{ form_route_to_confirm_update }}"
-        id="update-backup-page-form"
-        name="update-backup-page-form"
-      >
-        {% include "@ModuleAutoUpgrade/components/render-switch.html.twig" with {
-          id: form_fields.include_images.field,
-          name: form_fields.include_images.field,
-          title: 'Include images in your backup'|trans({}),
-          value: form_fields.include_images.value,
-          error_message: errors[form_fields.include_images.field] is defined ? errors[form_fields.include_images.field] : null,
-        } %}
-      </form>
-    </div>
-  </div>
+  {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
+    id: 'error-alert',
+    hidden: true,
+    alertStatus: backup_available ? 'warning' : 'danger',
+    title: 'Update failed'|trans({}),
+    message: backup_available
+    ? 'Your store may not work properly anymore. Select the backup you want to use and restore it to avoid any data loss.'|trans({})
+    : 'You didn’t back up your store with the Update assistant module but you can restore using your own manual backup.'|trans({}),
+    buttonLabel: backup_available ? 'Restore'|trans({}) : null,
+    formRoute: backup_available ? restore_route : null,
+    formName: 'restore-alert',
+  } %}
+  {% include "@ModuleAutoUpgrade/components/progress-tracker.html.twig" with {
+    successRoute: success_route,
+    downloadLogsRoute: download_logs_route,
+  } %}
 {% endblock %}
 
-{% block buttons_inner %}
-  <button class="btn btn-lg btn-default" type="button"
-    id="update-backup-page-skip-btn"
-  >
-    {{ 'Update without backup'|trans({}) }}
-  </button>
-  <button class="btn btn-lg btn-primary" type="submit"
-    form="update-backup-page-form"
-  >
-    {{ 'Launch backup'|trans({}) }}
-  </button>
+{% block buttons %}
+  <div class="page__buttons hidden" id="error-buttons">
+    <form>
+      <button class="btn btn-lg btn-default" type="submit">
+        <i class="material-icons">send</i>
+        {{ 'Send error report'|trans({}) }}
+      </button>
+    </form>
+    {% if backup_available %}
+      <form
+        id="restore-button"
+        name="restore-button"
+        data-route-to-submit="{{ restore_route }}"
+      >
+        <button class="btn btn-lg btn-primary" type="submit">
+          <i class="material-icons">settings_backup_restore</i>
+          {{ 'Restore'|trans({}) }}
+        </button>
+      </form>
+    {% endif %}
+  </div>
 {% endblock %}
