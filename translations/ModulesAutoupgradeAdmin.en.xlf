@@ -29,22 +29,27 @@
       <trans-unit id="8cd1c74d3c55f934c1b312fc65f9022f">
         <source>We couldn't find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.</source>
         <target>We couldn't find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.</target>
-        <note>Line: 118</note>
+        <note>Line: 144</note>
+      </trans-unit>
+      <trans-unit id="80c25611ea9134bac1da1d91eb03544a">
+        <source>Both 'xml' and 'zip' files attributes must be provided to use the local channel.</source>
+        <target>Both 'xml' and 'zip' files attributes must be provided to use the local channel.</target>
+        <note>Line: 119</note>
       </trans-unit>
       <trans-unit id="1d1a5763d2901dbd435b378358a149b4">
         <source>File %s does not exist. Unable to select that channel.</source>
         <target>File %s does not exist. Unable to select that channel.</target>
-        <note>Line: 135</note>
+        <note>Line: 161</note>
       </trans-unit>
       <trans-unit id="a9c58dc4da830f87b1f0cb9e2b6f8a1c">
         <source>We couldn't find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.</source>
         <target>We couldn't find a PrestaShop version in the XML file that was uploaded in your local archive. Please try again.</target>
-        <note>Line: 144</note>
+        <note>Line: 170</note>
       </trans-unit>
       <trans-unit id="9faf1391c6c018a5f5343bd509fe8e96">
         <source>The PrestaShop version in your archive doesn't match the one in XML file. Please fix this issue and try again.</source>
         <target>The PrestaShop version in your archive doesn't match the one in XML file. Please fix this issue and try again.</target>
-        <note>Line: 159</note>
+        <note>Line: 185</note>
       </trans-unit>
     </body>
   </file>
