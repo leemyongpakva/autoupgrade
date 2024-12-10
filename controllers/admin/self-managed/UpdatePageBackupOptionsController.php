@@ -47,7 +47,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
 
     protected function getStepTemplate(): string
     {
-        return self::CURRENT_STEP;
+        return 'backup-options';
     }
 
     protected function displayRouteInUrl(): ?string

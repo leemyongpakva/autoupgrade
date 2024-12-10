@@ -410,7 +410,8 @@ class State
 
     public function setProgressPercentage(int $progressPercentage): State
     {
-        if ($progressPercentage < $this->progressPercentage) {
+        // Allow reset of percentage but not a decrease
+        if ($progressPercentage && $progressPercentage < $this->progressPercentage) {
             throw new InvalidArgumentException('Updated progress percentage cannot be lower than the currently set one.');
         }
 

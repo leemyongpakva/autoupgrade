@@ -49,7 +49,7 @@ class UpdatePageBackupController extends AbstractPageWithStepController
 
     protected function getPageTemplate(): string
     {
-        return 'update';
+        return self::CURRENT_STEP;
     }
 
     protected function getStepTemplate(): string

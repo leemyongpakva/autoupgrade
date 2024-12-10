@@ -8,7 +8,7 @@ class UpdateSteps
 {
     const STEP_VERSION_CHOICE = 'version-choice';
     const STEP_UPDATE_OPTIONS = 'update-options';
-    const STEP_BACKUP = 'backup-options';
+    const STEP_BACKUP = 'backup';
     const STEP_UPDATE = 'update';
     const STEP_POST_UPDATE = 'post-update';
 

@@ -5,7 +5,7 @@
     {% include "@ModuleAutoUpgrade/steps/version-choice.html.twig" %}
   {% elseif step.code == "update-options" %}
     {% include "@ModuleAutoUpgrade/steps/update-options.html.twig" %}
-  {% elseif step.code == "backup-options" %}
+  {% elseif step.code == "backup" %}
     {% include "@ModuleAutoUpgrade/steps/backup-options.html.twig" %}
   {% elseif step.code == "update" %}
     {% include "@ModuleAutoUpgrade/steps/update.html.twig" %}
