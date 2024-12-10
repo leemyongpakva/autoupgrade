@@ -9,5 +9,12 @@ $e: ".page";
     gap: 1rem;
     align-items: center;
     justify-content: flex-end;
+
+    @container ua-main (max-width: 479px) {
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
   }
 }
