@@ -4,13 +4,14 @@ import { maskSensitiveInfoInUrl } from '../utils/urlUtils';
 import { Feedback, Logs, LogsFields } from '../types/sentryApi';
 
 const adminDir = window.AutoUpgradeVariables.admin_dir;
+const feedbackModalTag = 'feedbackModal';
 
 Sentry.init({
   dsn: 'https://eae192966a8d79509154c65c317a7e5d@o298402.ingest.us.sentry.io/4507254110552064',
   release: `v${window.AutoUpgradeVariables.module_version}`,
   sendDefaultPii: false,
   beforeSend(event) {
-    if (event.type === 'session') {
+    if (event.tags?.source !== feedbackModalTag) {
       return null;
     }
 
@@ -68,7 +69,8 @@ export function sendUserFeedback(
     message,
     level,
     tags: {
-      url: maskedUrl
+      url: maskedUrl,
+      source: feedbackModalTag
     }
   });
 
@@ -82,7 +84,8 @@ export function sendUserFeedback(
       {
         captureContext: {
           tags: {
-            url: maskedUrl
+            url: maskedUrl,
+            source: feedbackModalTag
           }
         }
       }
