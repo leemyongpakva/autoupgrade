@@ -132,5 +132,5 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
 
   #debouncedRefreshView = debounce(() => {
     this.refreshView();
-  }, 500);
+  }, 200);
 }
