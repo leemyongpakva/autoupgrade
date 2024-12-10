@@ -116,4 +116,29 @@ describe('Stepper', () => {
     expect(updateStep?.classList.contains('stepper__step--normal')).toBe(false);
     expect(postUpdateStep?.classList.contains('stepper__step--normal')).toBe(true);
   });
+
+  it('should not changer the stepper if the new active step is unknown', () => {
+    const stepper = new Stepper();
+
+    const checkStepsStatus = () => {
+      const versionChoiceStep = document.querySelector('[data-step-code="version-choice"]');
+      const updateOptionsStep = document.querySelector('[data-step-code="update-options"]');
+      const backupStep = document.querySelector('[data-step-code="backup"]');
+      const updateStep = document.querySelector('[data-step-code="update"]');
+      const postUpdateStep = document.querySelector('[data-step-code="post-update"]');
+
+      expect(versionChoiceStep?.classList.contains('stepper__step--done')).toBe(false);
+      expect(updateOptionsStep?.classList.contains('stepper__step--done')).toBe(false);
+      expect(backupStep?.classList.contains('stepper__step--done')).toBe(false);
+      expect(updateStep?.classList.contains('stepper__step--done')).toBe(false);
+      expect(postUpdateStep?.classList.contains('stepper__step--done')).toBe(false);
+    };
+
+    stepper.setCurrentStep('version-choice');
+    checkStepsStatus();
+
+    stepper.setCurrentStep('🐕');
+    checkStepsStatus();
+  });
+
 });

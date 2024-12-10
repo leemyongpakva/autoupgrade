@@ -50,28 +50,35 @@ export default class Stepper {
    * @description Sets the current step in the stepper and updates the classes for each step accordingly.
    */
   public setCurrentStep = (currentStep: string) => {
-    let isBeforeCurrentStep = true;
+    const stepIndex = this.steps.findIndex((step) => step.code === currentStep);
 
+    if (stepIndex === -1) {
+      console.debug(`Step ${currentStep} not found in list.`);
+      return;
+    }
     this.stepper.classList.add('stepper--hydration');
 
-    this.steps.forEach((step) => {
+    this.steps.forEach((step, i) => {
       const { element } = step;
 
-      const newClass =
-        step.code === currentStep
-          ? this.currentClass
-          : isBeforeCurrentStep
-            ? this.doneClass
-            : this.normalClass;
+      const newClass = this.#getClassOfStep(stepIndex, i);
 
       if (!element.classList.contains(newClass)) {
         element.classList.remove(this.currentClass, this.doneClass, this.normalClass);
         element.classList.add(newClass);
       }
-
-      if (step.code === currentStep) {
-        isBeforeCurrentStep = false;
-      }
     });
   };
+
+  #getClassOfStep(referenceIndex: number, currentIndex: number): string {
+    if (currentIndex === referenceIndex) {
+      return this.currentClass;
+    }
+
+    if (currentIndex < referenceIndex) {
+      return this.doneClass;
+    }
+
+    return this.normalClass;
+  }
 }
