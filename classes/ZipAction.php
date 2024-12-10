@@ -92,14 +92,16 @@ class ZipAction
             }
 
             if (!$zip->addFile($file, $archiveFilename)) {
+                $error = $zip->getStatusString();
                 // if an error occur, it's more safe to delete the corrupted backup
                 $zip->close();
                 (new Filesystem())->remove($toFile);
                 $this->logger->error($this->translator->trans(
-                    'Error when trying to add %filename% to archive %archive%.',
+                    'Unable to add %filename% to archive %archive%: %error%',
                     [
                         '%filename%' => $file,
                         '%archive%' => $archiveFilename,
+                        '%error%' => $error,
                     ]
                 ));
 
@@ -116,9 +118,14 @@ class ZipAction
         }
 
         if (!$zip->close()) {
+            $error = $zip->getStatusString();
+
             $this->logger->error($this->translator->trans(
-                'Could not close the Zip file: %toFile% properly. Check you are allowed to write on the disk and there is available space on it.',
-                ['%toFile%' => $toFile]
+                'Could not close the Zip file %toFile%: %error%',
+                [
+                    '%toFile%' => $toFile,
+                    '%error%' => $error,
+                ]
             ));
 
             return false;
@@ -159,10 +166,15 @@ class ZipAction
 
         for ($i = 0; $i < $zip->numFiles; ++$i) {
             if (!$zip->extractTo($to_dir, [$zip->getNameIndex($i)])) {
+                $error = $zip->getStatusString();
+
                 $this->logger->error(
                     $this->translator->trans(
-                        'Could not extract %file% from backup, the destination might not be writable.',
-                        ['%file%' => $zip->statIndex($i)['name']]
+                        'Could not extract %file% from archive: %error%',
+                        [
+                            '%file%' => $zip->statIndex($i)['name'],
+                            '%error%' => $error,
+                        ]
                     )
                 );
                 $zip->close();
@@ -193,7 +205,7 @@ class ZipAction
         try {
             $zip = $this->open($zipFile);
         } catch (ZipActionException $e) {
-            $this->logger->error($this->translator->trans('[ERROR] Unable to list archived files'));
+            $this->logger->error($this->translator->trans('Unable to list archived files'));
 
             return [];
         }
@@ -257,8 +269,10 @@ class ZipAction
             $flags = 0;
         }
         if ($zip->open($zipFile, $flags) !== true || empty($zip->filename)) {
-            $this->logger->error($this->translator->trans('Unable to open zipFile %s', [$zipFile]));
-            throw new ZipActionException('Unable to open zipFile ' . $zipFile);
+            $error = $zip->getStatusString();
+
+            $this->logger->error($this->translator->trans('Unable to open archive %s: %s', [$zipFile, $error]));
+            throw new ZipActionException('Unable to open archive ' . $zipFile . ': ' . $error);
         }
 
         return $zip;
