@@ -31,6 +31,7 @@ use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
@@ -67,7 +68,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
     public function submitUpdate(): JsonResponse
     {
         return $this->displayDialog('dialog-update', [
-            'noBackUp' => !$this->request->request->getBoolean('backupDone', false),
+            'backup_completed' => $this->upgradeContainer->getState()->isBackupCompleted(),
             'dialogId' => 'dialog-confirm-update',
 
             'form_route_to_confirm' => Routes::UPDATE_STEP_BACKUP_CONFIRM_UPDATE,
@@ -118,9 +119,15 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
 
+        $logsPath = $this->upgradeContainer->getDownloadLogsPath(TaskType::TASK_TYPE_BACKUP);
+
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),
             [
+                'backup_completed' => $this->upgradeContainer->getState()->isBackupCompleted(),
+                'download_path' => $logsPath,
+                'filename' => basename($logsPath),
+
                 'form_route_to_save' => Routes::UPDATE_STEP_BACKUP_SAVE_OPTION,
                 'form_route_to_submit_backup' => Routes::UPDATE_STEP_BACKUP_SUBMIT_BACKUP,
                 'form_route_to_submit_update' => Routes::UPDATE_STEP_BACKUP_SUBMIT_UPDATE,

@@ -10,7 +10,7 @@
     id="form-confirm-update"
     name="form-confirm-update"
   >
-  {% if noBackUp %}
+  {% if not backup_completed %}
     <p>
       {{ 'Before starting the update, make sure you have a complete and recent backup of your store (database, files, and images).'|trans({}) }}
     </p>
@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block dialog_extra_content %}
-  {% if noBackUp %}
+  {% if not backup_completed %}
     <div class="dialog__no-backup checkbox">
       <label>
         <input type="checkbox" value="" id="dialog-start-update-own-backup" />

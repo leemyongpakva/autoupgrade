@@ -40,7 +40,7 @@ class UpdatePageBackupController extends AbstractPageWithStepController
     const CURRENT_STEP = UpdateSteps::STEP_BACKUP;
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function index()
     {
@@ -61,6 +61,13 @@ class UpdatePageBackupController extends AbstractPageWithStepController
     protected function displayRouteInUrl(): ?string
     {
         return Routes::UPDATE_PAGE_BACKUP;
+    }
+
+    public function saveBackupIsCompleted(): JsonResponse
+    {
+        $this->upgradeContainer->getState()->setBackupCompleted(true);
+
+        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_BACKUP_OPTIONS);
     }
 
     public function getDownloadLogsButton(): JsonResponse

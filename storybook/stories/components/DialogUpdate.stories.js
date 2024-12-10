@@ -34,7 +34,7 @@ export default {
 export const Update = {
   args: {
     ...Dialog.args,
-    noBackUp: false,
+    backup_completed: true,
     form_route_to_confirm: "/",
   },
   play: async () => {

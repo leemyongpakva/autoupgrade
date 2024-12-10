@@ -127,6 +127,10 @@ class Router
             'controller' => UpdatePageBackupController::class,
             'method' => 'step',
         ],
+        Routes::UPDATE_PAGE_POST_BACKUP => [
+            'controller' => UpdatePageBackupController::class,
+            'method' => 'saveBackupIsCompleted',
+        ],
         Routes::UPDATE_PAGE_UPDATE => [
             'controller' => UpdatePageUpdateController::class,
             'method' => 'index',

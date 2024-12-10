@@ -14,7 +14,22 @@
       </p>
     </div>
 
-    <div class="backup-page__section">
+    {% if backup_completed %}
+      <div class="check-requirements check-requirements--success">
+        {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
+          title: 'Backup completed',
+          message: 'It is available at /your-admin-directory/autoupgrade/backup. You\'re ready to start the update now.'|trans({}),
+          alertStatus: 'success',
+          buttonLabel: 'Download backup logs'|trans({}),
+          buttonUrl: download_path,
+          buttonDownload: filename,
+        } %}
+      </div>
+    {% endif %}
+    <div class="
+      backup-page__section
+      {% if backup_completed %}hidden{% endif %}
+    ">
       <form 
         class="update-backup-page__field-list"
         action=""
@@ -39,14 +54,22 @@
 {% endblock %}
 
 {% block buttons_inner %}
-  <button class="btn btn-lg btn-default" type="button"
-    id="update-backup-page-skip-btn"
-  >
-    {{ 'Update without backup'|trans({}) }}
-  </button>
-  <button class="btn btn-lg btn-primary" type="submit"
-    form="update-backup-page-form"
-  >
-    {{ 'Launch backup'|trans({}) }}
-  </button>
+  {% if backup_completed %}
+    <button class="btn btn-lg btn-primary" type="button"
+      id="update-backup-page-skip-btn"
+    >
+      {{ 'Start update'|trans({}) }}
+    </button>
+  {% else %}
+    <button class="btn btn-lg btn-default" type="button"
+      id="update-backup-page-skip-btn"
+    >
+      {{ 'Update without backup'|trans({}) }}
+    </button>
+    <button class="btn btn-lg btn-primary" type="submit"
+      form="update-backup-page-form"
+    >
+      {{ 'Launch backup'|trans({}) }}
+    </button>
+  {% endif %}
 {% endblock %}

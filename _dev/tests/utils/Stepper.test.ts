@@ -140,5 +140,4 @@ describe('Stepper', () => {
     stepper.setCurrentStep('🐕');
     checkStepsStatus();
   });
-
 });

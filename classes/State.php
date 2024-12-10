@@ -58,6 +58,10 @@ class State
      */
     private $backupDbFilename;
     /**
+     * @var bool Marks the backup done during the update configuration
+     */
+    private $backupCompleted = false;
+    /**
      * @var string
      */
     private $restoreName;
@@ -222,6 +226,11 @@ class State
         return $this->backupDbFilename;
     }
 
+    public function isBackupCompleted(): bool
+    {
+        return $this->backupCompleted;
+    }
+
     /**
      * @return string[]|null
      */
@@ -322,6 +331,14 @@ class State
         $this->backupFilesFilename = BackupFinder::BACKUP_ZIP_NAME_PREFIX . $backupName . '.zip';
         $this->backupDbFilename = BackupFinder::BACKUP_DB_FOLDER_NAME_PREFIX . 'XXXXXX_' . $backupName . '.sql';
 
+        $this->save();
+
+        return $this;
+    }
+
+    public function setBackupCompleted(bool $completed): State
+    {
+        $this->backupCompleted = $completed;
         $this->save();
 
         return $this;

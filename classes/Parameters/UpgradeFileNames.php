@@ -163,7 +163,8 @@ class UpgradeFileNames
      * @var array<string, string>
      */
     public static $backup_tmp_files = [
-        'STATE_FILENAME' => self::STATE_FILENAME,
+        // TODO: Needs the split of state files to avoid dropping data useful for the update on the web UI
+        // 'STATE_FILENAME' => self::STATE_FILENAME,
         'FILES_TO_BACKUP_LIST' => self::FILES_TO_BACKUP_LIST,
         'DB_TABLES_TO_BACKUP_LIST' => self::DB_TABLES_TO_BACKUP_LIST,
     ];
