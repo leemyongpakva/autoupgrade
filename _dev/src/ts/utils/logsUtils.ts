@@ -45,3 +45,22 @@ export function parseLogWithSeverity(log: string): LogEntry {
 
   return { severity: SeverityClasses.ERROR, message: log };
 }
+
+type Procedure = (...args: unknown[]) => void;
+
+export function debounce<T extends Procedure>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  return (...args: Parameters<T>): void => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, wait);
+  };
+}

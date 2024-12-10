@@ -1,6 +1,6 @@
 import ComponentAbstract from './ComponentAbstract';
 import { LogEntry, Log } from '../types/logsTypes';
-import { parseLogWithSeverity } from '../utils/logsUtils';
+import { parseLogWithSeverity, debounce } from '../utils/logsUtils';
 import DomLifecycle from '../types/DomLifecycle';
 
 export default class LogsViewer extends ComponentAbstract implements DomLifecycle {
@@ -26,12 +26,11 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
   );
 
   public mount = () => {
-    window.LogsViewer = this;
-    this.#logsScroll.addEventListener('scroll', this.refreshView);
+    this.#logsScroll.addEventListener('scroll', this.#debouncedRefreshView);
   };
 
   public beforeDestroy = () => {
-    this.#logsScroll.removeEventListener('scroll', this.refreshView);
+    this.#logsScroll.removeEventListener('scroll', this.#debouncedRefreshView);
   };
 
   public addLogs = (logs: string[]): void => {
@@ -58,7 +57,7 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
 
       count += 1;
 
-      if (count > 50) {
+      if (count > 20) {
         this.#scrollToBottom();
         count = 0;
       }
@@ -115,7 +114,7 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
         if (log.HTMLElement?.parentElement) {
           log.HTMLElement.remove();
         }
-      } else if (!log.HTMLElement?.parentElement) {
+      } else if (log?.HTMLElement?.parentElement) {
         // add logs not present inside dom
         this.#logsList.appendChild(log.HTMLElement);
       }
@@ -130,4 +129,8 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
     this.#logsList.style.marginTop = `${marginTop}px`;
     this.#logsList.style.marginBottom = `${marginBottom}px`;
   };
+
+  #debouncedRefreshView = debounce(() => {
+    this.refreshView();
+  }, 500);
 }
