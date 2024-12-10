@@ -23,6 +23,14 @@
  * @copyright Since 2007 PrestaShop SA and Contributors
  * @license   https://opensource.org/licenses/OSL-3.0 Open Software License (OSL 3.0)
  */
+
+use PrestaShop\Module\AutoUpgrade\DbWrapper;
+
+/**
+ * @return void
+ *
+ * @throws \PrestaShop\Module\AutoUpgrade\Exceptions\UpdateDatabaseException
+ */
 function ps_900_migrate_category_images()
 {
     /*
