@@ -42,8 +42,6 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
 
     // Steps
     test('should login in BO', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'loginBO', baseContext);
-
       await boLoginPage.goTo(page, global.BO.URL);
       await boLoginPage.successLogin(page, global.BO.EMAIL, global.BO.PASSWD);
 
@@ -52,8 +50,6 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
     });
 
     test('should go to \'Catalog > Products\' page', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToProductsPage', baseContext);
-
       await boDashboardPage.goToSubMenu(
         page,
         boDashboardPage.catalogParentLink,
@@ -68,7 +64,6 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
     });
 
     test('should go to \'Advanced Parameters > New & Experimental Features\' page', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToFeatureFlagPage', baseContext);
       if (semver.gte(psVersion, '8.1.0') && isProductPageV1) {
         await boDashboardPage.goToSubMenu(
           page,
@@ -85,8 +80,6 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
     });
 
     test('should enable product page V2', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'enableProductPageV2', baseContext);
-
       if (semver.gte(psVersion, '8.1.0') && isProductPageV1) {
         const successMessage = await boNewExperimentalFeaturesPage.setFeatureFlag(
           page, boNewExperimentalFeaturesPage.featureFlagProductPageV2, true);
@@ -97,8 +90,6 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
     });
 
     test('should go back to \'Catalog > Products\' page', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goBackToProductsPage', baseContext);
-
       if (semver.gte(psVersion, '8.1.0') && isProductPageV1) {
         await boDashboardPage.goToSubMenu(
           page,
@@ -115,15 +106,11 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
     });
 
     test('should check that no filter is applied by default', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkNoFilter', baseContext);
-
       const isVisible = await boProductsPage.isResetButtonVisible(page);
       expect(isVisible, 'Reset button is visible!').toEqual(false);
     });
 
     test('should get the number of products', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'getNumberOfProduct', baseContext);
-
       if (semver.lt(psVersion, '8.1.0') || isProductPageV1) {
         numberOfProducts = await boProductsPage.getNumberOfProductsFromList(page);
       } else {
@@ -205,8 +192,6 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
       },
     ].forEach((tst) => {
       test(`should filter list by '${tst.args.filterBy}' and check result`, async () => {
-        await utilsTest.addContextItem(test.info(), 'testIdentifier', `${tst.args.identifier}`, baseContext);
-
         let filterValue: any = '';
 
         if (numberOfProducts > 7) {
@@ -245,8 +230,6 @@ test.describe('BO - Catalog - Products : Filter the products table by ID, Name, 
       });
 
       test(`should reset filter by '${tst.args.filterBy}'`, async () => {
-        await utilsTest.addContextItem(test.info(), 'testIdentifier', `resetFilter${tst.args.identifier}`, baseContext);
-
         const numberOfProductsAfterReset = await boProductsPage.resetAndGetNumberOfLines(page);
         expect(numberOfProductsAfterReset).toEqual(numberOfProducts);
       });

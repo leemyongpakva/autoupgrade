@@ -37,8 +37,6 @@ test.describe('FO - Catalog : Filter Products by categories in Home page', async
 
   // Steps
   test('should open the shop page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToShopFO', baseContext);
-
     await foClassicHomePage.goTo(page, global.FO.URL);
 
     const result = await foClassicHomePage.isHomePage(page);
@@ -46,8 +44,6 @@ test.describe('FO - Catalog : Filter Products by categories in Home page', async
   });
 
   test('should check and get the products number', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkNumberOfProducts', baseContext);
-
     await foClassicHomePage.goToAllProductsPage(page);
 
     allProductsNumber = await foClassicCategoryPage.getNumberOfProducts(page);
@@ -56,8 +52,6 @@ test.describe('FO - Catalog : Filter Products by categories in Home page', async
 
   if (semver.gte(psVersion, '7.3.0')) {
     test('should filter products by category and check result', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'FilterProductByCategory', baseContext);
-
       if (allProductsNumber > 7) {
         await foClassicCategoryPage.goToCategory(page, dataCategories.accessories.id);
 
@@ -79,8 +73,6 @@ test.describe('FO - Catalog : Filter Products by categories in Home page', async
   }
 
   test('should filter products by subcategory and check result', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'FilterProductBySubCategory', baseContext);
-
     await foClassicCategoryPage.reloadPage(page);
     if (allProductsNumber > 7) {
       await foClassicCategoryPage.goToSubCategory(page, dataCategories.accessories.id, dataCategories.stationery.id);

@@ -18,6 +18,7 @@ function loadGlobal(): void {
     PASSWD: process.env.PASSWD || 'prestashop',
     FIRSTNAME: process.env.FIRSTNAME || 'Marc',
     LASTNAME: process.env.LASTNAME || 'Beier',
+    SHOP_VERSION: process.env.SHOPVERSION,
   };
 
   global.PSConfig = {

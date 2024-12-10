@@ -12,7 +12,7 @@ import {
 
 let dbConnection: Connection;
 
-const baseContext: string = 'shopVersion_checkVersionIndatabase';
+const baseContext: string = 'sanity_checkVersionIndatabase';
 const psVersion = utilsTest.getPSVersion();
 
 test.describe('Check new shop version', () => {
@@ -37,8 +37,6 @@ test.describe('Check new shop version', () => {
   });
 
   test('should check psVersion from the database', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkPsVersion', baseContext);
-
     const [resultRows]: [RowDataPacket[], FieldPacket[]] = await dbConnection.query(
       `SELECT value FROM ${dbPrefix}configuration WHERE name = 'PS_VERSION_DB'`,
     );

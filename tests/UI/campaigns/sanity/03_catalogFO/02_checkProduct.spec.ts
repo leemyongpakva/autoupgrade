@@ -32,8 +32,6 @@ test.describe('FO - Catalog : Check the Product page', async () => {
 
   // Steps
   test('should open the shop page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToShopFO', baseContext);
-
     await foClassicHomePage.goTo(page, global.FO.URL);
 
     const result = await foClassicHomePage.isHomePage(page);
@@ -41,8 +39,6 @@ test.describe('FO - Catalog : Check the Product page', async () => {
   });
 
   test('should go to the first product page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToProductPage', baseContext);
-
     await foClassicHomePage.goToProductPage(page, 1);
 
     const pageTitle = await foClassicProductPage.getPageTitle(page);
@@ -50,8 +46,6 @@ test.describe('FO - Catalog : Check the Product page', async () => {
   });
 
   test('should check the product page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkProductPage', baseContext);
-
     const result = await foClassicProductPage.getProductInformation(page);
 
     if (result.name === dataProducts.demo_1.name) {
