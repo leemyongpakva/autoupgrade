@@ -35,7 +35,7 @@ export default class UpdatePageUpdate extends UpdatePage {
 
     this.#restoreAlertForm?.removeEventListener('submit', this.#handleSubmit);
     this.#restoreButtonForm?.removeEventListener('submit', this.#handleSubmit);
-    this.#submitErrorReportForm?.addEventListener('submit', this.#handleSubmit);
+    this.#submitErrorReportForm?.removeEventListener('submit', this.#handleSubmit);
   };
 
   get #progressTrackerContainer(): HTMLDivElement {
