@@ -718,6 +718,15 @@ Comment: directory already exists</note>
       </trans-unit>
     </body>
   </file>
+  <file original="classes/Traits/DisplayErrorReportDialogTrait.php" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="845ceb9fbcd6f7a5e5b55c0fc0264c3b">
+        <source>Send error report?</source>
+        <target>Send error report?</target>
+        <note>Line: 45</note>
+      </trans-unit>
+    </body>
+  </file>
   <file original="classes/Twig/Block/UpgradeButtonBlock.php" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
       <trans-unit id="54f664c70c22054ea0d8d26fc3997ce7">
@@ -2228,6 +2237,31 @@ Comment: directory already exists</note>
         <source>Help us improve the module by sending us this error report. You can add details in the description if you want to.</source>
         <target>Help us improve the module by sending us this error report. You can add details in the description if you want to.</target>
         <note>Line: 6</note>
+      </trans-unit>
+      <trans-unit id="e3c2f912efa622f6e06c414660d40034">
+        <source>Learn more about your data and your rights</source>
+        <target>Learn more about your data and your rights</target>
+        <note>Line: 12</note>
+      </trans-unit>
+      <trans-unit id="ea5957193770106ccbb79106b47c06a6">
+        <source>Email (optional)</source>
+        <target>Email (optional)</target>
+        <note>Line: 23</note>
+      </trans-unit>
+      <trans-unit id="6832ac593617c3e5f61c82a20b0d9a3a">
+        <source>Enter your email address</source>
+        <target>Enter your email address</target>
+        <note>Line: 30</note>
+      </trans-unit>
+      <trans-unit id="0ba3309bf076bf416d0bb498fdfcb77f">
+        <source>Description (optional)</source>
+        <target>Description (optional)</target>
+        <note>Line: 36</note>
+      </trans-unit>
+      <trans-unit id="70570ccbf37717a289b3ac438d3cf0c4">
+        <source>You can add details about the error here.</source>
+        <target>You can add details about the error here.</target>
+        <note>Line: 42</note>
       </trans-unit>
     </body>
   </file>
