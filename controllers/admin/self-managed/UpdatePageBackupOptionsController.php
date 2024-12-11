@@ -119,7 +119,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
         $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
 
-        $logsPath = $this->upgradeContainer->getDownloadLogsPath(TaskType::TASK_TYPE_BACKUP);
+        $logsPath = $this->upgradeContainer->getLogsService()->getDownloadLogsPath(TaskType::TASK_TYPE_BACKUP);
 
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),

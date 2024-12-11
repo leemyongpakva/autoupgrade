@@ -70,27 +70,6 @@ class UpdatePageBackupController extends AbstractPageWithStepController
         return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_BACKUP_OPTIONS);
     }
 
-    public function getDownloadLogsButton(): JsonResponse
-    {
-        try {
-            $logsPath = $this->upgradeContainer->getDownloadLogsPath(TaskType::TASK_TYPE_BACKUP);
-        } catch (\Exception $e) {
-            return AjaxResponseBuilder::errorResponse('Impossible to retrieve logs path');
-        }
-
-        return AjaxResponseBuilder::hydrationResponse(
-            PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
-            $this->getTwig()->render(
-                '@ModuleAutoUpgrade/components/download_logs.html.twig',
-                [
-                    'button_label' => $this->upgradeContainer->getTranslator()->trans('Download backup logs'),
-                    'download_path' => $logsPath,
-                    'filename' => basename($logsPath),
-                ]
-            )
-        );
-    }
-
     /**
      * @return array<string, mixed>
      *
@@ -104,7 +83,8 @@ class UpdatePageBackupController extends AbstractPageWithStepController
             $updateSteps->getStepParams($this::CURRENT_STEP),
             [
                 'success_route' => Routes::UPDATE_PAGE_POST_BACKUP,
-                'download_logs_route' => Routes::UPDATE_STEP_UPDATE_DOWNLOAD_LOGS,
+                'download_logs_route' => Routes::DOWNLOAD_LOGS,
+                'download_logs_type' => TaskType::TASK_TYPE_BACKUP,
                 'initial_process_action' => TaskName::TASK_BACKUP_INITIALIZATION,
                 'download_logs_parent_id' => PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
             ]

@@ -32,14 +32,12 @@ class Routes
 
     const UPDATE_PAGE_BACKUP = 'update-page-backup';
     const UPDATE_STEP_BACKUP = 'update-step-backup';
-    const UPDATE_STEP_BACKUP_DOWNLOAD_LOGS = 'update-step-backup-download-logs';
     const UPDATE_PAGE_POST_BACKUP = 'update-page-post-backup';
 
     /* step: update */
     const UPDATE_PAGE_UPDATE = 'update-page-update';
     const UPDATE_STEP_UPDATE = 'update-step-update';
     const UPDATE_STEP_UPDATE_SUBMIT_ERROR_REPORT = 'update-step-update-submit-error-report';
-    const UPDATE_STEP_UPDATE_DOWNLOAD_LOGS = 'update-step-update-download-logs';
 
     /* step: post update */
     const UPDATE_PAGE_POST_UPDATE = 'update-page-post-update';
@@ -48,4 +46,8 @@ class Routes
     /* RESTORE PAGE */
     /* step: backup selection */
     const RESTORE_PAGE_BACKUP_SELECTION = 'restore-page-backup-selection';
+
+    /* COMMON */
+    /* logs */
+    const DOWNLOAD_LOGS = 'download-logs';
 }

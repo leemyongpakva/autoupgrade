@@ -28,6 +28,7 @@
 namespace PrestaShop\Module\AutoUpgrade\Router;
 
 use PrestaShop\Module\AutoUpgrade\Controller\HomePageController;
+use PrestaShop\Module\AutoUpgrade\Controller\LogsController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageBackupController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageBackupOptionsController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePagePostUpdateController;
@@ -143,8 +144,8 @@ class Router
             'controller' => UpdatePageUpdateController::class,
             'method' => 'submitErrorReport',
         ],
-        Routes::UPDATE_STEP_UPDATE_DOWNLOAD_LOGS => [
-            'controller' => UpdatePageUpdateController::class,
+        Routes::DOWNLOAD_LOGS => [
+            'controller' => LogsController::class,
             'method' => 'getDownloadLogsButton',
         ],
         Routes::UPDATE_PAGE_POST_UPDATE => [

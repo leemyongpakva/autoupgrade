@@ -32,4 +32,10 @@ class TaskType
     const TASK_TYPE_BACKUP = 'backup';
     const TASK_TYPE_UPDATE = 'update';
     const TASK_TYPE_RESTORE = 'restore';
+
+    const ALL_TASKS = [
+        self::TASK_TYPE_BACKUP,
+        self::TASK_TYPE_UPDATE,
+        self::TASK_TYPE_RESTORE,
+    ];
 }
