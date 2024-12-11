@@ -46,7 +46,7 @@ export default class ScriptHandler {
 
   /**
    * @public
-   * @param {string} scriptID - The name of the route to load his associated script.
+   * @param {string} scriptID - The ID of the route to load his associated script.
    * @returns void
    * @description Loads and mounts the page script associated with the specified route name.
    */

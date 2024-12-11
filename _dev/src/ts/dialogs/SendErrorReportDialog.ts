@@ -25,15 +25,11 @@ export default class SendErrorReportDialog implements DomLifecycle {
   #onSubmit = (event: SubmitEvent) => {
     event.preventDefault();
 
-    const logsViewer = document.querySelector(
-      '[data-component="progress-tracker"] [data-component="logs-viewer"]'
-    );
+    const logsViewer = document.querySelector('[data-component="logs-viewer"]');
 
     const logs: Logs = {};
 
-    const logsContent = logsViewer?.querySelector(
-      '[data-slot-component="scroll"] [data-slot-component="list"]'
-    );
+    const logsContent = logsViewer?.querySelector('[data-slot-component="list"]');
     if (!logsContent) {
       throw new Error('Logs content to send not found');
     }
