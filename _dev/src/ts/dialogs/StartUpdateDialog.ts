@@ -20,7 +20,7 @@ export default class StartUpdateDialog implements DomLifecycle {
   }
 
   get #form(): HTMLFormElement {
-    const form = document.forms.namedItem('form-confirm-update');
+    const form = document.forms.namedItem(this.formId);
     if (!form) {
       throw new Error('Form not found');
     }

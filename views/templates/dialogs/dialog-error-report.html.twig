@@ -6,10 +6,10 @@
       {{ 'Help us improve the module by sending us this error report. You can add details in the description if you want to.'|trans({}) }}
     </p>
 
-    {% if dataPrivacyLink %}
+    {% if data_transparency_link %}
       <p>
-        <a class="link" href="{{ dataPrivacyLink }}">
-          Learn more about your data and your rights<i class="material-icons">launch</i>
+        <a class="link" target="_blank" href="{{ data_transparency_link }}">
+          {{ 'Learn more about your data and your rights'|trans({}) }}<i class="material-icons">launch</i>
         </a>
       </p>
     {% endif %}
@@ -17,43 +17,45 @@
 {% endblock %}
 
 {% block dialog_extra_content_inner %}
-  <div class="dialog__error-report-form">
+  <form class="dialog__error-report-form" id="form-error-feedback" name="form-error-feedback">
     <div class="form-group">
       <label for="userEmail">
-        Email (optional)
+        {{ 'Email (optional)'|trans({}) }}
       </label>
       <input
-        type="password"
+        type="email"
         class="form-control"
         id="userEmail"
-        placeholder="Enter your email address"
+        name="email"
+        placeholder="{{ 'Enter your email address'|trans({}) }}"
       />
     </div>
 
     <div class="form-group">
       <label for="errorDescription">
-        Description (optional)
+        {{ 'Description (optional)'|trans({}) }}
       </label>
-      <input
-        type="password"
+      <textarea
         class="form-control"
         id="errorDescription"
-        placeholder="You can add details about the error here. "
-      />
+        name="comments"
+        placeholder="{{ 'You can add details about the error here.'|trans({}) }}"
+        rows="3"
+      ></textarea>
     </div>
-  </div>
+  </form>
 {% endblock %}
 
 {% block dialog_footer %}
   <div class="dialog__footer">
     {% block dialog_footer_inner %}
       <button type="button" class="btn btn-link" data-dismiss="dialog">
-        Cancel
+        {{ 'Cancel'|trans({}) }}
       </button>
 
-      <button type="button" class="btn btn-primary">
+      <button type="submit" form="form-error-feedback" class="btn btn-primary">
         <i class="material-icons">send</i>
-        Send error report
+        {{ 'Send error report'|trans({}) }}
       </button>
     {% endblock %}
   </div>
