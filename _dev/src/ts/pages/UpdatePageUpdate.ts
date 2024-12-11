@@ -3,6 +3,7 @@ import ProgressTracker from '../components/ProgressTracker';
 import { ApiResponseAction } from '../types/apiTypes';
 import Process from '../utils/Process';
 import api from '../api/RequestHandler';
+import { logStore } from '../store/LogStore';
 
 export default class UpdatePageUpdate extends UpdatePage {
   protected stepCode = 'update';
@@ -33,6 +34,7 @@ export default class UpdatePageUpdate extends UpdatePage {
   };
 
   public beforeDestroy = () => {
+    logStore.clearLogs();
     this.#progressTracker.beforeDestroy();
 
     this.#restoreAlertForm?.removeEventListener('submit', this.#handleSubmit);
@@ -57,11 +59,11 @@ export default class UpdatePageUpdate extends UpdatePage {
   };
 
   #onProcessEnd = async (response: ApiResponseAction): Promise<void> => {
-    // if (response.error) {
-    this.#onError(response);
-    // } else {
-    //   await api.post(this.#progressTrackerContainer.dataset.successRoute!);
-    // }
+    if (response.error) {
+      this.#onError(response);
+    } else {
+      await api.post(this.#progressTrackerContainer.dataset.successRoute!);
+    }
   };
 
   #onError = (response: ApiResponseAction): void => {
