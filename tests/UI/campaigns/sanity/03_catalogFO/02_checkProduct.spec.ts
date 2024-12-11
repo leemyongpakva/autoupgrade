@@ -1,6 +1,4 @@
 import {
-  // Import utils
-  utilsTest,
   // Import FO pages
   foClassicHomePage,
   foClassicProductPage,
@@ -11,8 +9,6 @@ import {
 import {
   test, expect, Page, BrowserContext,
 } from '@playwright/test';
-
-const baseContext: string = 'sanity_catalogFO_checkProduct';
 
 /*
   Open the FO home page

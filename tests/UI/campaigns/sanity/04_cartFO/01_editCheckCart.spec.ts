@@ -15,8 +15,6 @@ import {
 } from '@playwright/test';
 import semver from 'semver';
 
-const baseContext: string = 'sanity_cartFO_editCheckCart';
-
 const psVersion = utilsTest.getPSVersion();
 
 /*

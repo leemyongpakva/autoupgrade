@@ -12,7 +12,6 @@ import {
 
 let dbConnection: Connection;
 
-const baseContext: string = 'sanity_checkVersionIndatabase';
 const psVersion = utilsTest.getPSVersion();
 
 test.describe('Check new shop version', () => {

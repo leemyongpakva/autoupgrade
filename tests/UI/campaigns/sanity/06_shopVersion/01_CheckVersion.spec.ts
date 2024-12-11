@@ -11,7 +11,6 @@ import {
 } from '@playwright/test';
 import semver from 'semver';
 
-const baseContext: string = 'sanity_checkVersion';
 const psVersion = utilsTest.getPSVersion();
 
 /*

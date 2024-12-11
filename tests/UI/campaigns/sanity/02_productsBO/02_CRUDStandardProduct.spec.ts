@@ -18,7 +18,6 @@ import {
 } from '@playwright/test';
 import semver from 'semver';
 
-const baseContext: string = 'sanity_productsBO_CRUDStandardProduct';
 const psVersion = utilsTest.getPSVersion();
 
 /*
@@ -192,8 +191,6 @@ test.describe('BO - Catalog - Products : CRUD standard product', async () => {
     });
 
     test('should delete product', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'deleteProduct', baseContext);
-
       const createProductMessage = await boProductsCreatePage.deleteProduct(page);
       expect(createProductMessage).toEqual(boProductsPage.successfulDeleteMessage);
     });

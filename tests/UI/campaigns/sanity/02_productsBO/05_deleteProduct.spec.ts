@@ -15,7 +15,6 @@ import {
 } from '@playwright/test';
 import semver from 'semver';
 
-const baseContext: string = 'sanity_productsBO_deleteProduct';
 const psVersion = utilsTest.getPSVersion();
 
 /*

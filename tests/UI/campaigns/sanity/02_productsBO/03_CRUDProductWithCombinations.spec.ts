@@ -18,7 +18,6 @@ import {
 } from '@playwright/test';
 import semver from 'semver';
 
-const baseContext: string = 'sanity_productsBO_CRUDProductWithCombinations';
 const psVersion = utilsTest.getPSVersion();
 
 /*

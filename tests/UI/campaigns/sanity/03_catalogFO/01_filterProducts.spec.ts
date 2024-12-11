@@ -14,7 +14,6 @@ import {
 import semver from 'semver';
 
 const psVersion = utilsTest.getPSVersion();
-const baseContext: string = 'sanity_catalogFO_filterProducts';
 
 /*
   Open the FO home page
