@@ -1,6 +1,7 @@
 import DomLifecycle from '../types/DomLifecycle';
 import { sendUserFeedback } from '../api/sentryApi';
 import { Feedback, FeedbackFields, Logs } from '../types/sentryApi';
+import { logStore } from '../store/LogStore';
 
 export default class SendErrorReportDialog implements DomLifecycle {
   protected readonly formId = 'form-error-feedback';
@@ -25,37 +26,23 @@ export default class SendErrorReportDialog implements DomLifecycle {
   #onSubmit = (event: SubmitEvent) => {
     event.preventDefault();
 
-    const logsViewer = document.querySelector('[data-component="logs-viewer"]');
+    const errors = logStore.getErrors();
 
-    const logs: Logs = {};
+    const logs: Logs = {
+      logs: logStore
+        .getLogs()
+        .map((log) => log.message)
+        .join('\n'),
+      warnings: logStore
+        .getWarnings()
+        .map((log) => log.message)
+        .join('\n'),
+      errors: errors.map((log) => log.message).join('\n')
+    };
 
-    const logsContent = logsViewer?.querySelector('[data-slot-component="list"]');
-    if (!logsContent) {
-      throw new Error('Logs content to send not found');
-    }
-
-    const message = logsContent.lastChild?.textContent;
+    const message = errors[errors.length - 1].message;
     if (!message) {
       throw new Error('Message to send not found');
-    }
-
-    if (!logsContent.textContent) {
-      throw new Error('Logs to send not found');
-    }
-    logs.logs = logsContent.textContent;
-
-    const summaryWarningText = logsViewer?.querySelector(
-      '[data-summary-severity="warning"]'
-    )?.textContent;
-    if (summaryWarningText) {
-      logs.warnings = summaryWarningText;
-    }
-
-    const summaryErrorText = logsViewer?.querySelector(
-      '[data-summary-severity="error"]'
-    )?.textContent;
-    if (summaryErrorText) {
-      logs.errors = summaryErrorText;
     }
 
     const feedback: Feedback = {};

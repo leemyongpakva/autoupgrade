@@ -2,9 +2,9 @@ import ComponentAbstract from './ComponentAbstract';
 import { LogEntry, Log } from '../types/logsTypes';
 import { parseLogWithSeverity, debounce } from '../utils/logsUtils';
 import DomLifecycle from '../types/DomLifecycle';
+import { logStore } from '../store/LogStore';
 
 export default class LogsViewer extends ComponentAbstract implements DomLifecycle {
-  #logs: Log[] = [];
   #logsIndexHeight: Map<number, number> = new Map();
   #logsListHeight: number = this.#logsList.clientHeight;
   #bufferSize = 1;
@@ -37,7 +37,7 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
     let count = 0;
 
     logs.forEach((log) => {
-      const id = this.#logs.length;
+      const id = logStore.getLogs().length;
       const logEntry = parseLogWithSeverity(log);
       const HTMLElement = this.#createLogLine(logEntry);
       this.#logsList.appendChild(HTMLElement);
@@ -45,7 +45,7 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
       const height = HTMLElement.offsetHeight;
       const offsetTop = HTMLElement.offsetTop;
 
-      this.#logs.push({
+      logStore.addLog({
         ...logEntry,
         height,
         offsetTop,
@@ -91,43 +91,32 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
     const endBoundary = scrollTop + viewportHeight + this.#bufferSize * viewportHeight;
 
     // search index of visible logs
-    let firstVisibleIndex = 0;
-    let lastVisibleIndex = this.#logs.length - 1;
+    const visibleLogs: Log[] = [];
+    let marginTop = 0;
+    let marginBottom = 0;
 
-    for (const [id, offsetTop] of this.#logsIndexHeight) {
-      const logHeight = this.#logs[id].height;
+    for (const [id, offsetTop] of this.#logsIndexHeight.entries()) {
+      const log = logStore.getLogs()[id];
+      const logHeight = log.height;
 
-      if (offsetTop + logHeight >= startBoundary && firstVisibleIndex === 0) {
-        firstVisibleIndex = id;
-      }
-
-      if (offsetTop <= endBoundary) {
-        lastVisibleIndex = id;
+      if (offsetTop + logHeight < startBoundary) {
+        marginTop += logHeight;
+      } else if (offsetTop > endBoundary) {
+        marginBottom += logHeight;
       } else {
-        break;
+        visibleLogs.push(log);
       }
     }
 
-    // delete logs outsite view
-    this.#logs.forEach((log, index) => {
-      if (index < firstVisibleIndex || index > lastVisibleIndex) {
-        if (log.HTMLElement?.parentElement) {
-          log.HTMLElement.remove();
-        }
-      } else if (log?.HTMLElement?.parentElement) {
-        // add logs not present inside dom
+    this.#logsList.style.marginTop = `${marginTop}px`;
+    this.#logsList.style.marginBottom = `${marginBottom}px`;
+
+    this.#logsList.innerHTML = '';
+    visibleLogs.forEach((log) => {
+      if (log.HTMLElement) {
         this.#logsList.appendChild(log.HTMLElement);
       }
     });
-
-    // calc margin to preserve list height
-    const marginTop = this.#logsIndexHeight.get(firstVisibleIndex) || 0;
-    const marginBottom =
-      this.#logsListHeight -
-      ((this.#logsIndexHeight.get(lastVisibleIndex) || 0) + this.#logs[lastVisibleIndex].height);
-
-    this.#logsList.style.marginTop = `${marginTop}px`;
-    this.#logsList.style.marginBottom = `${marginBottom}px`;
   };
 
   #debouncedRefreshView = debounce(() => {
