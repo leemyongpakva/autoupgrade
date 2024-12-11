@@ -42,10 +42,7 @@ export default class UpdatePageBackup extends UpdatePage {
 
   readonly #onClick = async (ev: Event) => {
     if ((ev.target as HTMLElement).id === 'update-backup-page-skip-btn') {
-      const formData = new FormData();
-      // TODO: Value currently hardcoded until management of backups is implemented
-      formData.append('backupDone', JSON.stringify(false));
-      await api.post(this.#form.dataset.routeToSubmitUpdate!, formData);
+      await api.post(this.#form.dataset.routeToSubmitUpdate!);
     }
   };
 

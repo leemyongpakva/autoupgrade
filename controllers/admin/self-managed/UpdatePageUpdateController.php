@@ -27,14 +27,12 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
-use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Traits\DisplayErrorReportDialogTrait;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UpdatePageUpdateController extends AbstractPageWithStepController
 {
@@ -74,6 +72,7 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
                 'download_logs_route' => Routes::DOWNLOAD_LOGS,
                 'download_logs_type' => TaskType::TASK_TYPE_UPDATE,
                 'restore_route' => Routes::RESTORE_PAGE_BACKUP_SELECTION,
+                // TODO: Move in a common controller
                 'submit_error_report_route' => Routes::UPDATE_STEP_UPDATE_SUBMIT_ERROR_REPORT,
                 'initial_process_action' => TaskName::TASK_UPDATE_INITIALIZATION,
                 'backup_available' => !empty($backupFinder->getAvailableBackups()),

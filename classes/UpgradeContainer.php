@@ -538,6 +538,7 @@ class UpgradeContainer
             $this->getTranslator(),
             $this->getProperty(self::LOGS_PATH)
         );
+
         return $this->logsService;
     }
 

@@ -251,7 +251,10 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
       '.logs__download-form',
       'Form to request the button to download logs cannot be found'
     );
-    await api.post(downloadlogsButtonForm.dataset.downloadLogsRoute!, new FormData(downloadlogsButtonForm));
+    await api.post(
+      downloadlogsButtonForm.dataset.downloadLogsRoute!,
+      new FormData(downloadlogsButtonForm)
+    );
 
     this.#logsSummary.appendChild(fragment);
     this.#isSummaryDisplayed = true;

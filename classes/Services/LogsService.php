@@ -27,6 +27,7 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Services;
 
+use Exception;
 use PrestaShop\Module\AutoUpgrade\State;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
@@ -57,6 +58,7 @@ class LogsService
     public function getDownloadLogsdData(string $task): array
     {
         $logsPath = $this->getDownloadLogsPath($task);
+
         return [
             'button_label' => $this->getDownloadLogsLabel($task),
             'download_path' => $logsPath,
@@ -100,12 +102,12 @@ class LogsService
     {
         if ($taskType === TaskType::TASK_TYPE_BACKUP) {
             return $this->translator->trans('Download backup logs');
-        } 
+        }
         if ($taskType === TaskType::TASK_TYPE_RESTORE) {
             return $this->translator->trans('Download restore logs');
-        } 
+        }
         if ($taskType === TaskType::TASK_TYPE_UPDATE) {
             return $this->translator->trans('Download update logs');
-        } 
+        }
     }
 }

@@ -55,7 +55,7 @@ class LogsController extends AbstractGlobalController
     private function validateLogsType(string $type): void
     {
         if (!in_array($type, TaskType::ALL_TASKS)) {
-            throw new InvalidArgumentException('Unknown log type '. $type);
+            throw new InvalidArgumentException('Unknown log type ' . $type);
         }
     }
 }

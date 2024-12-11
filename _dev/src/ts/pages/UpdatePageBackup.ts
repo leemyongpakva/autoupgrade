@@ -7,6 +7,10 @@ import api from '../api/RequestHandler';
 export default class UpdatePageBackup extends UpdatePage {
   protected stepCode = 'backup';
   #progressTracker: ProgressTracker = new ProgressTracker(this.#progressTrackerContainer);
+  #submitSkipBackupForm: null | HTMLFormElement = null;
+  #submitErrorReportForm: null | HTMLFormElement = null;
+  #submitRetryForm: null | HTMLFormElement = null;
+  #submitRetryAlert: null | HTMLFormElement = null;
 
   constructor() {
     super();
@@ -29,6 +33,11 @@ export default class UpdatePageBackup extends UpdatePage {
 
   public beforeDestroy = () => {
     this.#progressTracker.beforeDestroy();
+
+    this.#submitSkipBackupForm?.removeEventListener('submit', this.#handleSubmit);
+    this.#submitErrorReportForm?.removeEventListener('submit', this.#handleSubmit);
+    this.#submitRetryForm?.removeEventListener('submit', this.#handleSubmit);
+    this.#submitRetryAlert?.removeEventListener('submit', this.#handleSubmit);
   };
 
   get #progressTrackerContainer(): HTMLDivElement {
@@ -80,5 +89,25 @@ export default class UpdatePageBackup extends UpdatePage {
     }
 
     buttonsContainer.classList.remove('hidden');
+
+    this.#submitSkipBackupForm = document.forms.namedItem('submit-skip-backup');
+    this.#submitSkipBackupForm?.addEventListener('submit', this.#handleSubmit);
+
+    this.#submitErrorReportForm = document.forms.namedItem('submit-error-report');
+    this.#submitErrorReportForm?.addEventListener('submit', this.#handleSubmit);
+
+    this.#submitRetryAlert = document.forms.namedItem('retry-alert');
+    this.#submitRetryAlert?.addEventListener('submit', this.#handleSubmit);
+
+    this.#submitRetryForm = document.forms.namedItem('retry-button');
+    this.#submitRetryForm?.addEventListener('submit', this.#handleSubmit);
+  };
+
+  #handleSubmit = async (event: SubmitEvent) => {
+    event.preventDefault();
+
+    const form = event.target as HTMLFormElement;
+
+    await api.post(form.dataset.routeToSubmit!);
   };
 }
