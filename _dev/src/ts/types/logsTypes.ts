@@ -15,14 +15,14 @@ export enum ErrorSeverity {
   EMERGENCY = 'EMERGENCY'
 }
 
-export enum SeverityClasses {
+export enum Severity {
   SUCCESS = 'success',
   WARNING = 'warning',
   ERROR = 'error'
 }
 
 export interface LogEntry {
-  severity: SeverityClasses;
+  severity: Severity;
   message: string;
 }
 

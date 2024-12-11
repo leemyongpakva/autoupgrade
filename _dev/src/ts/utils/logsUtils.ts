@@ -2,21 +2,21 @@ import {
   ErrorSeverity,
   LogEntry,
   LogsSeverity,
-  SeverityClasses,
+  Severity,
   SuccessSeverity,
   WarningSeverity
 } from '../types/logsTypes';
 
 /**
  * @public
- * @type {Record<LogsSeverity, SeverityClasses>}
+ * @type {Record<LogsSeverity, Severity>}
  * @description Maps severity levels to their corresponding CSS classes for styling and process purposes.
  */
-export const severityToClassMap: Record<LogsSeverity, SeverityClasses> = {
-  ...Object.fromEntries(Object.values(SuccessSeverity).map((s) => [s, SeverityClasses.SUCCESS])),
-  ...Object.fromEntries(Object.values(WarningSeverity).map((s) => [s, SeverityClasses.WARNING])),
-  ...Object.fromEntries(Object.values(ErrorSeverity).map((s) => [s, SeverityClasses.ERROR]))
-} as Record<LogsSeverity, SeverityClasses>;
+export const severityToClassMap: Record<LogsSeverity, Severity> = {
+  ...Object.fromEntries(Object.values(SuccessSeverity).map((s) => [s, Severity.SUCCESS])),
+  ...Object.fromEntries(Object.values(WarningSeverity).map((s) => [s, Severity.WARNING])),
+  ...Object.fromEntries(Object.values(ErrorSeverity).map((s) => [s, Severity.ERROR]))
+} as Record<LogsSeverity, Severity>;
 
 const severityPattern = [
   ...Object.values(SuccessSeverity),
@@ -38,12 +38,12 @@ export function parseLogWithSeverity(log: string): LogEntry {
   if (match) {
     const severityStr = match[1] as LogsSeverity;
     const message = match[2];
-    const severity = severityToClassMap[severityStr] || SeverityClasses.ERROR;
+    const severity = severityToClassMap[severityStr] || Severity.ERROR;
 
     return { severity, message };
   }
 
-  return { severity: SeverityClasses.ERROR, message: log };
+  return { severity: Severity.ERROR, message: log };
 }
 
 type Procedure = (...args: unknown[]) => void;

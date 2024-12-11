@@ -1,5 +1,5 @@
 import { parseLogWithSeverity } from '../../src/ts/utils/logsUtils';
-import { SeverityClasses, LogEntry } from '../../src/ts/types/logsTypes';
+import { Severity, LogEntry } from '../../src/ts/types/logsTypes';
 
 describe('parseLogWithSeverity', () => {
   it('should parse a log with SUCCESS severity', () => {
@@ -7,7 +7,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      severity: SeverityClasses.SUCCESS,
+      severity: Severity.SUCCESS,
       message: 'Operation completed successfully'
     });
   });
@@ -17,7 +17,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      severity: SeverityClasses.WARNING,
+      severity: Severity.WARNING,
       message: 'Disk space is low'
     });
   });
@@ -27,7 +27,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      severity: SeverityClasses.ERROR,
+      severity: Severity.ERROR,
       message: 'System failure occurred'
     });
   });
@@ -37,7 +37,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      severity: SeverityClasses.ERROR,
+      severity: Severity.ERROR,
       message: 'This is an invalid log format'
     });
   });
@@ -47,7 +47,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      severity: SeverityClasses.SUCCESS,
+      severity: Severity.SUCCESS,
       message: 'Operation completed'
     });
   });
@@ -57,7 +57,7 @@ describe('parseLogWithSeverity', () => {
     const result = parseLogWithSeverity(log);
 
     expect(result).toEqual<LogEntry>({
-      severity: SeverityClasses.ERROR,
+      severity: Severity.ERROR,
       message: ''
     });
   });
