@@ -41,6 +41,7 @@ $e-logs: ".logs";
       border-radius: var(--#{$ua-prefix}border-radius);
 
       #{$e-logs}__line {
+        white-space: pre-line;
         padding-inline-start: 2.75rem;
         background-position: 1rem 0.125rem;
         background-size: 1.25rem 1.25rem;
