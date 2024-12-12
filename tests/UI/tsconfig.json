@@ -23,7 +23,7 @@
     "types/global.d.ts",
     "campaigns/**/*"
   ],
-  "exclude": [
+  "ignores": [
     "node_modules",
     "playwright.config.ts"
   ]
