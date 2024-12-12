@@ -21,6 +21,8 @@ export default class UpdatePageUpdate extends UpdatePage {
     const stepContent = document.getElementById('ua_step_content')!;
     const updateAction = stepContent.dataset.initialProcessAction!;
 
+    this.#enableExitConfirmation();
+
     const process = new Process({
       onProcessResponse: this.#onProcessResponse,
       onProcessEnd: this.#onProcessEnd,
@@ -36,6 +38,7 @@ export default class UpdatePageUpdate extends UpdatePage {
     this.#restoreAlertForm?.removeEventListener('submit', this.#handleSubmit);
     this.#restoreButtonForm?.removeEventListener('submit', this.#handleSubmit);
     this.#submitErrorReportForm?.removeEventListener('submit', this.#handleSubmit);
+    this.#disableExitConfirmation();
   };
 
   get #progressTrackerContainer(): HTMLDivElement {
@@ -55,6 +58,7 @@ export default class UpdatePageUpdate extends UpdatePage {
   };
 
   #onProcessEnd = async (response: ApiResponseAction): Promise<void> => {
+    this.#disableExitConfirmation();
     if (response.error) {
       this.#onError(response);
     } else {
@@ -63,6 +67,7 @@ export default class UpdatePageUpdate extends UpdatePage {
   };
 
   #onError = (response: ApiResponseAction): void => {
+    this.#disableExitConfirmation();
     this.#progressTracker.updateProgress(response);
     this.#progressTracker.endProgress();
     this.#displayErrorAlert();
@@ -104,5 +109,20 @@ export default class UpdatePageUpdate extends UpdatePage {
     const form = event.target as HTMLFormElement;
 
     await api.post(form.dataset.routeToSubmit!);
+  };
+
+  #enableExitConfirmation = () => {
+    window.addEventListener('beforeunload', this.#handleBeforeUnload);
+  };
+
+  #disableExitConfirmation = () => {
+    window.removeEventListener('beforeunload', this.#handleBeforeUnload);
+  };
+
+  #handleBeforeUnload = (event: Event) => {
+    event.preventDefault();
+
+    // Included for legacy support, e.g. Chrome/Edge < 119
+    event.returnValue = true;
   };
 }
