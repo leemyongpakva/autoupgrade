@@ -111,15 +111,15 @@ export default class UpdatePageUpdate extends UpdatePage {
     await api.post(form.dataset.routeToSubmit!);
   };
 
-  #enableExitConfirmation = () => {
+  #enableExitConfirmation = (): void => {
     window.addEventListener('beforeunload', this.#handleBeforeUnload);
   };
 
-  #disableExitConfirmation = () => {
+  #disableExitConfirmation = (): void => {
     window.removeEventListener('beforeunload', this.#handleBeforeUnload);
   };
 
-  #handleBeforeUnload = (event: Event) => {
+  #handleBeforeUnload = (event: Event): void => {
     event.preventDefault();
 
     // Included for legacy support, e.g. Chrome/Edge < 119
