@@ -176,6 +176,8 @@ export const Default = {
     ],
     downloadLogsButtonUrl: "#",
     downloadLogsButtonLabel: "Download update logs",
+    downloadLogsRoute: "/",
+    download_logs_parent_id: "download_logs"
   },
 };
 
@@ -325,5 +327,7 @@ export const RestoreLogsViewer = {
     ],
     downloadLogsButtonUrl: "#",
     downloadLogsButtonLabel: "Download restore logs",
+    downloadLogsRoute: "/",
+    download_logs_parent_id: "download_logs"
   },
 };

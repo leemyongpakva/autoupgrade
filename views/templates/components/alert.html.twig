@@ -2,7 +2,7 @@
   <div
     class="
       alert
-      alert-{% if alertStatus %}{{ alertStatus }}{% else %}info{% endif %}
+      alert-{% if alertStatus is defined and alertStatus is not empty %}{{ alertStatus }}{% else %}info{% endif %}
       {% if hidden is defined and hidden == true %}hidden{% endif %}
     "
     {% if id is defined %}id="{{ id }}"{% endif %}
@@ -17,27 +17,27 @@
       {% endif %}
     </div>
 
-    {% if buttonLabel %}
-      <{{ formRoute ? 'form' : 'div' }}
+    {% if buttonLabel is defined and buttonLabel is not empty %}
+      <{{ formRoute is defined and formRoute ? 'form' : 'div' }}
         class="alert__action"
-        {% if formRoute is defined %}
+        {% if formRoute is defined and formRoute is not empty %}
           data-route-to-submit="{{ formRoute }}"
           action=""
         {% endif %}
-        {% if formName %}
+        {% if formName is defined and formName is not empty %}
           id="{{ formName }}"
           name="{{ formName }}"
         {% endif %}
       >
-        <{{ formRoute ? 'button' : 'a' }}
-        class="alert__link btn btn-{% if alertStatus %}{{ alertStatus }}{% else %}info{% endif %}"
-        {% if buttonUrl %}href="{{ buttonUrl }}"{% endif %}
-        {% if buttonDownload %}download="{{ buttonDownload }}"{% endif %}
-        {% if formRoute %}type="submit"{% endif %}
+        <{{ formRoute is defined and formRoute is not empty ? 'button' : 'a' }}
+        class="alert__link btn btn-{% if alertStatus is defined and alertStatus is not empty %}{{ alertStatus }}{% else %}info{% endif %}"
+        {% if buttonUrl is defined and buttonUrl is not empty %}href="{{ buttonUrl }}"{% endif %}
+        {% if buttonDownload is defined and buttonDownload is not empty %}download="{{ buttonDownload }}"{% endif %}
+        {% if formRoute is defined and formRoute is not empty %}type="submit"{% endif %}
         >
           {{ buttonLabel }}
-        </{{ formRoute ? 'button' : 'a' }}>
-      </{{ formRoute ? 'form' : 'div' }}>
+        </{{ formRoute is defined and formRoute is not empty ? 'button' : 'a' }}>
+      </{{ formRoute is defined and formRoute is not empty ? 'form' : 'div' }}>
     {% endif %}
   </div>
 {% endif %}

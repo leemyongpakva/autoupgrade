@@ -45,6 +45,7 @@ export const Default = {
     alertStatus: "success",
     buttonLabel: "Download backup logs",
     buttonUrl: "#",
+    buttonDownload: "backup.log",
   },
 };
 
@@ -53,8 +54,6 @@ export const NoLocalArchive = {
     title: "",
     message: "It’s available at admin/autoupgrade/backup. You're ready to start the update now.",
     alertStatus: "success",
-    buttonLabel: "",
-    buttonUrl: "",
   },
 };
 

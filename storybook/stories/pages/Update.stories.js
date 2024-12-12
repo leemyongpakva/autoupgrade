@@ -47,6 +47,12 @@ export const Update = {
     downloadLogsButtonLabel: "",
     step_parent_id: "ua_container",
     stepper_parent_id: "stepper_content",
+    backup_available: true,
+    restore_route: "restore-page-backup-selection",
+    success_route: "update-step-post-update",
+    download_logs_route: "update-step-update-download-logs",
+    submit_error_report_route: "update-step-update-submit-error-report",
+    data_transparency_link: "https://www.prestashop-project.org/data-transparency",
     // Logs
     ...LogsProgress.args,
     ...LogsViewer.args,
