@@ -87,8 +87,7 @@ class UpdatePageBackupController extends AbstractPageWithStepController
                 'download_logs_route' => Routes::DOWNLOAD_LOGS,
                 'download_logs_type' => TaskType::TASK_TYPE_BACKUP,
                 'retry_route' => Routes::UPDATE_PAGE_BACKUP_OPTIONS,
-                // TODO: Move in a common controller
-                'submit_error_report_route' => Routes::UPDATE_STEP_UPDATE_SUBMIT_ERROR_REPORT,
+                'submit_error_report_route' => Routes::DISPLAY_ERROR_REPORT_MODAL,
                 'initial_process_action' => TaskName::TASK_BACKUP_INITIALIZATION,
                 'download_logs_parent_id' => PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
             ]

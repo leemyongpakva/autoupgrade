@@ -25,16 +25,16 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-namespace PrestaShop\Module\AutoUpgrade\Traits;
+namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\DocumentationLinks;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-trait DisplayErrorReportDialogTrait
+class ErrorReportController extends AbstractGlobalController
 {
-    public function submitErrorReport(): JsonResponse
+    public function displayErrorReportModal(): JsonResponse
     {
         return AjaxResponseBuilder::hydrationResponse(
             PageSelectors::DIALOG_PARENT_ID,
