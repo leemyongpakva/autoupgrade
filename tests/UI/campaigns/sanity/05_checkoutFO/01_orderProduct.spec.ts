@@ -1,6 +1,4 @@
 import {
-  // Import utils
-  utilsTest,
   // Import FO pages
   foClassicHomePage,
   foClassicLoginPage,

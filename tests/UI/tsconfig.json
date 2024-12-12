@@ -20,5 +20,5 @@
     "noEmit": true
   },
   "include": ["types/global.d.ts", "campaigns/**/*"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "playwright.config.ts"]
 }
