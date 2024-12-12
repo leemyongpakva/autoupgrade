@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<checksum_list>
+	<ps_root_dir version="8.1.0">
+		<dir name="admin">
+			<md5file name=".htaccess">f9801a6607a14db3eebab2da3a649716</md5file>
+			<md5file name="init.php">dc55d3ee8cd557eacc4e191643207698</md5file>
+		</dir>
+		<dir name="app">
+			<md5file name="AppKernel.php">37d3976fc4877231fa652567e4e02cd4</md5file>
+		</dir>
+		<dir name="install">
+			<md5file name="setup.php">b0175575517b2a31c3ee8cd55c5b50</md5file>
+		</dir>
+		<dir name="themes">
+			<dir name="classic">
+				<dir name="config">
+					<md5file name="theme.yml">b0175575517b2a31ccdc9d0784ec5b50</md5file>
+				</dir>
+			</dir>
+		</dir>
+		<dir name="translations">
+			<dir name="default">
+				<md5file name="AdminActions.xlf">ab259a1e9a4517fe5085897fe659eec9</md5file>
+			</dir>
+		</dir>
+		<md5file name="LICENSES">784dcbb3afa380d571da3664821f45bd</md5file>
+	</ps_root_dir>
+</checksum_list>

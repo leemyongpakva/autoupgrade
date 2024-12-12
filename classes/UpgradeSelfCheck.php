@@ -118,7 +118,8 @@ class UpgradeSelfCheck
     // Warnings const
     const MODULE_VERSION_IS_OUT_OF_DATE = 17;
     const PHP_COMPATIBILITY_UNKNOWN = 18;
-    const TEMPERED_FILES_LIST_NOT_EMPTY = 19;
+    const CORE_TEMPERED_FILES_LIST_NOT_EMPTY = 19;
+    const THEME_TEMPERED_FILES_LIST_NOT_EMPTY = 20;
 
     public function __construct(
         Upgrader $upgrader,
@@ -186,7 +187,8 @@ class UpgradeSelfCheck
     {
         $warnings = [
             self::MODULE_VERSION_IS_OUT_OF_DATE => !$this->isModuleVersionLatest(),
-            self::TEMPERED_FILES_LIST_NOT_EMPTY => !empty($this->getTamperedFiles()),
+            self::CORE_TEMPERED_FILES_LIST_NOT_EMPTY => !empty($this->getCoreAlteredFiles()) || !empty($this->getCoreMissingFiles()),
+            self::THEME_TEMPERED_FILES_LIST_NOT_EMPTY => !empty($this->getThemeAlteredFiles()) || !empty($this->getThemeMissingFiles()),
         ];
 
         if ($this->upgradeConfiguration->isChannelLocal()) {
@@ -363,10 +365,36 @@ class UpgradeSelfCheck
                     ),
                 ];
 
-            case self::TEMPERED_FILES_LIST_NOT_EMPTY:
+            case self::CORE_TEMPERED_FILES_LIST_NOT_EMPTY:
+                if ($isWebVersion) {
+                    // TODO the link must be integrated when implementing the modal in the web part
+                    $params = [
+                        '[1]' => '<a class="" href="" target="">',
+                        '[/1]' => '</a>',
+                    ];
+                    $message = $this->translator->trans('Some core files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of alterations.[/1]', $params);
+                } else {
+                    $message = $this->translator->trans('Some core files have been altered or removed. Any changes made to these files may be overwritten during the update.');
+                }
+
                 return [
-                    'message' => $this->translator->trans('Some core files have been altered, customization made on these files will be lost during the update: '),
-                    'list' => $this->getTamperedFiles(),
+                    'message' => $message,
+                ];
+
+            case self::THEME_TEMPERED_FILES_LIST_NOT_EMPTY:
+                if ($isWebVersion) {
+                    // TODO the link must be integrated when implementing the modal in the web part
+                    $params = [
+                        '[1]' => '<a class="" href="" target="">',
+                        '[/1]' => '</a>',
+                    ];
+                    $message = $this->translator->trans('Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of alterations.[/1]', $params);
+                } else {
+                    $message = $this->translator->trans('Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update.');
+                }
+
+                return [
+                    'message' => $message,
                 ];
 
             default:
@@ -379,11 +407,41 @@ class UpgradeSelfCheck
     /**
      * @return string[]
      */
-    public function getTamperedFiles(): array
+    public function getCoreMissingFiles(): array
     {
-        $tamperedFiles = $this->checksumCompare->getTamperedFilesOnShop($this->state->getCurrentVersion());
+        $missingFiles = $this->checksumCompare->getTamperedFilesOnShop($this->state->getCurrentVersion());
 
-        return array_merge($tamperedFiles['core'], $tamperedFiles['mail']);
+        return array_merge($missingFiles['core']['missing'], $missingFiles['mail']['missing']);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getCoreAlteredFiles(): array
+    {
+        $alteredFiles = $this->checksumCompare->getTamperedFilesOnShop($this->state->getCurrentVersion());
+
+        return array_merge($alteredFiles['core']['altered'], $alteredFiles['mail']['altered']);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getThemeMissingFiles(): array
+    {
+        $missingFiles = $this->checksumCompare->getTamperedFilesOnShop($this->state->getCurrentVersion());
+
+        return $missingFiles['themes']['missing'];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getThemeAlteredFiles(): array
+    {
+        $alteredFiles = $this->checksumCompare->getTamperedFilesOnShop($this->state->getCurrentVersion());
+
+        return $alteredFiles['themes']['altered'];
     }
 
     public function isFOpenOrCurlEnabled(): bool

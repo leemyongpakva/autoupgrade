@@ -157,10 +157,44 @@ class CheckRequirementsCommand extends AbstractCommand
         foreach ($this->upgradeSelfCheck->getWarnings() as $warning => $value) {
             $wording = $this->upgradeSelfCheck->getRequirementWording($warning);
             $this->writeWarning($wording['message']);
-            if (isset($wording['list'])) {
-                foreach ($wording['list'] as $item) {
-                    $this->output->writeln('    ' . $item);
-                }
+
+            switch ($warning) {
+                case UpgradeSelfCheck::CORE_TEMPERED_FILES_LIST_NOT_EMPTY:
+                    $missingFiles = $this->upgradeSelfCheck->getCoreMissingFiles();
+
+                    $this->output->writeln("\t" . count($missingFiles) . ' files are missing:');
+                    foreach ($missingFiles as $missingFile) {
+                        $this->output->writeln("\t\t" . $missingFile);
+                    }
+
+                    $alteredFiles = $this->upgradeSelfCheck->getCoreAlteredFiles();
+
+                    $this->output->writeln("\t" . count($alteredFiles) . ' files are altered:');
+                    foreach ($alteredFiles as $alteredFile) {
+                        $this->output->writeln("\t\t" . $alteredFile);
+                    }
+                    break;
+                case UpgradeSelfCheck::THEME_TEMPERED_FILES_LIST_NOT_EMPTY:
+                    $missingFiles = $this->upgradeSelfCheck->getThemeMissingFiles();
+
+                    $this->output->writeln("\t" . count($missingFiles) . ' files are missing:');
+                    foreach ($missingFiles as $missingFile) {
+                        $this->output->writeln("\t\t" . $missingFile);
+                    }
+
+                    $alteredFiles = $this->upgradeSelfCheck->getThemeAlteredFiles();
+
+                    $this->output->writeln("\t" . count($alteredFiles) . ' files are altered:');
+                    foreach ($alteredFiles as $alteredFile) {
+                        $this->output->writeln("\t\t" . $alteredFile);
+                    }
+                    break;
+                default:
+                    if (isset($wording['list'])) {
+                        foreach ($wording['list'] as $item) {
+                            $this->output->writeln("\t" . $item);
+                        }
+                    }
             }
         }
     }

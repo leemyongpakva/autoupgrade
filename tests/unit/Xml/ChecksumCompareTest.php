@@ -25,9 +25,19 @@
  */
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
+use PrestaShop\Module\AutoUpgrade\UpgradeTools\FilesystemAdapter;
+use PrestaShop\Module\AutoUpgrade\Xml\ChecksumCompare;
+use PrestaShop\Module\AutoUpgrade\Xml\FileLoader;
 
 class ChecksumCompareTest extends TestCase
 {
+    public function setUp()
+    {
+        if (PHP_VERSION_ID >= 80000) {
+            $this->markTestSkipped('An issue with this version of PHPUnit and PHP 8+ prevents this test to run.');
+        }
+    }
+
     public function testCompareReleases()
     {
         // Simplest test
@@ -68,5 +78,34 @@ class ChecksumCompareTest extends TestCase
             ],
         ];
         $this->assertEquals($expected, $actual);
+    }
+
+    public function testGetTamperedFilesOnShop()
+    {
+        $fileSystemAdapter = $this->getMockBuilder(FilesystemAdapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $fileLoader = $this->getMockBuilder(FileLoader::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getXmlMd5File'])
+            ->getMock();
+
+        $xmlFile = @simplexml_load_file(__DIR__ . '/../../fixtures/checksum-compare/8.1.0.xml');
+
+        $fileLoader->method('getXmlMd5File')
+            ->willReturn($xmlFile);
+
+        $checksumCompare = new ChecksumCompare($fileLoader, $fileSystemAdapter, __DIR__ . '/../../fixtures/checksum-compare/8.1.0', __DIR__ . '/../../fixtures/checksum-compare/8.1.0/adminTest');
+        $tamperedFiles = $checksumCompare->getTamperedFilesOnShop('8.1.0');
+
+        $expected = [
+            'mail' => ['missing' => [], 'altered' => []],
+            'translation' => ['missing' => [], 'altered' => ['translations/default/AdminActions.xlf']],
+            'core' => ['missing' => ['admin/init.php'], 'altered' => ['admin/.htaccess']],
+            'themes' => ['missing' => [], 'altered' => ['themes/classic/config/theme.yml']],
+        ];
+
+        $this->assertEquals($expected, $tamperedFiles);
     }
 }

@@ -40,20 +40,47 @@ class ChecksumCompare
      * @var FilesystemAdapter
      */
     private $filesystemAdapter;
-
     /**
-     * @var array{'mail':string[],'translation':string[],'core':string[]}|false
+     * @var string
      */
-    private $changed_files = [
-        'mail' => [],
-        'translation' => [],
-        'core' => [],
+    private $prodPath;
+    /**
+     * @var string
+     */
+    private $adminPath;
+    /**
+     * @var array{
+     *             'mail':array{'missing':string[],'altered':string[]},
+     *             'translation':array{'missing':string[],'altered':string[]},
+     *             'core':array{'missing':string[],'altered':string[]},
+     *             'themes':array{'missing':string[],'altered':string[]}
+     *             }|false
+     */
+    private $fileDifferences = [
+        'mail' => [
+            'missing' => [],
+            'altered' => [],
+        ],
+        'translation' => [
+            'missing' => [],
+            'altered' => [],
+        ],
+        'core' => [
+            'missing' => [],
+            'altered' => [],
+        ],
+        'themes' => [
+            'missing' => [],
+            'altered' => [],
+        ],
     ];
 
-    public function __construct(FileLoader $fileLoader, FilesystemAdapter $filesystemAdapter)
+    public function __construct(FileLoader $fileLoader, FilesystemAdapter $filesystemAdapter, string $prodPath, string $adminPath)
     {
         $this->fileLoader = $fileLoader;
         $this->filesystemAdapter = $filesystemAdapter;
+        $this->prodPath = $prodPath;
+        $this->adminPath = $adminPath;
     }
 
     /**
@@ -80,20 +107,25 @@ class ChecksumCompare
      * returns an array of files which are present in PrestaShop version $version and has been modified
      * in the current filesystem.
      *
-     * @return array{'mail':string[],'translation':string[],'core':string[]}|false
+     * @return array{
+     *                'mail':array{'missing':string[],'altered':string[]},
+     *                'translation':array{'missing':string[],'altered':string[]},
+     *                'core':array{'missing':string[],'altered':string[]},
+     *                'themes':array{'missing':string[],'altered':string[]}
+     *                }|false
      */
     public function getTamperedFilesOnShop(string $version)
     {
-        if (is_array($this->changed_files) && count($this->changed_files['core']) == 0) {
+        if (is_array($this->fileDifferences) && count($this->fileDifferences['core']['altered']) == 0) {
             $checksum = $this->fileLoader->getXmlMd5File($version);
             if (!$checksum) {
-                $this->changed_files = false;
+                $this->fileDifferences = false;
             } else {
                 $this->browseXmlAndCompare($checksum->ps_root_dir[0]);
             }
         }
 
-        return $this->changed_files;
+        return $this->fileDifferences;
     }
 
     public function isAuthenticPrestashopVersion(string $version): bool
@@ -113,7 +145,7 @@ class ChecksumCompare
      *
      * @return array{'modified': string[], "deleted": string[]}
      *
-     *@internal Made public for tests
+     * @internal Made public for tests
      */
     public function compareReleases(array $v1, array $v2, bool $show_modif = true, string $path = '/'): array
     {
@@ -155,29 +187,32 @@ class ChecksumCompare
     protected function browseXmlAndCompare(SimpleXMLElement $node, array &$current_path = [], int $level = 1): void
     {
         foreach ($node as $child) {
-            if (is_object($child) && $child->getName() == 'dir') {
-                $current_path[$level] = (string) $child['name'];
+            if (is_object($child) && $child->getName() === 'dir') {
+                $directoryName = (string) $child['name'];
+                if ($level === 1 && $directoryName === 'install') {
+                    continue;
+                }
+                $current_path[$level] = $directoryName;
                 $this->browseXmlAndCompare($child, $current_path, $level + 1);
-            } elseif (is_object($child) && $child->getName() == 'md5file') {
+            } elseif (is_object($child) && $child->getName() === 'md5file') {
                 // We will store only relative path.
                 // absolute path is only used for file_exists and compare
                 $relative_path = '';
                 for ($i = 1; $i < $level; ++$i) {
                     $relative_path .= $current_path[$i] . '/';
                 }
-                $relative_path .= (string) $child['name'];
+                $relative_path .= $child['name'];
 
-                // TODO: Drop use of constants and use args instead
-                $fullPath = _PS_ROOT_DIR_ . DIRECTORY_SEPARATOR . $relative_path;
-                $fullPath = str_replace('ps_root_dir', _PS_ROOT_DIR_, $fullPath);
+                $fullPath = $this->prodPath . DIRECTORY_SEPARATOR . $relative_path;
+                $fullPath = str_replace('ps_root_dir', $this->prodPath, $fullPath);
 
                 // replace default admin dir by current one
-                $fullPath = str_replace(_PS_ROOT_DIR_ . '/admin', _PS_ADMIN_DIR_, $fullPath);
-                $fullPath = str_replace(_PS_ROOT_DIR_ . DIRECTORY_SEPARATOR . 'admin', _PS_ADMIN_DIR_, $fullPath);
-                if (!file_exists($fullPath)) {
-                    // Not stored in a list as we do nothing with it.
+                $fullPath = str_replace($this->prodPath . DIRECTORY_SEPARATOR . 'admin', $this->adminPath, $fullPath);
+
+                if (!file_exists($fullPath) && !str_contains($fullPath, 'install' . DIRECTORY_SEPARATOR)) {
+                    $this->addFileDifferences($relative_path, true);
                 } elseif (!$this->compareChecksum($fullPath, (string) $child) && substr(str_replace(DIRECTORY_SEPARATOR, '-', $relative_path), 0, 7) != 'modules') {
-                    $this->addChangedFile($relative_path);
+                    $this->addFileDifferences($relative_path);
                 }
                 // else, file is original (and ok)
             }
@@ -208,22 +243,35 @@ class ChecksumCompare
         return $array;
     }
 
-    /** populate $this->changed_files with $path
-     * in sub arrays  mail, translation and core items.
+    /** populate $this->$this->file_differences with $path
+     * in sub arrays  mail, themes, translation and core items.
      *
      * @param string $path filepath to add, relative to _PS_ROOT_DIR_
      */
-    protected function addChangedFile(string $path): void
+    protected function addFileDifferences(string $path, bool $isDeletedFile = false): void
     {
-        if (strpos($path, 'mails/') !== false) {
-            $this->changed_files['mail'][] = $path;
-        } elseif (strpos($path, '/en.php') !== false || strpos($path, '/fr.php') !== false
-            || strpos($path, '/es.php') !== false || strpos($path, '/it.php') !== false
-            || strpos($path, '/de.php') !== false || strpos($path, 'translations/') !== false) {
-            $this->changed_files['translation'][] = $path;
-        } else {
-            $this->changed_files['core'][] = $path;
+        $key = $isDeletedFile ? 'missing' : 'altered';
+
+        $categories = [
+            'mail' => ['mails/'],
+            'translation' => [
+                '/en.php', '/fr.php', '/es.php', '/it.php', '/de.php',
+                'translations/',
+            ],
+            'themes' => ['themes/'],
+        ];
+
+        foreach ($categories as $category => $patterns) {
+            foreach ($patterns as $pattern) {
+                if (strpos($path, $pattern) !== false) {
+                    $this->fileDifferences[$category][$key][] = $path;
+
+                    return;
+                }
+            }
         }
+
+        $this->fileDifferences['core'][$key][] = $path;
     }
 
     protected function compareChecksum(string $filepath, string $md5sum): bool

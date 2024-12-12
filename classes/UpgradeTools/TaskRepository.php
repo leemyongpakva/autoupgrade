@@ -32,7 +32,6 @@ use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupComplete;
 use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupDatabase;
 use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupFiles;
 use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupInitialization;
-use PrestaShop\Module\AutoUpgrade\Task\Miscellaneous\CheckFilesVersion;
 use PrestaShop\Module\AutoUpgrade\Task\Miscellaneous\CompareReleases;
 use PrestaShop\Module\AutoUpgrade\Task\Miscellaneous\UpdateConfig;
 use PrestaShop\Module\AutoUpgrade\Task\NullTask;
@@ -58,8 +57,6 @@ class TaskRepository
     {
         switch ($step) {
             // MISCELLANEOUS (upgrade configuration, checks etc.)
-            case TaskName::TASK_CHECK_FILES_VERSION:
-                return new CheckFilesVersion($container);
             case TaskName::TASK_COMPARE_RELEASES:
                 return new CompareReleases($container);
             case TaskName::TASK_UPDATE_CONFIG:
