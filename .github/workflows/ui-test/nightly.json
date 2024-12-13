@@ -1,7 +1,16 @@
 {
   "include": [
     {
-      "comment": "1.7.1.0 ~ 1.7.1.2 -> 1.7.8.11 PHP 7.1"
+      "comment": "1.7.0.6 -> 1.7.8.11 PHP 7.1 online"
+    },
+    {
+      "PS_VERSION_START": "1.7.0.6",
+      "PS_VERSION_END": "1.7.8.11",
+      "PHP_VERSION": "7.1",
+      "UPGRADE_CHANNEL": "online"
+    },
+    {
+      "comment": "1.7.1.0 ~ 1.7.1.2 -> 1.7.8.11 PHP 7.1 online"
     },
     {
       "PS_VERSION_START": "1.7.1.0",
@@ -61,7 +70,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "1.7.3.0 ~ 1.7.3.4 -> 1.7.8.11 PHP 7.1"
+      "comment": "1.7.3.0 ~ 1.7.3.4 -> 1.7.8.11 PHP 7.1 online"
     },
     {
       "PS_VERSION_START": "1.7.3.0",
@@ -94,7 +103,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "1.7.4.0 ~ 1.7.4.4 -> 1.7.8.11 PHP 7.1"
+      "comment": "1.7.4.0 ~ 1.7.4.4 -> 1.7.8.11 PHP 7.1 online"
     },
     {
       "comment": "https://github.com/PrestaShop/docker/issues/399",
@@ -129,7 +138,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "1.7.5.0 ~ 1.7.5.2 -> 1.7.8.11 PHP 7.1"
+      "comment": "1.7.5.0 ~ 1.7.5.2 -> 1.7.8.11 PHP 7.1 online"
     },
     {
       "PS_VERSION_START": "1.7.5.0",
@@ -150,7 +159,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "1.7.5.0 ~ 1.7.5.2 -> 8.2.0 PHP 7.2"
+      "comment": "1.7.5.0 ~ 1.7.5.2 -> 8.2.0 PHP 7.2 online"
     },
     {
       "PS_VERSION_START": "1.7.5.0",
@@ -171,7 +180,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "1.7.6.0 ~ 1.7.6.9 -> 1.7.8.11 PHP 7.1"
+      "comment": "1.7.6.0 ~ 1.7.6.9 -> 1.7.8.11 PHP 7.1 online"
     },
     {
       "PS_VERSION_START": "1.7.6.0",
@@ -234,7 +243,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "1.7.6.0 ~ 1.7.6.9 -> 8.2.0 PHP 7.2"
+      "comment": "1.7.6.0 ~ 1.7.6.9 -> 8.2.0 PHP 7.2 online"
     },
     {
       "PS_VERSION_START": "1.7.6.0",
@@ -297,7 +306,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "1.7.7.0 ~ 1.7.7.8 -> 1.7.8.11 PHP 7.1"
+      "comment": "1.7.7.0 ~ 1.7.7.8 -> 1.7.8.11 PHP 7.1 online"
     },
     {
       "PS_VERSION_START": "1.7.7.0",
@@ -354,7 +363,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "1.7.7.0 ~ 1.7.7.8 -> 8.2.0 PHP 7.2 ~ 7.3"
+      "comment": "1.7.7.0 ~ 1.7.7.8 -> 8.2.0 PHP 7.2 ~ 7.3 online"
     },
     {
       "PS_VERSION_START": "1.7.7.0",
@@ -465,7 +474,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "1.7.8.0 ~ 1.7.8.10 -> 1.7.8.11 PHP 7.1"
+      "comment": "1.7.8.0 ~ 1.7.8.10 -> 1.7.8.11 PHP 7.1 online"
     },
     {
       "PS_VERSION_START": "1.7.8.0",
@@ -534,7 +543,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "1.7.8.0 ~ 1.7.8.11 -> 8.2.0 PHP 7.2 ~ 7.4"
+      "comment": "1.7.8.0 ~ 1.7.8.11 -> 8.2.0 PHP 7.2 ~ 7.4 online"
     },
     {
       "PS_VERSION_START": "1.7.8.0",
@@ -753,7 +762,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "8.0.0 ~ 8.0.5 -> 8.2.0 PHP 7.2 ~ 8.1"
+      "comment": "8.0.0 ~ 8.0.5 -> 8.2.0 PHP 7.2 ~ 8.1 online"
     },
     {
       "PS_VERSION_START": "8.0.0",
@@ -936,7 +945,7 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "8.1.0 ~ 8.1.7 -> 8.2.0 PHP 7.2 ~ 8.1"
+      "comment": "8.1.0 ~ 8.1.7 -> 8.2.0 PHP 7.2 ~ 8.1 online"
     },
     {
       "PS_VERSION_START": "8.1.0",
@@ -1179,103 +1188,103 @@
       "UPGRADE_CHANNEL": "online"
     },
     {
-      "comment": "8.0.0 ~ 8.0.5 -> 9.0.0 PHP 8.1"
+      "comment": "8.0.0 ~ 8.0.5 -> 9.0.0 PHP 8.1 local"
     },
     {
       "PS_VERSION_START": "8.0.0",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.0.1",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.0.2",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.0.3",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.0.4",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.0.5",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
-      "comment": "8.1.0 ~ 8.1.7 -> 9.0.0 PHP 8.1"
+      "comment": "8.1.0 ~ 8.1.7 -> 9.0.0 PHP 8.1 local"
     },
     {
       "PS_VERSION_START": "8.1.0",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.1.1",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.1.2",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.1.3",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.1.4",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.1.5",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.1.6",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
       "PS_VERSION_START": "8.1.7",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
+      "UPGRADE_CHANNEL": "local"
     },
     {
-      "comment": "8.2.0 -> 9.0.0 PHP 8.1"
+      "comment": "8.2.0 -> 9.0.0 PHP 8.1 local"
     },
     {
       "PS_VERSION_START": "8.2.0",
       "PS_VERSION_END": "9.0.0",
       "PHP_VERSION": "8.1",
-      "UPGRADE_CHANNEL":  "local"
-    }    
+      "UPGRADE_CHANNEL": "local"
+    }
   ]
 }
