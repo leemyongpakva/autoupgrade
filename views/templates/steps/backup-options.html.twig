@@ -17,7 +17,7 @@
     {% if backup_completed %}
       <div class="check-requirements check-requirements--success">
         {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
-          title: 'Backup completed',
+          title: 'Backup completed'|trans({}),
           message: 'It is available at /your-admin-directory/autoupgrade/backup. You\'re ready to start the update now.'|trans({}),
           alertStatus: 'success',
           buttonLabel: 'Download backup logs'|trans({}),

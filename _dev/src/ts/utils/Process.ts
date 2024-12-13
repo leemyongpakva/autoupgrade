@@ -3,7 +3,7 @@ import { ApiResponseAction } from '../types/apiTypes';
 import { ProgressTrackerCallbacks } from '../types/Process';
 
 export default class Process {
-  #callbacks: Callbacks;
+  #callbacks: ProgressTrackerCallbacks;
 
   /**
    * @constructor

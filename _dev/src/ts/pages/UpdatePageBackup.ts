@@ -17,7 +17,7 @@ export default class UpdatePageBackup extends UpdatePage {
     const initialAction = stepContent.dataset.initialProcessAction!;
 
     this.#processContainer = new ProcessContainer(initialAction, {
-      onError: this.#onError,
+      onError: this.#onError
     });
   }
 

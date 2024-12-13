@@ -10,7 +10,7 @@ export default class ProcessContainer implements DomLifecycle {
 
   constructor(
     private readonly initialAction: string,
-    private readonly callbacks: ProcessContainerCallbacks,
+    private readonly callbacks: ProcessContainerCallbacks
   ) {}
 
   public mount = async (): Promise<void> => {

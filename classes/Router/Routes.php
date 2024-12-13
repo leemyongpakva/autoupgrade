@@ -37,7 +37,6 @@ class Routes
     /* step: update */
     const UPDATE_PAGE_UPDATE = 'update-page-update';
     const UPDATE_STEP_UPDATE = 'update-step-update';
-    const DISPLAY_ERROR_REPORT_MODAL = 'update-step-update-submit-error-report';
 
     /* step: post update */
     const UPDATE_PAGE_POST_UPDATE = 'update-page-post-update';
@@ -50,4 +49,7 @@ class Routes
     /* COMMON */
     /* logs */
     const DOWNLOAD_LOGS = 'download-logs';
+
+    /* error reporting */
+    const DISPLAY_ERROR_REPORT_MODAL = 'update-step-update-submit-error-report';
 }

@@ -7,7 +7,7 @@ type ProgressTrackerCallbacks = {
 };
 
 type ProcessContainerCallbacks = {
-  onError: () => void,
+  onError: () => void;
 };
 
 export type { ProgressTrackerCallbacks, ProcessContainerCallbacks };
