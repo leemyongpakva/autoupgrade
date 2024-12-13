@@ -32,7 +32,6 @@ class Routes
 
     const UPDATE_PAGE_BACKUP = 'update-page-backup';
     const UPDATE_STEP_BACKUP = 'update-step-backup';
-    const UPDATE_PAGE_POST_BACKUP = 'update-page-post-backup';
 
     /* step: update */
     const UPDATE_PAGE_UPDATE = 'update-page-update';

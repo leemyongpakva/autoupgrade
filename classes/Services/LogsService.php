@@ -100,14 +100,13 @@ class LogsService
      */
     private function getDownloadLogsLabel(string $taskType): string
     {
-        if ($taskType === TaskType::TASK_TYPE_BACKUP) {
-            return $this->translator->trans('Download backup logs');
-        }
-        if ($taskType === TaskType::TASK_TYPE_RESTORE) {
-            return $this->translator->trans('Download restore logs');
-        }
-        if ($taskType === TaskType::TASK_TYPE_UPDATE) {
-            return $this->translator->trans('Download update logs');
+        switch ($taskType) {
+            case TaskType::TASK_TYPE_BACKUP:
+                return $this->translator->trans('Download backup logs');
+            case TaskType::TASK_TYPE_RESTORE:
+                return $this->translator->trans('Download restore logs');
+            case TaskType::TASK_TYPE_UPDATE:
+                return $this->translator->trans('Download update logs');
         }
     }
 }

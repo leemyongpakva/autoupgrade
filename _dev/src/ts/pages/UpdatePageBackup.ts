@@ -27,7 +27,7 @@ export default class UpdatePageBackup extends UpdatePage {
     this.#processContainer.mount();
   };
 
-  public beforeDestroy = () => {
+  public beforeDestroy = (): void => {
     this.#processContainer.beforeDestroy();
 
     this.#submitSkipBackupForm?.removeEventListener('submit', this.#handleSubmit);

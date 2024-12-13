@@ -27,13 +27,11 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
-use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UpdatePageBackupController extends AbstractPageWithStepController
 {
@@ -63,13 +61,6 @@ class UpdatePageBackupController extends AbstractPageWithStepController
         return Routes::UPDATE_PAGE_BACKUP;
     }
 
-    public function saveBackupIsCompleted(): JsonResponse
-    {
-        $this->upgradeContainer->getState()->setBackupCompleted(true);
-
-        return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_BACKUP_OPTIONS);
-    }
-
     /**
      * @return array<string, mixed>
      *
@@ -82,7 +73,7 @@ class UpdatePageBackupController extends AbstractPageWithStepController
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),
             [
-                'success_route' => Routes::UPDATE_PAGE_POST_BACKUP,
+                'success_route' => Routes::UPDATE_STEP_BACKUP_OPTIONS,
                 'submit_skip_backup_route' => Routes::UPDATE_STEP_BACKUP_SUBMIT_UPDATE,
                 'download_logs_route' => Routes::DOWNLOAD_LOGS,
                 'download_logs_type' => TaskType::TASK_TYPE_BACKUP,
