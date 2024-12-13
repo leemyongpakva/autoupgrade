@@ -34,7 +34,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractPageWithStepController extends AbstractPageController
 {
-    public function step()
+    public function step(): Response
     {
         if (!$this->request->isXmlHttpRequest()) {
             return new Response('Unexpected call to a step route outside an ajax call.', 404);

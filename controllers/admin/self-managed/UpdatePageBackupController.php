@@ -109,7 +109,7 @@ class UpdatePageBackupController extends AbstractPageWithStepController
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws \Exception
      */
@@ -136,6 +136,9 @@ class UpdatePageBackupController extends AbstractPageWithStepController
         );
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     private function getRefreshOfForm(array $params): JsonResponse
     {
         return AjaxResponseBuilder::hydrationResponse(
@@ -148,6 +151,9 @@ class UpdatePageBackupController extends AbstractPageWithStepController
         );
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     private function displayDialog(string $dialogName, array $params): JsonResponse
     {
         $options = $dialogName === 'dialog-update' ? ['addScript' => 'start-update-dialog'] : null;
