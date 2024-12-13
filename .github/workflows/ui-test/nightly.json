@@ -1,6 +1,27 @@
 {
   "include": [
     {
+      "comment": "1.7.1.0 ~ 1.7.1.2 -> 1.7.8.11 PHP 7.1"
+    },
+    {
+      "PS_VERSION_START": "1.7.1.0",
+      "PS_VERSION_END": "1.7.8.11",
+      "PHP_VERSION": "7.1",
+      "UPGRADE_CHANNEL": "online"
+    },
+    {
+      "PS_VERSION_START": "1.7.1.1",
+      "PS_VERSION_END": "1.7.8.11",
+      "PHP_VERSION": "7.1",
+      "UPGRADE_CHANNEL": "online"
+    },
+    {
+      "PS_VERSION_START": "1.7.1.2",
+      "PS_VERSION_END": "1.7.8.11",
+      "PHP_VERSION": "7.1",
+      "UPGRADE_CHANNEL": "online"
+    },
+    {
       "comment": "1.7.2.0 ~ 1.7.2.5 -> 1.7.8.11 PHP 7.1 online"
     },
     {
