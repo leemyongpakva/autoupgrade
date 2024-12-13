@@ -1,6 +1,6 @@
 import type { Listener } from '../types/Store';
 
-export default abstract class StoreAbastract<T> {
+export default abstract class StoreAbstract<T> {
   private listeners: Listener<T>[] = [];
 
   subscribe(listener: Listener<T>): () => void {

@@ -6,6 +6,8 @@ import {
   SuccessSeverity,
   WarningSeverity
 } from '../types/logsTypes';
+import type { Procedure } from '../types/logsUtilsTypes';
+import type { Log } from '../types/logsTypes';
 
 /**
  * @public
@@ -46,8 +48,13 @@ export function parseLogWithSeverity(log: string): LogEntry {
   return { severity: Severity.ERROR, message: log };
 }
 
-type Procedure = (...args: unknown[]) => void;
-
+/**
+ * @public
+ * @param {T} func
+ * @param {number} wait
+ * @return {(...args: Parameters<T>) => void}
+ * @description
+ */
 export function debounce<T extends Procedure>(
   func: T,
   wait: number
@@ -63,4 +70,13 @@ export function debounce<T extends Procedure>(
       func(...args);
     }, wait);
   };
+}
+
+/**
+ * @public
+ * @param logs
+ * @description
+ */
+export function formatLogsMessages(logs: Log[]): string {
+  return logs.map((log) => log.message).join('\n');
 }

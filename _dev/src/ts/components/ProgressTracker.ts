@@ -3,7 +3,7 @@ import ProgressBar from './ProgressBar';
 import LogsSummary from './LogsSummary';
 import LogsViewer from './LogsViewer';
 import { ApiResponseAction } from '../types/apiTypes';
-import DomLifecycle, { Destroyable } from '../types/DomLifecycle';
+import DomLifecycle from '../types/DomLifecycle';
 
 export default class ProgressTracker extends ComponentAbstract implements DomLifecycle {
   #logsSummary: LogsSummary | null = new LogsSummary(this.#logsSummaryContainer);
@@ -73,7 +73,6 @@ export default class ProgressTracker extends ComponentAbstract implements DomLif
     this.#progressBar?.beforeDestroy();
     this.#progressBar = null;
 
-    // Todo: we need to retrieve the download link
-    // this.#logsViewer.displaySummary();
+    this.#logsViewer.displaySummary();
   };
 }

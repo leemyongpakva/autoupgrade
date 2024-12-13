@@ -1,7 +1,7 @@
 import { Log, Severity } from '../types/logsTypes';
-import StoreAbastract from './StoreAbstract';
+import StoreAbstract from './StoreAbstract';
 
-class LogStore extends StoreAbastract<Log[]> {
+class LogStore extends StoreAbstract<Log[]> {
   #logs: Log[] = [];
 
   addLog(log: Log): void {
@@ -11,6 +11,14 @@ class LogStore extends StoreAbastract<Log[]> {
 
   getLogs(): Log[] {
     return this.#logs;
+  }
+
+  getLog(index: number): Log {
+    return this.#logs[index];
+  }
+
+  getLogsLength(): number {
+    return this.#logs.length;
   }
 
   getWarnings(): Log[] {

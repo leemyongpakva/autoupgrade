@@ -2,6 +2,7 @@ import DomLifecycle from '../types/DomLifecycle';
 import { sendUserFeedback } from '../api/sentryApi';
 import { Feedback, FeedbackFields, Logs } from '../types/sentryApi';
 import { logStore } from '../store/LogStore';
+import { formatLogsMessages } from '../utils/logsUtils';
 
 export default class SendErrorReportDialog implements DomLifecycle {
   protected readonly formId = 'form-error-feedback';
@@ -26,29 +27,28 @@ export default class SendErrorReportDialog implements DomLifecycle {
   #onSubmit = (event: SubmitEvent) => {
     event.preventDefault();
 
-    const errors = logStore.getErrors();
+    const logs = this.#getLogs();
+    const feedback = this.#getFeedback(event.target as HTMLFormElement);
 
-    const logs: Logs = {
-      logs: logStore
-        .getLogs()
-        .map((log) => log.message)
-        .join('\n'),
-      warnings: logStore
-        .getWarnings()
-        .map((log) => log.message)
-        .join('\n'),
-      errors: errors.map((log) => log.message).join('\n')
-    };
-
-    const message = errors[errors.length - 1].message;
-    if (!message) {
-      throw new Error('Message to send not found');
+    const latestError = logStore.getErrors().pop()?.message;
+    if (!latestError) {
+      throw new Error('No error message found to send');
     }
 
-    const feedback: Feedback = {};
+    sendUserFeedback(latestError, logs, feedback);
+  };
 
-    const form = event.target as HTMLFormElement;
+  #getLogs(): Logs {
+    return {
+      logs: formatLogsMessages(logStore.getLogs()),
+      warnings: formatLogsMessages(logStore.getWarnings()),
+      errors: formatLogsMessages(logStore.getErrors())
+    };
+  }
+
+  #getFeedback(form: HTMLFormElement): Feedback {
     const formData = new FormData(form);
+    const feedback: Feedback = {};
 
     Object.values(FeedbackFields).forEach((field) => {
       const value = formData.get(field);
@@ -57,6 +57,6 @@ export default class SendErrorReportDialog implements DomLifecycle {
       }
     });
 
-    sendUserFeedback(message, logs, feedback);
-  };
+    return feedback;
+  }
 }
