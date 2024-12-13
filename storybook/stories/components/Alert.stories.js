@@ -35,7 +35,6 @@ export default {
       options: ["info", "success", "warning", "danger"],
     },
   },
-  includeStories: ["Default"],
 };
 
 export const Default = {
@@ -43,9 +42,30 @@ export const Default = {
     title: "Backup completed",
     message: "It’s available at admin/autoupgrade/backup. You're ready to start the update now.",
     alertStatus: "success",
+  },
+};
+
+export const AlertWithForm = {
+  args: {
+    title: "Update failed",
+    message: "Your store may not work properly anymore. Select the backup you want to use and restore it to avoid any data loss.",
+    alertStatus: "warning",
+    // Required for form
+    buttonLabel: "Restore",
+    formRoute: "/",
+    formName: "alert-form",
+  },
+};
+
+export const AlertWithLink = {
+  args: {
+    title: "Backup completed",
+    message: "It’s available at /your-admin-directory/autoupgrade/backup. You're ready to start the update now.",
+    alertStatus: "success",
+    buttonDownload: "backup.log",
+    // Required for link
     buttonLabel: "Download backup logs",
     buttonUrl: "#",
-    buttonDownload: "backup.log",
   },
 };
 

@@ -1,43 +1,24 @@
-{% if title or message %}
+{% if title is defined or message is defined %}
   <div
-    class="
-      alert
-      alert-{% if alertStatus is defined and alertStatus is not empty %}{{ alertStatus }}{% else %}info{% endif %}
-      {% if hidden is defined and hidden == true %}hidden{% endif %}
-    "
-    {% if id is defined %}id="{{ id }}"{% endif %}
+    class="alert alert-{% if alertStatus is defined and alertStatus is not empty %}{{ alertStatus }}{% else %}info{% endif %} {% if hidden is defined and hidden %}hidden{% endif %}"
+    {% if id is defined and id is not empty %}id="{{ id }}"{% endif %}
   >
     <div class="alert__infos">
-      {% if title %}
+      {% if title is defined and title is not empty %}
         <p class="alert__title">{{ title }}</p>
       {% endif %}
 
-      {% if message %}
+      {% if message is defined and message is not empty %}
         <p class="alert__message">{{ message|raw }}</p>
       {% endif %}
     </div>
 
     {% if buttonLabel is defined and buttonLabel is not empty %}
-      <{{ formRoute is defined and formRoute ? 'form' : 'div' }}
-        class="alert__action"
-        {% if formRoute is defined and formRoute is not empty %}
-          data-route-to-submit="{{ formRoute }}"
-          action=""
-        {% endif %}
-        {% if formName is defined and formName is not empty %}
-          id="{{ formName }}"
-          name="{{ formName }}"
-        {% endif %}
-      >
-        <{{ formRoute is defined and formRoute is not empty ? 'button' : 'a' }}
-        class="alert__link btn btn-{% if alertStatus is defined and alertStatus is not empty %}{{ alertStatus }}{% else %}info{% endif %}"
-        {% if buttonUrl is defined and buttonUrl is not empty %}href="{{ buttonUrl }}"{% endif %}
-        {% if buttonDownload is defined and buttonDownload is not empty %}download="{{ buttonDownload }}"{% endif %}
-        {% if formRoute is defined and formRoute is not empty %}type="submit"{% endif %}
-        >
-          {{ buttonLabel }}
-        </{{ formRoute is defined and formRoute is not empty ? 'button' : 'a' }}>
-      </{{ formRoute is defined and formRoute is not empty ? 'form' : 'div' }}>
+      {% if formRoute is defined and formRoute is not empty %}
+        {% include '@ModuleAutoUpgrade/components/alert-action-form.html.twig' %}
+      {% else %}
+        {% include '@ModuleAutoUpgrade/components/alert-action-link.html.twig' %}
+      {% endif %}
     {% endif %}
   </div>
 {% endif %}

@@ -1,0 +1,9 @@
+<div class="alert__action">
+  <a
+    class="alert__link btn btn-{% if alertStatus is defined and alertStatus is not empty %}{{ alertStatus }}{% else %}info{% endif %}"
+    href="{{ buttonUrl }}"
+    {% if buttonDownload is defined and buttonDownload is not empty %}download="{{ buttonDownload }}"{% endif %}
+  >
+    {{ buttonLabel }}
+  </a>
+</div>

@@ -68,11 +68,9 @@
       {% if errors['global'] %}
         <div class="local-archive__alert">
           {% include "@ModuleAutoUpgrade/components/alert.html.twig" with {
-            title: "",
+            title: '',
             message: errors['global'],
-            alertStatus: "warning",
-            buttonLabel: "",
-            buttonUrl: "",
+            alertStatus: 'warning',
           } %}
         </div>
       {% endif %}
@@ -83,7 +81,5 @@
     title: '',
     message: 'No archive found in the following directory: /your-admin-directory/autoupgrade/download/'|trans({}),
     alertStatus: 'warning',
-    buttonLabel: '',
-    buttonUrl: '',
   } %}
 {% endif %}
