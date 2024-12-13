@@ -67,7 +67,7 @@ export default class ProcessContainer implements DomLifecycle {
     this.callbacks.onError();
   };
 
-  #displayErrorAlert = () => {
+  #displayErrorAlert = (): void => {
     const alertContainer = document.getElementById('error-alert');
 
     if (!alertContainer) {
@@ -77,7 +77,7 @@ export default class ProcessContainer implements DomLifecycle {
     alertContainer.classList.remove('hidden');
   };
 
-  #displayErrorButtons = () => {
+  #displayErrorButtons = (): void => {
     const buttonsContainer = document.getElementById('error-buttons');
 
     if (!buttonsContainer) {

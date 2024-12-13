@@ -3,10 +3,10 @@ import { dialogContainer } from '../autoUpgrade';
 import DialogContainer from '../components/DialogContainer';
 import UpdatePage from './UpdatePage';
 
-export default class UpdatePageBackup extends UpdatePage {
+export default class UpdatePageBackupOptions extends UpdatePage {
   protected stepCode = 'backup';
 
-  public mount() {
+  public mount(): void {
     this.initStepper();
     this.#form.addEventListener('submit', this.#onFormSubmit);
     this.#form.addEventListener('change', this.#onInputChange);
@@ -40,13 +40,13 @@ export default class UpdatePageBackup extends UpdatePage {
     return form;
   }
 
-  readonly #onClick = async (ev: Event) => {
+  readonly #onClick = async (ev: Event): Promise<void> => {
     if ((ev.target as HTMLElement).id === 'update-backup-page-skip-btn') {
       await api.post(this.#form.dataset.routeToSubmitUpdate!);
     }
   };
 
-  readonly #onDialogOk = async (ev: Event) => {
+  readonly #onDialogOk = async (ev: Event): Promise<void> => {
     // We handle the backup confirmation dialog as it is really basic
     if ((ev.target as HTMLElement).id === 'dialog-confirm-backup') {
       api.post(this.#form.dataset.routeToConfirmBackup!);
@@ -54,7 +54,7 @@ export default class UpdatePageBackup extends UpdatePage {
     // The update confirmation dialog gets its logic in a dedicated script
   };
 
-  readonly #onInputChange = async (ev: Event) => {
+  readonly #onInputChange = async (ev: Event): Promise<void> => {
     const optionInput = ev.target as HTMLInputElement;
 
     const data = new FormData(this.#form);
@@ -63,7 +63,7 @@ export default class UpdatePageBackup extends UpdatePage {
     optionInput.removeAttribute('disabled');
   };
 
-  readonly #onFormSubmit = async (event: Event) => {
+  readonly #onFormSubmit = async (event: Event): Promise<void> => {
     event.preventDefault();
 
     await api.post(this.#form.dataset.routeToSubmitBackup!, new FormData(this.#form));

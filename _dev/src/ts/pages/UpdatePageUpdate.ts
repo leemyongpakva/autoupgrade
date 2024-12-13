@@ -20,7 +20,7 @@ export default class UpdatePageUpdate extends UpdatePage {
     });
   }
 
-  public mount = async () => {
+  public mount = (): void => {
     this.initStepper();
 
     this.#processContainer.mount();

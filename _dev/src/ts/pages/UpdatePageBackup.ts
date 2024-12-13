@@ -50,7 +50,7 @@ export default class UpdatePageBackup extends UpdatePage {
     this.#submitRetryForm?.addEventListener('submit', this.#handleSubmit);
   };
 
-  #handleSubmit = async (event: SubmitEvent) => {
+  #handleSubmit = async (event: SubmitEvent): Promise<void> => {
     event.preventDefault();
 
     const form = event.target as HTMLFormElement;
