@@ -1,9 +1,13 @@
 import { ApiResponseAction } from './apiTypes';
 
-type Callbacks = {
+type ProgressTrackerCallbacks = {
   onProcessResponse: (response: ApiResponseAction) => void | Promise<void>;
   onProcessEnd: (response: ApiResponseAction) => void | Promise<void>;
   onError: (response: ApiResponseAction) => void | Promise<void>;
 };
 
-export type { Callbacks };
+type ProcessContainerCallbacks = {
+  onError: () => void,
+};
+
+export type { ProgressTrackerCallbacks, ProcessContainerCallbacks };

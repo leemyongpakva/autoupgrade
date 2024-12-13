@@ -1,6 +1,6 @@
 import api from '../api/RequestHandler';
 import { ApiResponseAction } from '../types/apiTypes';
-import { Callbacks } from '../types/Process';
+import { ProgressTrackerCallbacks } from '../types/Process';
 
 export default class Process {
   #callbacks: Callbacks;
@@ -12,7 +12,7 @@ export default class Process {
    * - `onError`: Triggered when an error occurs in the process.
    * - `onProcessEnd`: Triggered when the process ends successfully.
    */
-  constructor(callbacks: Callbacks) {
+  constructor(callbacks: ProgressTrackerCallbacks) {
     this.#callbacks = callbacks;
   }
 
