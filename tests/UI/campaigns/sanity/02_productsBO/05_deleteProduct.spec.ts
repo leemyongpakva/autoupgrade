@@ -111,8 +111,6 @@ test.describe('BO - Catalog - Products : Delete product', async () => {
     });
 
     test('should search for the created product', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'searchProduct', baseContext);
-
       await boProductsPage.filterProducts(page, 'product_name', newProductData.name, 'input');
 
       const textColumn = await boProductsPage.getTextColumn(page, 'product_name', 1);
@@ -130,8 +128,6 @@ test.describe('BO - Catalog - Products : Delete product', async () => {
     });
 
     test('should reset filter', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'resetFilter', baseContext);
-
       const numberOfProductsAfterReset = await boProductsPage.resetAndGetNumberOfLines(page);
       expect(numberOfProductsAfterReset).toEqual(numberOfProducts);
     });
