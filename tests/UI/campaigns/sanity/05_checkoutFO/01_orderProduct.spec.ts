@@ -1,4 +1,6 @@
 import {
+  // Import utils
+  utilsTest,
   // Import FO pages
   foClassicHomePage,
   foClassicLoginPage,
@@ -21,7 +23,6 @@ import {
 import semver from 'semver';
 
 const psVersion = utilsTest.getPSVersion();
-const baseContext: string = 'sanity_checkoutFO_orderProduct';
 
 /*
   Order a product and check order confirmation
@@ -139,9 +140,6 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   });
 
   test('should Pay by bank wire and confirm order', async () => {
-    await foClassicCheckoutPage.choosePaymentAndOrder(page, dataPaymentMethods.wirePayment.moduleName);
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'confirmOrder', baseContext);
-
     if (semver.gte(psVersion, '7.1.0')) {
       await foClassicCheckoutPage.choosePaymentAndOrder(page, dataPaymentMethods.wirePayment.moduleName);
     } else {
