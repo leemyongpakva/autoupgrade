@@ -12,34 +12,33 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
 
   // -- virtual scroll configuration --
   private static CONFIG = {
-    BUFFER_SIZE: 2, // The multiplier for the viewport height used to define the buffer zone for virtual scrolling.
-    DEBOUNCE_TIME: 200, // The delay time (in ms) for debouncing the `refreshView` method.
-    LOG_BEFORE_SCROLL: 50 // The number of logs to process before automatically scrolling to the bottom.
+    BUFFER_SIZE: 3, // The multiplier for the viewport height used to define the buffer zone for virtual scrolling.
+    DEBOUNCE_TIME: 100, // The delay time (in ms) for debouncing the `refreshView` method.
+    LOG_BEFORE_SCROLL: 70 // The number of logs to process before automatically scrolling to the bottom.
   };
 
-  get #templateLogLine() {
-    return this.queryElement<HTMLTemplateElement>('#log-line', 'Template log line not found');
-  }
+  #templateLogLine = this.queryElement<HTMLTemplateElement>(
+    '#log-line',
+    'Template log line not found'
+  );
 
-  get #logsScroll() {
-    return this.queryElement<HTMLDivElement>(
-      '[data-slot-component="scroll"]',
-      'Logs scroll not found'
-    );
-  }
+  #logsSummary = this.queryElement<HTMLDivElement>(
+    '[data-slot-component="summary"]',
+    'Logs summary not found'
+  );
+
+  #templateSummary = this.queryElement<HTMLTemplateElement>(
+    '#log-summary',
+    'Template summary not found'
+  );
+
+  #logsScroll = this.queryElement<HTMLDivElement>(
+    '[data-slot-component="scroll"]',
+    'Logs scroll not found'
+  );
 
   get #logsList() {
     return this.queryElement<HTMLDivElement>('[data-slot-component="list"]', 'Logs list not found');
-  }
-
-  get #logsSummary() {
-    return this.queryElement<HTMLDivElement>(
-      '[data-slot-component="summary"]',
-      'Logs summary not found'
-    );
-  }
-  get #templateSummary() {
-    return this.queryElement<HTMLTemplateElement>('#log-summary', 'Template summary not found');
   }
 
   public mount = () => {
@@ -54,6 +53,7 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
   };
 
   public beforeDestroy = () => {
+    logStore.clearLogs();
     this.#logsScroll.removeEventListener('scroll', this.#debouncedRefreshView);
     this.#logsSummary.removeEventListener('click', this.#handleLinkEvent);
   };
@@ -210,10 +210,9 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
     return { marginTop, marginBottom, visibleLogs };
   }
 
-  #debouncedRefreshView = () =>
-    debounce(() => {
-      this.#refreshView();
-    }, LogsViewer.CONFIG.DEBOUNCE_TIME);
+  #debouncedRefreshView = debounce(() => {
+    this.#refreshView();
+  }, LogsViewer.CONFIG.DEBOUNCE_TIME);
 
   /**
    * @public
