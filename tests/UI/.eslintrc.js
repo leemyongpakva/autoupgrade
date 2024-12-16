@@ -11,6 +11,7 @@ module.exports = {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
+  ignorePatterns: ['playwright.config.ts'],
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
