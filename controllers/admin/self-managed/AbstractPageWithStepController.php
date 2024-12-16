@@ -29,7 +29,6 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
-use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractPageWithStepController extends AbstractPageController

@@ -27,7 +27,6 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
-use InvalidArgumentException;
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
@@ -37,8 +36,9 @@ class LogsController extends AbstractGlobalController
 {
     public function getDownloadLogsButton(): JsonResponse
     {
-        $type = $this->request->request->get('download-logs-type');
-        $this->validateLogsType($type);
+        $type = TaskType::fromString(
+            $this->request->request->get('download-logs-type')
+        );
 
         return AjaxResponseBuilder::hydrationResponse(
             PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
@@ -47,15 +47,5 @@ class LogsController extends AbstractGlobalController
                 $this->upgradeContainer->getLogsService()->getDownloadLogsdData($type)
             )
         );
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    private function validateLogsType(string $type): void
-    {
-        if (!in_array($type, TaskType::ALL_TASKS)) {
-            throw new InvalidArgumentException('Unknown log type ' . $type);
-        }
     }
 }

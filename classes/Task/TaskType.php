@@ -27,6 +27,8 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Task;
 
+use InvalidArgumentException;
+
 class TaskType
 {
     const TASK_TYPE_BACKUP = 'backup';
@@ -38,4 +40,16 @@ class TaskType
         self::TASK_TYPE_UPDATE,
         self::TASK_TYPE_RESTORE,
     ];
+
+    /**
+     * @return self::TASK_TYPE_*
+     */
+    public static function fromString(string $type)
+    {
+        if (!in_array($type, TaskType::ALL_TASKS)) {
+            throw new InvalidArgumentException('Unknown log type ' . $type);
+        }
+
+        return $type;
+    }
 }
