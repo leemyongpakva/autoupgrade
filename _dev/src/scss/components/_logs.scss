@@ -52,7 +52,7 @@ $e-logs: ".logs";
 
     &__scroll-inner {
       height: 100%;
-      overflow-y: auto;
+      overflow-y: scroll;
     }
 
     &__list {
