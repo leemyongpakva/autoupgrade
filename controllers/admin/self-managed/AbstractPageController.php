@@ -29,6 +29,7 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\DocumentationLinks;
+use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -53,6 +54,9 @@ abstract class AbstractPageController extends AbstractGlobalController
         return $psClass;
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     public function renderPage(string $page, array $params): string
     {
         $pageSelectors = new PageSelectors();
@@ -71,6 +75,9 @@ abstract class AbstractPageController extends AbstractGlobalController
         );
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     public function renderPageContent(string $page, array $params): string
     {
         $pageSelectors = new PageSelectors();
@@ -121,7 +128,7 @@ abstract class AbstractPageController extends AbstractGlobalController
      * Provide another route to display in the address bar when this controller
      * is called from an ajax request.
      *
-     * @return Routes::*|void
+     * @return Routes::*|null
      */
     protected function displayRouteInUrl(): ?string
     {
@@ -129,7 +136,7 @@ abstract class AbstractPageController extends AbstractGlobalController
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      */
     abstract protected function getParams(): array;
 }

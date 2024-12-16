@@ -79,7 +79,7 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws \Exception
      */

@@ -68,7 +68,7 @@ class HomePageController extends AbstractPageController
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws \Exception
      */

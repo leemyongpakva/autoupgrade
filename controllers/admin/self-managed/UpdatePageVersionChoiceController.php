@@ -72,7 +72,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws \Exception
      */
@@ -141,6 +141,11 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
     }
 
     /**
+     * @return array{
+     *                'requirements_ok': bool,
+     *                'warnings':array<int, array{'message': string, 'list'?: array<string>}>,
+     *                'errors':array<int, array{'message': string, 'list'?: array<string>}>}}
+     *
      * @throws Exception
      */
     private function getRequirements(): array

@@ -69,10 +69,10 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
 
         if (empty($errors)) {
-            if (isset($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES])) {
-                $this->upgradeContainer->initPrestaShopCore();
-                UpgradeConfiguration::updatePSDisableOverrides($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES]);
-            }
+            // One specific option requires the Core to store the value in database.
+            $this->upgradeContainer->initPrestaShopCore();
+            UpgradeConfiguration::updatePSDisableOverrides($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES]);
+
             $upgradeConfiguration->merge($config);
             $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
         }
@@ -89,7 +89,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
     }
 
     /**
-     * @return array
+     * @return array<string, mixed>
      *
      * @throws \Exception
      */
@@ -123,6 +123,9 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         );
     }
 
+    /**
+     * @param array<string, mixed> $params
+     */
     private function getRefreshOfForm(array $params): JsonResponse
     {
         return AjaxResponseBuilder::hydrationResponse(

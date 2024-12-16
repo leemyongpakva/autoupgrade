@@ -30,6 +30,8 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Twig\Environment;
+use Twig_Environment;
 
 abstract class AbstractGlobalController
 {
@@ -45,6 +47,9 @@ abstract class AbstractGlobalController
         $this->request = $request;
     }
 
+    /**
+     * @return Twig_Environment|Environment
+     */
     protected function getTwig()
     {
         return $this->upgradeContainer->getTwig();

@@ -35,7 +35,7 @@ class AjaxResponseBuilder
         ]);
     }
 
-    public static function errorResponse(string $error, ?int $errorNumber): JsonResponse
+    public static function errorResponse(string $error, ?int $errorNumber = null): JsonResponse
     {
         return new JsonResponse([
             'error' => $error,
