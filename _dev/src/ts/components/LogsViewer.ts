@@ -1,30 +1,25 @@
 import ComponentAbstract from './ComponentAbstract';
-import { LogEntry, Log, Severity } from '../types/logsTypes';
+import { LogEntry, Log, Severity, VisibleLogs } from '../types/logsTypes';
 import { parseLogWithSeverity, debounce } from '../utils/logsUtils';
 import DomLifecycle from '../types/DomLifecycle';
 import { logStore } from '../store/LogStore';
+import api from '../api/RequestHandler';
 
 export default class LogsViewer extends ComponentAbstract implements DomLifecycle {
   #logsIndexHeight: Map<number, number> = new Map();
   #logsListHeight: number = this.#logsList.clientHeight;
+  #isSummaryDisplayed: boolean = false;
 
   // -- virtual scroll configuration --
-  readonly #bufferSize = 2; // The multiplier for the viewport height used to define the buffer zone for virtual scrolling.
-  readonly #debounceTime = 200; // The delay time (in ms) for debouncing the `refreshView` method.
-  readonly #logBeforeScroll = 50; // The number of logs to process before automatically scrolling to the bottom.
+  private static CONFIG = {
+    BUFFER_SIZE: 2, // The multiplier for the viewport height used to define the buffer zone for virtual scrolling.
+    DEBOUNCE_TIME: 200, // The delay time (in ms) for debouncing the `refreshView` method.
+    LOG_BEFORE_SCROLL: 50 // The number of logs to process before automatically scrolling to the bottom.
+  };
 
-  #templateLogLine = this.queryElement<HTMLTemplateElement>(
-    '#log-line',
-    'Template log line not found'
-  );
-  #logsSummary = this.queryElement<HTMLDivElement>(
-    '[data-slot-component="summary"]',
-    'Logs summary not found'
-  );
-  #templateSummary = this.queryElement<HTMLTemplateElement>(
-    '#log-summary',
-    'Template summary not found'
-  );
+  get #templateLogLine() {
+    return this.queryElement<HTMLTemplateElement>('#log-line', 'Template log line not found');
+  }
 
   get #logsScroll() {
     return this.queryElement<HTMLDivElement>(
@@ -35,6 +30,16 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
 
   get #logsList() {
     return this.queryElement<HTMLDivElement>('[data-slot-component="list"]', 'Logs list not found');
+  }
+
+  get #logsSummary() {
+    return this.queryElement<HTMLDivElement>(
+      '[data-slot-component="summary"]',
+      'Logs summary not found'
+    );
+  }
+  get #templateSummary() {
+    return this.queryElement<HTMLTemplateElement>('#log-summary', 'Template summary not found');
   }
 
   public mount = () => {
@@ -55,33 +60,27 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
 
   /**
    * @public
-   * @param logs
+   * @param {string[]} logs - Array of log strings to be parsed and displayed.
+   * @returns {void}
+   * @description Adds multiple logs to the logs list. Ensures each log is parsed, stored,
+   * and added to the DOM. Automatically scrolls to the bottom after a certain number of logs
+   * are added or when all logs are processed.
+   * If the logs summary is currently displayed, the method exits early with a warning
+   * (no logs can be added if the summary is shown).
    */
   public addLogs = (logs: string[]): void => {
+    if (this.#isSummaryDisplayed) {
+      console.warn('Cannot add logs because summary is displayed');
+      return;
+    }
+
     let count = 0;
 
     logs.forEach((log) => {
-      const id = logStore.getLogsLength();
-      const logEntry = parseLogWithSeverity(log);
-      const HTMLElement = this.#createLogLine(logEntry);
-      this.#logsList.appendChild(HTMLElement);
-
-      const height = HTMLElement.offsetHeight;
-      const offsetTop = HTMLElement.offsetTop;
-
-      logStore.addLog({
-        ...logEntry,
-        height,
-        offsetTop,
-        HTMLElement
-      });
-
-      this.#logsIndexHeight.set(id, offsetTop);
-      this.#logsListHeight += height;
-
+      this.#addLogToStore(log);
       count += 1;
 
-      if (count > this.#logBeforeScroll) {
+      if (count > LogsViewer.CONFIG.LOG_BEFORE_SCROLL) {
         this.#scrollToBottom();
         count = 0;
       }
@@ -90,47 +89,111 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
     this.#scrollToBottom();
   };
 
-  #createLogLine = (logEntry: LogEntry): HTMLDivElement => {
+  /**
+   * @private
+   * @param {string} log - A single log string to be parsed, stored, and added to the DOM.
+   * @returns {number} - The unique ID of the newly added log in the `logStore`.
+   * @description Parses a log string to create a structured log entry. Adds the parsed log
+   * to the `logStore`, updates the virtual scrolling infrastructure (offsets and height),
+   * and appends the corresponding DOM element to the logs container.
+   */
+  #addLogToStore(log: string): number {
+    const id = logStore.getLogsLength();
+    const logEntry = parseLogWithSeverity(log);
+    const HTMLElement = this.#createLogLine(logEntry);
+
+    this.#logsList.appendChild(HTMLElement);
+
+    const height = HTMLElement.offsetHeight;
+    const offsetTop = HTMLElement.offsetTop;
+
+    logStore.addLog({
+      ...logEntry,
+      height,
+      offsetTop,
+      HTMLElement
+    });
+
+    this.#logsIndexHeight.set(id, offsetTop);
+    this.#logsListHeight += height;
+
+    return id;
+  }
+
+  /**
+   * @private
+   * @param {LogEntry | Log} log - A structured log entry containing severity and message.
+   * @param {boolean} isSummary - Flag to indicate if it's for a summary log.
+   * @returns {HTMLDivElement} - The DOM element representing the log line.
+   * @description Generates an HTML log line (for regular logs or summary logs).
+   */
+  #createLogLine = (log: LogEntry | Log, isSummary: boolean = false): HTMLDivElement => {
     const logLineFragment = this.#templateLogLine.content.cloneNode(true) as DocumentFragment;
     const logLine = logLineFragment.querySelector('.logs__line') as HTMLDivElement;
 
-    logLine.classList.add(`logs__line--${logEntry.severity}`);
-    logLine.setAttribute('data-status', logEntry.severity);
-    logLine.textContent = logEntry.message;
+    logLine.classList.add(`logs__line--${log.severity}`);
+    logLine.setAttribute('data-status', log.severity);
+    if (isSummary && 'offsetTop' in log) {
+      const logLineContent = logLine.querySelector('.logs__line-content') as HTMLDivElement;
+      logLineContent.textContent = log.message;
+
+      const linkElement = this.#createSummaryLinkElement(log.severity);
+      const linkClone = linkElement.cloneNode(true) as HTMLAnchorElement;
+      linkClone.href = `#${String(log.offsetTop)}`;
+
+      logLine.appendChild(linkClone);
+    } else {
+      logLine.textContent = log.message;
+    }
 
     return logLine;
   };
 
-  #createSummaryLogLine = (logEntry: LogEntry): HTMLDivElement => {
-    const logLineFragment = this.#templateLogLine.content.cloneNode(true) as DocumentFragment;
-    const logLine = logLineFragment.querySelector('.logs__line') as HTMLDivElement;
-    const logLineContent = logLine.querySelector('.logs__line-content') as HTMLDivElement;
-
-    logLine.classList.add(`logs__line--${logEntry.severity}`);
-    logLine.setAttribute('data-status', logEntry.severity);
-    logLineContent.textContent = logEntry.message;
-
-    return logLine;
-  };
-
+  /**
+   * @private
+   * @description Scrolls the logs container to the bottom and triggers a visual refresh of the logs view.
+   */
   #scrollToBottom = () => {
     this.#logsScroll.scrollTop = this.#logsListHeight;
-    this.refreshView();
+    this.#refreshView();
   };
 
-  refreshView = () => {
-    const scrollTop = this.#logsScroll.scrollTop;
-    const viewportHeight = this.#logsScroll.clientHeight;
+  /**
+   * @private
+   * @description Refreshes the view using the virtual scrolling technique.
+   */
+  #refreshView = () => {
+    const { marginTop, marginBottom, visibleLogs } = this.#calculateVisibleLogs(
+      this.#logsScroll.scrollTop,
+      this.#logsScroll.clientHeight
+    );
 
-    // calc vision limit with buffer
-    const startBoundary = scrollTop - this.#bufferSize * viewportHeight;
-    const endBoundary = scrollTop + viewportHeight + this.#bufferSize * viewportHeight;
+    this.#logsList.style.marginTop = `${marginTop}px`;
+    this.#logsList.style.marginBottom = `${marginBottom}px`;
 
-    // search index of visible logs
-    const visibleLogs: Log[] = [];
+    this.#logsList.innerHTML = '';
+    visibleLogs.forEach((log) => {
+      if (log.HTMLElement) {
+        this.#logsList.appendChild(log.HTMLElement);
+      }
+    });
+  };
+
+  /**
+   * Calculates the visible margins (top and bottom) and returns visible logs.
+   * @private
+   * @param {number} scrollTop - Current scroll position (top).
+   * @param {number} viewportHeight - Current viewport height.
+   * @returns {VisibleLogs} - Margins and visible logs.
+   */
+  #calculateVisibleLogs(scrollTop: number, viewportHeight: number): VisibleLogs {
+    const startBoundary = scrollTop - LogsViewer.CONFIG.BUFFER_SIZE * viewportHeight;
+    const endBoundary = scrollTop + viewportHeight + LogsViewer.CONFIG.BUFFER_SIZE * viewportHeight;
+
     let marginTop = 0;
     let marginBottom = 0;
 
+    const visibleLogs: Log[] = [];
     for (const [id, offsetTop] of this.#logsIndexHeight.entries()) {
       const log = logStore.getLogs()[id];
       const logHeight = log.height;
@@ -144,27 +207,19 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
       }
     }
 
-    this.#logsList.style.marginTop = `${marginTop}px`;
-    this.#logsList.style.marginBottom = `${marginBottom}px`;
+    return { marginTop, marginBottom, visibleLogs };
+  }
 
-    this.#logsList.innerHTML = '';
-    visibleLogs.forEach((log) => {
-      if (log.HTMLElement) {
-        this.#logsList.appendChild(log.HTMLElement);
-      }
-    });
-  };
-
-  #debouncedRefreshView = debounce(() => {
-    this.refreshView();
-  }, this.#debounceTime);
+  #debouncedRefreshView = () =>
+    debounce(() => {
+      this.#refreshView();
+    }, LogsViewer.CONFIG.DEBOUNCE_TIME);
 
   /**
    * @public
-   * @description Displays a summary of logs, grouping warnings and errors.
-   * Summaries include links to the corresponding log lines.
-   * Adds a click event listener to handle navigation within the summary.
-   * Prevents displaying a summary if no logs are present.
+   * @description Displays a summary of logs, dividing it into warnings and errors.
+   * Creates DOM elements dynamically and adds event listeners for navigation.
+   * Prevents showing a summary if the logs list is empty.
    */
   public displaySummary = async (): Promise<void> => {
     if (logStore.getLogsLength() === 0) {
@@ -192,17 +247,17 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
 
     this.#logsSummary.appendChild(fragment);
 
-    // await api.post(this.element.dataset.downloadLogsRoute!);
-    //
-    // this.#appendFragmentElement(fragment, this.#logsSummary);
-    // this.#isSummaryDisplayed = true;
+    await api.post(this.element.dataset.downloadLogsRoute!);
+
+    this.#logsSummary.appendChild(fragment);
+    this.#isSummaryDisplayed = true;
   };
 
   /**
    * @private
-   * @param {Severity} severity - The severity type (e.g., warning, error).
-   * @param {Log[]} logs - Array of logs to include in the summary.
-   * @returns {HTMLDivElement} - The created summary element.
+   * @param {Severity} severity - The severity of logs to summarize (e.g., warning, error).
+   * @param {Log[]} logs - An array of structured logs for the given severity.
+   * @returns {HTMLDivElement} - The summary HTML element for the grouped logs.
    * @description Creates a summary element grouping logs by severity.
    * Each log in the summary includes a link to its corresponding log line.
    */
@@ -221,15 +276,8 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
     const countContainer = summary.querySelector('[data-slot-template="count"]') as HTMLDivElement;
     countContainer.textContent = String(logs.length);
 
-    const linkElement = this.#createSummaryLinkElement(severity);
-
     logs.forEach((log) => {
-      const logElement = this.#createSummaryLogLine(log);
-      const linkClone = linkElement.cloneNode(true) as HTMLAnchorElement;
-      linkClone.href = `#${String(log.offsetTop)}`;
-
-      logElement.appendChild(linkClone);
-
+      const logElement = this.#createLogLine(log, true);
       summaryScroll.appendChild(logElement);
     });
 
@@ -286,9 +334,9 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
     event.preventDefault();
 
     const offsetTopToScroll = target.hash.substring(1);
-    const logKey = [...this.#logsIndexHeight.entries()].find(
-      ([key, value]) => value === Number(offsetTopToScroll)
-    )?.[0];
+    const logKey = [...this.#logsIndexHeight.keys()].find(
+      (key) => this.#logsIndexHeight.get(key) === Number(offsetTopToScroll)
+    );
 
     if (logKey === undefined) {
       return;
