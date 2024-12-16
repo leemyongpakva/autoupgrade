@@ -1,5 +1,7 @@
 {% extends "@ModuleAutoUpgrade/components/dialog.html.twig" %}
+
 {% set title = 'Start backup?'|trans({}) %}
+{% set dialogSize = 'sm' %}
 {% set message = 'Your files and database will be backed up.'|trans({}) %}
 
 {% block dialog_content %}

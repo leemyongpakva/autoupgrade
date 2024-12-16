@@ -24,7 +24,6 @@
  */
 
 import DialogBackup from "../../../views/templates/dialogs/dialog-backup-all.html.twig";
-import { Default as Dialog } from "./Dialog.stories";
 
 export default {
   title: "Components/Dialog",
@@ -32,8 +31,8 @@ export default {
 };
 
 export const BackupWithImg = {
-  args: {
-    ...Dialog.args,
-    dialogSize: "md",
+  play: async () => {
+    const dialog = document.querySelector('.dialog');
+    dialog.showModal();
   },
 };

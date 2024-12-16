@@ -1,0 +1,13 @@
+<form
+  class="alert__action"
+  data-route-to-submit="{{ formRoute }}"
+  id="{{ formName }}"
+  name="{{ formName }}"
+>
+  <button
+    class="alert__link btn btn-{% if alertStatus is defined and alertStatus is not empty %}{{ alertStatus }}{% else %}info{% endif %}"
+    type="submit"
+  >
+    {{ buttonLabel }}
+  </button>
+</form>

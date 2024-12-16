@@ -41,8 +41,6 @@ trait DisplayErrorReportDialogTrait
             $this->getTwig()->render(
                 '@ModuleAutoUpgrade/dialogs/dialog-error-report.html.twig',
                 [
-                    'dialogSize' => 'sm',
-                    'title' => $this->upgradeContainer->getTranslator()->trans('Send error report?'),
                     'data_transparency_link' => DocumentationLinks::PRESTASHOP_PROJECT_DATA_TRANSPARENCY_URL,
                 ]
             ),

@@ -42,6 +42,7 @@ export const Restore = {
       title: "Restore",
     },
     step_parent_id: "ua_container",
+    data_transparency_link: "https://www.prestashop-project.org/data-transparency",
     // Logs
     ...LogsProgress.args,
     ...LogsViewer.args,

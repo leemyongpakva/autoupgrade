@@ -28,6 +28,9 @@ import Privacy from "../../../views/templates/components/privacy.html.twig";
 export default {
   component: Privacy,
   title: "Components/Privacy",
+  args: {
+    data_transparency_link: "https://www.prestashop-project.org/data-transparency",
+  },
 };
 
 export const Default = {};

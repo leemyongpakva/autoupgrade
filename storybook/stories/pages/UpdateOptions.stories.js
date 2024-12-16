@@ -55,14 +55,12 @@ export const UpdateOptions = {
     },
     step_parent_id: "ua_container",
     stepper_parent_id: "stepper_content",
-
     form_route_to_save: "update-step-update-options-save-option",
     form_route_to_submit: "update-step-update-options-submit-form",
-
     error: {
       'PS_AUTOUP_REGEN_EMAIL': 'Example of an error that occured when switching the value!',
     },
-
+    data_transparency_link: "https://www.prestashop-project.org/data-transparency",
     // Stepper
     ...Stepper.args,
   },

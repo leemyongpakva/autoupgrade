@@ -1,5 +1,9 @@
 {% extends "@ModuleAutoUpgrade/components/dialog.html.twig" %}
 
+{% set dialogId = 'errorDialog' %}
+{% set title = 'Send error report?'|trans({}) %}
+{% set dialogSize = 'sm' %}
+
 {% block dialog_content %}
   <div class="dialog__error-report-content">
     <p>

@@ -28,6 +28,12 @@ import LogsProgress from "../../../views/templates/components/logs-summary.html.
 export default {
   component: LogsProgress,
   title: "Components/Logs progress",
+  play: async ({ args }) => {
+    const textSlots = document.querySelectorAll("[data-slot-component='text']");
+    textSlots.forEach((slot) => {
+      slot.textContent = args.progressStatus;
+    });
+  }
 };
 
 export const Default = {

@@ -36,5 +36,6 @@ export const Default = {
   args: {
     ...Stepper.args,
     step_parent_id: "ua_container",
+    data_transparency_link: "https://www.prestashop-project.org/data-transparency",
   },
 };

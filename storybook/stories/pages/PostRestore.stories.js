@@ -46,6 +46,7 @@ export const PostRestore = {
     currentPhpVersion: "8.1",
     backlog_link: "https://myshop.com/my-backlog.txt",
     step_parent_id: "ua_container",
+    data_transparency_link: "https://www.prestashop-project.org/data-transparency",
     // Stepper
     ...Stepper.args,
   },

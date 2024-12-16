@@ -24,7 +24,6 @@
  */
 
 import DialogErrorReport from "../../../views/templates/dialogs/dialog-error-report.html.twig";
-import { Default as Dialog } from "./Dialog.stories";
 
 export default {
   title: "Components/Dialog",
@@ -33,11 +32,10 @@ export default {
 
 export const ErrorReport = {
   args: {
-    ...Dialog.args,
-    dialogId: "errorDialog",
-    title: "Send error report?",
-    message: "",
-    dialogSize: "md",
-    dataPrivacyLink: "#"
+    data_transparency_link: "https://www.prestashop-project.org/data-transparency",
+  },
+  play: async () => {
+    const dialog = document.querySelector('.dialog');
+    dialog.showModal();
   },
 };

@@ -39,18 +39,20 @@ export const Backup = {
       code: "backup",
       title: "Backup",
     },
-
     form_fields: {
       include_images: {
           field: 'PS_AUTOUP_KEEP_IMAGES',
           value: true,
       },
     },
-    
-    form_route_to_save: "update-step-update-options-save-option",
-    form_route_to_submit: "update-step-update-options-submit-form",
-
+    form_route_to_save: "update-step-backup-save-option",
+    form_route_to_submit: "update-step-backup-submit-backup",
+    form_route_to_confirm_update: "update-step-backup-confirm-update",
+    form_route_to_confirm_backup: "update-step-backup-confirm-backup",
+    form_route_to_submit_update: "update-step-backup-submit-update",
+    form_route_to_submit_backup: "update-step-update-options-submit-form",
     step_parent_id: "ua_container",
+    data_transparency_link: "https://www.prestashop-project.org/data-transparency",
     // Stepper
     ...Stepper.args,
   },
