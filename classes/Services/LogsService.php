@@ -55,7 +55,7 @@ class LogsService
      *
      * @return array{'button_label': string, 'download_path': string, 'filename': string}
      */
-    public function getDownloadLogsdData(string $task): array
+    public function getDownloadLogsData(string $task): array
     {
         $logsPath = $this->getDownloadLogsPath($task);
 

@@ -44,7 +44,7 @@ class LogsController extends AbstractGlobalController
             PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
             $this->getTwig()->render(
                 '@ModuleAutoUpgrade/components/download_logs.html.twig',
-                $this->upgradeContainer->getLogsService()->getDownloadLogsdData($type)
+                $this->upgradeContainer->getLogsService()->getDownloadLogsData($type)
             )
         );
     }
