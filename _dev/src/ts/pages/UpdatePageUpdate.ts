@@ -34,7 +34,6 @@ export default class UpdatePageUpdate extends UpdatePage {
   };
 
   public beforeDestroy = () => {
-    logStore.clearLogs();
     this.#progressTracker.beforeDestroy();
 
     this.#restoreAlertForm?.removeEventListener('submit', this.#handleSubmit);
