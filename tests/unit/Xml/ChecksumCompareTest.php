@@ -100,10 +100,10 @@ class ChecksumCompareTest extends TestCase
         $tamperedFiles = $checksumCompare->getTamperedFilesOnShop('8.1.0');
 
         $expected = [
-            'mail' => ['missing' => [], 'altered' => []],
-            'translation' => ['missing' => [], 'altered' => ['translations/default/AdminActions.xlf']],
-            'core' => ['missing' => ['admin/init.php'], 'altered' => ['admin/.htaccess']],
-            'themes' => ['missing' => [], 'altered' => ['themes/classic/config/theme.yml']],
+            ChecksumCompare::CATEGORY_MAIL => [ChecksumCompare::FILE_MISSING => [], ChecksumCompare::FILE_ALTERED => []],
+            ChecksumCompare::CATEGORY_TRANSLATION => [ChecksumCompare::FILE_MISSING => [], ChecksumCompare::FILE_ALTERED => ['translations/default/AdminActions.xlf']],
+            ChecksumCompare::CATEGORY_CORE => [ChecksumCompare::FILE_MISSING => ['admin/init.php'], ChecksumCompare::FILE_ALTERED => ['admin/.htaccess']],
+            ChecksumCompare::CATEGORY_THEME => [ChecksumCompare::FILE_MISSING => [], ChecksumCompare::FILE_ALTERED => ['themes/classic/config/theme.yml']],
         ];
 
         $this->assertEquals($expected, $tamperedFiles);
