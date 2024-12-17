@@ -228,6 +228,21 @@ class UpgradeContainer
     private $prestashopVersionService;
 
     /**
+     * @var UpgradeSelfCheck
+     */
+    private $upgradeSelfCheck;
+
+    /**
+     * @var PhpVersionResolverService
+     */
+    private $phpVersionResolverService;
+
+    /**
+     * @var DistributionApiService
+     */
+    private $distributionApiService;
+
+    /**
      * AdminSelfUpgrade::$autoupgradePath
      * Ex.: /var/www/html/PrestaShop/admin-dev/autoupgrade.
      *
@@ -685,33 +700,60 @@ class UpgradeContainer
         return new UpgradeConfigurationStorage($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR);
     }
 
+    public function getDistributionApiService(): DistributionApiService
+    {
+        if (null !== $this->distributionApiService) {
+            return $this->distributionApiService;
+        }
+
+        $this->distributionApiService = new DistributionApiService();
+
+        return $this->distributionApiService;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getPhpVersionResolverService(): PhpVersionResolverService
+    {
+        if (null !== $this->phpVersionResolverService) {
+            return $this->phpVersionResolverService;
+        }
+
+        $this->phpVersionResolverService = new PhpVersionResolverService(
+            $this->getDistributionApiService(),
+            $this->getFileLoader(),
+            $this->getState()->getCurrentVersion()
+        );
+
+        return $this->phpVersionResolverService;
+    }
+
     /**
      * @throws Exception
      */
     public function getUpgradeSelfCheck(): UpgradeSelfCheck
     {
+        if (null !== $this->upgradeSelfCheck) {
+            return $this->upgradeSelfCheck;
+        }
+
         $this->initPrestaShopCore();
-        $state = $this->getState();
 
-        $distributionApiService = new DistributionApiService();
-        $phpVersionResolverService = new PhpVersionResolverService(
-            $distributionApiService,
-            $this->getFileLoader(),
-            $state->getCurrentVersion()
-        );
-
-        return new UpgradeSelfCheck(
+        $this->upgradeSelfCheck = new UpgradeSelfCheck(
             $this->getUpgrader(),
-            $state,
+            $this->getState(),
             $this->getUpgradeConfiguration(),
             $this->getPrestaShopConfiguration(),
             $this->getTranslator(),
-            $phpVersionResolverService,
+            $this->getPhpVersionResolverService(),
             $this->getChecksumCompare(),
             _PS_ROOT_DIR_,
             _PS_ADMIN_DIR_,
             $this->getProperty(UpgradeContainer::WORKSPACE_PATH)
         );
+
+        return $this->upgradeSelfCheck;
     }
 
     /**
