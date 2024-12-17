@@ -33,13 +33,10 @@ use PrestaShop\Module\AutoUpgrade\DocumentationLinks;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
-use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
-use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
-use PrestaShop\Module\AutoUpgrade\UpgradeSelfCheck;
 use PrestaShop\Module\AutoUpgrade\VersionUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -245,7 +242,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
                 'title' => $this->upgradeContainer->getTranslator()->trans('List of core alterations'),
                 'description' => $this->upgradeContainer->getTranslator()->trans('Some core files have been altered, customization made on these files will be lost during the update.'),
                 'missing_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getCoreMissingFiles(),
-                'altered_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getCoreAlteredFiles()
+                'altered_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getCoreAlteredFiles(),
             ])
         );
     }
@@ -258,7 +255,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
                 'title' => $this->upgradeContainer->getTranslator()->trans('List of theme alterations'),
                 'description' => $this->upgradeContainer->getTranslator()->trans('Some theme files have been altered, customization made on these files will be lost during the update.'),
                 'missing_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getThemeMissingFiles(),
-                'altered_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getThemeAlteredFiles()
+                'altered_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getThemeAlteredFiles(),
             ])
         );
     }
@@ -266,7 +263,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
     /**
      * @param array<string,string|string[]> $params
      */
-    private function getTemperedFilesDialog($params)
+    private function getTemperedFilesDialog($params): string
     {
         return $this->getTwig()->render(
             '@ModuleAutoUpgrade/dialogs/dialog-tempered-files.html.twig',
