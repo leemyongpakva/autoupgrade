@@ -12,9 +12,9 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
 
   // -- virtual scroll configuration --
   private static CONFIG = {
-    BUFFER_SIZE: 3, // The multiplier for the viewport height used to define the buffer zone for virtual scrolling.
-    DEBOUNCE_TIME: 100, // The delay time (in ms) for debouncing the `refreshView` method.
-    LOG_BEFORE_SCROLL: 70 // The number of logs to process before automatically scrolling to the bottom.
+    BUFFER_SIZE: 6, // The multiplier for the viewport height used to define the buffer zone for virtual scrolling.
+    DEBOUNCE_TIME: 50, // The delay time (in ms) for debouncing the `refreshView` method.
+    LOG_BEFORE_SCROLL: 120 // The number of logs to process before automatically scrolling to the bottom.
   };
 
   #templateLogLine = this.queryElement<HTMLTemplateElement>(
@@ -250,6 +250,8 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
 
     this.#logsSummary.appendChild(fragment);
     this.#isSummaryDisplayed = true;
+
+    this.#scrollToBottom();
   };
 
   /**
