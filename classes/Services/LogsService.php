@@ -28,7 +28,7 @@
 namespace PrestaShop\Module\AutoUpgrade\Services;
 
 use Exception;
-use PrestaShop\Module\AutoUpgrade\State;
+use PrestaShop\Module\AutoUpgrade\State\LogsState;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
@@ -43,7 +43,7 @@ class LogsService
     /** @var string */
     private $logsPath;
 
-    public function __construct(State $state, Translator $translator, string $logsPath)
+    public function __construct(LogsState $state, Translator $translator, string $logsPath)
     {
         $this->state = $state;
         $this->translator = $translator;
@@ -73,13 +73,23 @@ class LogsService
      */
     public function getLogsPath(string $task): ?string
     {
-        $logPath = null;
-        if (is_writable($this->logsPath)) {
-            $fileName = $this->state->getProcessTimestamp() . '-' . $task . '.txt';
-            $logPath = $this->logsPath . DIRECTORY_SEPARATOR . $fileName;
+        switch ($task) {
+            case TaskType::TASK_TYPE_BACKUP:
+                $fileName = $this->state->getActiveBackupLogFile();
+                break;
+            case TaskType::TASK_TYPE_RESTORE:
+                $fileName = $this->state->getActiveRestoreLogFile();
+                break;
+            case TaskType::TASK_TYPE_UPDATE:
+                $fileName = $this->state->getActiveUpdateLogFile();
+                break;
         }
 
-        return $logPath;
+        if (!$fileName) {
+            return null;
+        }
+
+        return $this->logsPath . DIRECTORY_SEPARATOR . $fileName;
     }
 
     /**

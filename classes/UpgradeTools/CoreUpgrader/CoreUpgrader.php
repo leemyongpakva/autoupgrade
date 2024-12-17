@@ -97,7 +97,7 @@ abstract class CoreUpgrader
         $this->container = $container;
         $this->logger = $logger;
         $this->filesystem = new Filesystem();
-        $this->destinationUpgradeVersion = $this->container->getState()->getDestinationVersion();
+        $this->destinationUpgradeVersion = $this->container->getUpdateState()->getDestinationVersion();
         $this->pathToInstallFolder = realpath($this->container->getProperty(UpgradeContainer::LATEST_PATH) . DIRECTORY_SEPARATOR . 'install');
         $this->pathToUpgradeScripts = dirname(__DIR__, 3) . '/upgrade/';
         if (file_exists($this->pathToInstallFolder . DIRECTORY_SEPARATOR . 'autoload.php')) {
@@ -146,7 +146,7 @@ abstract class CoreUpgrader
 
         $this->runCoreCacheClean();
 
-        if ($this->container->getState()->getWarningExists()) {
+        if ($this->container->getUpdateState()->getWarningExists()) {
             $this->logger->warning($this->container->getTranslator()->trans('Warning detected during upgrade.'));
         } else {
             $this->logger->info($this->container->getTranslator()->trans('Database upgrade completed'));
@@ -466,19 +466,19 @@ abstract class CoreUpgrader
     private function logPhpError(string $upgrade_file, string $query, string $message): void
     {
         $this->logger->error('PHP ' . $upgrade_file . ' ' . $query . ": \n" . $message);
-        $this->container->getState()->setWarningExists(true);
+        $this->container->getUpdateState()->setWarningExists(true);
     }
 
     private function logMissingFileError(string $path, string $func_name, string $query): void
     {
         $this->logger->error($path . strtolower($func_name) . ' PHP - missing file ' . $query);
-        $this->container->getState()->setWarningExists(true);
+        $this->container->getUpdateState()->setWarningExists(true);
     }
 
     private function logForbiddenObjectMethodError(string $phpString, string $upgrade_file): void
     {
         $this->logger->error($upgrade_file . ' PHP - Object Method call is forbidden (' . $phpString . ')');
-        $this->container->getState()->setWarningExists(true);
+        $this->container->getUpdateState()->setWarningExists(true);
     }
 
     protected function runSqlQuery(string $upgrade_file, string $query): void
@@ -509,7 +509,7 @@ abstract class CoreUpgrader
         $duplicates = ['1050', '1054', '1060', '1061', '1062', '1091'];
         if (!in_array($error_number, $duplicates)) {
             $this->logger->error('SQL ' . $upgrade_file . ' ' . $error_number . ' in ' . $query . ': ' . $error);
-            $this->container->getState()->setWarningExists(true);
+            $this->container->getUpdateState()->setWarningExists(true);
         }
     }
 
@@ -821,7 +821,7 @@ abstract class CoreUpgrader
                     $e->getMessage()
                 );
 
-                $this->container->getState()->setWarningExists(true);
+                $this->container->getUpdateState()->setWarningExists(true);
             }
         }
     }

@@ -35,6 +35,7 @@ use PrestaShop\Module\AutoUpgrade\Exceptions\DistributionApiException;
 use PrestaShop\Module\AutoUpgrade\Exceptions\UpgradeException;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
+use PrestaShop\Module\AutoUpgrade\State\UpdateState;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 use PrestaShop\Module\AutoUpgrade\Xml\ChecksumCompare;
 use Shop;
@@ -65,7 +66,7 @@ class UpgradeSelfCheck
     private $maxExecutionTime;
     /** @var Upgrader */
     private $upgrader;
-    /** @var State */
+    /** @var UpdateState */
     private $state;
     /**
      * Path to the root folder of PS
@@ -123,7 +124,7 @@ class UpgradeSelfCheck
 
     public function __construct(
         Upgrader $upgrader,
-        State $state,
+        UpdateState $state,
         UpgradeConfiguration $upgradeConfiguration,
         PrestashopConfiguration $prestashopConfiguration,
         Translator $translator,

@@ -49,14 +49,14 @@ class Restore extends AbstractTask
      */
     public function run(): int
     {
-        $this->container->getState()->setProgressPercentage(
+        $this->container->getRestoreState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );
 
         // 1st, need to analyse what was wrong.
-        $restoreName = $this->container->getState()->getRestoreName();
-        $this->container->getState()->setRestoreFilesFilename($restoreName);
-        $restoreDbFilenames = $this->container->getState()->getRestoreDbFilenames();
+        $restoreName = $this->container->getRestoreState()->getRestoreName();
+        $this->container->getRestoreState()->setRestoreFilesFilename($restoreName);
+        $restoreDbFilenames = $this->container->getRestoreState()->getRestoreDbFilenames();
 
         if (empty($restoreName)) {
             $this->next = TaskName::TASK_RESTORE_EMPTY;
@@ -68,14 +68,14 @@ class Restore extends AbstractTask
         // find backup filenames, and be sure they exists
         foreach ($files as $file) {
             if (preg_match('#' . preg_quote(BackupFinder::BACKUP_ZIP_NAME_PREFIX . $restoreName) . '#', $file)) {
-                $this->container->getState()->setRestoreFilesFilename($file);
+                $this->container->getRestoreState()->setRestoreFilesFilename($file);
                 break;
             }
         }
-        if (!is_file($this->container->getProperty(UpgradeContainer::BACKUP_PATH) . DIRECTORY_SEPARATOR . $this->container->getState()->getRestoreFilesFilename())) {
+        if (!is_file($this->container->getProperty(UpgradeContainer::BACKUP_PATH) . DIRECTORY_SEPARATOR . $this->container->getRestoreState()->getRestoreFilesFilename())) {
             $this->next = TaskName::TASK_ERROR;
             $this->setErrorFlag();
-            $this->logger->error($this->translator->trans('File %s is missing: unable to restore files. Operation aborted.', [$this->container->getState()->getRestoreFilesFilename()]));
+            $this->logger->error($this->translator->trans('File %s is missing: unable to restore files. Operation aborted.', [$this->container->getRestoreState()->getRestoreFilesFilename()]));
 
             return ExitCode::FAIL;
         }
@@ -88,7 +88,7 @@ class Restore extends AbstractTask
 
         // order files is important !
         sort($restoreDbFilenames);
-        $this->container->getState()->setRestoreDbFilenames($restoreDbFilenames);
+        $this->container->getRestoreState()->setRestoreDbFilenames($restoreDbFilenames);
         if (count($restoreDbFilenames) == 0) {
             $this->next = TaskName::TASK_ERROR;
             $this->setErrorFlag();

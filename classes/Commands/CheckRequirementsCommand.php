@@ -86,11 +86,10 @@ class CheckRequirementsCommand extends AbstractCommand
                 return $exitCode;
             }
             $this->logger->debug('Configuration loaded successfully.');
-            $moduleConfigPath = _PS_ADMIN_DIR_ . DIRECTORY_SEPARATOR . self::MODULE_CONFIG_DIR;
 
             $this->upgradeContainer->initPrestaShopAutoloader();
             $this->upgradeContainer->initPrestaShopCore();
-            $this->upgradeContainer->getState()->initDefault($this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION), $this->upgradeContainer->getUpgrader()->getDestinationVersion());
+            $this->upgradeContainer->getUpdateState()->initDefault($this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION), $this->upgradeContainer->getUpgrader()->getDestinationVersion());
 
             $output->writeln('Result of prerequisite checks:');
             $this->exitCode = ExitCode::SUCCESS;

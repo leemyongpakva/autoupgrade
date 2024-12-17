@@ -28,8 +28,8 @@
 namespace PrestaShop\Module\AutoUpgrade;
 
 use Exception;
-use PrestaShop\Module\AutoUpgrade\RestorepFinder;
-use PrestaShop\Module\AutoUpgrade\RestorepManager;
+use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
+use PrestaShop\Module\AutoUpgrade\Backup\BackupManager;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
 use PrestaShop\Module\AutoUpgrade\Log\WebLogger;
 use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationValidator;
@@ -344,7 +344,10 @@ class UpgradeContainer
         // But equal between two upgrade processes
         return $this->analytics = new Analytics(
             $this->getUpgradeConfiguration(),
-            $this->getState(),
+            [
+                'update' => $this->getUpdateState(),
+                'restore' => $this->getRestoreState(),
+            ],
             $this->getProperty(self::WORKSPACE_PATH), [
             'properties' => [
                 Analytics::WITH_COMMON_PROPERTIES => [
@@ -567,7 +570,7 @@ class UpgradeContainer
         }
 
         $this->logsService = new LogsService(
-            $this->getState(),
+            $this->getLogsState(),
             $this->getTranslator(),
             $this->getProperty(self::LOGS_PATH)
         );
@@ -602,7 +605,7 @@ class UpgradeContainer
 
         $this->moduleSourceProviders = [
             new LocalSourceProvider($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR . 'modules', $this->getFileConfigurationStorage()),
-            new MarketplaceSourceProvider($this->getState()->getDestinationVersion(), $this->getProperty(self::PS_ROOT_PATH), $this->getFileLoader(), $this->getFileConfigurationStorage()),
+            new MarketplaceSourceProvider($this->getUpdateState()->getDestinationVersion(), $this->getProperty(self::PS_ROOT_PATH), $this->getFileLoader(), $this->getFileConfigurationStorage()),
             new ComposerSourceProvider($this->getProperty(self::LATEST_PATH), $this->getComposerService(), $this->getFileConfigurationStorage()),
             // Other providers
         ];
@@ -674,7 +677,7 @@ class UpgradeContainer
      */
     public function getTranslationAdapter(): Translation
     {
-        return new Translation($this->getTranslator(), $this->getLogger(), $this->getState()->getInstalledLanguagesIso());
+        return new Translation($this->getTranslator(), $this->getLogger(), $this->getUpdateState()->getInstalledLanguagesIso());
     }
 
     public function getTranslator(): Translator
@@ -813,7 +816,7 @@ class UpgradeContainer
 
         $this->upgradeSelfCheck = new UpgradeSelfCheck(
             $this->getUpgrader(),
-            $this->getState(),
+            $this->getUpdateState(),
             $this->getUpgradeConfiguration(),
             $this->getPrestaShopConfiguration(),
             $this->getTranslator(),

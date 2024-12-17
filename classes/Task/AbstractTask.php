@@ -120,7 +120,20 @@ abstract class AbstractTask
      */
     public function getResponse(): AjaxResponse
     {
-        $response = new AjaxResponse($this->container->getState(), $this->logger);
+        switch ($this::TASK_TYPE) {
+            case TaskType::TASK_TYPE_BACKUP:
+                $state = $this->container->getBackupState();
+                break;
+            case TaskType::TASK_TYPE_RESTORE:
+                $state = $this->container->getRestoreState();
+                break;
+            case TaskType::TASK_TYPE_UPDATE:
+            default:
+                $state = $this->container->getUpdateState();
+                break;
+        }
+
+        $response = new AjaxResponse($state, $this->logger);
 
         return $response->setError($this->error)
             ->setStepDone($this->stepDone)
@@ -189,9 +202,14 @@ abstract class AbstractTask
             $this->container->getFileLoader()->addXmlMd5File($this->container->getUpgrader()->getDestinationVersion(), $this->container->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $archiveXml);
         }
 
-        if ($this::TASK_TYPE !== TaskType::TASK_TYPE_RESTORE && !$this->container->getState()->isInitialized()) {
-            $this->container->getState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION), $this->container->getUpgrader()->getDestinationVersion());
-            $this->logger->debug($this->translator->trans('Successfully initialized state.'));
+        if ($this::TASK_TYPE !== TaskType::TASK_TYPE_RESTORE && !$this->container->getUpdateState()->isInitialized()) {
+            $this->container->getUpdateState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION), $this->container->getUpgrader()->getDestinationVersion());
+            $this->logger->debug($this->translator->trans('Successfully initialized update state.'));
+        }
+
+        if ($this::TASK_TYPE === TaskType::TASK_TYPE_BACKUP && !$this->container->getBackupState()->isInitialized()) {
+            $this->container->getBackupState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION));
+            $this->logger->debug($this->translator->trans('Successfully initialized backup state.'));
         }
     }
 

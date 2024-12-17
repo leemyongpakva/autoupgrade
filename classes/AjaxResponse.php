@@ -29,6 +29,7 @@ namespace PrestaShop\Module\AutoUpgrade;
 
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
+use PrestaShop\Module\AutoUpgrade\State\AbstractState;
 
 /**
  * Class creating the content to return at an ajax call.
@@ -78,11 +79,11 @@ class AjaxResponse
     private $logger;
 
     /**
-     * @var State
+     * @var AbstractState
      */
     private $state;
 
-    public function __construct(State $state, Logger $logger)
+    public function __construct(AbstractState $state, Logger $logger)
     {
         $this->state = $state;
         $this->logger = $logger;

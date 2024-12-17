@@ -49,7 +49,7 @@ class UpdateInitialization extends AbstractTask
     public function run(): int
     {
         $this->logger->info($this->translator->trans('Starting upgrade...'));
-        $this->container->getState()->setProgressPercentage(
+        $this->container->getUpdateState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );
 
@@ -61,7 +61,7 @@ class UpdateInitialization extends AbstractTask
             return ExitCode::SUCCESS;
         }
 
-        $this->logger->info($this->translator->trans('Destination version: %s', [$this->container->getState()->getDestinationVersion()]));
+        $this->logger->info($this->translator->trans('Destination version: %s', [$this->container->getUpdateState()->getDestinationVersion()]));
 
         switch ($this->container->getUpgradeConfiguration()->getChannelOrDefault()) {
             case UpgradeConfiguration::CHANNEL_LOCAL:

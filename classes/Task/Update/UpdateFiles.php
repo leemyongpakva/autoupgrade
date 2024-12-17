@@ -85,7 +85,7 @@ class UpdateFiles extends AbstractTask
                 break;
             }
         }
-        $this->container->getState()->setProgressPercentage(
+        $this->container->getUpdateState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->computePercentage($filesToUpgrade, self::class, UpdateDatabase::class)
         );
         $this->container->getFileConfigurationStorage()->save($filesToUpgrade->dump(), UpgradeFileNames::FILES_TO_UPGRADE_LIST);
@@ -197,7 +197,7 @@ class UpdateFiles extends AbstractTask
      */
     protected function warmUp(): int
     {
-        $this->container->getState()->setProgressPercentage(
+        $this->container->getUpdateState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );
 
@@ -224,8 +224,8 @@ class UpdateFiles extends AbstractTask
             rename($newReleasePath . DIRECTORY_SEPARATOR . 'install-dev', $newReleasePath . DIRECTORY_SEPARATOR . 'install');
         }
 
-        $destinationVersion = $this->container->getState()->getDestinationVersion();
-        $originVersion = $this->container->getState()->getCurrentVersion();
+        $destinationVersion = $this->container->getUpdateState()->getDestinationVersion();
+        $originVersion = $this->container->getUpdateState()->getCurrentVersion();
         $this->logger->debug($this->translator->trans('Generate diff file list between %s and %s.', [$originVersion, $destinationVersion]));
         $diffFileList = $this->container->getChecksumCompare()->getFilesDiffBetweenVersions($originVersion, $destinationVersion);
         if (!is_array($diffFileList)) {

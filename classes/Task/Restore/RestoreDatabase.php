@@ -50,7 +50,7 @@ class RestoreDatabase extends AbstractTask
      */
     public function run(): int
     {
-        $this->container->getState()->setProgressPercentage(
+        $this->container->getRestoreState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );
 
@@ -70,10 +70,10 @@ class RestoreDatabase extends AbstractTask
         }
 
         // deal with the next files stored in restoreDbFilenames
-        $restoreDbFilenames = $this->container->getState()->getRestoreDbFilenames();
+        $restoreDbFilenames = $this->container->getRestoreState()->getRestoreDbFilenames();
         if ((!isset($backlog) || !$backlog->getRemainingTotal()) && count($restoreDbFilenames) > 0) {
             $currentDbFilename = array_shift($restoreDbFilenames);
-            $this->container->getState()->setRestoreDbFilenames($restoreDbFilenames);
+            $this->container->getRestoreState()->setRestoreDbFilenames($restoreDbFilenames);
             if (!preg_match('#' . BackupFinder::BACKUP_DB_FOLDER_NAME_PREFIX . '([0-9]{6})_#', $currentDbFilename, $match)) {
                 $this->next = TaskName::TASK_ERROR;
                 $this->setErrorFlag();
@@ -81,8 +81,8 @@ class RestoreDatabase extends AbstractTask
 
                 return ExitCode::FAIL;
             }
-            $this->container->getState()->setDbStep((int) $match[1]);
-            $backupdb_path = $this->container->getProperty(UpgradeContainer::BACKUP_PATH) . DIRECTORY_SEPARATOR . $this->container->getState()->getRestoreName();
+            $this->container->getRestoreState()->setDbStep((int) $match[1]);
+            $backupdb_path = $this->container->getProperty(UpgradeContainer::BACKUP_PATH) . DIRECTORY_SEPARATOR . $this->container->getRestoreState()->getRestoreName();
 
             $dot_pos = strrpos($currentDbFilename, '.');
             $fileext = substr($currentDbFilename, $dot_pos + 1);
@@ -140,7 +140,7 @@ class RestoreDatabase extends AbstractTask
             unset($content);
 
             // Get tables before backup
-            if ($this->container->getState()->getDbStep() == '1') {
+            if ($this->container->getRestoreState()->getDbStep() == '1') {
                 $tables_after_restore = [];
                 foreach ($listQuery as $q) {
                     if (preg_match('/`(?<table>' . _DB_PREFIX_ . '[a-zA-Z0-9_-]+)`/', $q, $matches)) {
@@ -173,17 +173,17 @@ class RestoreDatabase extends AbstractTask
                         unlink($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR . UpgradeFileNames::QUERIES_TO_RESTORE_LIST);
                     }
 
-                    $restoreDbFilenamesCount = count($this->container->getState()->getRestoreDbFilenames());
+                    $restoreDbFilenamesCount = count($this->container->getRestoreState()->getRestoreDbFilenames());
                     if ($restoreDbFilenamesCount) {
                         $this->logger->info($this->translator->trans(
                             'Database restoration file %filename% done. %filescount% file(s) left...',
                             [
-                                '%filename%' => $this->container->getState()->getDbStep(),
+                                '%filename%' => $this->container->getRestoreState()->getDbStep(),
                                 '%filescount%' => $restoreDbFilenamesCount,
                             ]
                         ));
                     } else {
-                        $this->logger->info($this->translator->trans('Database restoration file %1$s done.', [$this->container->getState()->getDbStep()]));
+                        $this->logger->info($this->translator->trans('Database restoration file %1$s done.', [$this->container->getRestoreState()->getDbStep()]));
                     }
 
                     $this->stepDone = true;
@@ -230,7 +230,7 @@ class RestoreDatabase extends AbstractTask
                 '%numberqueries% queries left for file %filename%...',
                 [
                     '%numberqueries%' => $queries_left,
-                    '%filename%' => $this->container->getState()->getDbStep(),
+                    '%filename%' => $this->container->getRestoreState()->getDbStep(),
                 ]
             ));
         } else {

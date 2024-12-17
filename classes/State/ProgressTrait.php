@@ -27,6 +27,8 @@
 
 namespace PrestaShop\Module\AutoUpgrade\State;
 
+use InvalidArgumentException;
+
 trait ProgressTrait
 {
     /** @var int */

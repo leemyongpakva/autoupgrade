@@ -54,7 +54,7 @@ class UpdateState extends AbstractState
     /**
      * @var bool Marks the backup done during the update configuration
      */
-    private $backupCompleted = false;
+    protected $backupCompleted = false;
 
     /**
      * @var bool Determining if all steps went totally successfully
@@ -77,12 +77,6 @@ class UpdateState extends AbstractState
         );
         $this->setInstalledLanguagesIso($installedLanguagesIso);
 
-        $rand = dechex(mt_rand(0, min(0xffffffff, mt_getrandmax())));
-        $date = date('Ymd-His');
-        $backupName = 'V' . $currentVersion . '_' . $date . '-' . $rand;
-        // Todo: To be moved in state class? We could only require the backup name here
-        // I.e = $this->upgradeContainer->getState()->setBackupName($backupName);, which triggers 2 other setters internally
-        $this->setBackupName($backupName);
         $this->setCurrentVersion($currentVersion);
         $this->setDestinationVersion($destinationVersion);
         $this->disableSave = false;
@@ -137,7 +131,7 @@ class UpdateState extends AbstractState
         return $this->backupCompleted;
     }
 
-    public function setBackupCompleted(bool $completed): State
+    public function setBackupCompleted(bool $completed): self
     {
         $this->backupCompleted = $completed;
         $this->save();

@@ -27,6 +27,7 @@
 
 namespace PrestaShop\Module\AutoUpgrade\State;
 
+use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 
 class BackupState extends AbstractState
@@ -66,6 +67,16 @@ class BackupState extends AbstractState
     protected function getFileNameForPersistentStorage(): string
     {
         return UpgradeFileNames::STATE_BACKUP_FILENAME;
+    }
+
+    public function initDefault(string $currentVersion): void
+    {
+        $rand = dechex(mt_rand(0, min(0xffffffff, mt_getrandmax())));
+        $date = date('Ymd-His');
+        $backupName = 'V' . $currentVersion . '_' . $date . '-' . $rand;
+        // Todo: To be moved in state class? We could only require the backup name here
+        // I.e = $this->upgradeContainer->getBackupState()->setBackupName($backupName);, which triggers 2 other setters internally
+        $this->setBackupName($backupName);
     }
 
     public function getBackupName(): string

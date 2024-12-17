@@ -43,7 +43,7 @@ class BackupInitialization extends AbstractTask
      */
     public function run(): int
     {
-        $this->container->getState()->setProgressPercentage(
+        $this->container->getBackupState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );
 

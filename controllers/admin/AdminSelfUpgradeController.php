@@ -287,7 +287,14 @@ class AdminSelfUpgradeController extends ModuleAdminController
         // from $_POST or $_GET
         $this->action = empty($_REQUEST['action']) ? null : $_REQUEST['action'];
         $this->initPath();
-        $this->upgradeContainer->getState()->importFromArray(
+
+        $this->upgradeContainer->getBackupState()->importFromArray(
+            empty($_REQUEST['params']) ? [] : $_REQUEST['params']
+        );
+        $this->upgradeContainer->getRestoreState()->importFromArray(
+            empty($_REQUEST['params']) ? [] : $_REQUEST['params']
+        );
+        $this->upgradeContainer->getUpdateState()->importFromArray(
             empty($_REQUEST['params']) ? [] : $_REQUEST['params']
         );
 
@@ -298,10 +305,16 @@ class AdminSelfUpgradeController extends ModuleAdminController
             $this->upgradeContainer->getFileConfigurationStorage()->cleanAllRestoreFiles();
         }
 
-        if (!$this->upgradeContainer->getState()->isInitialized()) {
-            $this->upgradeContainer->getState()->initDefault(
+        if (!$this->upgradeContainer->getUpdateState()->isInitialized()) {
+            $this->upgradeContainer->getUpdateState()->initDefault(
                 $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION),
                 $this->upgradeContainer->getUpgrader()->getDestinationVersion()
+            );
+        }
+
+        if (!$this->upgradeContainer->getBackupState()->isInitialized()) {
+            $this->upgradeContainer->getBackupState()->initDefault(
+                $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION)
             );
         }
 
@@ -476,14 +489,14 @@ class AdminSelfUpgradeController extends ModuleAdminController
         $availableBackups = $backupFinder->getAvailableBackups();
         if (!$this->upgradeContainer->getUpgradeConfiguration()->shouldBackupFilesAndDatabase()
             && !empty($availableBackups)
-            && !in_array($this->upgradeContainer->getState()->getBackupName(), $availableBackups)
+            && !in_array($this->upgradeContainer->getBackupState()->getBackupName(), $availableBackups)
         ) {
-            $this->upgradeContainer->getState()->setBackupName(end($availableBackups));
+            $this->upgradeContainer->getBackupState()->setBackupName(end($availableBackups));
         }
 
         $upgrader = $this->upgradeContainer->getUpgrader();
 
-        $response = new AjaxResponse($this->upgradeContainer->getState(), $this->upgradeContainer->getLogger());
+        $response = new AjaxResponse($this->upgradeContainer->getUpdateState(), $this->upgradeContainer->getLogger());
         $this->content = (new UpgradePage(
             $this->upgradeContainer->getUpgradeConfiguration(),
             $this->upgradeContainer->getTwig(),
@@ -496,7 +509,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
             $this->adminDir,
             self::$currentIndex,
             $this->token,
-            $this->upgradeContainer->getState()->getBackupName(),
+            $this->upgradeContainer->getBackupState()->getBackupName(),
             $this->downloadPath
         ))->display(
             $response

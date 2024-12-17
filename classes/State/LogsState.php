@@ -31,56 +31,55 @@ use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 
 class LogsState extends AbstractState
 {
-    /** @var string Timestamp of the last started process, refering to the place where the new logs should be saved */
-    // TODO: Unused?
-    private $currentProcessTimestamp;
+    /** @var string|null */
+    protected $activeBackupLogFile;
 
     /** @var string|null */
-    private $activeBackupLogFile;
+    protected $activeRestoreLogFile;
 
     /** @var string|null */
-    private $activeRestoreLogFile;
-
-    /** @var string|null */
-    private $activeUpdateLogFile;
+    protected $activeUpdateLogFile;
 
     protected function getFileNameForPersistentStorage(): string
     {
         return UpgradeFileNames::STATE_LOGS_FILENAME;
     }
 
-    public function getActiveUpdateLogFile(): string
-    {
-        return $this->activeUpdateLogFile;
-    }
-
-    public function setActiveUpdateLog(string $activeUpdateLogFile): self
-    {
-        $this->activeUpdateLogFile = $activeUpdateLogFile;
-
-        return $this;
-    }
-
-    public function getActiveRestoreLogFile(): string
-    {
-        return $this->activeRestoreLogFile;
-    }
-
-    public function setActiveRestoreLog(string $activeRestoreLogFile): self
-    {
-        $this->activeRestoreLogFile = $activeRestoreLogFile;
-
-        return $this;
-    }
-
-    public function getActiveBackupLogFile(): string
+    public function getActiveBackupLogFile(): ?string
     {
         return $this->activeBackupLogFile;
     }
 
-    public function setActiveBackupLog(string $activeBackupLogFile): self
+    public function setActiveBackupLogFromTimestamp(string $timestamp): self
     {
-        $this->activeBackupLogFile = $activeBackupLogFile;
+        $this->activeBackupLogFile = $timestamp . '-backup.txt';
+        $this->save();
+
+        return $this;
+    }
+
+    public function getActiveRestoreLogFile(): ?string
+    {
+        return $this->activeRestoreLogFile;
+    }
+
+    public function setActiveRestoreLogFromTimestamp(string $timestamp): self
+    {
+        $this->activeRestoreLogFile = $timestamp . '-restore.txt';
+        $this->save();
+
+        return $this;
+    }
+
+    public function getActiveUpdateLogFile(): ?string
+    {
+        return $this->activeUpdateLogFile;
+    }
+
+    public function setActiveUpdateLogFromTimestamp(string $timestamp): self
+    {
+        $this->activeUpdateLogFile = $timestamp . '-update.txt';
+        $this->save();
 
         return $this;
     }
