@@ -240,7 +240,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
             PageSelectors::DIALOG_PARENT_ID,
             $this->getTemperedFilesDialog([
                 'title' => $this->upgradeContainer->getTranslator()->trans('List of core alterations'),
-                'description' => $this->upgradeContainer->getTranslator()->trans('Some core files have been altered, customization made on these files will be lost during the update.'),
+                'message' => $this->upgradeContainer->getTranslator()->trans('Some core files have been altered, customization made on these files will be lost during the update.'),
                 'missing_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getCoreMissingFiles(),
                 'altered_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getCoreAlteredFiles(),
             ])
@@ -253,7 +253,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
             PageSelectors::DIALOG_PARENT_ID,
             $this->getTemperedFilesDialog([
                 'title' => $this->upgradeContainer->getTranslator()->trans('List of theme alterations'),
-                'description' => $this->upgradeContainer->getTranslator()->trans('Some theme files have been altered, customization made on these files will be lost during the update.'),
+                'message' => $this->upgradeContainer->getTranslator()->trans('Some theme files have been altered, customization made on these files will be lost during the update.'),
                 'missing_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getThemeMissingFiles(),
                 'altered_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getThemeAlteredFiles(),
             ])
