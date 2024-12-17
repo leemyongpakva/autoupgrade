@@ -15,7 +15,6 @@ import {
 } from '@playwright/test';
 import semver from 'semver';
 
-const baseContext: string = 'sanity_productsBO_deleteProductsWithBulkActions';
 const psVersion = utilsTest.getPSVersion();
 
 /*
@@ -57,8 +56,6 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
 
   // Steps
   test('should login in BO', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'loginBO', baseContext);
-
     await boLoginPage.goTo(page, global.BO.URL);
     await boLoginPage.successLogin(page, global.BO.EMAIL, global.BO.PASSWD);
 
@@ -67,8 +64,6 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
   });
 
   test('should go to \'Catalog > Products\' page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToProductsPage', baseContext);
-
     await boDashboardPage.goToSubMenu(
       page,
       boDashboardPage.catalogParentLink,
@@ -83,8 +78,6 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
   // @todo : https://github.com/PrestaShop/PrestaShop/issues/36097
   if (semver.lte(psVersion, '8.1.6') && semver.gte(psVersion, '7.3.0')) {
     test('should close the menu', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'closeMenu', baseContext);
-
       await boDashboardPage.setSidebarCollapsed(page, true);
 
       const isSidebarCollapsed = await boDashboardPage.isSidebarCollapsed(page);
@@ -94,23 +87,17 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
 
   test.describe('Create first product', async () => {
     test('should reset filter and get number of products', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'getNumberOfProduct', baseContext);
-
       numberOfProducts = await boProductsPage.resetAndGetNumberOfLines(page);
       expect(numberOfProducts).toBeGreaterThan(0);
     });
 
     test('should click on \'New product\' button', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'clickOnNewProductButton', baseContext);
-
       const isVisible = await boProductsPage.clickOnNewProductButton(page);
       expect(isVisible).toEqual(true);
     });
 
     if (semver.gte(psVersion, '8.1.0')) {
       test('should choose \'Standard product\'', async () => {
-        await utilsTest.addContextItem(test.info(), 'testIdentifier', 'chooseStandardProduct', baseContext);
-
         await boProductsPage.selectProductType(page, firstProductData.type);
         await boProductsPage.clickOnAddNewProduct(page);
 
@@ -120,8 +107,6 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
     }
 
     test('should create standard product', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'createStandardProduct', baseContext);
-
       await boProductsCreatePage.closeSfToolBar(page);
 
       const createProductMessage = await boProductsCreatePage.setProduct(page, firstProductData);
@@ -131,15 +116,11 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
 
   test.describe('Create second product', async () => {
     test('should click on \'New product\' button and check new product modal', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'clickOnNewProductButton2', baseContext);
-
       const isVisible = await boProductsCreatePage.clickOnNewProductButton(page);
       expect(isVisible).toEqual(true);
     });
 
     test('should create product', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'chooseStandardProduct2', baseContext);
-
       if (semver.gte(psVersion, '8.1.0')) {
         await boProductsCreatePage.chooseProductType(page, secondProductData.type);
       }
@@ -150,8 +131,6 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
 
   test.describe('Bulk delete created products', async () => {
     test('should click on \'Go to catalog\' button', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToCatalogPage', baseContext);
-
       await boProductsCreatePage.goToCatalogPage(page);
 
       const pageTitle = await boProductsPage.getPageTitle(page);
@@ -159,8 +138,6 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
     });
 
     test('should filter list by \'Name\' and check result', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'filterListByReference', baseContext);
-
       await boProductsPage.filterProducts(page, 'product_name', 'toDelete', 'input');
 
       const numberOfProductsAfterFilter = await boProductsPage.getNumberOfProductsFromList(page);
@@ -171,15 +148,11 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
     });
 
     test('should select the 2 products', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'clickOnDeleteProduct', baseContext);
-
       const isBulkDeleteButtonEnabled = await boProductsPage.bulkSelectProducts(page);
       expect(isBulkDeleteButtonEnabled).toEqual(true);
     });
 
     test('should click on bulk actions button', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'clickOnBulkDeleteButton', baseContext);
-
       const textMessage = await boProductsPage.clickOnBulkActionsProducts(page, 'delete');
 
       if (semver.gte(psVersion, '8.1.0')) {
@@ -190,8 +163,6 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
     });
 
     test('should bulk delete products', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'bulkDeleteProduct', baseContext);
-
       if (semver.gte(psVersion, '8.1.0')) {
         const textMessage = await boProductsPage.bulkActionsProduct(page, 'delete');
         expect(textMessage).toEqual('Deleting 2 / 2 products');
@@ -203,16 +174,12 @@ test.describe('BO - Catalog - Products : Delete products with bulk actions', asy
 
     if (semver.gte(psVersion, '8.1.0')) {
       test('should close progress modal', async () => {
-        await utilsTest.addContextItem(test.info(), 'testIdentifier', 'closeProgressModal', baseContext);
-
         const isModalNotVisible = await boProductsPage.closeBulkActionsProgressModal(page, 'delete');
         expect(isModalNotVisible).toEqual(true);
       });
     }
 
     test('should reset filter', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'resetFilter', baseContext);
-
       const numberOfProductsAfterReset = await boProductsPage.resetAndGetNumberOfLines(page);
       expect(numberOfProductsAfterReset).toEqual(numberOfProducts);
     });

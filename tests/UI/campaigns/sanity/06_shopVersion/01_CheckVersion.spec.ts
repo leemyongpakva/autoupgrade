@@ -11,7 +11,6 @@ import {
 } from '@playwright/test';
 import semver from 'semver';
 
-const baseContext: string = 'shopVersion_checkVersion';
 const psVersion = utilsTest.getPSVersion();
 
 /*
@@ -34,8 +33,6 @@ test.describe('Check new shop version', () => {
 
   // Steps
   test('should go to BO', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'openBO', baseContext);
-
     await boLoginPage.goTo(page, global.BO.URL);
 
     const pageTitle = await boLoginPage.getPageTitle(page);
@@ -44,8 +41,6 @@ test.describe('Check new shop version', () => {
 
   if (semver.lt(psVersion, '7.4.0')) {
     test(`should check that the shop version is ${psVersion}`, async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkShopVersionInLoginPage', baseContext);
-
       const shopVersion = await boLoginPage.getShopVersion(page);
       expect(shopVersion).toContain(psVersion);
     });
@@ -53,8 +48,6 @@ test.describe('Check new shop version', () => {
 
   if (semver.gte(psVersion, '7.4.0')) {
     test('should login in BO', async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'loginBO', baseContext);
-
       await boLoginPage.successLogin(page, global.BO.EMAIL, global.BO.PASSWD);
 
       const pageTitle = await boDashboardPage.getPageTitle(page);
@@ -62,8 +55,6 @@ test.describe('Check new shop version', () => {
     });
 
     test(`should check that the new shop version is ${psVersion}`, async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkShopVersionInDashboard', baseContext);
-
       const shopVersion = await boDashboardPage.getShopVersion(page);
       expect(shopVersion).toContain(psVersion);
     });

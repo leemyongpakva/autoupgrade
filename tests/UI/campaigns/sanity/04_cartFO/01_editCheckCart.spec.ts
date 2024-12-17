@@ -15,8 +15,6 @@ import {
 } from '@playwright/test';
 import semver from 'semver';
 
-const baseContext: string = 'sanity_cartFO_editCheckCart';
-
 const psVersion = utilsTest.getPSVersion();
 
 /*
@@ -43,8 +41,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
 
   // Steps
   test('should open the shop page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToShopFO', baseContext);
-
     await foClassicHomePage.goTo(page, global.FO.URL);
 
     const isHomePage = await foClassicHomePage.isHomePage(page);
@@ -52,8 +48,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should check and get the products number', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkNumberOfProducts', baseContext);
-
     await foClassicHomePage.goToAllProductsPage(page);
 
     allProductsNumber = await foClassicCategoryPage.getNumberOfProducts(page);
@@ -61,8 +55,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should go to the first product page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToProductPage1', baseContext);
-
     await foClassicHomePage.goToHomePage(page);
     await foClassicHomePage.goToProductPage(page, 1);
 
@@ -76,8 +68,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should add product to cart and check that the number of products is updated in cart header', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'addProductToCart1', baseContext);
-
     await foClassicProductPage.addProductToTheCart(page);
 
     const notificationsNumber = await foClassicHomePage.getCartNotificationsNumber(page);
@@ -85,8 +75,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should go to the home page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToHomePage', baseContext);
-
     await foClassicHomePage.goToHomePage(page);
 
     const isHomePage = await foClassicHomePage.isHomePage(page);
@@ -94,8 +82,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should go to the second product page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToProductPage2', baseContext);
-
     await foClassicHomePage.goToProductPage(page, 2);
 
     const pageTitle = await foClassicProductPage.getPageTitle(page);
@@ -108,8 +94,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should add the second product to cart and check that the number of products is updated in cart header', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'addProductToCart2', baseContext);
-
     await foClassicProductPage.addProductToTheCart(page);
 
     const notificationsNumber = await foClassicHomePage.getCartNotificationsNumber(page);
@@ -117,8 +101,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should check the first product details', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkProductDetail1', baseContext);
-
     if (allProductsNumber > 7) {
       const result = await foClassicCartPage.getProductDetail(page, 1);
       await Promise.all([
@@ -139,8 +121,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should check the second product details', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkProductDetail2', baseContext);
-
     if (allProductsNumber > 7) {
       const result = await foClassicCartPage.getProductDetail(page, 2);
       await Promise.all([
@@ -162,8 +142,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
 
   // @todo : https://github.com/PrestaShop/PrestaShop/issues/9779
   test.skip('should get the ATI price', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkTotalATI', baseContext);
-
     totalATI = await foClassicCartPage.getATIPrice(page);
     if (allProductsNumber > 7) {
       expect(totalATI.toString()).toEqual((dataProducts.demo_3.finalPrice + dataProducts.demo_1.finalPrice)
@@ -175,8 +153,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should get the products number and check that is equal to 2', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkNumberOfProductsInCart', baseContext);
-
     totalATI = await foClassicCartPage.getATIPrice(page);
 
     itemsNumber = await foClassicCartPage.getProductsNumber(page);
@@ -184,8 +160,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should edit the quantity of the first product', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'editProductQuantity1', baseContext);
-
     await foClassicCartPage.editProductQuantity(page, 1, 3);
 
     const totalPrice = await foClassicCartPage.getATIPrice(page);
@@ -196,8 +170,6 @@ test.describe('FO - Cart : Check Cart in FO', async () => {
   });
 
   test('should edit the quantity of the second product', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'editProductQuantity2', baseContext);
-
     await foClassicCartPage.editProductQuantity(page, 2, 2);
 
     const totalPrice = await foClassicCartPage.getATIPrice(page);

@@ -5,7 +5,11 @@
   "scripts": {
     "// ESLint": "To run ESLint commands",
     "lint:fix": "eslint --fix --ignore-path .gitignore .",
-    "lint": "eslint --ignore-path .gitignore ."
+    "lint": "eslint --ignore-path .gitignore .",
+    "// TypeScript Check": "Script to check typescript",
+    "check:typescript": "tsc --build ./tsconfig.json",
+    "// Run tests": "Script to run sanity tests",
+    "test:sanity": "npx playwright test --ui --headed"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +25,9 @@
     "eslint-plugin-deprecation": "^2.0.0",
     "eslint-plugin-html": "^8.1.1",
     "eslint-plugin-import": "^2.29.1",
-    "pwmochawesome": "^1.1.1",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.8",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {

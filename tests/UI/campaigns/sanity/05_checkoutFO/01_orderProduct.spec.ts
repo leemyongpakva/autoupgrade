@@ -23,7 +23,6 @@ import {
 import semver from 'semver';
 
 const psVersion = utilsTest.getPSVersion();
-const baseContext: string = 'sanity_checkoutFO_orderProduct';
 
 /*
   Order a product and check order confirmation
@@ -43,8 +42,6 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
 
   // Steps
   test('should open the shop page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToShopFO', baseContext);
-
     await foClassicHomePage.goTo(page, global.FO.URL);
 
     const result = await foClassicHomePage.isHomePage(page);
@@ -52,8 +49,6 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   });
 
   test('should go to login page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToLoginPage', baseContext);
-
     await foClassicHomePage.goToLoginPage(page);
 
     const pageTitle = await foClassicLoginPage.getPageTitle(page);
@@ -61,8 +56,6 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   });
 
   test('should sign In in FO with default account', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'loginFO', baseContext);
-
     await foClassicLoginPage.customerLogin(page, dataCustomers.johnDoe);
 
     const connected = await foClassicHomePage.isCustomerConnected(page);
@@ -70,8 +63,6 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   });
 
   test('should go to home page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToHomePage', baseContext);
-
     const isHomepage = await foClassicHomePage.isHomePage(page);
 
     if (!isHomepage) {
@@ -83,8 +74,6 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   });
 
   test('should check and get the products number', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkNumberOfProducts', baseContext);
-
     await foClassicHomePage.goToAllProductsPage(page);
 
     allProductsNumber = await foClassicCategoryPage.getNumberOfProducts(page);
@@ -92,8 +81,6 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   });
 
   test('should quick view the first product', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'quickViewFirstProduct', baseContext);
-
     await foClassicHomePage.goToHomePage(page);
     await foClassicHomePage.quickViewProduct(page, 1);
 
@@ -102,8 +89,6 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   });
 
   test('should add first product to cart and Proceed to checkout', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'addProductToCart', baseContext);
-
     await foClassicModalQuickViewPage.addToCartByQuickView(page);
     await foClassicModalBlockCartPage.proceedToCheckout(page);
 
@@ -112,8 +97,6 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   });
 
   test('should check the cart details', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkCartDetails', baseContext);
-
     if (allProductsNumber > 7) {
       const result = await foClassicCartPage.getProductDetail(page, 1);
       await Promise.all([
@@ -134,8 +117,6 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   });
 
   test('should proceed to checkout and check Step Address', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkAddressStep', baseContext);
-
     await foClassicCartPage.clickOnProceedToCheckout(page);
 
     const isCheckoutPage = await foClassicCheckoutPage.isCheckoutPage(page);
@@ -149,22 +130,16 @@ test.describe('BO - Checkout : Order a product and check order confirmation', as
   });
 
   test('should validate Step Address and go to Delivery Step', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'checkDeliveryStep', baseContext);
-
     const isStepAddressComplete = await foClassicCheckoutPage.goToDeliveryStep(page);
     expect(isStepAddressComplete, 'Step Address is not complete').toEqual(true);
   });
 
   test('should validate Step Delivery and go to Payment Step', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToPaymentStep', baseContext);
-
     const isStepDeliveryComplete = await foClassicCheckoutPage.goToPaymentStep(page);
     expect(isStepDeliveryComplete, 'Step Address is not complete').toEqual(true);
   });
 
   test('should Pay by bank wire and confirm order', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'confirmOrder', baseContext);
-
     if (semver.gte(psVersion, '7.1.0')) {
       await foClassicCheckoutPage.choosePaymentAndOrder(page, dataPaymentMethods.wirePayment.moduleName);
     } else {

@@ -17,8 +17,6 @@ import semver from 'semver';
 
 const psVersion = utilsTest.getPSVersion();
 
-const baseContext: string = 'sanity_ordersBO_filterOrders';
-
 /*
   Connect to the BO
   Filter the Orders table
@@ -39,8 +37,6 @@ test.describe('BO - Orders - Orders : Filter the Orders table by ID, REFERENCE, 
 
   // Steps
   test('should login in BO', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'loginBO', baseContext);
-
     await boLoginPage.goTo(page, global.BO.URL);
     await boLoginPage.successLogin(page, global.BO.EMAIL, global.BO.PASSWD);
 
@@ -49,8 +45,6 @@ test.describe('BO - Orders - Orders : Filter the Orders table by ID, REFERENCE, 
   });
 
   test('should go to the \'Orders > Orders\' page', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'goToOrdersPage', baseContext);
-
     await boDashboardPage.goToSubMenu(
       page,
       boDashboardPage.ordersParentLink,
@@ -63,8 +57,6 @@ test.describe('BO - Orders - Orders : Filter the Orders table by ID, REFERENCE, 
   });
 
   test('should reset all filters and get number of orders', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'resetFilters1', baseContext);
-
     numberOfOrders = await boOrdersPage.resetAndGetNumberOfLines(page);
     await expect(numberOfOrders).toBeGreaterThan(0);
   });
@@ -95,8 +87,6 @@ test.describe('BO - Orders - Orders : Filter the Orders table by ID, REFERENCE, 
 
   tests.forEach((tst, index: number) => {
     test(`should filter the Orders table by '${tst.args.filterBy}' and check the result`, async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', tst.args.identifier, baseContext);
-
       if (semver.lte(psVersion, '7.6.9') && index === 2) {
         await boOrdersPage.filterOrders(
           page,
@@ -118,8 +108,6 @@ test.describe('BO - Orders - Orders : Filter the Orders table by ID, REFERENCE, 
     });
 
     test(`should reset filter by '${tst.args.filterBy}'`, async () => {
-      await utilsTest.addContextItem(test.info(), 'testIdentifier', `reset_${tst.args.identifier}`, baseContext);
-
       const numberOfOrdersAfterReset = await boOrdersPage.resetAndGetNumberOfLines(page);
       await expect(numberOfOrdersAfterReset).toEqual(numberOfOrders);
     });
@@ -127,8 +115,6 @@ test.describe('BO - Orders - Orders : Filter the Orders table by ID, REFERENCE, 
 
   // Logout from BO
   test('should log out from BO', async () => {
-    await utilsTest.addContextItem(test.info(), 'testIdentifier', 'logoutBO', baseContext);
-
     await boLoginPage.logoutBO(page);
 
     const pageTitle = await boLoginPage.getPageTitle(page);

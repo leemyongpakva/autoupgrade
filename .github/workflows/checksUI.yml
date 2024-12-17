@@ -1,0 +1,68 @@
+name: Lint And Typescript Checks
+
+on:
+  pull_request:
+  push:
+    branches:
+      - dev
+defaults:
+  run:
+    working-directory: ./tests/UI/
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: ESLint
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright/
+          key: ${{ runner.os }}-browsers
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies in UI tests directory
+        working-directory: tests/UI
+        run: npm ci
+
+      - name: Check eslint errors
+        working-directory: tests/UI
+        run: npm run lint
+
+  tscheck:
+    runs-on: ubuntu-latest
+    name: TypeScript Check
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/ms-playwright/
+          key: ${{ runner.os }}-browsers
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Install dependencies in UI tests directory
+        working-directory: tests/UI
+        run: npm ci
+
+      - name: Check TypeScript errors
+        working-directory: tests/UI
+        run: npx tsc --strict
