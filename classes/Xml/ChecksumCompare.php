@@ -32,6 +32,13 @@ use SimpleXMLElement;
 
 class ChecksumCompare
 {
+    public const CATEGORY_MAIL = 'mail';
+    public const CATEGORY_TRANSLATION = 'translation';
+    public const CATEGORY_CORE = 'core';
+    public const CATEGORY_THEME = 'themes';
+
+    public const FILE_MISSING = 'missing';
+    public const FILE_ALTERED = 'altered';
     /**
      * @var FileLoader
      */
@@ -48,6 +55,7 @@ class ChecksumCompare
      * @var string
      */
     private $adminPath;
+
     /**
      * @var array{
      *             'mail':array{'missing':string[],'altered':string[]},
@@ -57,21 +65,21 @@ class ChecksumCompare
      *             }|false
      */
     private $fileDifferences = [
-        'mail' => [
-            'missing' => [],
-            'altered' => [],
+        self::CATEGORY_MAIL => [
+            self::FILE_MISSING => [],
+            self::FILE_ALTERED => [],
         ],
-        'translation' => [
-            'missing' => [],
-            'altered' => [],
+        self::CATEGORY_TRANSLATION => [
+            self::FILE_MISSING => [],
+            self::FILE_ALTERED => [],
         ],
-        'core' => [
-            'missing' => [],
-            'altered' => [],
+        self::CATEGORY_CORE => [
+            self::FILE_MISSING => [],
+            self::FILE_ALTERED => [],
         ],
-        'themes' => [
-            'missing' => [],
-            'altered' => [],
+        self::CATEGORY_THEME => [
+            self::FILE_MISSING => [],
+            self::FILE_ALTERED => [],
         ],
     ];
 
@@ -116,7 +124,21 @@ class ChecksumCompare
      */
     public function getTamperedFilesOnShop(string $version)
     {
-        if (is_array($this->fileDifferences) && count($this->fileDifferences['core']['altered']) == 0) {
+        if (is_array($this->fileDifferences)) {
+            $useCache = false;
+
+            foreach ($this->fileDifferences as $section) {
+                foreach ([self::FILE_MISSING, self::FILE_ALTERED] as $key) {
+                    if (!empty($section[$key])) {
+                        $useCache = true;
+                    }
+                }
+            }
+
+            if ($useCache) {
+                return $this->fileDifferences;
+            }
+
             $checksum = $this->fileLoader->getXmlMd5File($version);
             if (!$checksum) {
                 $this->fileDifferences = false;
@@ -250,15 +272,15 @@ class ChecksumCompare
      */
     protected function addFileDifferences(string $path, bool $isDeletedFile = false): void
     {
-        $key = $isDeletedFile ? 'missing' : 'altered';
+        $key = $isDeletedFile ? self::FILE_MISSING : self::FILE_ALTERED;
 
         $categories = [
-            'mail' => ['mails/'],
-            'translation' => [
+            self::CATEGORY_MAIL => ['mails/'],
+            self::CATEGORY_TRANSLATION => [
                 '/en.php', '/fr.php', '/es.php', '/it.php', '/de.php',
                 'translations/',
             ],
-            'themes' => ['themes/'],
+            self::CATEGORY_THEME => ['themes/'],
         ];
 
         foreach ($categories as $category => $patterns) {
@@ -271,7 +293,7 @@ class ChecksumCompare
             }
         }
 
-        $this->fileDifferences['core'][$key][] = $path;
+        $this->fileDifferences[self::CATEGORY_CORE][$key][] = $path;
     }
 
     protected function compareChecksum(string $filepath, string $md5sum): bool
