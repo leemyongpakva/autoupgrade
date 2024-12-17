@@ -3,7 +3,6 @@ import ProgressTracker from '../components/ProgressTracker';
 import { ApiResponseAction } from '../types/apiTypes';
 import Process from '../utils/Process';
 import api from '../api/RequestHandler';
-import { logStore } from '../store/LogStore';
 
 export default class UpdatePageUpdate extends UpdatePage {
   protected stepCode = 'update';
