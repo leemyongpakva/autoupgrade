@@ -6,7 +6,7 @@ import { logStore } from '../store/LogStore';
 import api from '../api/RequestHandler';
 
 export default class LogsViewer extends ComponentAbstract implements DomLifecycle {
-  #logsIndexHeight: Map<number, number> = new Map();
+  #logsIndexOffsets: Map<number, number> = new Map();
   #logsListHeight: number = this.#logsList.clientHeight;
   #isSummaryDisplayed: boolean = false;
 
@@ -114,7 +114,7 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
       HTMLElement
     });
 
-    this.#logsIndexHeight.set(id, offsetTop);
+    this.#logsIndexOffsets.set(id, offsetTop);
     this.#logsListHeight += height;
 
     return id;
@@ -183,18 +183,19 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
    * Calculates the visible margins (top and bottom) and returns visible logs.
    * @private
    * @param {number} scrollTop - Current scroll position (top).
-   * @param {number} viewportHeight - Current viewport height.
+   * @param {number} logsViewportHeight - Current viewport height.
    * @returns {VisibleLogs} - Margins and visible logs.
    */
-  #calculateVisibleLogs(scrollTop: number, viewportHeight: number): VisibleLogs {
-    const startBoundary = scrollTop - LogsViewer.CONFIG.BUFFER_SIZE * viewportHeight;
-    const endBoundary = scrollTop + viewportHeight + LogsViewer.CONFIG.BUFFER_SIZE * viewportHeight;
+  #calculateVisibleLogs(scrollTop: number, logsViewportHeight: number): VisibleLogs {
+    const startBoundary = scrollTop - LogsViewer.CONFIG.BUFFER_SIZE * logsViewportHeight;
+    const endBoundary =
+      scrollTop + logsViewportHeight + LogsViewer.CONFIG.BUFFER_SIZE * logsViewportHeight;
 
     let marginTop = 0;
     let marginBottom = 0;
 
     const visibleLogs: Log[] = [];
-    for (const [id, offsetTop] of this.#logsIndexHeight.entries()) {
+    for (const [id, offsetTop] of this.#logsIndexOffsets.entries()) {
       const log = logStore.getLogs()[id];
       const logHeight = log.height;
 
@@ -335,8 +336,8 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
     event.preventDefault();
 
     const offsetTopToScroll = target.hash.substring(1);
-    const logKey = [...this.#logsIndexHeight.keys()].find(
-      (key) => this.#logsIndexHeight.get(key) === Number(offsetTopToScroll)
+    const logKey = [...this.#logsIndexOffsets.keys()].find(
+      (key) => this.#logsIndexOffsets.get(key) === Number(offsetTopToScroll)
     );
 
     if (logKey === undefined) {
