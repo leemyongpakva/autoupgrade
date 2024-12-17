@@ -28,8 +28,8 @@
 namespace PrestaShop\Module\AutoUpgrade;
 
 use Exception;
-use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
-use PrestaShop\Module\AutoUpgrade\Backup\BackupManager;
+use PrestaShop\Module\AutoUpgrade\RestorepFinder;
+use PrestaShop\Module\AutoUpgrade\RestorepManager;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
 use PrestaShop\Module\AutoUpgrade\Log\WebLogger;
 use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationValidator;
@@ -45,6 +45,11 @@ use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\LogsService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
+use PrestaShop\Module\AutoUpgrade\State\BackupState;
+use PrestaShop\Module\AutoUpgrade\State\LogsState;
+use PrestaShop\Module\AutoUpgrade\State\RestoreState;
+use PrestaShop\Module\AutoUpgrade\State\UpdateState;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\AssetsEnvironment;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension3;
@@ -183,9 +188,24 @@ class UpgradeContainer
     private $twig;
 
     /**
-     * @var State
+     * @var BackupState
      */
-    private $state;
+    private $backupState;
+    
+        /**
+         * @var LogsState
+         */
+        private $logsState;
+
+    /**
+     * @var RestoreState
+     */
+    private $restoreState;
+
+    /**
+     * @var UpdateState
+     */
+    private $updateState;
 
     /**
      * @var SymfonyAdapter
@@ -601,19 +621,52 @@ class UpgradeContainer
         return $this->completionCalculator;
     }
 
-    /**
-     * @return State
-     */
-    public function getState(): State
+    public function getBackupState(): BackupState
     {
-        if (null !== $this->state) {
-            return $this->state;
+        if (null !== $this->backupState) {
+            return $this->backupState;
         }
 
-        $this->state = new State($this->getFileConfigurationStorage());
-        $this->state->load();
+        $this->backupState = new BackupState($this->getFileConfigurationStorage());
+        $this->backupState->load();
 
-        return $this->state;
+        return $this->backupState;
+    }
+    
+    public function getLogsState(): LogsState
+    {
+        if (null !== $this->logsState) {
+            return $this->logsState;
+        }
+
+        $this->logsState = new LogsState($this->getFileConfigurationStorage());
+        $this->logsState->load();
+
+        return $this->logsState;
+    }
+
+    public function getRestoreState(): RestoreState
+    {
+        if (null !== $this->restoreState) {
+            return $this->restoreState;
+        }
+
+        $this->restoreState = new RestoreState($this->getFileConfigurationStorage());
+        $this->restoreState->load();
+
+        return $this->restoreState;
+    }
+
+    public function getUpdateState(): UpdateState
+    {
+        if (null !== $this->updateState) {
+            return $this->updateState;
+        }
+
+        $this->updateState = new UpdateState($this->getFileConfigurationStorage());
+        $this->updateState->load();
+
+        return $this->updateState;
     }
 
     /**
