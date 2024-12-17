@@ -150,29 +150,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
      */
     private function getRequirements(): array
     {
-        $this->upgradeContainer->initPrestaShopCore();
-
-        $state = $this->upgradeContainer->getState();
-
-        $distributionApiService = new DistributionApiService();
-        $phpVersionResolverService = new PhpVersionResolverService(
-            $distributionApiService,
-            $this->upgradeContainer->getFileLoader(),
-            $state->getCurrentVersion()
-        );
-
-        $upgradeSelfCheck = new UpgradeSelfCheck(
-            $this->upgradeContainer->getUpgrader(),
-            $state,
-            $this->upgradeContainer->getUpgradeConfiguration(),
-            $this->upgradeContainer->getPrestaShopConfiguration(),
-            $this->upgradeContainer->getTranslator(),
-            $phpVersionResolverService,
-            $this->upgradeContainer->getChecksumCompare(),
-            _PS_ROOT_DIR_,
-            _PS_ADMIN_DIR_,
-            $this->upgradeContainer->getProperty(UpgradeContainer::WORKSPACE_PATH)
-        );
+        $upgradeSelfCheck = $this->upgradeContainer->getUpgradeSelfCheck();
 
         $warnings = $upgradeSelfCheck->getWarnings();
         foreach ($warnings as $warningKey => $warningValue) {
@@ -255,5 +233,42 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
     {
         /* we dont check again because the button is only accessible if check are ok */
         return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_UPDATE_OPTIONS);
+    }
+
+    public function coreTemperedFilesDialog(): JsonResponse
+    {
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::DIALOG_PARENT_ID,
+            $this->getTemperedFilesDialog([
+                'title' => $this->upgradeContainer->getTranslator()->trans('List of core alterations'),
+                'description' => $this->upgradeContainer->getTranslator()->trans('Some core files have been altered, customization made on these files will be lost during the update.'),
+                'missing_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getCoreMissingFiles(),
+                'altered_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getCoreAlteredFiles()
+            ])
+        );
+    }
+
+    public function themeTemperedFilesDialog(): JsonResponse
+    {
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::DIALOG_PARENT_ID,
+            $this->getTemperedFilesDialog([
+                'title' => $this->upgradeContainer->getTranslator()->trans('List of theme alterations'),
+                'description' => $this->upgradeContainer->getTranslator()->trans('Some theme files have been altered, customization made on these files will be lost during the update.'),
+                'missing_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getThemeMissingFiles(),
+                'altered_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getThemeAlteredFiles()
+            ])
+        );
+    }
+
+    /**
+     * @param array<string,string|string[]> $params
+     */
+    private function getTemperedFilesDialog($params)
+    {
+        return $this->getTwig()->render(
+            '@ModuleAutoUpgrade/dialogs/dialog-tempered-files.html.twig',
+            $params
+        );
     }
 }

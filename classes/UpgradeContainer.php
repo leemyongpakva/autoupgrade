@@ -688,6 +688,35 @@ class UpgradeContainer
     /**
      * @throws Exception
      */
+    public function getUpgradeSelfCheck(): UpgradeSelfCheck
+    {
+        $this->initPrestaShopCore();
+        $state = $this->getState();
+
+        $distributionApiService = new DistributionApiService();
+        $phpVersionResolverService = new PhpVersionResolverService(
+            $distributionApiService,
+            $this->getFileLoader(),
+            $state->getCurrentVersion()
+        );
+
+        return new UpgradeSelfCheck(
+            $this->getUpgrader(),
+            $state,
+            $this->getUpgradeConfiguration(),
+            $this->getPrestaShopConfiguration(),
+            $this->getTranslator(),
+            $phpVersionResolverService,
+            $this->getChecksumCompare(),
+            _PS_ROOT_DIR_,
+            _PS_ADMIN_DIR_,
+            $this->getProperty(UpgradeContainer::WORKSPACE_PATH)
+        );
+    }
+
+    /**
+     * @throws Exception
+     */
     public function getWorkspace(): Workspace
     {
         if (null !== $this->workspace) {

@@ -1,0 +1,40 @@
+{% extends "@ModuleAutoUpgrade/components/dialog.html.twig" %}
+
+{% block dialog_content %}
+    <p>
+        {{ description }}
+    </p>
+{% endblock %}
+
+{% block dialog_extra_content_inner %}
+    {% if missing_files is defined and missing_files|length > 0 %}
+        <div class="logs__summary">
+            <div class="logs__summary-top">
+                <p class="h3">{{ 'List of files missing'|trans({}) }}</p>
+                <span class="badge badge-warning">{{ missing_files|length }}</span>
+            </div>
+            <div class="logs__summary-scroll">
+                {% for missing_file in missing_files %}
+                    <div>
+                        {{ missing_file }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+    {% if altered_files is defined and altered_files|length > 0 %}
+        <div class="logs__summary">
+            <div class="logs__summary-top">
+                <p class="h3">{{ 'List of files changed'|trans({}) }}</p>
+                <span class="badge badge-warning">{{ altered_files|length }}</span>
+            </div>
+            <div class="logs__summary-scroll">
+                {% for altered_file in altered_files %}
+                    <div>
+                        {{ altered_file }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}
