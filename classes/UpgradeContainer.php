@@ -463,12 +463,10 @@ class UpgradeContainer
             define('_PS_ROOT_DIR_', $this->getProperty(self::PS_ROOT_PATH));
         }
 
-        $currentPrestashopVersion = $this->getProperty(self::PS_VERSION);
-        $phpRequirementService = new PhpVersionResolverService(new DistributionApiService(), $this->getFileLoader(), $currentPrestashopVersion);
         $upgrader = new Upgrader(
-            $phpRequirementService,
+            $this->getPhpVersionResolverService(),
             $this->getUpgradeConfiguration(),
-            $currentPrestashopVersion
+            $this->getProperty(self::PS_VERSION)
         );
 
         $this->upgrader = $upgrader;
@@ -748,8 +746,8 @@ class UpgradeContainer
             $this->getTranslator(),
             $this->getPhpVersionResolverService(),
             $this->getChecksumCompare(),
-            _PS_ROOT_DIR_,
-            _PS_ADMIN_DIR_,
+            $this->psRootDir,
+            $this->adminDir,
             $this->getProperty(UpgradeContainer::WORKSPACE_PATH)
         );
 

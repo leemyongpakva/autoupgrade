@@ -63,7 +63,6 @@ export default class UpdatePageVersionChoice extends UpdatePage {
 
   #onClickDialogLink = async (event: MouseEvent) => {
     const target = event.target as HTMLAnchorElement;
-    console.log('click');
 
     // Checks if the clicked element is an <a> tag pointing towards an ID
     if (!target || target.tagName !== 'A' || !target.hash) {
