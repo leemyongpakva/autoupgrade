@@ -11,7 +11,7 @@ describe('LogsViewer', () => {
     container = document.createElement('div');
     container.innerHTML = `
       <div data-component="logs-viewer" class="logs__inner">
-        <form class="logs__download-form" data-download-logs-route="">
+        <form id="form-logs-download-button" data-download-logs-route="">
           <input type="hidden" name="download-logs-type" value="" />
         </form>
         <div data-slot-component="scroll" class="logs__scroll" tabindex="0">

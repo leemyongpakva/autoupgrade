@@ -17,6 +17,8 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
     LOG_BEFORE_SCROLL: 120 // The number of logs to process before automatically scrolling to the bottom.
   };
 
+  #formId = 'form-logs-download-button';
+
   #templateLogLine = this.queryElement<HTMLTemplateElement>(
     '#log-line',
     'Template log line not found'
@@ -247,10 +249,10 @@ export default class LogsViewer extends ComponentAbstract implements DomLifecycl
 
     this.#logsSummary.appendChild(fragment);
 
-    const downloadlogsButtonForm = this.queryElement<HTMLFormElement>(
-      '.logs__download-form',
-      'Form to request the button to download logs cannot be found'
-    );
+    const downloadlogsButtonForm = document.forms.namedItem(this.#formId);
+    if (!downloadlogsButtonForm) {
+      throw new Error('Form to request the button to download logs cannot be found');
+    }
     await api.post(
       downloadlogsButtonForm.dataset.downloadLogsRoute!,
       new FormData(downloadlogsButtonForm)
