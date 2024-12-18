@@ -35,11 +35,13 @@ class UpdateState extends AbstractState
 
     /**
      * Origin version of PrestaShop
+     *
      * @var string
      */
     protected $currentVersion;
     /**
      * Destination version of PrestaShop
+     *
      * @var ?string
      */
     protected $destinationVersion;
@@ -58,7 +60,8 @@ class UpdateState extends AbstractState
 
     /**
      * @var bool Determining if all steps went totally successfully
-     * @deprecated
+     *
+     * @deprecated To remove with the old UI
      */
     protected $warning_exists = false;
 
@@ -156,5 +159,5 @@ class UpdateState extends AbstractState
         $this->save();
 
         return $this;
-    }    
+    }
 }

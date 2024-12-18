@@ -27,7 +27,6 @@
 
 namespace PrestaShop\Module\AutoUpgrade\State;
 
-use InvalidArgumentException;
 use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 

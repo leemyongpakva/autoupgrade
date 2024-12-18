@@ -34,7 +34,7 @@ use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
 class LogsService
 {
-    /** @var State */
+    /** @var LogsState */
     private $state;
 
     /** @var Translator */

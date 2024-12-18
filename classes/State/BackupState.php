@@ -46,15 +46,15 @@ class BackupState extends AbstractState
      * @var string
      */
     protected $backupDbFilename;
-    
+
     /**
      * @var int
      */
-    protected $backup_loop_limit;
+    protected $backupLoopLimit;
     /**
      * @var string the table being synchronized, in case mutiple requests are needed to sync the whole table
      */
-    protected $backup_table;
+    protected $backupTable;
 
     /**
      * Int during BackupDb, allowing the script to increent the number of different file names
@@ -74,8 +74,6 @@ class BackupState extends AbstractState
         $rand = dechex(mt_rand(0, min(0xffffffff, mt_getrandmax())));
         $date = date('Ymd-His');
         $backupName = 'V' . $currentVersion . '_' . $date . '-' . $rand;
-        // Todo: To be moved in state class? We could only require the backup name here
-        // I.e = $this->upgradeContainer->getBackupState()->setBackupName($backupName);, which triggers 2 other setters internally
         $this->setBackupName($backupName);
     }
 
@@ -107,12 +105,12 @@ class BackupState extends AbstractState
 
     public function getBackupLoopLimit(): ?int
     {
-        return $this->backup_loop_limit;
+        return $this->backupLoopLimit;
     }
 
-    public function setBackupLoopLimit(?int $backup_loop_limit): self
+    public function setBackupLoopLimit(?int $backupLoopLimit): self
     {
-        $this->backup_loop_limit = $backup_loop_limit;
+        $this->backupLoopLimit = $backupLoopLimit;
         $this->save();
 
         return $this;
@@ -120,12 +118,12 @@ class BackupState extends AbstractState
 
     public function getBackupTable(): ?string
     {
-        return $this->backup_table;
+        return $this->backupTable;
     }
 
-    public function setBackupTable(?string $backup_table): self
+    public function setBackupTable(?string $backupTable): self
     {
-        $this->backup_table = $backup_table;
+        $this->backupTable = $backupTable;
         $this->save();
 
         return $this;

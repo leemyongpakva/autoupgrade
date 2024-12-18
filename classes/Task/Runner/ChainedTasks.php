@@ -31,7 +31,6 @@ use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponse;
 use PrestaShop\Module\AutoUpgrade\Task\AbstractTask;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
-use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\TaskRepository;
 use Throwable;
 
@@ -116,16 +115,15 @@ abstract class ChainedTasks extends AbstractTask
             $timestamp = date('Y-m-d-His');
             switch ($this->step) {
                 case TaskName::TASK_BACKUP_INITIALIZATION:
-                    $this->container->getLogsState()->setActiveBackupLogFromTimestamp($timestamp);
+                    $this->container->getLogsState()->setActiveBackupLogFromDateTime($timestamp);
                     break;
                 case TaskName::TASK_RESTORE:
-                    $this->container->getLogsState()->setActiveRestoreLogFromTimestamp($timestamp);
+                    $this->container->getLogsState()->setActiveRestoreLogFromDateTime($timestamp);
                     break;
                 case TaskName::TASK_UPDATE_INITIALIZATION:
-                    $this->container->getLogsState()->setActiveUpdateLogFromTimestamp($timestamp);
+                    $this->container->getLogsState()->setActiveUpdateLogFromDateTime($timestamp);
                     break;
             }
-            
         }
     }
 }

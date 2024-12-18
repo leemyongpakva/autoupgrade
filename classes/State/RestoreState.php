@@ -45,7 +45,7 @@ class RestoreState extends AbstractState
      * @var string[]
      */
     protected $restoreDbFilenames = [];
-    
+
     /**
      * Int during BackupDb, allowing the script to increent the number of different file names
      * String during step RestoreDb, which contains the file to process (Data coming from toRestoreQueryList).

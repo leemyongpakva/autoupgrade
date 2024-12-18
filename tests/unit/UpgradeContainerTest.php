@@ -45,7 +45,7 @@ class UpgradeContainerTest extends TestCase
             ->setMethods(['getDb', 'getUpgrader'])
             ->getMock();
 
-        $container->getState()->setDestinationVersion('1.7.1.0');
+        $container->getUpdateState()->setDestinationVersion('1.7.1.0');
         $actualClass = get_class(call_user_func([$container, $functionName]));
         $this->assertSame($actualClass, $expectedClass);
     }
@@ -64,7 +64,7 @@ class UpgradeContainerTest extends TestCase
             ['getFileLoader', PrestaShop\Module\AutoUpgrade\Xml\FileLoader::class],
             ['getLogger', PrestaShop\Module\AutoUpgrade\Log\WebLogger::class],
             ['getModuleAdapter', \PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\ModuleAdapter::class],
-            ['getState', \PrestaShop\Module\AutoUpgrade\State::class],
+            ['getUpdateState', \PrestaShop\Module\AutoUpgrade\State\UpdateState::class],
             ['getSymfonyAdapter', PrestaShop\Module\AutoUpgrade\UpgradeTools\SymfonyAdapter::class],
             ['getTranslationAdapter', \PrestaShop\Module\AutoUpgrade\UpgradeTools\Translation::class],
             ['getTranslator', \PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator::class],

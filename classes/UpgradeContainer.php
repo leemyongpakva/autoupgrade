@@ -49,7 +49,6 @@ use PrestaShop\Module\AutoUpgrade\State\BackupState;
 use PrestaShop\Module\AutoUpgrade\State\LogsState;
 use PrestaShop\Module\AutoUpgrade\State\RestoreState;
 use PrestaShop\Module\AutoUpgrade\State\UpdateState;
-use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\AssetsEnvironment;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension3;
@@ -191,11 +190,11 @@ class UpgradeContainer
      * @var BackupState
      */
     private $backupState;
-    
-        /**
-         * @var LogsState
-         */
-        private $logsState;
+
+    /**
+     * @var LogsState
+     */
+    private $logsState;
 
     /**
      * @var RestoreState
@@ -635,7 +634,7 @@ class UpgradeContainer
 
         return $this->backupState;
     }
-    
+
     public function getLogsState(): LogsState
     {
         if (null !== $this->logsState) {

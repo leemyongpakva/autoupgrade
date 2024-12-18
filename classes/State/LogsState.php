@@ -50,9 +50,9 @@ class LogsState extends AbstractState
         return $this->activeBackupLogFile;
     }
 
-    public function setActiveBackupLogFromTimestamp(string $timestamp): self
+    public function setActiveBackupLogFromDateTime(string $datetime): self
     {
-        $this->activeBackupLogFile = $timestamp . '-backup.txt';
+        $this->activeBackupLogFile = $datetime . '-backup.txt';
         $this->save();
 
         return $this;
@@ -63,9 +63,9 @@ class LogsState extends AbstractState
         return $this->activeRestoreLogFile;
     }
 
-    public function setActiveRestoreLogFromTimestamp(string $timestamp): self
+    public function setActiveRestoreLogFromDateTime(string $datetime): self
     {
-        $this->activeRestoreLogFile = $timestamp . '-restore.txt';
+        $this->activeRestoreLogFile = $datetime . '-restore.txt';
         $this->save();
 
         return $this;
@@ -76,9 +76,9 @@ class LogsState extends AbstractState
         return $this->activeUpdateLogFile;
     }
 
-    public function setActiveUpdateLogFromTimestamp(string $timestamp): self
+    public function setActiveUpdateLogFromDateTime(string $datetime): self
     {
-        $this->activeUpdateLogFile = $timestamp . '-update.txt';
+        $this->activeUpdateLogFile = $datetime . '-update.txt';
         $this->save();
 
         return $this;

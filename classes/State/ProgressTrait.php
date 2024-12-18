@@ -33,7 +33,7 @@ trait ProgressTrait
 {
     /** @var int */
     protected $progressPercentage;
-    
+
     public function getProgressPercentage(): ?int
     {
         return $this->progressPercentage;
@@ -41,7 +41,7 @@ trait ProgressTrait
 
     public function setProgressPercentage(int $progressPercentage): self
     {
-        if ($progressPercentage < $this->progressPercentage) {
+        if ($progressPercentage && $progressPercentage < $this->progressPercentage) {
             throw new InvalidArgumentException('Updated progress percentage cannot be lower than the currently set one.');
         }
 

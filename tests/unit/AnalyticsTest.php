@@ -27,7 +27,8 @@ use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\AutoUpgrade\Analytics;
 use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\State;
+use PrestaShop\Module\AutoUpgrade\State\RestoreState;
+use PrestaShop\Module\AutoUpgrade\State\UpdateState;
 
 class AnalyticsTest extends TestCase
 {
@@ -36,10 +37,15 @@ class AnalyticsTest extends TestCase
         $fixturesDir = __DIR__ . '/../../fixtures/config/';
         $fileStorage = new FileConfigurationStorage($fixturesDir);
 
-        $state = (new State($fileStorage))
-            ->setCurrentVersion('8.8.8')
-            ->setDestinationVersion('8.8.808')
+        $restoreState = (new RestoreState($fileStorage))
             ->setRestoreName('V1.2.3_blablabla-🐶');
+        $updateState = (new UpdateState($fileStorage))
+            ->setCurrentVersion('8.8.8')
+            ->setDestinationVersion('8.8.808');
+        $states = [
+            'restore' => $restoreState,
+            'update' => $updateState,
+        ];
         $upgradeConfiguration = (new UpgradeConfiguration([
             UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => 0,
             UpgradeConfiguration::PS_AUTOUP_CHANGE_DEFAULT_THEME => 1,
@@ -52,7 +58,7 @@ class AnalyticsTest extends TestCase
 
         $analytics = new Analytics(
             $upgradeConfiguration,
-            $state,
+            $states,
             'somePathToAutoupgradeModule',
             [
                 'properties' => [
