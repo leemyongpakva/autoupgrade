@@ -1,8 +1,8 @@
 <div class="scrollable-list">
-  {% if title is defined and title and not empty %}
+  {% if title is defined and title is not empty %}
     <div class="scrollable-list__header">
       <p class="h3">{{ title }}</p>
-      {% if status is defined and status and not empty %}
+      {% if status is defined and status is not empty %}
         <span class="scrollable-list__count badge badge-{{ status }}">{{ items|length }}</span>
       {% endif %}
     </div>

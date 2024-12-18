@@ -21,8 +21,10 @@ $e: ".scrollable-list";
     &__count {
       flex-shrink: 0;
       min-width: 1.25rem;
+      padding: 0.0625rem 0.3125rem;
       font-size: 0.875rem;
       line-height: 1.125rem;
+      text-align: center;
     }
 
     &__scroll {
@@ -35,7 +37,7 @@ $e: ".scrollable-list";
       overflow-y: auto;
       border-radius: var(--#{$ua-prefix}border-radius);
       font-size: 0.875rem;
-      line-height: 1.25;
+      line-height: 1.25rem;
     }
 
     &__item {
