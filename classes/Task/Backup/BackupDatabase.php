@@ -151,9 +151,6 @@ class BackupDatabase extends AbstractTask
                     $written += fwrite($fp, $schema[0]['Create Table'] . ";\n\n");
                     // schema created, now we need to create the missing vars
                     $state->setBackupTable($table);
-                    //TODO: The related getter was never called. Check if we can remove this
-                    // $lines = explode("\n", $schema[0]['Create Table']);
-                    // $state->setBackupLines($lines);
                 }
             }
             // end of schema
@@ -251,8 +248,6 @@ class BackupDatabase extends AbstractTask
         }
         $state
             ->setBackupLoopLimit(null)
-            // TODO: remove if we confirm it is unused
-            // ->setBackupLines(null)
             ->setBackupTable(null);
 
         $this->stepDone = true;
