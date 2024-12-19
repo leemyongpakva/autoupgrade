@@ -28,6 +28,7 @@
 namespace PrestaShop\Module\AutoUpgrade;
 
 use Exception;
+use InvalidArgumentException;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupManager;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
@@ -45,10 +46,12 @@ use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\LogsService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
+use PrestaShop\Module\AutoUpgrade\State\AbstractState;
 use PrestaShop\Module\AutoUpgrade\State\BackupState;
 use PrestaShop\Module\AutoUpgrade\State\LogsState;
 use PrestaShop\Module\AutoUpgrade\State\RestoreState;
 use PrestaShop\Module\AutoUpgrade\State\UpdateState;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\AssetsEnvironment;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension3;
@@ -669,6 +672,23 @@ class UpgradeContainer
         $this->updateState->load();
 
         return $this->updateState;
+    }
+
+    /**
+     * @param TaskType::TASK_TYPE_* $taskType
+     */
+    public function getStateFromTaskType($taskType): AbstractState
+    {
+        switch ($taskType) {
+            case TaskType::TASK_TYPE_BACKUP:
+                return $this->getBackupState();
+            case TaskType::TASK_TYPE_RESTORE:
+                return $this->getRestoreState();
+            case TaskType::TASK_TYPE_UPDATE:
+                return $this->getUpdateState();
+            default:
+                throw new InvalidArgumentException('Unknown task type "' . $taskType . '"');
+        }
     }
 
     /**

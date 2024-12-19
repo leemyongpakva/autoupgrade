@@ -45,6 +45,11 @@ abstract class ChainedTasks extends AbstractTask
     protected $step;
 
     /**
+     * @var string
+     */
+    protected $stepClass;
+
+    /**
      * Execute all the tasks from a specific initial step, until the end (complete or error).
      *
      * @return int Return code (0 for success, any value otherwise)
@@ -58,6 +63,7 @@ abstract class ChainedTasks extends AbstractTask
         $requireRestart = false;
         while ($this->canContinue() && !$requireRestart) {
             $controller = TaskRepository::get($this->step, $this->container);
+            $this->stepClass = get_class($controller);
             $controller->init();
             $this->logger->debug('Step ' . $this->step);
             try {

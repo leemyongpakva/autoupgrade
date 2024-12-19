@@ -31,6 +31,7 @@ use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponse;
 use PrestaShop\Module\AutoUpgrade\Analytics;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
+use PrestaShop\Module\AutoUpgrade\Task\Runner\ChainedTasks;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
@@ -120,26 +121,28 @@ abstract class AbstractTask
      */
     public function getResponse(): AjaxResponse
     {
-        switch ($this::TASK_TYPE) {
-            case TaskType::TASK_TYPE_BACKUP:
-                $state = $this->container->getBackupState();
-                break;
-            case TaskType::TASK_TYPE_RESTORE:
-                $state = $this->container->getRestoreState();
-                break;
-            case TaskType::TASK_TYPE_UPDATE:
-            default:
-                $state = $this->container->getUpdateState();
-                break;
-        }
-
-        $response = new AjaxResponse($state, $this->logger);
+        $response = new AjaxResponse(
+            $this->container->getStateFromTaskType($this->getTaskType()),
+            $this->logger
+        );
 
         return $response->setError($this->error)
             ->setStepDone($this->stepDone)
             ->setNext($this->next)
             ->setNextParams($this->nextParams)
             ->setUpgradeConfiguration($this->container->getUpgradeConfiguration());
+    }
+
+    /**
+     * @return TaskType::TASK_TYPE_* $task
+     */
+    private function getTaskType(): string
+    {
+        if ($this instanceof ChainedTasks) {
+            return $this->stepClass::TASK_TYPE;
+        }
+
+        return $this::TASK_TYPE;
     }
 
     private function checkTaskMayRun(): void

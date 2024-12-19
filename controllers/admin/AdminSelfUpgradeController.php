@@ -312,6 +312,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
             );
         }
 
+        // TODO: Can be removed when the old UI is not needed anymore
         if (!$this->upgradeContainer->getBackupState()->isInitialized()) {
             $this->upgradeContainer->getBackupState()->initDefault(
                 $this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION)

@@ -33,6 +33,7 @@ use PrestaShop\Module\AutoUpgrade\Task\AbstractTask;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
+use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 
 class BackupInitialization extends AbstractTask
 {
@@ -43,6 +44,9 @@ class BackupInitialization extends AbstractTask
      */
     public function run(): int
     {
+        $this->container->getBackupState()->initDefault(
+            $this->container->getProperty(UpgradeContainer::PS_VERSION)
+        );
         $this->container->getBackupState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );

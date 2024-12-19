@@ -29,8 +29,6 @@ namespace PrestaShop\Module\AutoUpgrade\Task\Runner;
 
 class SingleTask extends ChainedTasks
 {
-    protected $step;
-
     /** @var bool */
     private $stepHasRun = false;
 

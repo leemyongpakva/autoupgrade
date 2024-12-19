@@ -83,6 +83,8 @@ class LogsService
             case TaskType::TASK_TYPE_UPDATE:
                 $fileName = $this->state->getActiveUpdateLogFile();
                 break;
+            default:
+                $fileName = null;
         }
 
         if (!$fileName) {

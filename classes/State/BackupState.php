@@ -48,11 +48,11 @@ class BackupState extends AbstractState
     protected $backupDbFilename;
 
     /**
-     * @var int
+     * @var ?int
      */
     protected $backupLoopLimit;
     /**
-     * @var string the table being synchronized, in case mutiple requests are needed to sync the whole table
+     * @var ?string the table being synchronized, in case mutiple requests are needed to sync the whole table
      */
     protected $backupTable;
 
@@ -75,6 +75,10 @@ class BackupState extends AbstractState
         $date = date('Ymd-His');
         $backupName = 'V' . $currentVersion . '_' . $date . '-' . $rand;
         $this->setBackupName($backupName);
+
+        $this->setBackupTable(null);
+        $this->setBackupLoopLimit(null);
+        $this->setDbStep(0);
     }
 
     public function getBackupName(): string

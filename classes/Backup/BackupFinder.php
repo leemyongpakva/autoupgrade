@@ -165,7 +165,7 @@ class BackupFinder
 
     private function getFormattedDatetime(int $timestamp): string
     {
-        setlocale(LC_TIME, 'UTC');
+        setlocale(LC_TIME, '');
 
         return strftime('%x %X', $timestamp);
     }
