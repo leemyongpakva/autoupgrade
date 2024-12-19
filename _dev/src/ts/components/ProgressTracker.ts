@@ -3,12 +3,16 @@ import ProgressBar from './ProgressBar';
 import LogsSummary from './LogsSummary';
 import LogsViewer from './LogsViewer';
 import { ApiResponseAction } from '../types/apiTypes';
-import { Destroyable } from '../types/DomLifecycle';
+import DomLifecycle from '../types/DomLifecycle';
 
-export default class ProgressTracker extends ComponentAbstract implements Destroyable {
+export default class ProgressTracker extends ComponentAbstract implements DomLifecycle {
   #logsSummary: LogsSummary | null = new LogsSummary(this.#logsSummaryContainer);
   #progressBar: ProgressBar | null = new ProgressBar(this.#progressBarContainer);
   #logsViewer: NonNullable<LogsViewer> = new LogsViewer(this.#logsViewerContainer);
+
+  public mount = () => {
+    this.#logsViewer.mount();
+  };
 
   public beforeDestroy = () => {
     this.#logsViewer.beforeDestroy();
@@ -69,7 +73,6 @@ export default class ProgressTracker extends ComponentAbstract implements Destro
     this.#progressBar?.beforeDestroy();
     this.#progressBar = null;
 
-    // Todo: we need to retrieve the download link
     this.#logsViewer.displaySummary();
   };
 }

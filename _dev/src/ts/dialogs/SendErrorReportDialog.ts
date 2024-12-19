@@ -1,6 +1,8 @@
 import DomLifecycle from '../types/DomLifecycle';
 import { sendUserFeedback } from '../api/sentryApi';
 import { Feedback, FeedbackFields, Logs } from '../types/sentryApi';
+import { logStore } from '../store/LogStore';
+import { formatLogsMessages } from '../utils/logsUtils';
 
 export default class SendErrorReportDialog implements DomLifecycle {
   protected readonly formId = 'form-error-feedback';
@@ -25,43 +27,28 @@ export default class SendErrorReportDialog implements DomLifecycle {
   #onSubmit = (event: SubmitEvent) => {
     event.preventDefault();
 
-    const logsViewer = document.querySelector('[data-component="logs-viewer"]');
+    const logs = this.#getLogs();
+    const feedback = this.#getFeedback(event.target as HTMLFormElement);
 
-    const logs: Logs = {};
-
-    const logsContent = logsViewer?.querySelector('[data-slot-component="list"]');
-    if (!logsContent) {
-      throw new Error('Logs content to send not found');
+    const latestError = logStore.getErrors().pop()?.message;
+    if (!latestError) {
+      throw new Error('No error message found to send');
     }
 
-    const message = logsContent.lastChild?.textContent;
-    if (!message) {
-      throw new Error('Message to send not found');
-    }
+    sendUserFeedback(latestError, logs, feedback);
+  };
 
-    if (!logsContent.textContent) {
-      throw new Error('Logs to send not found');
-    }
-    logs.logs = logsContent.textContent;
+  #getLogs(): Logs {
+    return {
+      logs: formatLogsMessages(logStore.getLogs()),
+      warnings: formatLogsMessages(logStore.getWarnings()),
+      errors: formatLogsMessages(logStore.getErrors())
+    };
+  }
 
-    const summaryWarningText = logsViewer?.querySelector(
-      '[data-summary-severity="warning"]'
-    )?.textContent;
-    if (summaryWarningText) {
-      logs.warnings = summaryWarningText;
-    }
-
-    const summaryErrorText = logsViewer?.querySelector(
-      '[data-summary-severity="error"]'
-    )?.textContent;
-    if (summaryErrorText) {
-      logs.errors = summaryErrorText;
-    }
-
-    const feedback: Feedback = {};
-
-    const form = event.target as HTMLFormElement;
+  #getFeedback(form: HTMLFormElement): Feedback {
     const formData = new FormData(form);
+    const feedback: Feedback = {};
 
     Object.values(FeedbackFields).forEach((field) => {
       const value = formData.get(field);
@@ -70,6 +57,6 @@ export default class SendErrorReportDialog implements DomLifecycle {
       }
     });
 
-    sendUserFeedback(message, logs, feedback);
-  };
+    return feedback;
+  }
 }

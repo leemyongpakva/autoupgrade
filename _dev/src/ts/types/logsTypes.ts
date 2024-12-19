@@ -15,15 +15,27 @@ export enum ErrorSeverity {
   EMERGENCY = 'EMERGENCY'
 }
 
-export enum SeverityClasses {
+export type LogsSeverity = SuccessSeverity | WarningSeverity | ErrorSeverity;
+
+export enum Severity {
   SUCCESS = 'success',
   WARNING = 'warning',
   ERROR = 'error'
 }
 
 export interface LogEntry {
-  className: SeverityClasses;
+  severity: Severity;
   message: string;
 }
 
-export type LogsSeverity = SuccessSeverity | WarningSeverity | ErrorSeverity;
+export interface Log extends LogEntry {
+  height: number;
+  offsetTop: number;
+  HTMLElement?: HTMLDivElement;
+}
+
+export interface VisibleLogs {
+  marginTop: number;
+  marginBottom: number;
+  visibleLogs: Log[];
+}

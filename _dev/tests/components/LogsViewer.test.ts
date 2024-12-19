@@ -1,10 +1,13 @@
 import LogsViewer from '../../src/ts/components/LogsViewer';
+import { logStore } from '../../src/ts/store/LogStore';
 
 describe('LogsViewer', () => {
   let logsViewer: LogsViewer;
   let container: HTMLElement;
 
   beforeEach(() => {
+    logStore.clearLogs();
+
     container = document.createElement('div');
     container.innerHTML = `
       <div data-component="logs-viewer" class="logs__inner">
@@ -57,20 +60,19 @@ describe('LogsViewer', () => {
 
       const logsList = container.querySelector('[data-slot-component="list"]');
       const logLines = logsList!.querySelectorAll('.logs__line');
-      const logLineContents = logsList!.querySelectorAll('.logs__line-content');
 
       expect(logLines.length).toBe(3);
-      expect(logLineContents[0].textContent).toBe('Info message');
+      expect(logLines[0].textContent).toBe('Info message');
       expect(logLines[0].classList.contains('logs__line--success')).toBe(true);
 
-      expect(logLineContents[1].textContent).toBe('Warning message');
+      expect(logLines[1].textContent).toBe('Warning message');
       expect(logLines[1].classList.contains('logs__line--warning')).toBe(true);
 
-      expect(logLineContents[2].textContent).toBe('Error message');
+      expect(logLines[2].textContent).toBe('Error message');
       expect(logLines[2].classList.contains('logs__line--error')).toBe(true);
     });
 
-    it('should prevent adding logs when the summary is displayed', () => {
+    it('should prevent adding logs when the summary is displayed', async () => {
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
 
       const logsList = container.querySelector('[data-slot-component="list"]');
@@ -78,7 +80,7 @@ describe('LogsViewer', () => {
 
       expect(logLines.length).toBe(0);
 
-      logsViewer.displaySummary();
+      await logsViewer.displaySummary();
       logsViewer.addLogs(['INFO - Log message']);
 
       expect(consoleSpy).toHaveBeenCalledWith('Cannot display summary because logs are empty');
@@ -125,9 +127,9 @@ describe('LogsViewer', () => {
       expect(errorChildren[0].textContent).toContain('First error');
     });
 
-    it('should not display summary if no logs are present', () => {
+    it('should not display summary if no logs are present', async () => {
       const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
-      logsViewer.displaySummary();
+      await logsViewer.displaySummary();
 
       const summary = container.querySelector('[data-slot-component="summary"]');
       expect(summary!.children.length).toBe(0);

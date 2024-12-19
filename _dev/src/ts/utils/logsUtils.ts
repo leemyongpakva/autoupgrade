@@ -2,21 +2,23 @@ import {
   ErrorSeverity,
   LogEntry,
   LogsSeverity,
-  SeverityClasses,
+  Severity,
   SuccessSeverity,
   WarningSeverity
 } from '../types/logsTypes';
+import type { Procedure } from '../types/logsUtilsTypes';
+import type { Log } from '../types/logsTypes';
 
 /**
  * @public
- * @type {Record<LogsSeverity, SeverityClasses>}
+ * @type {Record<LogsSeverity, Severity>}
  * @description Maps severity levels to their corresponding CSS classes for styling and process purposes.
  */
-export const severityToClassMap: Record<LogsSeverity, SeverityClasses> = {
-  ...Object.fromEntries(Object.values(SuccessSeverity).map((s) => [s, SeverityClasses.SUCCESS])),
-  ...Object.fromEntries(Object.values(WarningSeverity).map((s) => [s, SeverityClasses.WARNING])),
-  ...Object.fromEntries(Object.values(ErrorSeverity).map((s) => [s, SeverityClasses.ERROR]))
-} as Record<LogsSeverity, SeverityClasses>;
+export const severityToClassMap: Record<LogsSeverity, Severity> = {
+  ...Object.fromEntries(Object.values(SuccessSeverity).map((s) => [s, Severity.SUCCESS])),
+  ...Object.fromEntries(Object.values(WarningSeverity).map((s) => [s, Severity.WARNING])),
+  ...Object.fromEntries(Object.values(ErrorSeverity).map((s) => [s, Severity.ERROR]))
+} as Record<LogsSeverity, Severity>;
 
 const severityPattern = [
   ...Object.values(SuccessSeverity),
@@ -38,10 +40,43 @@ export function parseLogWithSeverity(log: string): LogEntry {
   if (match) {
     const severityStr = match[1] as LogsSeverity;
     const message = match[2];
-    const className = severityToClassMap[severityStr] || SeverityClasses.ERROR;
+    const severity = severityToClassMap[severityStr] || Severity.ERROR;
 
-    return { className, message };
+    return { severity, message };
   }
 
-  return { className: SeverityClasses.ERROR, message: log };
+  return { severity: Severity.ERROR, message: log };
+}
+
+/**
+ * @public
+ * @param {T} func
+ * @param {number} wait
+ * @return {(...args: Parameters<T>) => void}
+ * @description
+ */
+export function debounce<T extends Procedure>(
+  func: T,
+  wait: number
+): (...args: Parameters<T>) => void {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  return (...args: Parameters<T>): void => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, wait);
+  };
+}
+
+/**
+ * @public
+ * @param logs
+ * @description
+ */
+export function formatLogsMessages(logs: Log[]): string {
+  return logs.map((log) => log.message).join('\n');
 }

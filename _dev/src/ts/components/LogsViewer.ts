@@ -1,101 +1,243 @@
 import ComponentAbstract from './ComponentAbstract';
-import { SeverityClasses, LogEntry } from '../types/logsTypes';
-import { parseLogWithSeverity } from '../utils/logsUtils';
-import { Destroyable } from '../types/DomLifecycle';
+import { LogEntry, Log, Severity, VisibleLogs } from '../types/logsTypes';
+import { parseLogWithSeverity, debounce } from '../utils/logsUtils';
+import DomLifecycle from '../types/DomLifecycle';
+import { logStore } from '../store/LogStore';
 import api from '../api/RequestHandler';
 
-export default class LogsViewer extends ComponentAbstract implements Destroyable {
-  #warnings: string[] = [];
-  #errors: string[] = [];
+export default class LogsViewer extends ComponentAbstract implements DomLifecycle {
+  #logsIndexOffsets: Map<number, number> = new Map();
+  #logsListHeight: number = this.#logsList.clientHeight;
   #isSummaryDisplayed: boolean = false;
 
-  #timeLastReflow: number = 0;
+  // -- virtual scroll configuration --
+  private static CONFIG = {
+    BUFFER_SIZE: 6, // The multiplier for the viewport height used to define the buffer zone for virtual scrolling.
+    DEBOUNCE_TIME: 50, // The delay time (in ms) for debouncing the `refreshView` method.
+    LOG_BEFORE_SCROLL: 120 // The number of logs to process before automatically scrolling to the bottom.
+  };
 
-  #logsList = this.queryElement<HTMLDivElement>(
-    '[data-slot-component="list"]',
-    'Logs list not found'
-  );
-  #logsScroll = this.queryElement<HTMLDivElement>(
-    '[data-slot-component="scroll"]',
-    'Logs scroll not found'
-  );
-  #logsSummary = this.queryElement<HTMLDivElement>(
-    '[data-slot-component="summary"]',
-    'Logs summary not found'
-  );
   #templateLogLine = this.queryElement<HTMLTemplateElement>(
     '#log-line',
     'Template log line not found'
   );
+
+  #logsSummary = this.queryElement<HTMLDivElement>(
+    '[data-slot-component="summary"]',
+    'Logs summary not found'
+  );
+
   #templateSummary = this.queryElement<HTMLTemplateElement>(
     '#log-summary',
     'Template summary not found'
   );
 
+  #logsScroll = this.queryElement<HTMLDivElement>(
+    '[data-slot-component="scroll"]',
+    'Logs scroll not found'
+  );
+
+  get #logsList() {
+    return this.queryElement<HTMLDivElement>('[data-slot-component="list"]', 'Logs list not found');
+  }
+
+  public mount = () => {
+    this.#logsScroll.addEventListener('scroll', this.#debouncedRefreshView);
+
+    // delay needed because of side menu toggle on small screens
+    // we set width to prevent the modification of the height of
+    // the logs which would require too many resources to recalculate everything
+    setTimeout(() => {
+      this.#logsList.style.width = `${this.#logsList.offsetWidth}px`;
+    }, 1000);
+  };
+
   public beforeDestroy = () => {
+    logStore.clearLogs();
+    this.#logsScroll.removeEventListener('scroll', this.#debouncedRefreshView);
     this.#logsSummary.removeEventListener('click', this.#handleLinkEvent);
   };
 
   /**
    * @public
-   * @param {string[]} logs - Array of log strings to be added.
-   * @description Adds logs to the viewer and updates the DOM with log lines.
-   * Logs with specific severity (WARNING, ERROR) are tracked with unique IDs.
-   * Prevents adding logs if the summary is already displayed.
+   * @param {string[]} logs - Array of log strings to be parsed and displayed.
+   * @returns {void}
+   * @description Adds multiple logs to the logs list. Ensures each log is parsed, stored,
+   * and added to the DOM. Automatically scrolls to the bottom after a certain number of logs
+   * are added or when all logs are processed.
+   * If the logs summary is currently displayed, the method exits early with a warning
+   * (no logs can be added if the summary is shown).
    */
   public addLogs = (logs: string[]): void => {
     if (this.#isSummaryDisplayed) {
-      console.warn('Cannot add logs while the summary is displayed');
+      console.warn('Cannot add logs because summary is displayed');
       return;
     }
 
-    const fragment = document.createDocumentFragment();
+    let count = 0;
 
     logs.forEach((log) => {
-      const logEntry = parseLogWithSeverity(log);
-      const logLine = this.#createLogLine(logEntry);
+      this.#addLogToStore(log);
+      count += 1;
 
-      if (logEntry.className === SeverityClasses.WARNING) {
-        const id = `warning-${this.#warnings.length}`;
-        this.#warnings.push(id);
-        logLine.id = id;
+      if (count > LogsViewer.CONFIG.LOG_BEFORE_SCROLL) {
+        this.#scrollToBottom();
+        count = 0;
       }
-
-      if (logEntry.className === SeverityClasses.ERROR) {
-        const id = `error-${this.#errors.length}`;
-        this.#errors.push(id);
-        logLine.id = id;
-      }
-
-      fragment.appendChild(logLine);
     });
 
-    this.#appendFragmentElement(fragment, this.#logsList);
     this.#scrollToBottom();
   };
 
   /**
+   * @private
+   * @param {string} log - A single log string to be parsed, stored, and added to the DOM.
+   * @returns {number} - The unique ID of the newly added log in the `logStore`.
+   * @description Parses a log string to create a structured log entry. Adds the parsed log
+   * to the `logStore`, updates the virtual scrolling infrastructure (offsets and height),
+   * and appends the corresponding DOM element to the logs container.
+   */
+  #addLogToStore(log: string): number {
+    const id = logStore.getLogsLength();
+    const logEntry = parseLogWithSeverity(log);
+    const HTMLElement = this.#createLogLine(logEntry);
+
+    this.#logsList.appendChild(HTMLElement);
+
+    const height = HTMLElement.offsetHeight;
+    const offsetTop = HTMLElement.offsetTop;
+
+    logStore.addLog({
+      ...logEntry,
+      height,
+      offsetTop,
+      HTMLElement
+    });
+
+    this.#logsIndexOffsets.set(id, offsetTop);
+    this.#logsListHeight += height;
+
+    return id;
+  }
+
+  /**
+   * @private
+   * @param {LogEntry | Log} log - A structured log entry containing severity and message.
+   * @param {boolean} isSummary - Flag to indicate if it's for a summary log.
+   * @returns {HTMLDivElement} - The DOM element representing the log line.
+   * @description Generates an HTML log line (for regular logs or summary logs).
+   */
+  #createLogLine = (log: LogEntry | Log, isSummary: boolean = false): HTMLDivElement => {
+    const logLineFragment = this.#templateLogLine.content.cloneNode(true) as DocumentFragment;
+    const logLine = logLineFragment.querySelector('.logs__line') as HTMLDivElement;
+
+    logLine.classList.add(`logs__line--${log.severity}`);
+    logLine.setAttribute('data-status', log.severity);
+    if (isSummary && 'offsetTop' in log) {
+      const logLineContent = logLine.querySelector('.logs__line-content') as HTMLDivElement;
+      logLineContent.textContent = log.message;
+
+      const linkElement = this.#createSummaryLinkElement(log.severity);
+      const linkClone = linkElement.cloneNode(true) as HTMLAnchorElement;
+      linkClone.href = `#${String(log.offsetTop)}`;
+
+      logLine.appendChild(linkClone);
+    } else {
+      logLine.textContent = log.message;
+    }
+
+    return logLine;
+  };
+
+  /**
+   * @private
+   * @description Scrolls the logs container to the bottom and triggers a visual refresh of the logs view.
+   */
+  #scrollToBottom = () => {
+    this.#logsScroll.scrollTop = this.#logsListHeight;
+    this.#refreshView();
+  };
+
+  /**
+   * @private
+   * @description Refreshes the view using the virtual scrolling technique.
+   */
+  #refreshView = () => {
+    const { marginTop, marginBottom, visibleLogs } = this.#calculateVisibleLogs(
+      this.#logsScroll.scrollTop,
+      this.#logsScroll.clientHeight
+    );
+
+    this.#logsList.style.marginTop = `${marginTop}px`;
+    this.#logsList.style.marginBottom = `${marginBottom}px`;
+
+    this.#logsList.innerHTML = '';
+    visibleLogs.forEach((log) => {
+      if (log.HTMLElement) {
+        this.#logsList.appendChild(log.HTMLElement);
+      }
+    });
+  };
+
+  /**
+   * Calculates the visible margins (top and bottom) and returns visible logs.
+   * @private
+   * @param {number} scrollTop - Current scroll position (top).
+   * @param {number} logsViewportHeight - Current viewport height.
+   * @returns {VisibleLogs} - Margins and visible logs.
+   */
+  #calculateVisibleLogs(scrollTop: number, logsViewportHeight: number): VisibleLogs {
+    const startBoundary = scrollTop - LogsViewer.CONFIG.BUFFER_SIZE * logsViewportHeight;
+    const endBoundary =
+      scrollTop + logsViewportHeight + LogsViewer.CONFIG.BUFFER_SIZE * logsViewportHeight;
+
+    let marginTop = 0;
+    let marginBottom = 0;
+
+    const visibleLogs: Log[] = [];
+    for (const [id, offsetTop] of this.#logsIndexOffsets.entries()) {
+      const log = logStore.getLogs()[id];
+      const logHeight = log.height;
+
+      if (offsetTop + logHeight < startBoundary) {
+        marginTop += logHeight;
+      } else if (offsetTop > endBoundary) {
+        marginBottom += logHeight;
+      } else {
+        visibleLogs.push(log);
+      }
+    }
+
+    return { marginTop, marginBottom, visibleLogs };
+  }
+
+  #debouncedRefreshView = debounce(() => {
+    this.#refreshView();
+  }, LogsViewer.CONFIG.DEBOUNCE_TIME);
+
+  /**
    * @public
-   * @description Displays a summary of logs, grouping warnings and errors.
-   * Summaries include links to the corresponding log lines.
-   * Adds a click event listener to handle navigation within the summary.
-   * Prevents displaying a summary if no logs are present.
+   * @description Displays a summary of logs, dividing it into warnings and errors.
+   * Creates DOM elements dynamically and adds event listeners for navigation.
+   * Prevents showing a summary if the logs list is empty.
    */
   public displaySummary = async (): Promise<void> => {
-    if (!this.#logsList.hasChildNodes()) {
+    if (logStore.getLogsLength() === 0) {
       console.warn('Cannot display summary because logs are empty');
       return;
     }
 
     const fragment = document.createDocumentFragment();
 
-    if (this.#warnings.length > 0) {
-      const warningsSummary = this.#createSummary(SeverityClasses.WARNING, this.#warnings);
+    const warnings = logStore.getWarnings();
+    if (warnings.length > 0) {
+      const warningsSummary = this.#createSummary(Severity.WARNING, warnings);
       fragment.appendChild(warningsSummary);
     }
 
-    if (this.#errors.length > 0) {
-      const errorsSummary = this.#createSummary(SeverityClasses.ERROR, this.#errors);
+    const errors = logStore.getErrors();
+    if (errors.length > 0) {
+      const errorsSummary = this.#createSummary(Severity.ERROR, errors);
       fragment.appendChild(errorsSummary);
     }
 
@@ -103,64 +245,25 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
       this.#logsSummary.addEventListener('click', this.#handleLinkEvent);
     }
 
+    this.#logsSummary.appendChild(fragment);
+
     await api.post(this.element.dataset.downloadLogsRoute!);
 
-    this.#appendFragmentElement(fragment, this.#logsSummary);
+    this.#logsSummary.appendChild(fragment);
     this.#isSummaryDisplayed = true;
+
+    this.#scrollToBottom();
   };
 
   /**
    * @private
-   * @param {LogEntry} logEntry - Parsed log entry containing message and severity information.
-   * @returns {HTMLDivElement} - The created log line element.
-   * @description Creates an HTML log line element based on the log entry's severity and message.
-   * Applies appropriate CSS classes and data attributes to the log line.
-   */
-  #createLogLine = (logEntry: LogEntry): HTMLDivElement => {
-    const logLineFragment = this.#templateLogLine.content.cloneNode(true) as DocumentFragment;
-    const logLine = logLineFragment.querySelector('.logs__line') as HTMLDivElement;
-    const logLineContent = logLineFragment.querySelector('.logs__line-content') as HTMLDivElement;
-
-    logLine.classList.add(`logs__line--${logEntry.className}`);
-    logLine.setAttribute('data-status', logEntry.className);
-    logLineContent.textContent = logEntry.message;
-
-    return logLine;
-  };
-
-  /**
-   * @private
-   * @param {DocumentFragment} fragment - The fragment containing child elements to append.
-   * @param {HTMLElement} element - The target element to which the fragment will be appended.
-   * @description Appends a document fragment to a specified HTML element in the DOM.
-   */
-  #appendFragmentElement = (fragment: DocumentFragment, element: HTMLElement) => {
-    element.appendChild(fragment);
-  };
-
-  /**
-   * @private
-   * @description Automatically scrolls the logs container to the bottom of the list.
-   */
-  #scrollToBottom = () => {
-    const currentTime = Date.now();
-
-    // We defer scrolls to the bottom if they are happening too frequently
-    if (currentTime - this.#timeLastReflow > 500) {
-      this.#timeLastReflow = currentTime;
-      this.#logsScroll.scrollTop = this.#logsScroll.scrollHeight;
-    }
-  };
-
-  /**
-   * @private
-   * @param {SeverityClasses} severity - The severity type (e.g., WARNING, ERROR).
-   * @param {string[]} logs - Array of log IDs to include in the summary.
-   * @returns {HTMLDivElement} - The created summary element.
+   * @param {Severity} severity - The severity of logs to summarize (e.g., warning, error).
+   * @param {Log[]} logs - An array of structured logs for the given severity.
+   * @returns {HTMLDivElement} - The summary HTML element for the grouped logs.
    * @description Creates a summary element grouping logs by severity.
    * Each log in the summary includes a link to its corresponding log line.
    */
-  #createSummary(severity: SeverityClasses, logs: string[]): HTMLDivElement {
+  #createSummary(severity: Severity, logs: Log[]): HTMLDivElement {
     const summaryFragment = this.#templateSummary.content.cloneNode(true) as DocumentFragment;
 
     const summary = summaryFragment.querySelector('.logs__summary') as HTMLDivElement;
@@ -175,19 +278,9 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
     const countContainer = summary.querySelector('[data-slot-template="count"]') as HTMLDivElement;
     countContainer.textContent = String(logs.length);
 
-    const linkElement = this.#createSummaryLinkElement(severity);
-
-    logs.forEach((logId) => {
-      const logElement = document.getElementById(logId)!;
-      const cloneLogElement = logElement.cloneNode(true) as HTMLDivElement;
-      cloneLogElement.id = '';
-
-      const linkClone = linkElement.cloneNode(true) as HTMLAnchorElement;
-      linkClone.href = `#${logId}`;
-
-      cloneLogElement.appendChild(linkClone);
-
-      summaryScroll.appendChild(cloneLogElement);
+    logs.forEach((log) => {
+      const logElement = this.#createLogLine(log, true);
+      summaryScroll.appendChild(logElement);
     });
 
     return summary;
@@ -195,11 +288,11 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
 
   /**
    * @private
-   * @param {SeverityClasses} severity - The severity type (e.g., WARNING, ERROR).
+   * @param {Severity} severity - The severity type (e.g., WARNING, ERROR).
    * @returns {string} - The content of the title template.
    * @description Retrieves the title template for the given severity type and extracts its content.
    */
-  #getSummaryTitle(severity: SeverityClasses): string {
+  #getSummaryTitle(severity: Severity): string {
     const titleTemplate = this.queryElement<HTMLTemplateElement>(
       `#summary-${severity}-title`,
       `Summary ${severity} title not found`
@@ -212,11 +305,11 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
 
   /**
    * @private
-   * @param {SeverityClasses} severity - The severity type (e.g., WARNING, ERROR).
+   * @param {Severity} severity - The severity type (e.g., WARNING, ERROR).
    * @returns {HTMLAnchorElement} - The created link element.
    * @description Creates a link element from the template corresponding to the given severity type.
    */
-  #createSummaryLinkElement(severity: SeverityClasses): HTMLAnchorElement {
+  #createSummaryLinkElement(severity: Severity): HTMLAnchorElement {
     const linkTemplate = this.queryElement<HTMLTemplateElement>(
       `#summary-${severity}-link`,
       `Summary ${severity} link not found`
@@ -242,15 +335,27 @@ export default class LogsViewer extends ComponentAbstract implements Destroyable
 
     event.preventDefault();
 
-    const logId = target.hash.substring(1);
-    const targetElement = document.getElementById(logId);
+    const offsetTopToScroll = target.hash.substring(1);
+    const logKey = [...this.#logsIndexOffsets.keys()].find(
+      (key) => this.#logsIndexOffsets.get(key) === Number(offsetTopToScroll)
+    );
 
-    if (targetElement) {
-      this.#logsScroll.scrollTop = targetElement.offsetTop - this.#logsScroll.offsetTop;
-      targetElement.classList.add('logs__line--pointed');
-      window.setTimeout(() => {
-        targetElement.classList.remove('logs__line--pointed');
-      }, 2000);
+    if (logKey === undefined) {
+      return;
     }
+
+    const HTMLElement = logStore.getLog(logKey).HTMLElement;
+
+    if (HTMLElement === undefined) {
+      return;
+    }
+
+    this.#logsScroll.scrollTop = Number(offsetTopToScroll);
+    window.setTimeout(() => {
+      HTMLElement.classList.add('logs__line--pointed');
+    }, 100);
+    window.setTimeout(() => {
+      HTMLElement.classList.remove('logs__line--pointed');
+    }, 2000);
   };
 }

@@ -18,6 +18,8 @@ export default class UpdatePageUpdate extends UpdatePage {
   public mount = async () => {
     this.initStepper();
 
+    this.#progressTracker.mount();
+
     const stepContent = document.getElementById('ua_step_content')!;
     const updateAction = stepContent.dataset.initialProcessAction!;
 
