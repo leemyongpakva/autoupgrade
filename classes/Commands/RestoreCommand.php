@@ -87,7 +87,7 @@ class RestoreCommand extends AbstractBackupCommand
 
             return $exitCode;
         } catch (Exception $e) {
-            $this->logger->error('An error occurred during the restoration process');
+            $this->logger->error("An error occurred during the restoration process:\n" . $e);
             throw $e;
         }
     }

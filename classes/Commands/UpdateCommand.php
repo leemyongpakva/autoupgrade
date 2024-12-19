@@ -115,7 +115,7 @@ class UpdateCommand extends AbstractCommand
 
             return $this->chainCommand($output);
         } catch (Exception $e) {
-            $this->logger->error('An error occurred during the update process');
+            $this->logger->error("An error occurred during the update process:\n" . $e);
             throw $e;
         }
     }

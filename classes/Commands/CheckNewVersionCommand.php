@@ -103,7 +103,7 @@ class CheckNewVersionCommand extends AbstractCommand
 
             return ExitCode::SUCCESS;
         } catch (Exception $e) {
-            $this->logger->error('An error occurred during the check new version process');
+            $this->logger->error("An error occurred during the check new version process:\n" . $e);
             throw $e;
         }
     }

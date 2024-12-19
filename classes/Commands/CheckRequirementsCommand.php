@@ -127,7 +127,7 @@ class CheckRequirementsCommand extends AbstractCommand
 
             return $this->exitCode;
         } catch (Exception $e) {
-            $this->logger->error('An error occurred during the check requirements process');
+            $this->logger->error("An error occurred during the check requirements process:\n" . $e);
             throw $e;
         }
     }

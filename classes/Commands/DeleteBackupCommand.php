@@ -83,7 +83,7 @@ class DeleteBackupCommand extends AbstractBackupCommand
 
             return $exitCode;
         } catch (Exception $e) {
-            $this->logger->error('An error occurred during the delete backup process');
+            $this->logger->error("An error occurred during the delete backup process:\n" . $e);
             throw $e;
         }
     }
