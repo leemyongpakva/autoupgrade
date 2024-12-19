@@ -721,7 +721,7 @@ class UpgradeContainer
         $this->phpVersionResolverService = new PhpVersionResolverService(
             $this->getDistributionApiService(),
             $this->getFileLoader(),
-            $this->getState()->getCurrentVersion()
+            $this->getProperty(self::PS_VERSION)
         );
 
         return $this->phpVersionResolverService;
