@@ -21,6 +21,12 @@ $e: ".content";
         background-color: transparent !important;
         /* stylelint-enable */
       }
+
+      ul {
+        li {
+          word-break: break-word;
+        }
+      }
     }
   }
 }

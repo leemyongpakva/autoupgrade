@@ -2,6 +2,11 @@
 
 $e: "#ua";
 
+#{$ua-id} {
+  // Default BO theme layout fix
+  padding-inline-end: 5px;
+}
+
 #{$e} {
   &_main {
     display: flex;
