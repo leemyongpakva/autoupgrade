@@ -162,31 +162,39 @@ class CheckRequirementsCommand extends AbstractCommand
                 case UpgradeSelfCheck::CORE_TEMPERED_FILES_LIST_NOT_EMPTY:
                     $missingFiles = $this->upgradeSelfCheck->getCoreMissingFiles();
 
-                    $this->output->writeln("\t" . count($missingFiles) . ' files are missing:');
-                    foreach ($missingFiles as $missingFile) {
-                        $this->output->writeln("\t\t" . $missingFile);
+                    if (!empty($missingFiles)) {
+                        $this->output->writeln("\t" . count($missingFiles) . ' files are missing:');
+                        foreach ($missingFiles as $missingFile) {
+                            $this->output->writeln("\t\t" . $missingFile);
+                        }
                     }
 
                     $alteredFiles = $this->upgradeSelfCheck->getCoreAlteredFiles();
 
-                    $this->output->writeln("\t" . count($alteredFiles) . ' files are altered:');
-                    foreach ($alteredFiles as $alteredFile) {
-                        $this->output->writeln("\t\t" . $alteredFile);
+                    if (!empty($alteredFiles)) {
+                        $this->output->writeln("\t" . count($alteredFiles) . ' files are altered:');
+                        foreach ($alteredFiles as $alteredFile) {
+                            $this->output->writeln("\t\t" . $alteredFile);
+                        }
                     }
                     break;
                 case UpgradeSelfCheck::THEME_TEMPERED_FILES_LIST_NOT_EMPTY:
                     $missingFiles = $this->upgradeSelfCheck->getThemeMissingFiles();
 
-                    $this->output->writeln("\t" . count($missingFiles) . ' files are missing:');
-                    foreach ($missingFiles as $missingFile) {
-                        $this->output->writeln("\t\t" . $missingFile);
+                    if (!empty($missingFiles)) {
+                        $this->output->writeln("\t" . count($missingFiles) . ' files are missing:');
+                        foreach ($missingFiles as $missingFile) {
+                            $this->output->writeln("\t\t" . $missingFile);
+                        }
                     }
 
                     $alteredFiles = $this->upgradeSelfCheck->getThemeAlteredFiles();
 
-                    $this->output->writeln("\t" . count($alteredFiles) . ' files are altered:');
-                    foreach ($alteredFiles as $alteredFile) {
-                        $this->output->writeln("\t\t" . $alteredFile);
+                    if (!empty($alteredFiles)) {
+                        $this->output->writeln("\t" . count($alteredFiles) . ' files are altered:');
+                        foreach ($alteredFiles as $alteredFile) {
+                            $this->output->writeln("\t\t" . $alteredFile);
+                        }
                     }
                     break;
                 default:
