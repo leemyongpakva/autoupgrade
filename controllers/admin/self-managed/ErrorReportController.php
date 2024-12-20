@@ -28,41 +28,23 @@
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\DocumentationLinks;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-abstract class AbstractPageWithStepController extends AbstractPageController
+class ErrorReportController extends AbstractGlobalController
 {
-    public function step(): Response
+    public function displayErrorReportModal(): JsonResponse
     {
-        if (!$this->request->isXmlHttpRequest()) {
-            return new Response('Unexpected call to a step route outside an ajax call.', 404);
-        }
-
-        // It may be tempting to move this line inside the parameters of the method
-        // `getTwig()->render()`. Please refrain to do so as this makes Twig
-        // called BEFORE the call to the function sent as parameters. Initiating it too early
-        // can be misleading when rendering the templates as more autoloaders can be loaded
-        // in the meantime (i.e the core).
-        $params = $this->getParams();
-
         return AjaxResponseBuilder::hydrationResponse(
-            PageSelectors::STEP_PARENT_ID,
+            PageSelectors::DIALOG_PARENT_ID,
             $this->getTwig()->render(
-                '@ModuleAutoUpgrade/steps/' . $this->getStepTemplate() . '.html.twig',
-                $params
+                '@ModuleAutoUpgrade/dialogs/dialog-error-report.html.twig',
+                [
+                    'data_transparency_link' => DocumentationLinks::PRESTASHOP_PROJECT_DATA_TRANSPARENCY_URL,
+                ]
             ),
-            ['newRoute' => $this->displayRouteInUrl()]
+            ['addScript' => 'send-error-report-dialog']
         );
     }
-
-    /**
-     * Relative path from the templates folder of the twig file
-     * to load when reaching this step.
-     *
-     * @see step()
-     *
-     * @return string
-     */
-    abstract protected function getStepTemplate(): string;
 }

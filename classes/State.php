@@ -58,6 +58,10 @@ class State
      */
     private $backupDbFilename;
     /**
+     * @var bool Marks the backup done during the update configuration
+     */
+    private $backupCompleted = false;
+    /**
      * @var string
      */
     private $restoreName;
@@ -222,6 +226,11 @@ class State
         return $this->backupDbFilename;
     }
 
+    public function isBackupCompleted(): bool
+    {
+        return $this->backupCompleted;
+    }
+
     /**
      * @return string[]|null
      */
@@ -327,6 +336,14 @@ class State
         return $this;
     }
 
+    public function setBackupCompleted(bool $completed): State
+    {
+        $this->backupCompleted = $completed;
+        $this->save();
+
+        return $this;
+    }
+
     /**
      * @param string[]|null $backup_lines
      */
@@ -410,7 +427,8 @@ class State
 
     public function setProgressPercentage(int $progressPercentage): State
     {
-        if ($progressPercentage < $this->progressPercentage) {
+        // Allow reset of percentage but not a decrease
+        if ($progressPercentage && $progressPercentage < $this->progressPercentage) {
             throw new InvalidArgumentException('Updated progress percentage cannot be lower than the currently set one.');
         }
 

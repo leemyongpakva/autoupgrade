@@ -98,7 +98,7 @@ abstract class AbstractTask
         $this->checkTaskMayRun();
 
         if ($this::TASK_TYPE !== null) {
-            $logPath = $this->container->getLogsPath($this::TASK_TYPE);
+            $logPath = $this->container->getLogsService()->getLogsPath($this::TASK_TYPE);
             if ($logPath !== null) {
                 $this->logger->updateLogsPath($logPath);
             }

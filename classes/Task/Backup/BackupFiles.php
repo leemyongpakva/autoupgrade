@@ -84,7 +84,6 @@ class BackupFiles extends AbstractTask
         $remainingFiles = $backlog->getRemainingTotal();
         if ($remainingFiles) {
             $this->logger->info($this->translator->trans('Backup files in progress. %d files left', [$remainingFiles]));
-
             $this->stepDone = false;
             $res = $this->container->getZipAction()->compress($backlog, $this->container->getProperty(UpgradeContainer::BACKUP_PATH) . DIRECTORY_SEPARATOR . $backupFilesFilename);
             if (!$res) {

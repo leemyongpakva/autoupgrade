@@ -25,26 +25,27 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-namespace PrestaShop\Module\AutoUpgrade\Traits;
+namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
-use PrestaShop\Module\AutoUpgrade\DocumentationLinks;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-trait DisplayErrorReportDialogTrait
+class LogsController extends AbstractGlobalController
 {
-    public function submitErrorReport(): JsonResponse
+    public function getDownloadLogsButton(): JsonResponse
     {
+        $type = TaskType::fromString(
+            $this->request->request->get('download-logs-type')
+        );
+
         return AjaxResponseBuilder::hydrationResponse(
-            PageSelectors::DIALOG_PARENT_ID,
+            PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
             $this->getTwig()->render(
-                '@ModuleAutoUpgrade/dialogs/dialog-error-report.html.twig',
-                [
-                    'data_transparency_link' => DocumentationLinks::PRESTASHOP_PROJECT_DATA_TRANSPARENCY_URL,
-                ]
-            ),
-            ['addScript' => 'send-error-report-dialog']
+                '@ModuleAutoUpgrade/components/download_logs.html.twig',
+                $this->upgradeContainer->getLogsService()->getDownloadLogsData($type)
+            )
         );
     }
 }

@@ -1,15 +1,17 @@
 {% extends "@ModuleAutoUpgrade/layouts/page.html.twig" %}
 
 {% block container_inner %}
-  {% if step.code == "update-options" %}
+  {% if step.code == "version-choice" %}
+    {% include "@ModuleAutoUpgrade/steps/version-choice.html.twig" %}
+  {% elseif step.code == "update-options" %}
     {% include "@ModuleAutoUpgrade/steps/update-options.html.twig" %}
   {% elseif step.code == "backup" %}
-    {% include "@ModuleAutoUpgrade/steps/backup.html.twig" %}
+    {% include "@ModuleAutoUpgrade/steps/backup-options.html.twig" %}
   {% elseif step.code == "update" %}
     {% include "@ModuleAutoUpgrade/steps/update.html.twig" %}
   {% elseif step.code == "post-update" %}
     {% include "@ModuleAutoUpgrade/steps/post-update.html.twig" %}
   {% else %}
-    {% include "@ModuleAutoUpgrade/steps/version-choice.html.twig" %}
+    The step {{ step.code }} is unknown and cannot be loaded.
   {% endif %}
 {% endblock %}

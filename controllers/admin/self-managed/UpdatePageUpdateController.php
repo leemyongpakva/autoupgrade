@@ -27,19 +27,14 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Controller;
 
-use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
-use PrestaShop\Module\AutoUpgrade\Traits\DisplayErrorReportDialogTrait;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UpdatePageUpdateController extends AbstractPageWithStepController
 {
-    use DisplayErrorReportDialogTrait;
-
     const CURRENT_STEP = UpdateSteps::STEP_UPDATE;
 
     protected function getPageTemplate(): string
@@ -57,27 +52,6 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
         return Routes::UPDATE_PAGE_UPDATE;
     }
 
-    public function getDownloadLogsButton(): JsonResponse
-    {
-        try {
-            $logsPath = $this->upgradeContainer->getDownloadLogsPath(TaskType::TASK_TYPE_UPDATE);
-        } catch (\Exception $e) {
-            return AjaxResponseBuilder::errorResponse('Impossible to retrieve logs path');
-        }
-
-        return AjaxResponseBuilder::hydrationResponse(
-            PageSelectors::DOWNLOAD_LOGS_PARENT_ID,
-            $this->getTwig()->render(
-                '@ModuleAutoUpgrade/components/download_logs.html.twig',
-                [
-                    'button_label' => $this->upgradeContainer->getTranslator()->trans('Download update logs'),
-                    'download_path' => $logsPath,
-                    'filename' => basename($logsPath),
-                ]
-            )
-        );
-    }
-
     /**
      * @return array<string, mixed>
      *
@@ -92,9 +66,10 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
             $updateSteps->getStepParams($this::CURRENT_STEP),
             [
                 'success_route' => Routes::UPDATE_STEP_POST_UPDATE,
-                'download_logs_route' => Routes::UPDATE_STEP_UPDATE_DOWNLOAD_LOGS,
+                'download_logs_route' => Routes::DOWNLOAD_LOGS,
+                'download_logs_type' => TaskType::TASK_TYPE_UPDATE,
                 'restore_route' => Routes::RESTORE_PAGE_BACKUP_SELECTION,
-                'submit_error_report_route' => Routes::UPDATE_STEP_UPDATE_SUBMIT_ERROR_REPORT,
+                'submit_error_report_route' => Routes::DISPLAY_ERROR_REPORT_MODAL,
                 'initial_process_action' => TaskName::TASK_UPDATE_INITIALIZATION,
                 'backup_available' => !empty($backupFinder->getAvailableBackups()),
                 'download_logs_parent_id' => PageSelectors::DOWNLOAD_LOGS_PARENT_ID,

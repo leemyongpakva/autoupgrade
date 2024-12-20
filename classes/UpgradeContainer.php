@@ -42,9 +42,9 @@ use PrestaShop\Module\AutoUpgrade\Progress\CompletionCalculator;
 use PrestaShop\Module\AutoUpgrade\Repository\LocalArchiveRepository;
 use PrestaShop\Module\AutoUpgrade\Services\ComposerService;
 use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
+use PrestaShop\Module\AutoUpgrade\Services\LogsService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
-use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\AssetsEnvironment;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension3;
@@ -156,6 +156,11 @@ class UpgradeContainer
      * @var Logger
      */
     private $logger;
+
+    /**
+     * @var LogsService
+     */
+    private $logsService;
 
     /**
      * @var ModuleAdapter
@@ -522,6 +527,21 @@ class UpgradeContainer
         $this->logger = $logger;
     }
 
+    public function getLogsService(): LogsService
+    {
+        if (null !== $this->logsService) {
+            return $this->logsService;
+        }
+
+        $this->logsService = new LogsService(
+            $this->getState(),
+            $this->getTranslator(),
+            $this->getProperty(self::LOGS_PATH)
+        );
+
+        return $this->logsService;
+    }
+
     /**
      * @throws Exception
      */
@@ -857,34 +877,5 @@ class UpgradeContainer
         }
 
         return false;
-    }
-
-    /**
-     * @throws Exception
-     *
-     * @param TaskType::TASK_TYPE_* $task
-     */
-    public function getLogsPath(string $task): ?string
-    {
-        $logPath = null;
-        if (is_writable($this->getProperty(self::LOGS_PATH))) {
-            $fileName = $this->getState()->getProcessTimestamp() . '-' . $task . '.txt';
-            $logPath = $this->getProperty(self::LOGS_PATH) . DIRECTORY_SEPARATOR . $fileName;
-        }
-
-        return $logPath;
-    }
-
-    /**
-     * @throws Exception
-     *
-     * @param TaskType::TASK_TYPE_* $task
-     */
-    public function getDownloadLogsPath(string $task): ?string
-    {
-        $logPath = $this->getLogsPath($task);
-        $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
-
-        return str_replace($documentRoot, '', $logPath);
     }
 }
