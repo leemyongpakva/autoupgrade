@@ -1419,55 +1419,55 @@ Comment: directory already exists</note>
   </file>
   <file original="classes/ZipAction.php" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="037350bc293c5e04305ff73a7e470b52">
-        <source>Error when trying to add %filename% to archive %archive%.</source>
-        <target>Error when trying to add %filename% to archive %archive%.</target>
-        <note>Line: 99</note>
+      <trans-unit id="31098a445d00d6606542c429524f464f">
+        <source>Unable to add %filename% to archive %archive%: %error%</source>
+        <target>Unable to add %filename% to archive %archive%: %error%</target>
+        <note>Line: 100</note>
       </trans-unit>
       <trans-unit id="1d7a665a8b724a2a30e72af54b8fd313">
         <source>%filename% added to archive. %filescount% files left.</source>
         <target>%filename% added to archive. %filescount% files left.</target>
-        <note>Line: 110</note>
+        <note>Line: 112</note>
       </trans-unit>
-      <trans-unit id="d8d67c977419d047e2a73c456db8f721">
-        <source>Could not close the Zip file: %toFile% properly. Check you are allowed to write on the disk and there is available space on it.</source>
-        <target>Could not close the Zip file: %toFile% properly. Check you are allowed to write on the disk and there is available space on it.</target>
-        <note>Line: 120</note>
+      <trans-unit id="e2791f065857bf0bec8ce49645861c2f">
+        <source>Could not close the Zip file %toFile%: %error%</source>
+        <target>Could not close the Zip file %toFile%: %error%</target>
+        <note>Line: 124</note>
       </trans-unit>
       <trans-unit id="9311ab161709b4f5efe9c6ff08b33699">
         <source>%s is not a file</source>
         <target>%s is not a file</target>
-        <note>Line: 139</note>
+        <note>Line: 146</note>
       </trans-unit>
       <trans-unit id="3d72a59cd44079c486a184a6a7bcec34">
         <source>Unable to create directory %s.</source>
         <target>Unable to create directory %s.</target>
-        <note>Line: 147</note>
+        <note>Line: 154</note>
       </trans-unit>
-      <trans-unit id="619c520551c7a108c12fde64e9b73b12">
-        <source>Could not extract %file% from backup, the destination might not be writable.</source>
-        <target>Could not extract %file% from backup, the destination might not be writable.</target>
-        <note>Line: 164</note>
+      <trans-unit id="47cb4b86d62a75548519cd992be451d5">
+        <source>Could not extract %file% from archive: %error%</source>
+        <target>Could not extract %file% from archive: %error%</target>
+        <note>Line: 173</note>
       </trans-unit>
       <trans-unit id="b6fadb405627a21f30cbe97d9f47d7a3">
         <source>Content of archive %zip% is extracted</source>
         <target>Content of archive %zip% is extracted</target>
-        <note>Line: 175</note>
+        <note>Line: 187</note>
       </trans-unit>
-      <trans-unit id="3858aebfe7dce0a1dc398d199cb85a2b">
-        <source>[ERROR] Unable to list archived files</source>
-        <target>[ERROR] Unable to list archived files</target>
-        <note>Line: 196</note>
+      <trans-unit id="206e6b8346294e90dc99fa4c130afbcc">
+        <source>Unable to list archived files</source>
+        <target>Unable to list archived files</target>
+        <note>Line: 208</note>
       </trans-unit>
       <trans-unit id="fe718bdde198efa66b9e3a9a5cf476e6">
         <source>File %filename% (size: %filesize%) has been skipped during backup.</source>
         <target>File %filename% (size: %filesize%) has been skipped during backup.</target>
-        <note>Line: 234</note>
+        <note>Line: 246</note>
       </trans-unit>
-      <trans-unit id="0f9f19a4f5e93b3d5a94405e3af32a28">
-        <source>Unable to open zipFile %s</source>
-        <target>Unable to open zipFile %s</target>
-        <note>Line: 260</note>
+      <trans-unit id="ced3e0d550ba1c19d14f9cf7080de9b6">
+        <source>Unable to open archive %s: %s</source>
+        <target>Unable to open archive %s: %s</target>
+        <note>Line: 274</note>
       </trans-unit>
     </body>
   </file>
