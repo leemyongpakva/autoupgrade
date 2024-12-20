@@ -209,11 +209,6 @@ abstract class AbstractTask
             $this->container->getUpdateState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION), $this->container->getUpgrader()->getDestinationVersion());
             $this->logger->debug($this->translator->trans('Successfully initialized update state.'));
         }
-
-        if ($this::TASK_TYPE === TaskType::TASK_TYPE_BACKUP && !$this->container->getBackupState()->isInitialized()) {
-            $this->container->getBackupState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION));
-            $this->logger->debug($this->translator->trans('Successfully initialized backup state.'));
-        }
     }
 
     abstract public function run(): int;

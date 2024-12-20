@@ -71,6 +71,7 @@ class BackupState extends AbstractState
 
     public function initDefault(string $currentVersion): void
     {
+        $this->disableSave = true;
         $rand = dechex(mt_rand(0, min(0xffffffff, mt_getrandmax())));
         $date = date('Ymd-His');
         $backupName = 'V' . $currentVersion . '_' . $date . '-' . $rand;
@@ -79,6 +80,9 @@ class BackupState extends AbstractState
         $this->setBackupTable(null);
         $this->setBackupLoopLimit(null);
         $this->setDbStep(0);
+
+        $this->disableSave = false;
+        $this->save();
     }
 
     public function getBackupName(): string

@@ -52,15 +52,6 @@ class UpgradeFileNames
 
     /**
      * during upgradeFiles process,
-     * this files contains the list of queries left to upgrade in a serialized array.
-     * (this file is deleted in init() method if you reload the page).
-     *
-     * @var string
-     */
-    const QUERIES_TO_UPGRADE_LIST = 'queriesToUpgrade.list';
-
-    /**
-     * during upgradeFiles process,
      * this files contains the list of files left to upgrade in a serialized array.
      * (this file is deleted in init() method if you reload the page).
      *
@@ -151,7 +142,6 @@ class UpgradeFileNames
      */
     public static $update_tmp_files = [
         'STATE_FILENAME' => self::STATE_UPDATE_FILENAME,
-        'QUERIES_TO_UPGRADE_LIST' => self::QUERIES_TO_UPGRADE_LIST, // used ?
         'FILES_TO_UPGRADE_LIST' => self::FILES_TO_UPGRADE_LIST,
         'DB_TABLES_TO_CLEAN_LIST' => self::DB_TABLES_TO_CLEAN_LIST,
         'FILES_TO_REMOVE_LIST' => self::FILES_TO_REMOVE_LIST,

@@ -676,6 +676,8 @@ class UpgradeContainer
 
     /**
      * @param TaskType::TASK_TYPE_* $taskType
+     *
+     * @throws InvalidArgumentException
      */
     public function getStateFromTaskType($taskType): AbstractState
     {
