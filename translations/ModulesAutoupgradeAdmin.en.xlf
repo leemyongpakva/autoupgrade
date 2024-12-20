@@ -1086,30 +1086,30 @@ Comment: directory already exists</note>
         <target>We were unable to check your PHP compatibility with PrestaShop %s.</target>
         <note>Line: 363</note>
       </trans-unit>
-      <trans-unit id="3ae5a6d3a6f0ad91a21156eadd1cf9d8">
-        <source>Some core files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of alterations.[/1]</source>
-        <target>Some core files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of alterations.[/1]</target>
-        <note>Line: 375</note>
+      <trans-unit id="8fe7d00736157606de57d3d048e341d6">
+        <source>Some core files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of changes.[/1]</source>
+        <target>Some core files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of changes.[/1]</target>
+        <note>Line: 374</note>
       </trans-unit>
       <trans-unit id="427da216e71ba0cd2ce8f0cc71fa7943">
         <source>Some core files have been altered or removed. Any changes made to these files may be overwritten during the update.</source>
         <target>Some core files have been altered or removed. Any changes made to these files may be overwritten during the update.</target>
-        <note>Line: 377</note>
+        <note>Line: 376</note>
       </trans-unit>
-      <trans-unit id="288e80daf482241699b5eb5f5e3c7a28">
-        <source>Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of alterations.[/1]</source>
-        <target>Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of alterations.[/1]</target>
-        <note>Line: 391</note>
+      <trans-unit id="61404918d61b02676f938f187bdd4481">
+        <source>Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of changes.[/1]</source>
+        <target>Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of changes.[/1]</target>
+        <note>Line: 389</note>
       </trans-unit>
       <trans-unit id="77e552478a3a1c92107ccae8722476a3">
         <source>Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update.</source>
         <target>Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update.</target>
-        <note>Line: 393</note>
+        <note>Line: 391</note>
       </trans-unit>
       <trans-unit id="5ae505096414401ddbb2affa6620a869">
         <source>Unknown requirement.</source>
         <target>Unknown requirement.</target>
-        <note>Line: 402</note>
+        <note>Line: 400</note>
       </trans-unit>
     </body>
   </file>
@@ -1476,27 +1476,27 @@ Comment: directory already exists</note>
       <trans-unit id="21dc065f2d8653ebca37ec552d17b37e">
         <source>Unable to create the directory "%s"</source>
         <target>Unable to create the directory "%s"</target>
-        <note>Line: 183</note>
+        <note>Line: 180</note>
       </trans-unit>
       <trans-unit id="6215d33db0d099fcaae168dd4715135a">
         <source>Unable to write in the directory "%s"</source>
         <target>Unable to write in the directory "%s"</target>
-        <note>Line: 149</note>
+        <note>Line: 146</note>
       </trans-unit>
       <trans-unit id="92a5801448b25f111961462b0b31995d">
         <source>Unable to create file %s</source>
         <target>Unable to create file %s</target>
-        <note>Line: 355</note>
+        <note>Line: 352</note>
       </trans-unit>
       <trans-unit id="56195ded2802813800f43e3be1babe1c">
         <source>Error when trying to delete backups %s</source>
         <target>Error when trying to delete backups %s</target>
-        <note>Line: 390</note>
+        <note>Line: 387</note>
       </trans-unit>
       <trans-unit id="f4eb320e09f7ef88a627229870458454">
         <source>The module %s requires PHP %s to work properly. Please upgrade your server configuration.</source>
         <target>The module %s requires PHP %s to work properly. Please upgrade your server configuration.</target>
-        <note>Line: 439</note>
+        <note>Line: 436</note>
       </trans-unit>
     </body>
   </file>
@@ -1505,17 +1505,37 @@ Comment: directory already exists</note>
       <trans-unit id="001c32426a6cfb48ebb848b13141593c">
         <source>Major version</source>
         <target>Major version</target>
-        <note>Line: 95</note>
+        <note>Line: 93</note>
       </trans-unit>
       <trans-unit id="c5439de366a407641018f189da1ad4a7">
         <source>Minor version</source>
         <target>Minor version</target>
-        <note>Line: 98</note>
+        <note>Line: 96</note>
       </trans-unit>
       <trans-unit id="8a0dd44f366bc5604b8329a87be5f933">
         <source>Patch version</source>
         <target>Patch version</target>
-        <note>Line: 101</note>
+        <note>Line: 99</note>
+      </trans-unit>
+      <trans-unit id="064903b5aa01cf4bc4e5c073d9917678">
+        <source>List of core alterations</source>
+        <target>List of core alterations</target>
+        <note>Line: 242</note>
+      </trans-unit>
+      <trans-unit id="673cc49de07389091a77d1872687cf64">
+        <source>Some core files have been altered, customization made on these files will be lost during the update.</source>
+        <target>Some core files have been altered, customization made on these files will be lost during the update.</target>
+        <note>Line: 243</note>
+      </trans-unit>
+      <trans-unit id="3e520d769e66a4dcdf43029803ab4e8e">
+        <source>List of theme alterations</source>
+        <target>List of theme alterations</target>
+        <note>Line: 255</note>
+      </trans-unit>
+      <trans-unit id="fa22ace14d701200f848374a39f3e88c">
+        <source>Some theme files have been altered, customization made on these files will be lost during the update.</source>
+        <target>Some theme files have been altered, customization made on these files will be lost during the update.</target>
+        <note>Line: 256</note>
       </trans-unit>
     </body>
   </file>
@@ -2035,17 +2055,22 @@ Comment: directory already exists</note>
       <trans-unit id="c2be89ec4229ab7b25ab17f1f7caea13">
         <source>Once all the following conditions are met, you can continue with the update. Read more in the [1]developer documentation[/1].</source>
         <target>Once all the following conditions are met, you can continue with the update. Read more in the [1]developer documentation[/1].</target>
-        <note>Line: 8</note>
+        <note>Line: 9</note>
+      </trans-unit>
+      <trans-unit id="b40bb42243c77c74dee5c2743fb49e7f">
+        <source>Please consider these warnings before continuing with the update. Read more in the [1]developer documentation[/1].</source>
+        <target>Please consider these warnings before continuing with the update. Read more in the [1]developer documentation[/1].</target>
+        <note>Line: 14</note>
       </trans-unit>
       <trans-unit id="3758c107f9d68f5fb6d56486dab9f2d4">
         <source>Check requirements again</source>
         <target>Check requirements again</target>
-        <note>Line: 35</note>
+        <note>Line: 42</note>
       </trans-unit>
       <trans-unit id="e964dbbc34b653f925c68e27cd08141a">
         <source>The requirements check is complete, you can update your store to this version of PrestaShop.</source>
         <target>The requirements check is complete, you can update your store to this version of PrestaShop.</target>
-        <note>Line: 42</note>
+        <note>Line: 49</note>
       </trans-unit>
     </body>
   </file>
@@ -2264,6 +2289,20 @@ Comment: directory already exists</note>
         <source>You can add details about the error here.</source>
         <target>You can add details about the error here.</target>
         <note>Line: 46</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="views/templates/dialogs/dialog-tempered-files.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="2b3196ae5bc51de9273f565ca1fb9fef">
+        <source>List of files missing</source>
+        <target>List of files missing</target>
+        <note>Line: 8</note>
+      </trans-unit>
+      <trans-unit id="845d6ad834a73165f8da00625a00dd76">
+        <source>List of files changed</source>
+        <target>List of files changed</target>
+        <note>Line: 16</note>
       </trans-unit>
     </body>
   </file>
