@@ -72,7 +72,7 @@
       <trans-unit id="88b3ca1ea582b35668b5ed49bbf8206b">
         <source>Backup completed successfully.</source>
         <target>Backup completed successfully.</target>
-        <note>Line: 56</note>
+        <note>Line: 57</note>
       </trans-unit>
     </body>
   </file>
@@ -160,17 +160,17 @@
       <trans-unit id="b31006b398a0fc315119a145aa1b0466">
         <source>Unable to open archive</source>
         <target>Unable to open archive</target>
-        <note>Line: 92</note>
+        <note>Line: 91</note>
       </trans-unit>
       <trans-unit id="f39b870765d50b64ba7a6facea83010d">
         <source>All files have been added to archive.</source>
         <target>All files have been added to archive.</target>
-        <note>Line: 104</note>
+        <note>Line: 103</note>
       </trans-unit>
       <trans-unit id="f36d7ee6cae92008008a95bf5898daf2">
         <source>All files saved. Now backing up database</source>
         <target>All files saved. Now backing up database</target>
-        <note>Line: 105</note>
+        <note>Line: 104</note>
       </trans-unit>
     </body>
   </file>
@@ -2269,6 +2269,11 @@ Comment: directory already exists</note>
   </file>
   <file original="views/templates/dialogs/dialog-update.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
+      <trans-unit id="880d6ec7b06e1f403347a16afbca8335">
+        <source>Start update</source>
+        <target>Start update</target>
+        <note>Line: 53</note>
+      </trans-unit>
       <trans-unit id="2ca0ff94d146821c12f5340b117b9ecf">
         <source>Start update?</source>
         <target>Start update?</target>
@@ -2288,11 +2293,6 @@ Comment: directory already exists</note>
         <source>I have made my own backup and can restore it manually if a problem occur.</source>
         <target>I have made my own backup and can restore it manually if a problem occur.</target>
         <note>Line: 28</note>
-      </trans-unit>
-      <trans-unit id="880d6ec7b06e1f403347a16afbca8335">
-        <source>Start update</source>
-        <target>Start update</target>
-        <note>Line: 53</note>
       </trans-unit>
     </body>
   </file>
@@ -2357,6 +2357,50 @@ Comment: directory already exists</note>
       </trans-unit>
     </body>
   </file>
+  <file original="views/templates/steps/backup-options.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="7f8f7ff0c4bb4599a45fa5b3708dd2c4">
+        <source>Download backup logs</source>
+        <target>Download backup logs</target>
+        <note>Line: 23</note>
+      </trans-unit>
+      <trans-unit id="9c32ff52925ba5a296f9696cfbb7edcc">
+        <source>Backing up your store's files, database, and images means you can restore to a previous version if something goes wrong during the update. This keeps your data safe and ensures your business stays up and running.</source>
+        <target>Backing up your store's files, database, and images means you can restore to a previous version if something goes wrong during the update. This keeps your data safe and ensures your business stays up and running.</target>
+        <note>Line: 13</note>
+      </trans-unit>
+      <trans-unit id="b27bea61eb2963cb570ce625b87ea053">
+        <source>Update without backup</source>
+        <target>Update without backup</target>
+        <note>Line: 67</note>
+      </trans-unit>
+      <trans-unit id="8f54da32d0160f178f08b2530d1e690b">
+        <source>Back up your store</source>
+        <target>Back up your store</target>
+        <note>Line: 6</note>
+      </trans-unit>
+      <trans-unit id="a2eabcbade98a44462292c4666e62044">
+        <source>Backup completed</source>
+        <target>Backup completed</target>
+        <note>Line: 20</note>
+      </trans-unit>
+      <trans-unit id="11934523e2ab02034c868cd62e048c7f">
+        <source>It is available at /your-admin-directory/autoupgrade/backup. You're ready to start the update now.</source>
+        <target>It is available at /your-admin-directory/autoupgrade/backup. You're ready to start the update now.</target>
+        <note>Line: 21</note>
+      </trans-unit>
+      <trans-unit id="a946e4190a81d83574867d2182261e35">
+        <source>Include images in your backup</source>
+        <target>Include images in your backup</target>
+        <note>Line: 47</note>
+      </trans-unit>
+      <trans-unit id="2284aa8fec405e1dd014326b51cde020">
+        <source>Launch backup</source>
+        <target>Launch backup</target>
+        <note>Line: 72</note>
+      </trans-unit>
+    </body>
+  </file>
   <file original="views/templates/steps/backup-selection.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
       <trans-unit id="2bd339d85ee3b33e513359ce781b60cc">
@@ -2368,30 +2412,20 @@ Comment: directory already exists</note>
   </file>
   <file original="views/templates/steps/backup.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="8f54da32d0160f178f08b2530d1e690b">
-        <source>Back up your store</source>
-        <target>Back up your store</target>
-        <note>Line: 6</note>
+      <trans-unit id="d7f31683c24e4c4b7f0c7f376fe3a8fe">
+        <source>Backup failed</source>
+        <target>Backup failed</target>
+        <note>Line: 20</note>
       </trans-unit>
-      <trans-unit id="9c32ff52925ba5a296f9696cfbb7edcc">
-        <source>Backing up your store's files, database, and images means you can restore to a previous version if something goes wrong during the update. This keeps your data safe and ensures your business stays up and running.</source>
-        <target>Backing up your store's files, database, and images means you can restore to a previous version if something goes wrong during the update. This keeps your data safe and ensures your business stays up and running.</target>
-        <note>Line: 13</note>
+      <trans-unit id="48fa328a70d6cbeb701e7f50ea26465f">
+        <source>Please try again or perform a manual backup. In any case, ensure you have a backup before starting the update to avoid any data loss.</source>
+        <target>Please try again or perform a manual backup. In any case, ensure you have a backup before starting the update to avoid any data loss.</target>
+        <note>Line: 22</note>
       </trans-unit>
-      <trans-unit id="a946e4190a81d83574867d2182261e35">
-        <source>Include images in your backup</source>
-        <target>Include images in your backup</target>
-        <note>Line: 32</note>
-      </trans-unit>
-      <trans-unit id="b27bea61eb2963cb570ce625b87ea053">
-        <source>Update without backup</source>
-        <target>Update without backup</target>
-        <note>Line: 45</note>
-      </trans-unit>
-      <trans-unit id="2284aa8fec405e1dd014326b51cde020">
-        <source>Launch backup</source>
-        <target>Launch backup</target>
-        <note>Line: 50</note>
+      <trans-unit id="6890c3f9a573b71dacdcaf6dbcf91bec">
+        <source>Retry backup</source>
+        <target>Retry backup</target>
+        <note>Line: 61</note>
       </trans-unit>
     </body>
   </file>
@@ -2436,6 +2470,11 @@ Comment: directory already exists</note>
   </file>
   <file original="views/templates/steps/post-restore.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
+      <trans-unit id="deaf32a53ead325a232c297209dc187f">
+        <source>Download restore logs</source>
+        <target>Download restore logs</target>
+        <note>Line: 52</note>
+      </trans-unit>
       <trans-unit id="e6196201ba7431ba94d3bac5d6af97c8">
         <source>%startbold%Open the developer documentation%endbold% to keep this checklist at-hand.</source>
         <target>%startbold%Open the developer documentation%endbold% to keep this checklist at-hand.</target>
@@ -2455,11 +2494,6 @@ Comment: directory already exists</note>
         <source>Post-restore checklist</source>
         <target>Post-restore checklist</target>
         <note>Line: 6</note>
-      </trans-unit>
-      <trans-unit id="deaf32a53ead325a232c297209dc187f">
-        <source>Download restore logs</source>
-        <target>Download restore logs</target>
-        <note>Line: 52</note>
       </trans-unit>
     </body>
   </file>
