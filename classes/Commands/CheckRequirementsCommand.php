@@ -31,8 +31,6 @@ use Exception;
 use PrestaShop\Module\AutoUpgrade\Exceptions\DistributionApiException;
 use PrestaShop\Module\AutoUpgrade\Exceptions\UpgradeException;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
-use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\UpgradeSelfCheck;
@@ -46,8 +44,6 @@ class CheckRequirementsCommand extends AbstractCommand
     /** @var string */
     protected static $defaultName = 'update:check-requirements';
     const MODULE_CONFIG_DIR = 'autoupgrade';
-    /** @var UpgradeSelfCheck */
-    private $upgradeSelfCheck;
     /** @var OutputInterface */
     private $output;
     /** @var int */
@@ -96,26 +92,6 @@ class CheckRequirementsCommand extends AbstractCommand
             $this->upgradeContainer->initPrestaShopCore();
             $this->upgradeContainer->getState()->initDefault($this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION), $this->upgradeContainer->getUpgrader()->getDestinationVersion());
 
-            $distributionApiService = new DistributionApiService();
-            $phpVersionResolverService = new PhpVersionResolverService(
-                $distributionApiService,
-                $this->upgradeContainer->getFileLoader(),
-                $this->upgradeContainer->getState()->getCurrentVersion()
-            );
-
-            $this->upgradeSelfCheck = new UpgradeSelfCheck(
-                $this->upgradeContainer->getUpgrader(),
-                $this->upgradeContainer->getState(),
-                $this->upgradeContainer->getUpgradeConfiguration(),
-                $this->upgradeContainer->getPrestaShopConfiguration(),
-                $this->upgradeContainer->getTranslator(),
-                $phpVersionResolverService,
-                $this->upgradeContainer->getChecksumCompare(),
-                _PS_ROOT_DIR_,
-                _PS_ADMIN_DIR_,
-                $moduleConfigPath
-            );
-
             $output->writeln('Result of prerequisite checks:');
             $this->exitCode = ExitCode::SUCCESS;
             $this->processRequirementWarnings();
@@ -137,8 +113,8 @@ class CheckRequirementsCommand extends AbstractCommand
      */
     private function processRequirementErrors(): void
     {
-        foreach ($this->upgradeSelfCheck->getErrors() as $error => $value) {
-            $wording = $this->upgradeSelfCheck->getRequirementWording($error);
+        foreach ($this->upgradeContainer->getUpgradeSelfCheck()->getErrors() as $error => $value) {
+            $wording = $this->upgradeContainer->getUpgradeSelfCheck()->getRequirementWording($error);
             $this->writeError($wording['message']);
             if (isset($wording['list'])) {
                 foreach ($wording['list'] as $item) {
@@ -154,13 +130,13 @@ class CheckRequirementsCommand extends AbstractCommand
      */
     private function processRequirementWarnings(): void
     {
-        foreach ($this->upgradeSelfCheck->getWarnings() as $warning => $value) {
-            $wording = $this->upgradeSelfCheck->getRequirementWording($warning);
+        foreach ($this->upgradeContainer->getUpgradeSelfCheck()->getWarnings() as $warning => $value) {
+            $wording = $this->upgradeContainer->getUpgradeSelfCheck()->getRequirementWording($warning);
             $this->writeWarning($wording['message']);
 
             switch ($warning) {
                 case UpgradeSelfCheck::CORE_TEMPERED_FILES_LIST_NOT_EMPTY:
-                    $missingFiles = $this->upgradeSelfCheck->getCoreMissingFiles();
+                    $missingFiles = $this->upgradeContainer->getUpgradeSelfCheck()->getCoreMissingFiles();
 
                     if (!empty($missingFiles)) {
                         $this->output->writeln("\t" . count($missingFiles) . ' files are missing:');
@@ -169,7 +145,7 @@ class CheckRequirementsCommand extends AbstractCommand
                         }
                     }
 
-                    $alteredFiles = $this->upgradeSelfCheck->getCoreAlteredFiles();
+                    $alteredFiles = $this->upgradeContainer->getUpgradeSelfCheck()->getCoreAlteredFiles();
 
                     if (!empty($alteredFiles)) {
                         $this->output->writeln("\t" . count($alteredFiles) . ' files are altered:');
@@ -179,7 +155,7 @@ class CheckRequirementsCommand extends AbstractCommand
                     }
                     break;
                 case UpgradeSelfCheck::THEME_TEMPERED_FILES_LIST_NOT_EMPTY:
-                    $missingFiles = $this->upgradeSelfCheck->getThemeMissingFiles();
+                    $missingFiles = $this->upgradeContainer->getUpgradeSelfCheck()->getThemeMissingFiles();
 
                     if (!empty($missingFiles)) {
                         $this->output->writeln("\t" . count($missingFiles) . ' files are missing:');
@@ -188,7 +164,7 @@ class CheckRequirementsCommand extends AbstractCommand
                         }
                     }
 
-                    $alteredFiles = $this->upgradeSelfCheck->getThemeAlteredFiles();
+                    $alteredFiles = $this->upgradeContainer->getUpgradeSelfCheck()->getThemeAlteredFiles();
 
                     if (!empty($alteredFiles)) {
                         $this->output->writeln("\t" . count($alteredFiles) . ' files are altered:');

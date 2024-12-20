@@ -29,16 +29,14 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
+use PrestaShop\Module\AutoUpgrade\DocumentationLinks;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
-use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
-use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
-use PrestaShop\Module\AutoUpgrade\UpgradeSelfCheck;
 use PrestaShop\Module\AutoUpgrade\VersionUtils;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -111,6 +109,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),
             [
+                'dev_doc_upgrade_web_url' => DocumentationLinks::DEV_DOC_UPGRADE_WEB_URL,
                 'up_to_date' => !$isNewerVersionAvailableOnline,
                 'no_local_archive' => !$this->upgradeContainer->getLocalArchiveRepository()->hasLocalArchive(),
                 'assets_base_path' => $this->upgradeContainer->getAssetsEnvironment()->getAssetsBaseUrl($this->request),
@@ -150,29 +149,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
      */
     private function getRequirements(): array
     {
-        $this->upgradeContainer->initPrestaShopCore();
-
-        $state = $this->upgradeContainer->getState();
-
-        $distributionApiService = new DistributionApiService();
-        $phpVersionResolverService = new PhpVersionResolverService(
-            $distributionApiService,
-            $this->upgradeContainer->getFileLoader(),
-            $state->getCurrentVersion()
-        );
-
-        $upgradeSelfCheck = new UpgradeSelfCheck(
-            $this->upgradeContainer->getUpgrader(),
-            $state,
-            $this->upgradeContainer->getUpgradeConfiguration(),
-            $this->upgradeContainer->getPrestaShopConfiguration(),
-            $this->upgradeContainer->getTranslator(),
-            $phpVersionResolverService,
-            $this->upgradeContainer->getChecksumCompare(),
-            _PS_ROOT_DIR_,
-            _PS_ADMIN_DIR_,
-            $this->upgradeContainer->getProperty(UpgradeContainer::WORKSPACE_PATH)
-        );
+        $upgradeSelfCheck = $this->upgradeContainer->getUpgradeSelfCheck();
 
         $warnings = $upgradeSelfCheck->getWarnings();
         foreach ($warnings as $warningKey => $warningValue) {
@@ -255,5 +232,42 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
     {
         /* we dont check again because the button is only accessible if check are ok */
         return AjaxResponseBuilder::nextRouteResponse(Routes::UPDATE_STEP_UPDATE_OPTIONS);
+    }
+
+    public function coreTemperedFilesDialog(): JsonResponse
+    {
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::DIALOG_PARENT_ID,
+            $this->getTemperedFilesDialog([
+                'title' => $this->upgradeContainer->getTranslator()->trans('List of core alterations'),
+                'message' => $this->upgradeContainer->getTranslator()->trans('Some core files have been altered, customization made on these files will be lost during the update.'),
+                'missing_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getCoreMissingFiles(),
+                'altered_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getCoreAlteredFiles(),
+            ])
+        );
+    }
+
+    public function themeTemperedFilesDialog(): JsonResponse
+    {
+        return AjaxResponseBuilder::hydrationResponse(
+            PageSelectors::DIALOG_PARENT_ID,
+            $this->getTemperedFilesDialog([
+                'title' => $this->upgradeContainer->getTranslator()->trans('List of theme alterations'),
+                'message' => $this->upgradeContainer->getTranslator()->trans('Some theme files have been altered, customization made on these files will be lost during the update.'),
+                'missing_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getThemeMissingFiles(),
+                'altered_files' => $this->upgradeContainer->getUpgradeSelfCheck()->getThemeAlteredFiles(),
+            ])
+        );
+    }
+
+    /**
+     * @param array<string,string|string[]> $params
+     */
+    private function getTemperedFilesDialog($params): string
+    {
+        return $this->getTwig()->render(
+            '@ModuleAutoUpgrade/dialogs/dialog-tempered-files.html.twig',
+            $params
+        );
     }
 }

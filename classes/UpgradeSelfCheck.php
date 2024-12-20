@@ -367,12 +367,11 @@ class UpgradeSelfCheck
 
             case self::CORE_TEMPERED_FILES_LIST_NOT_EMPTY:
                 if ($isWebVersion) {
-                    // TODO the link must be integrated when implementing the modal in the web part
                     $params = [
-                        '[1]' => '<a class="" href="" target="">',
+                        '[1]' => '<a class="link" href="#update-step-version-choice-core-tempered-files-dialog">',
                         '[/1]' => '</a>',
                     ];
-                    $message = $this->translator->trans('Some core files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of alterations.[/1]', $params);
+                    $message = $this->translator->trans('Some core files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of changes.[/1]', $params);
                 } else {
                     $message = $this->translator->trans('Some core files have been altered or removed. Any changes made to these files may be overwritten during the update.');
                 }
@@ -383,12 +382,11 @@ class UpgradeSelfCheck
 
             case self::THEME_TEMPERED_FILES_LIST_NOT_EMPTY:
                 if ($isWebVersion) {
-                    // TODO the link must be integrated when implementing the modal in the web part
                     $params = [
-                        '[1]' => '<a class="" href="" target="">',
+                        '[1]' => '<a class="link" href="#update-step-version-choice-theme-tempered-files-dialog">',
                         '[/1]' => '</a>',
                     ];
-                    $message = $this->translator->trans('Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of alterations.[/1]', $params);
+                    $message = $this->translator->trans('Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update. [1]See the list of changes.[/1]', $params);
                 } else {
                     $message = $this->translator->trans('Some theme files have been altered or removed. Any changes made to these files may be overwritten during the update.');
                 }

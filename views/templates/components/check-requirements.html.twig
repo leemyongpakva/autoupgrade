@@ -1,14 +1,21 @@
 {% if requirements.warnings|length > 0 or requirements.errors|length > 0 %}
-  <div class="check-requirements check-requirements--failed">
+  <div data-slot-component="requirements" class="check-requirements check-requirements--failed">
     <p class="check-requirements__title h3">
       {{ "Update requirements"|trans({}) }}
     </p>
 
     <p class="check-requirements__message">
-      {{ 'Once all the following conditions are met, you can continue with the update. Read more in the [1]developer documentation[/1].'|trans({
-        '[1]' : '<a class="link" href="' ~ updateAssistantDocs ~'" target="_blank">',
-        '[/1]' : '</a>',
-      })|raw }}
+        {% if requirements.errors|length > 0 %}
+            {{ 'Once all the following conditions are met, you can continue with the update. Read more in the [1]developer documentation[/1].'|trans({
+                '[1]' : '<a class="link" href="' ~ dev_doc_upgrade_web_url ~'" target="_blank">',
+                '[/1]' : '</a>',
+            })|raw }}
+        {% else %}
+            {{ 'Please consider these warnings before continuing with the update. Read more in the [1]developer documentation[/1].'|trans({
+                '[1]' : '<a class="link" href="' ~ dev_doc_upgrade_web_url ~'" target="_blank">',
+                '[/1]' : '</a>',
+            })|raw }}
+        {% endif %}
     </p>
 
     <div class="check-requirements__list">

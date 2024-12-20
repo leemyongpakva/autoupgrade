@@ -77,6 +77,14 @@ class Router
             'controller' => UpdatePageVersionChoiceController::class,
             'method' => 'submit',
         ],
+        Routes::UPDATE_STEP_VERSION_CHOICE_CORE_TEMPERED_FILES_DIALOG => [
+            'controller' => UpdatePageVersionChoiceController::class,
+            'method' => 'coreTemperedFilesDialog',
+        ],
+        Routes::UPDATE_STEP_VERSION_CHOICE_THEME_TEMPERED_FILES_DIALOG => [
+            'controller' => UpdatePageVersionChoiceController::class,
+            'method' => 'themeTemperedFilesDialog',
+        ],
         Routes::UPDATE_PAGE_UPDATE_OPTIONS => [
             'controller' => UpdatePageUpdateOptionsController::class,
             'method' => 'index',

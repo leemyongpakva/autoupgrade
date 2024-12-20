@@ -87,6 +87,12 @@ $e: ".dialog";
     }
 
     // Custom dialogs
+    &:not(:has(#{$e}__footer)) {
+      #{$e}__body {
+        padding-block-end: 1.5rem;
+      }
+    }
+
     &__spacer {
       display: flex;
       flex-direction: column;

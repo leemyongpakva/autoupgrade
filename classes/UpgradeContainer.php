@@ -233,6 +233,21 @@ class UpgradeContainer
     private $prestashopVersionService;
 
     /**
+     * @var UpgradeSelfCheck
+     */
+    private $upgradeSelfCheck;
+
+    /**
+     * @var PhpVersionResolverService
+     */
+    private $phpVersionResolverService;
+
+    /**
+     * @var DistributionApiService
+     */
+    private $distributionApiService;
+
+    /**
      * AdminSelfUpgrade::$autoupgradePath
      * Ex.: /var/www/html/PrestaShop/admin-dev/autoupgrade.
      *
@@ -453,12 +468,10 @@ class UpgradeContainer
             define('_PS_ROOT_DIR_', $this->getProperty(self::PS_ROOT_PATH));
         }
 
-        $currentPrestashopVersion = $this->getProperty(self::PS_VERSION);
-        $phpRequirementService = new PhpVersionResolverService(new DistributionApiService(), $this->getFileLoader(), $currentPrestashopVersion);
         $upgrader = new Upgrader(
-            $phpRequirementService,
+            $this->getPhpVersionResolverService(),
             $this->getUpgradeConfiguration(),
-            $currentPrestashopVersion
+            $this->getProperty(self::PS_VERSION)
         );
 
         $this->upgrader = $upgrader;
@@ -703,6 +716,62 @@ class UpgradeContainer
     public function getUpgradeConfigurationStorage(): UpgradeConfigurationStorage
     {
         return new UpgradeConfigurationStorage($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR);
+    }
+
+    public function getDistributionApiService(): DistributionApiService
+    {
+        if (null !== $this->distributionApiService) {
+            return $this->distributionApiService;
+        }
+
+        $this->distributionApiService = new DistributionApiService();
+
+        return $this->distributionApiService;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getPhpVersionResolverService(): PhpVersionResolverService
+    {
+        if (null !== $this->phpVersionResolverService) {
+            return $this->phpVersionResolverService;
+        }
+
+        $this->phpVersionResolverService = new PhpVersionResolverService(
+            $this->getDistributionApiService(),
+            $this->getFileLoader(),
+            $this->getProperty(self::PS_VERSION)
+        );
+
+        return $this->phpVersionResolverService;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getUpgradeSelfCheck(): UpgradeSelfCheck
+    {
+        if (null !== $this->upgradeSelfCheck) {
+            return $this->upgradeSelfCheck;
+        }
+
+        $this->initPrestaShopCore();
+
+        $this->upgradeSelfCheck = new UpgradeSelfCheck(
+            $this->getUpgrader(),
+            $this->getState(),
+            $this->getUpgradeConfiguration(),
+            $this->getPrestaShopConfiguration(),
+            $this->getTranslator(),
+            $this->getPhpVersionResolverService(),
+            $this->getChecksumCompare(),
+            $this->psRootDir,
+            $this->adminDir,
+            $this->getProperty(UpgradeContainer::WORKSPACE_PATH)
+        );
+
+        return $this->upgradeSelfCheck;
     }
 
     /**

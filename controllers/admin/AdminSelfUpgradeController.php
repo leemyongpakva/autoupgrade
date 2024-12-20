@@ -29,12 +29,9 @@ use PrestaShop\Module\AutoUpgrade\AjaxResponse;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Router;
-use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
-use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Tools14;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\UpgradePage;
-use PrestaShop\Module\AutoUpgrade\UpgradeSelfCheck;
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminSelfUpgradeController extends ModuleAdminController
@@ -485,30 +482,13 @@ class AdminSelfUpgradeController extends ModuleAdminController
         }
 
         $upgrader = $this->upgradeContainer->getUpgrader();
-        $distributionApiService = new DistributionApiService();
-        $phpVersionResolverService = new PhpVersionResolverService(
-            $distributionApiService,
-            $this->upgradeContainer->getFileLoader(),
-            $this->upgradeContainer->getState()->getCurrentVersion()
-        );
-        $upgradeSelfCheck = new UpgradeSelfCheck(
-            $upgrader,
-            $this->upgradeContainer->getState(),
-            $this->upgradeContainer->getUpgradeConfiguration(),
-            $this->upgradeContainer->getPrestaShopConfiguration(),
-            $this->upgradeContainer->getTranslator(),
-            $phpVersionResolverService,
-            $this->upgradeContainer->getChecksumCompare(),
-            $this->prodRootDir,
-            $this->adminDir,
-            $this->autoupgradePath
-        );
+
         $response = new AjaxResponse($this->upgradeContainer->getState(), $this->upgradeContainer->getLogger());
         $this->content = (new UpgradePage(
             $this->upgradeContainer->getUpgradeConfiguration(),
             $this->upgradeContainer->getTwig(),
             $this->upgradeContainer->getTranslator(),
-            $upgradeSelfCheck,
+            $this->upgradeContainer->getUpgradeSelfCheck(),
             $upgrader,
             $backupFinder,
             $this->autoupgradePath,
