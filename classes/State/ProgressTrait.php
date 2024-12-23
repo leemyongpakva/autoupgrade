@@ -25,37 +25,29 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-namespace PrestaShop\Module\AutoUpgrade\Task\Backup;
+namespace PrestaShop\Module\AutoUpgrade\State;
 
-use Exception;
-use PrestaShop\Module\AutoUpgrade\Analytics;
-use PrestaShop\Module\AutoUpgrade\Task\AbstractTask;
-use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
-use PrestaShop\Module\AutoUpgrade\Task\TaskName;
-use PrestaShop\Module\AutoUpgrade\Task\TaskType;
+use InvalidArgumentException;
 
-class BackupComplete extends AbstractTask
+trait ProgressTrait
 {
-    const TASK_TYPE = TaskType::TASK_TYPE_BACKUP;
+    /** @var int */
+    protected $progressPercentage;
 
-    /**
-     * @throws Exception
-     */
-    public function run(): int
+    public function getProgressPercentage(): ?int
     {
-        $this->container->getBackupState()->setProgressPercentage(
-            $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
-        );
+        return $this->progressPercentage;
+    }
 
-        $this->stepDone = true;
-        $this->next = TaskName::TASK_COMPLETE;
+    public function setProgressPercentage(int $progressPercentage): self
+    {
+        if ($progressPercentage && $progressPercentage < $this->progressPercentage) {
+            throw new InvalidArgumentException('Updated progress percentage cannot be lower than the currently set one.');
+        }
 
-        $this->container->getFileConfigurationStorage()->cleanAllBackupFiles();
-        $this->container->getUpdateState()->setBackupCompleted(true);
-        $this->container->getAnalytics()->track('Backup Succeeded', Analytics::WITH_BACKUP_PROPERTIES);
+        $this->progressPercentage = $progressPercentage;
+        $this->save();
 
-        $this->logger->info($this->translator->trans('Backup completed successfully.'));
-
-        return ExitCode::SUCCESS;
+        return $this;
     }
 }

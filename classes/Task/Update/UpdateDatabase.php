@@ -53,7 +53,7 @@ class UpdateDatabase extends AbstractTask
         try {
             if (!$this->container->getFileConfigurationStorage()->exists(UpgradeFileNames::SQL_TO_EXECUTE_LIST)) {
                 $this->warmUp();
-                $currentVersion = $this->container->getState()->getCurrentVersion();
+                $currentVersion = $this->container->getUpdateState()->getCurrentVersion();
                 $sqlContentList = $this->getCoreUpgrader()->getSqlContentList($currentVersion);
                 $backlog = new Backlog(array_reverse($sqlContentList), count($sqlContentList));
             } else {
@@ -66,7 +66,7 @@ class UpdateDatabase extends AbstractTask
 
                 $this->updateDatabase($backlog);
 
-                $this->container->getState()->setProgressPercentage(
+                $this->container->getUpdateState()->setProgressPercentage(
                     $this->container->getCompletionCalculator()->computePercentage($backlog, self::class, UpdateModules::class)
                 );
 
@@ -101,9 +101,9 @@ class UpdateDatabase extends AbstractTask
             return $this->coreUpgrader;
         }
 
-        if (version_compare($this->container->getState()->getDestinationVersion(), '8', '<')) {
+        if (version_compare($this->container->getUpdateState()->getDestinationVersion(), '8', '<')) {
             $this->coreUpgrader = new CoreUpgrader17($this->container, $this->logger);
-        } elseif (version_compare($this->container->getState()->getDestinationVersion(), '8.1', '<')) {
+        } elseif (version_compare($this->container->getUpdateState()->getDestinationVersion(), '8.1', '<')) {
             $this->coreUpgrader = new CoreUpgrader80($this->container, $this->logger);
         } else {
             $this->coreUpgrader = new CoreUpgrader81($this->container, $this->logger);
@@ -134,7 +134,7 @@ class UpdateDatabase extends AbstractTask
     {
         $this->logger->info($this->container->getTranslator()->trans('Updating database data and structure'));
 
-        $this->container->getState()->setProgressPercentage(
+        $this->container->getUpdateState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );
 
@@ -164,8 +164,8 @@ class UpdateDatabase extends AbstractTask
      */
     protected function checkVersionIsNewer(): void
     {
-        $currentVersion = VersionUtils::normalizePrestaShopVersion($this->container->getState()->getCurrentVersion());
-        $destinationVersion = VersionUtils::normalizePrestaShopVersion($this->container->getState()->getDestinationVersion());
+        $currentVersion = VersionUtils::normalizePrestaShopVersion($this->container->getUpdateState()->getCurrentVersion());
+        $destinationVersion = VersionUtils::normalizePrestaShopVersion($this->container->getUpdateState()->getDestinationVersion());
 
         $versionCompare = version_compare($destinationVersion, $currentVersion);
 

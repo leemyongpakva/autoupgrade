@@ -31,6 +31,7 @@ use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponse;
 use PrestaShop\Module\AutoUpgrade\Analytics;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
+use PrestaShop\Module\AutoUpgrade\Task\Runner\ChainedTasks;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
@@ -120,13 +121,28 @@ abstract class AbstractTask
      */
     public function getResponse(): AjaxResponse
     {
-        $response = new AjaxResponse($this->container->getState(), $this->logger);
+        $response = new AjaxResponse(
+            $this->container->getStateFromTaskType($this->getTaskType()),
+            $this->logger
+        );
 
         return $response->setError($this->error)
             ->setStepDone($this->stepDone)
             ->setNext($this->next)
             ->setNextParams($this->nextParams)
             ->setUpgradeConfiguration($this->container->getUpgradeConfiguration());
+    }
+
+    /**
+     * @return TaskType::TASK_TYPE_* $task
+     */
+    private function getTaskType(): string
+    {
+        if ($this instanceof ChainedTasks) {
+            return $this->stepClass::TASK_TYPE;
+        }
+
+        return $this::TASK_TYPE;
     }
 
     private function checkTaskMayRun(): void
@@ -189,9 +205,9 @@ abstract class AbstractTask
             $this->container->getFileLoader()->addXmlMd5File($this->container->getUpgrader()->getDestinationVersion(), $this->container->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $archiveXml);
         }
 
-        if ($this::TASK_TYPE !== TaskType::TASK_TYPE_RESTORE && !$this->container->getState()->isInitialized()) {
-            $this->container->getState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION), $this->container->getUpgrader()->getDestinationVersion());
-            $this->logger->debug($this->translator->trans('Successfully initialized state.'));
+        if ($this::TASK_TYPE !== TaskType::TASK_TYPE_RESTORE && !$this->container->getUpdateState()->isInitialized()) {
+            $this->container->getUpdateState()->initDefault($this->container->getProperty(UpgradeContainer::PS_VERSION), $this->container->getUpgrader()->getDestinationVersion());
+            $this->logger->debug($this->translator->trans('Successfully initialized update state.'));
         }
     }
 

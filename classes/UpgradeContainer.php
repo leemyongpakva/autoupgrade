@@ -28,6 +28,7 @@
 namespace PrestaShop\Module\AutoUpgrade;
 
 use Exception;
+use InvalidArgumentException;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupManager;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
@@ -45,6 +46,12 @@ use PrestaShop\Module\AutoUpgrade\Services\DistributionApiService;
 use PrestaShop\Module\AutoUpgrade\Services\LogsService;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Services\PrestashopVersionService;
+use PrestaShop\Module\AutoUpgrade\State\AbstractState;
+use PrestaShop\Module\AutoUpgrade\State\BackupState;
+use PrestaShop\Module\AutoUpgrade\State\LogsState;
+use PrestaShop\Module\AutoUpgrade\State\RestoreState;
+use PrestaShop\Module\AutoUpgrade\State\UpdateState;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\AssetsEnvironment;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension;
 use PrestaShop\Module\AutoUpgrade\Twig\TransFilterExtension3;
@@ -183,9 +190,24 @@ class UpgradeContainer
     private $twig;
 
     /**
-     * @var State
+     * @var BackupState
      */
-    private $state;
+    private $backupState;
+
+    /**
+     * @var LogsState
+     */
+    private $logsState;
+
+    /**
+     * @var RestoreState
+     */
+    private $restoreState;
+
+    /**
+     * @var UpdateState
+     */
+    private $updateState;
 
     /**
      * @var SymfonyAdapter
@@ -324,7 +346,10 @@ class UpgradeContainer
         // But equal between two upgrade processes
         return $this->analytics = new Analytics(
             $this->getUpgradeConfiguration(),
-            $this->getState(),
+            [
+                'update' => $this->getUpdateState(),
+                'restore' => $this->getRestoreState(),
+            ],
             $this->getProperty(self::WORKSPACE_PATH), [
             'properties' => [
                 Analytics::WITH_COMMON_PROPERTIES => [
@@ -547,7 +572,7 @@ class UpgradeContainer
         }
 
         $this->logsService = new LogsService(
-            $this->getState(),
+            $this->getLogsState(),
             $this->getTranslator(),
             $this->getProperty(self::LOGS_PATH)
         );
@@ -582,7 +607,7 @@ class UpgradeContainer
 
         $this->moduleSourceProviders = [
             new LocalSourceProvider($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR . 'modules', $this->getFileConfigurationStorage()),
-            new MarketplaceSourceProvider($this->getState()->getDestinationVersion(), $this->getProperty(self::PS_ROOT_PATH), $this->getFileLoader(), $this->getFileConfigurationStorage()),
+            new MarketplaceSourceProvider($this->getUpdateState()->getDestinationVersion(), $this->getProperty(self::PS_ROOT_PATH), $this->getFileLoader(), $this->getFileConfigurationStorage()),
             new ComposerSourceProvider($this->getProperty(self::LATEST_PATH), $this->getComposerService(), $this->getFileConfigurationStorage()),
             // Other providers
         ];
@@ -601,19 +626,71 @@ class UpgradeContainer
         return $this->completionCalculator;
     }
 
-    /**
-     * @return State
-     */
-    public function getState(): State
+    public function getBackupState(): BackupState
     {
-        if (null !== $this->state) {
-            return $this->state;
+        if (null !== $this->backupState) {
+            return $this->backupState;
         }
 
-        $this->state = new State($this->getFileConfigurationStorage());
-        $this->state->load();
+        $this->backupState = new BackupState($this->getFileConfigurationStorage());
+        $this->backupState->load();
 
-        return $this->state;
+        return $this->backupState;
+    }
+
+    public function getLogsState(): LogsState
+    {
+        if (null !== $this->logsState) {
+            return $this->logsState;
+        }
+
+        $this->logsState = new LogsState($this->getFileConfigurationStorage());
+        $this->logsState->load();
+
+        return $this->logsState;
+    }
+
+    public function getRestoreState(): RestoreState
+    {
+        if (null !== $this->restoreState) {
+            return $this->restoreState;
+        }
+
+        $this->restoreState = new RestoreState($this->getFileConfigurationStorage());
+        $this->restoreState->load();
+
+        return $this->restoreState;
+    }
+
+    public function getUpdateState(): UpdateState
+    {
+        if (null !== $this->updateState) {
+            return $this->updateState;
+        }
+
+        $this->updateState = new UpdateState($this->getFileConfigurationStorage());
+        $this->updateState->load();
+
+        return $this->updateState;
+    }
+
+    /**
+     * @param TaskType::TASK_TYPE_* $taskType
+     *
+     * @throws InvalidArgumentException
+     */
+    public function getStateFromTaskType($taskType): AbstractState
+    {
+        switch ($taskType) {
+            case TaskType::TASK_TYPE_BACKUP:
+                return $this->getBackupState();
+            case TaskType::TASK_TYPE_RESTORE:
+                return $this->getRestoreState();
+            case TaskType::TASK_TYPE_UPDATE:
+                return $this->getUpdateState();
+            default:
+                throw new InvalidArgumentException('Unknown task type "' . $taskType . '"');
+        }
     }
 
     /**
@@ -621,7 +698,7 @@ class UpgradeContainer
      */
     public function getTranslationAdapter(): Translation
     {
-        return new Translation($this->getTranslator(), $this->getLogger(), $this->getState()->getInstalledLanguagesIso());
+        return new Translation($this->getTranslator(), $this->getLogger(), $this->getUpdateState()->getInstalledLanguagesIso());
     }
 
     public function getTranslator(): Translator
@@ -760,7 +837,7 @@ class UpgradeContainer
 
         $this->upgradeSelfCheck = new UpgradeSelfCheck(
             $this->getUpgrader(),
-            $this->getState(),
+            $this->getUpdateState(),
             $this->getUpgradeConfiguration(),
             $this->getPrestaShopConfiguration(),
             $this->getTranslator(),

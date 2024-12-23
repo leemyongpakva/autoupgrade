@@ -76,7 +76,9 @@ function autoupgrade_init_container($callerFilePath)
     }
 
     $container = new \PrestaShop\Module\AutoUpgrade\UpgradeContainer(_PS_ROOT_DIR_, _PS_ADMIN_DIR_);
-    $container->getState()->importFromArray(empty($_REQUEST['params']) ? [] : $_REQUEST['params']);
+    $container->getBackupState()->importFromArray(empty($_REQUEST['params']) ? [] : $_REQUEST['params']);
+    $container->getRestoreState()->importFromArray(empty($_REQUEST['params']) ? [] : $_REQUEST['params']);
+    $container->getUpdateState()->importFromArray(empty($_REQUEST['params']) ? [] : $_REQUEST['params']);
 
     return $container;
 }

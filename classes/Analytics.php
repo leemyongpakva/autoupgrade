@@ -28,6 +28,8 @@
 namespace PrestaShop\Module\AutoUpgrade;
 
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
+use PrestaShop\Module\AutoUpgrade\State\RestoreState;
+use PrestaShop\Module\AutoUpgrade\State\UpdateState;
 
 class Analytics
 {
@@ -58,21 +60,22 @@ class Analytics
     private $upgradeConfiguration;
 
     /**
-     * @var State
+     * @var array{'restore': RestoreState, 'update': UpdateState}
      */
-    private $state;
+    private $states;
 
     /**
      * @param array{'properties'?: array<int, array<string, mixed>>} $options
+     * @param array{'restore': RestoreState, 'update': UpdateState} $states
      */
     public function __construct(
         UpgradeConfiguration $upgradeConfiguration,
-        State $state,
+        array $states,
         string $anonymousUserId,
         array $options
     ) {
         $this->upgradeConfiguration = $upgradeConfiguration;
-        $this->state = $state;
+        $this->states = $states;
 
         $this->anonymousId = hash('sha256', $anonymousUserId);
         $this->properties = $options['properties'] ?? [];
@@ -119,8 +122,8 @@ class Analytics
                 break;
             case self::WITH_UPDATE_PROPERTIES:
                 $additionalProperties = [
-                    'from_ps_version' => $this->state->getCurrentVersion(),
-                    'to_ps_version' => $this->state->getDestinationVersion(),
+                    'from_ps_version' => $this->states['update']->getCurrentVersion(),
+                    'to_ps_version' => $this->states['update']->getDestinationVersion(),
                     'upgrade_channel' => $this->upgradeConfiguration->getChannel(),
                     'disable_non_native_modules' => $this->upgradeConfiguration->shouldDeactivateCustomModules(),
                     'switch_to_default_theme' => $this->upgradeConfiguration->shouldSwitchToDefaultTheme(),
@@ -132,7 +135,7 @@ class Analytics
             case self::WITH_RESTORE_PROPERTIES:
                 $additionalProperties = [
                     'from_ps_version' => $this->properties[self::WITH_COMMON_PROPERTIES]['ps_version'] ?? null,
-                    'to_ps_version' => $this->state->getRestoreVersion(),
+                    'to_ps_version' => $this->states['restore']->getRestoreVersion(),
                 ];
                 $rollbackProperties = $this->properties[self::WITH_RESTORE_PROPERTIES] ?? [];
                 $additionalProperties = array_merge($rollbackProperties, $additionalProperties);

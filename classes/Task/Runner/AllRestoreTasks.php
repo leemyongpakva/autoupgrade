@@ -52,7 +52,7 @@ class AllRestoreTasks extends ChainedTasks
     public function setOptions(array $options): void
     {
         if (!empty($options['backup'])) {
-            $this->container->getState()->setRestoreName($options['backup']);
+            $this->container->getRestoreState()->setRestoreName($options['backup']);
         }
     }
 

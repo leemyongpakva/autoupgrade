@@ -32,12 +32,16 @@ namespace PrestaShop\Module\AutoUpgrade\Parameters;
  */
 class UpgradeFileNames
 {
-    /**
-     * stateFilename contains all state specific to the autoupgrade module.
-     *
-     * @var string
-     */
-    const STATE_FILENAME = 'state.var';
+    // The different state files contains the temporary data used during
+    // the execution or as a result of a process
+    /** @var string */
+    const STATE_BACKUP_FILENAME = 'state_backup.var';
+    /** @var string */
+    const STATE_LOGS_FILENAME = 'state_logs.var';
+    /** @var string */
+    const STATE_RESTORE_FILENAME = 'state_restore.var';
+    /** @var string */
+    const STATE_UPDATE_FILENAME = 'state_update.var';
 
     /**
      * configFilename contains all configuration specific to the autoupgrade module.
@@ -45,15 +49,6 @@ class UpgradeFileNames
      * @var string
      */
     const CONFIG_FILENAME = 'config.var';
-
-    /**
-     * during upgradeFiles process,
-     * this files contains the list of queries left to upgrade in a serialized array.
-     * (this file is deleted in init() method if you reload the page).
-     *
-     * @var string
-     */
-    const QUERIES_TO_UPGRADE_LIST = 'queriesToUpgrade.list';
 
     /**
      * during upgradeFiles process,
@@ -146,8 +141,7 @@ class UpgradeFileNames
      * @var array<string, string>
      */
     public static $update_tmp_files = [
-        'STATE_FILENAME' => self::STATE_FILENAME,
-        'QUERIES_TO_UPGRADE_LIST' => self::QUERIES_TO_UPGRADE_LIST, // used ?
+        'STATE_FILENAME' => self::STATE_UPDATE_FILENAME,
         'FILES_TO_UPGRADE_LIST' => self::FILES_TO_UPGRADE_LIST,
         'DB_TABLES_TO_CLEAN_LIST' => self::DB_TABLES_TO_CLEAN_LIST,
         'FILES_TO_REMOVE_LIST' => self::FILES_TO_REMOVE_LIST,
@@ -163,8 +157,7 @@ class UpgradeFileNames
      * @var array<string, string>
      */
     public static $backup_tmp_files = [
-        // TODO: Needs the split of state files to avoid dropping data useful for the update on the web UI
-        // 'STATE_FILENAME' => self::STATE_FILENAME,
+        'STATE_FILENAME' => self::STATE_BACKUP_FILENAME,
         'FILES_TO_BACKUP_LIST' => self::FILES_TO_BACKUP_LIST,
         'DB_TABLES_TO_BACKUP_LIST' => self::DB_TABLES_TO_BACKUP_LIST,
     ];
@@ -173,7 +166,7 @@ class UpgradeFileNames
      * @var array<string, string>
      */
     public static $restore_tmp_files = [
-        'STATE_FILENAME' => self::STATE_FILENAME,
+        'STATE_FILENAME' => self::STATE_RESTORE_FILENAME,
         'QUERIES_TO_RESTORE_LIST' => self::QUERIES_TO_RESTORE_LIST,
         'FILES_FROM_ARCHIVE_LIST' => self::FILES_FROM_ARCHIVE_LIST,
     ];

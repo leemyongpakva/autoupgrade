@@ -54,7 +54,7 @@ class Download extends AbstractTask
             return ExitCode::FAIL;
         }
 
-        $this->container->getState()->setProgressPercentage(
+        $this->container->getUpdateState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );
 

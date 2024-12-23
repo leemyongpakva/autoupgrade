@@ -48,13 +48,14 @@ class UpdateComplete extends AbstractTask
      */
     public function run(): int
     {
-        $this->container->getState()->setProgressPercentage(
+        $state = $this->container->getUpdateState();
+        $state->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );
 
-        $destinationVersion = $this->container->getState()->getDestinationVersion();
+        $destinationVersion = $state->getDestinationVersion();
 
-        $this->logger->info($this->container->getState()->getWarningExists() ?
+        $this->logger->info($state->getWarningExists() ?
             $this->translator->trans('Shop updated to %s, but some warnings have been found.', [$destinationVersion]) :
             $this->translator->trans('Shop updated to %s. Congratulations! You can now reactivate your shop.', [$destinationVersion])
         );

@@ -118,7 +118,7 @@ class UpdateModules extends AbstractTask
         }
 
         $modules_left = $listModules->getRemainingTotal();
-        $this->container->getState()->setProgressPercentage(
+        $this->container->getUpdateState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->computePercentage($listModules, self::class, CleanDatabase::class)
         );
         $this->container->getFileConfigurationStorage()->save($listModules->dump(), UpgradeFileNames::MODULES_TO_UPGRADE_LIST);
@@ -139,7 +139,7 @@ class UpdateModules extends AbstractTask
 
     public function warmUp(): int
     {
-        $this->container->getState()->setProgressPercentage(
+        $this->container->getUpdateState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );
 
