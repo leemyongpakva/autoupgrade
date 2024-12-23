@@ -33,6 +33,7 @@ use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -117,7 +118,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
     protected function getParams(): array
     {
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
-        $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
+        $updateSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
 
         $logsPath = $this->upgradeContainer->getLogsService()->getDownloadLogsPath(TaskType::TASK_TYPE_BACKUP);
 

@@ -27,10 +27,12 @@
 namespace PrestaShop\Module\AutoUpgrade\Tests\Twig;
 
 use PHPUnit\Framework\TestCase;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
-class UpdateStepsTest extends TestCase
+class StepsTest extends TestCase
 {
     /** @var Translator */
     private $translator;
@@ -46,7 +48,7 @@ class UpdateStepsTest extends TestCase
             return $string;
         });
 
-        $this->updateSteps = new UpdateSteps($this->translator);
+        $this->updateSteps = new Steps($this->translator, TaskType::TASK_TYPE_UPDATE);
     }
 
     public function testGetSteps()

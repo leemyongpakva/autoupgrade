@@ -30,6 +30,7 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 use PrestaShop\Module\AutoUpgrade\DocumentationLinks;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps;
 use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 
@@ -59,7 +60,7 @@ class UpdatePagePostUpdateController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
-        $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
+        $updateSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
 
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),
