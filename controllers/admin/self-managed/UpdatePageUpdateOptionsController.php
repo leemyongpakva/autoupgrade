@@ -60,7 +60,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
     public function saveOption(): JsonResponse
     {
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
-        $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
+        $upgradeConfigurationStorage = $this->upgradeContainer->getConfigurationStorage();
 
         $config = [
             UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT, false),
@@ -76,7 +76,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
             UpgradeConfiguration::updatePSDisableOverrides($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES]);
 
             $upgradeConfiguration->merge($config);
-            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::UPDATE_CONFIG_FILENAME);
         }
 
         return $this->getRefreshOfForm(array_merge(

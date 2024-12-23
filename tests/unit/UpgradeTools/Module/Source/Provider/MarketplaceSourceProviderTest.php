@@ -25,7 +25,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\Source\ModuleSource;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\Source\Provider\MarketplaceSourceProvider;
 use PrestaShop\Module\AutoUpgrade\Xml\FileLoader;
@@ -45,7 +45,7 @@ class MarketplaceSourceProviderTest extends TestCase
     {
         $fileLoader = $this->createMock(FileLoader::class);
         $fileLoader->method('getXmlFile')->willReturn(simplexml_load_file(__DIR__ . '/../../../../../fixtures/api-marketplace/native-modules-list.xml'));
-        $fileConfigurationStorageMock = $this->createMock(FileConfigurationStorage::class);
+        $fileConfigurationStorageMock = $this->createMock(FileStorage::class);
 
         $sourceProvider = new MarketplaceSourceProvider('9.0.0', 'C:\mocked', $fileLoader, $fileConfigurationStorageMock);
 
@@ -66,7 +66,7 @@ class MarketplaceSourceProviderTest extends TestCase
     {
         $fileLoader = $this->createMock(FileLoader::class);
         $fileLoader->method('getXmlFile')->willReturn(simplexml_load_string('<?xml version="1.0" encoding="UTF-8"?><modules></modules>'));
-        $fileConfigurationStorageMock = $this->createMock(FileConfigurationStorage::class);
+        $fileConfigurationStorageMock = $this->createMock(FileStorage::class);
 
         $sourceProvider = new MarketplaceSourceProvider('9.0.0', 'C:\mocked', $fileLoader, $fileConfigurationStorageMock);
 
@@ -81,7 +81,7 @@ class MarketplaceSourceProviderTest extends TestCase
     public function testCacheLoading()
     {
         $fileLoader = $this->createMock(FileLoader::class);
-        $fileConfigurationStorageMock = $this->createMock(FileConfigurationStorage::class);
+        $fileConfigurationStorageMock = $this->createMock(FileStorage::class);
         $fileConfigurationStorageMock->method('exists')->willReturn(true);
         $fileConfigurationStorageMock->method('load')->willReturn([]);
 

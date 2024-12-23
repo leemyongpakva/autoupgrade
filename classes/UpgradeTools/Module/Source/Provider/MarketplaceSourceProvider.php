@@ -27,7 +27,7 @@
 
 namespace PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\Source\Provider;
 
-use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\Source\ModuleSource;
 use PrestaShop\Module\AutoUpgrade\Xml\FileLoader;
@@ -42,7 +42,7 @@ class MarketplaceSourceProvider extends AbstractModuleSourceProvider
     /** @var FileLoader */
     private $fileLoader;
 
-    /** @var FileConfigurationStorage */
+    /** @var FileStorage */
     private $fileConfigurationStorage;
 
     /** @var string */
@@ -51,7 +51,7 @@ class MarketplaceSourceProvider extends AbstractModuleSourceProvider
     /** @var string */
     private $prestashopRootFolder;
 
-    public function __construct(string $targetVersionOfPrestaShop, string $prestashopRootFolder, FileLoader $fileLoader, FileConfigurationStorage $fileConfigurationStorage)
+    public function __construct(string $targetVersionOfPrestaShop, string $prestashopRootFolder, FileLoader $fileLoader, FileStorage $fileConfigurationStorage)
     {
         $this->targetVersionOfPrestaShop = $targetVersionOfPrestaShop;
         $this->prestashopRootFolder = $prestashopRootFolder;

@@ -67,7 +67,7 @@ class RestoreDatabase extends AbstractTask
 
         // deal with running backup rest if exist
         if (file_exists($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR . UpgradeFileNames::QUERIES_TO_RESTORE_LIST)) {
-            $backlog = Backlog::fromContents($this->container->getFileConfigurationStorage()->load(UpgradeFileNames::QUERIES_TO_RESTORE_LIST));
+            $backlog = Backlog::fromContents($this->container->getFileStorage()->load(UpgradeFileNames::QUERIES_TO_RESTORE_LIST));
         }
 
         // deal with the next files stored in restoreDbFilenames
@@ -156,7 +156,7 @@ class RestoreDatabase extends AbstractTask
                 $tablesToRemove = array_diff($tables_before_restore, $tables_after_restore, $ignore_stats_table);
 
                 if (!empty($tablesToRemove)) {
-                    $this->container->getFileConfigurationStorage()->save($tablesToRemove, UpgradeFileNames::DB_TABLES_TO_CLEAN_LIST);
+                    $this->container->getFileStorage()->save($tablesToRemove, UpgradeFileNames::DB_TABLES_TO_CLEAN_LIST);
                 }
             }
             $backlog = new Backlog(array_reverse($listQuery), count($listQuery));
@@ -195,8 +195,8 @@ class RestoreDatabase extends AbstractTask
                         $this->next = TaskName::TASK_RESTORE_COMPLETE;
                         $this->logger->info($this->translator->trans('Database has been restored.'));
 
-                        $databaseTools->cleanTablesAfterBackup($this->container->getFileConfigurationStorage()->load(UpgradeFileNames::DB_TABLES_TO_CLEAN_LIST));
-                        $this->container->getFileConfigurationStorage()->clean(UpgradeFileNames::DB_TABLES_TO_CLEAN_LIST);
+                        $databaseTools->cleanTablesAfterBackup($this->container->getFileStorage()->load(UpgradeFileNames::DB_TABLES_TO_CLEAN_LIST));
+                        $this->container->getFileStorage()->clean(UpgradeFileNames::DB_TABLES_TO_CLEAN_LIST);
                     }
 
                     return ExitCode::SUCCESS;
@@ -220,7 +220,7 @@ class RestoreDatabase extends AbstractTask
             $queries_left = $backlog->getRemainingTotal();
 
             if ($queries_left > 0) {
-                $this->container->getFileConfigurationStorage()->save($backlog->dump(), UpgradeFileNames::QUERIES_TO_RESTORE_LIST);
+                $this->container->getFileStorage()->save($backlog->dump(), UpgradeFileNames::QUERIES_TO_RESTORE_LIST);
             } elseif (file_exists($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR . UpgradeFileNames::QUERIES_TO_RESTORE_LIST)) {
                 unlink($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR . UpgradeFileNames::QUERIES_TO_RESTORE_LIST);
             }
@@ -240,7 +240,7 @@ class RestoreDatabase extends AbstractTask
             $this->next = TaskName::TASK_RESTORE_COMPLETE;
             $this->logger->info($this->translator->trans('Database restoration done.'));
 
-            $databaseTools->cleanTablesAfterBackup($this->container->getFileConfigurationStorage()->load(UpgradeFileNames::DB_TABLES_TO_CLEAN_LIST));
+            $databaseTools->cleanTablesAfterBackup($this->container->getFileStorage()->load(UpgradeFileNames::DB_TABLES_TO_CLEAN_LIST));
         }
 
         return ExitCode::SUCCESS;

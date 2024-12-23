@@ -300,9 +300,9 @@ class AdminSelfUpgradeController extends ModuleAdminController
 
         if (!$this->ajax) {
             // removing temporary files before init state to make sure state is already available
-            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
-            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllBackupFiles();
-            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllRestoreFiles();
+            $this->upgradeContainer->getFileStorage()->cleanAllUpdateFiles();
+            $this->upgradeContainer->getFileStorage()->cleanAllBackupFiles();
+            $this->upgradeContainer->getFileStorage()->cleanAllRestoreFiles();
         }
 
         if (!$this->upgradeContainer->getUpdateState()->isInitialized()) {
@@ -431,9 +431,9 @@ class AdminSelfUpgradeController extends ModuleAdminController
         $UpConfig = $this->upgradeContainer->getUpgradeConfiguration();
         $UpConfig->merge($config);
 
-        if ($this->upgradeContainer->getUpgradeConfigurationStorage()->save(
+        if ($this->upgradeContainer->getConfigurationStorage()->save(
             $UpConfig,
-            UpgradeFileNames::CONFIG_FILENAME)
+            UpgradeFileNames::UPDATE_CONFIG_FILENAME)
         ) {
             Tools14::redirectAdmin(self::$currentIndex . '&conf=6&token=' . Tools14::getValue('token'));
         }

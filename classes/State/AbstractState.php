@@ -27,7 +27,7 @@
 
 namespace PrestaShop\Module\AutoUpgrade\State;
 
-use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 
 abstract class AbstractState
@@ -35,10 +35,10 @@ abstract class AbstractState
     /** @var bool */
     protected $disableSave = false;
 
-    /** @var FileConfigurationStorage */
+    /** @var FileStorage */
     private $fileConfigurationStorage;
 
-    public function __construct(FileConfigurationStorage $fileConfigurationStorage)
+    public function __construct(FileStorage $fileConfigurationStorage)
     {
         $this->fileConfigurationStorage = $fileConfigurationStorage;
     }

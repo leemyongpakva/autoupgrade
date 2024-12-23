@@ -27,7 +27,7 @@
 
 namespace PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\Source\Provider;
 
-use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Services\ComposerService;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\Source\ModuleSource;
@@ -43,10 +43,10 @@ class ComposerSourceProvider extends AbstractModuleSourceProvider
     /** @var ComposerService */
     private $composerService;
 
-    /** @var FileConfigurationStorage */
+    /** @var FileStorage */
     private $fileConfigurationStorage;
 
-    public function __construct(string $prestaShopReleaseFolder, ComposerService $composerService, FileConfigurationStorage $fileConfigurationStorage)
+    public function __construct(string $prestaShopReleaseFolder, ComposerService $composerService, FileStorage $fileConfigurationStorage)
     {
         $this->prestaShopReleaseFolder = $prestaShopReleaseFolder;
         $this->composerService = $composerService;

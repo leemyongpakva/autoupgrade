@@ -92,7 +92,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
     public function saveOption(): JsonResponse
     {
         $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
-        $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
+        $upgradeConfigurationStorage = $this->upgradeContainer->getConfigurationStorage();
 
         $config = [
             UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, false),
@@ -101,7 +101,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
         $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
         if (empty($errors)) {
             $upgradeConfiguration->merge($config);
-            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::UPDATE_CONFIG_FILENAME);
         }
 
         return $this->getRefreshOfForm(array_merge(

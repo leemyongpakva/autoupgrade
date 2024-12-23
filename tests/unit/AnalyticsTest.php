@@ -25,7 +25,7 @@
  */
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\AutoUpgrade\Analytics;
-use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\State\RestoreState;
 use PrestaShop\Module\AutoUpgrade\State\UpdateState;
@@ -35,7 +35,7 @@ class AnalyticsTest extends TestCase
     public function testProperties()
     {
         $fixturesDir = __DIR__ . '/../../fixtures/config/';
-        $fileStorage = new FileConfigurationStorage($fixturesDir);
+        $fileStorage = new FileStorage($fixturesDir);
 
         $restoreState = (new RestoreState($fileStorage))
             ->setRestoreName('V1.2.3_blablabla-🐶');

@@ -51,14 +51,14 @@ class UpdateDatabase extends AbstractTask
     public function run(): int
     {
         try {
-            if (!$this->container->getFileConfigurationStorage()->exists(UpgradeFileNames::SQL_TO_EXECUTE_LIST)) {
+            if (!$this->container->getFileStorage()->exists(UpgradeFileNames::SQL_TO_EXECUTE_LIST)) {
                 $this->warmUp();
                 $currentVersion = $this->container->getUpdateState()->getCurrentVersion();
                 $sqlContentList = $this->getCoreUpgrader()->getSqlContentList($currentVersion);
                 $backlog = new Backlog(array_reverse($sqlContentList), count($sqlContentList));
             } else {
                 $this->getCoreUpgrader()->setupUpdateEnvironment();
-                $backlog = Backlog::fromContents($this->container->getFileConfigurationStorage()->load(UpgradeFileNames::SQL_TO_EXECUTE_LIST));
+                $backlog = Backlog::fromContents($this->container->getFileStorage()->load(UpgradeFileNames::SQL_TO_EXECUTE_LIST));
             }
 
             if ($backlog->getRemainingTotal() > 0) {
@@ -75,7 +75,7 @@ class UpdateDatabase extends AbstractTask
 
                 return ExitCode::SUCCESS;
             }
-            $this->container->getFileConfigurationStorage()->clean(UpgradeFileNames::SQL_TO_EXECUTE_LIST);
+            $this->container->getFileStorage()->clean(UpgradeFileNames::SQL_TO_EXECUTE_LIST);
             $this->getCoreUpgrader()->finalizeCoreUpdate();
         } catch (UpgradeException $e) {
             $this->next = TaskName::TASK_ERROR;
@@ -114,7 +114,7 @@ class UpdateDatabase extends AbstractTask
 
     public function init(): void
     {
-        if (!$this->container->getFileConfigurationStorage()->exists(UpgradeFileNames::SQL_TO_EXECUTE_LIST)) {
+        if (!$this->container->getFileStorage()->exists(UpgradeFileNames::SQL_TO_EXECUTE_LIST)) {
             $this->logger->info($this->translator->trans('Cleaning file cache'));
             $this->container->getCacheCleaner()->cleanFolders();
             $this->logger->info($this->translator->trans('Running opcache_reset'));
@@ -180,6 +180,6 @@ class UpdateDatabase extends AbstractTask
     {
         $sqlContent = $backlog->getNext();
         $this->getCoreUpgrader()->runQuery($sqlContent['version'], $sqlContent['query']);
-        $this->container->getFileConfigurationStorage()->save($backlog->dump(), UpgradeFileNames::SQL_TO_EXECUTE_LIST);
+        $this->container->getFileStorage()->save($backlog->dump(), UpgradeFileNames::SQL_TO_EXECUTE_LIST);
     }
 }

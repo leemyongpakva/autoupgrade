@@ -35,7 +35,7 @@ use Symfony\Component\Filesystem\Filesystem;
  * Class used for management of to do files for upgrade tasks.
  * Load / Save / Delete etc.
  */
-class FileConfigurationStorage
+class FileStorage
 {
     /**
      * @var string Location where all the configuration files are stored

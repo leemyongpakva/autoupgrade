@@ -88,8 +88,8 @@ class UpdateCommand extends AbstractCommand
             // if we are in the 1st step of the update, we update the configuration
             if ($action === null || $action === TaskName::TASK_UPDATE_INITIALIZATION) {
                 $this->logger->debug('Cleaning previous state files.');
-                $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
-                $this->upgradeContainer->getFileConfigurationStorage()->clean(UpgradeFileNames::CONFIG_FILENAME);
+                $this->upgradeContainer->getFileStorage()->cleanAllUpdateFiles();
+                $this->upgradeContainer->getFileStorage()->clean(UpgradeFileNames::UPDATE_CONFIG_FILENAME);
 
                 $this->processConsoleInputConfiguration($input);
                 $configPath = $input->getOption('config-file-path');
