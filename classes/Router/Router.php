@@ -153,10 +153,10 @@ class Router
             'controller' => UpdatePagePostUpdateController::class,
             'method' => 'step',
         ],
-//        self::RESTORE_PAGE_BACKUP_SELECTION => [
-//            'controller' => 'todo',
-//            'method' => 'index',
-//        ],
+        Routes::RESTORE_PAGE_BACKUP_SELECTION => [
+            'controller' => 'todo',
+            'method' => 'index',
+        ],
         Routes::DISPLAY_ERROR_REPORT_MODAL => [
             'controller' => ErrorReportController::class,
             'method' => 'displayErrorReportModal',

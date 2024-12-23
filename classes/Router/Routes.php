@@ -46,6 +46,8 @@ class Routes
     /* RESTORE PAGE */
     /* step: backup selection */
     const RESTORE_PAGE_BACKUP_SELECTION = 'restore-page-backup-selection';
+    const RESTORE_PAGE_RESTORE = 'restore-page-restore';
+    const RESTORE_PAGE_POST_RESTORE = 'restore-page-post-restore';
 
     /* COMMON */
     /* logs */
