@@ -30,12 +30,14 @@ namespace PrestaShop\Module\AutoUpgrade\Router;
 use PrestaShop\Module\AutoUpgrade\Controller\ErrorReportController;
 use PrestaShop\Module\AutoUpgrade\Controller\HomePageController;
 use PrestaShop\Module\AutoUpgrade\Controller\LogsController;
+use PrestaShop\Module\AutoUpgrade\Controller\RestorePageRestore;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageBackupController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageBackupOptionsController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePagePostUpdateController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageUpdateController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageUpdateOptionsController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageVersionChoiceController;
+use PrestaShop\Module\AutoUpgrade\Controller\RestorePageBackupSelection;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -52,7 +54,9 @@ class Router
         $this->upgradeContainer = $upgradeContainer;
     }
 
-    const ROUTES = [
+    const ROUTES =
+        /* HOME PAGE */
+        [
         Routes::HOME_PAGE => [
             'controller' => HomePageController::class,
             'method' => 'index',
@@ -61,6 +65,8 @@ class Router
             'controller' => HomePageController::class,
             'method' => 'submit',
         ],
+        /* UPDATE PAGE */
+        /* step: version choice */
         Routes::UPDATE_PAGE_VERSION_CHOICE => [
             'controller' => UpdatePageVersionChoiceController::class,
             'method' => 'index',
@@ -85,6 +91,7 @@ class Router
             'controller' => UpdatePageVersionChoiceController::class,
             'method' => 'themeTemperedFilesDialog',
         ],
+        /* step: update options */
         Routes::UPDATE_PAGE_UPDATE_OPTIONS => [
             'controller' => UpdatePageUpdateOptionsController::class,
             'method' => 'index',
@@ -101,6 +108,7 @@ class Router
             'controller' => UpdatePageUpdateOptionsController::class,
             'method' => 'submit',
         ],
+        /* step: backup */
         Routes::UPDATE_PAGE_BACKUP_OPTIONS => [
             'controller' => UpdatePageBackupOptionsController::class,
             'method' => 'index',
@@ -137,6 +145,7 @@ class Router
             'controller' => UpdatePageBackupController::class,
             'method' => 'step',
         ],
+        /* step: update */
         Routes::UPDATE_PAGE_UPDATE => [
             'controller' => UpdatePageUpdateController::class,
             'method' => 'index',
@@ -145,6 +154,7 @@ class Router
             'controller' => UpdatePageUpdateController::class,
             'method' => 'step',
         ],
+        /* step: post update */
         Routes::UPDATE_PAGE_POST_UPDATE => [
             'controller' => UpdatePagePostUpdateController::class,
             'method' => 'index',
@@ -153,14 +163,53 @@ class Router
             'controller' => UpdatePagePostUpdateController::class,
             'method' => 'step',
         ],
+        /* RESTORE PAGE */
+        /* step: backup selection */
         Routes::RESTORE_PAGE_BACKUP_SELECTION => [
+            'controller' => RestorePageBackupSelection::class,
+            'method' => 'index',
+        ],
+        Routes::RESTORE_STEP_BACKUP_SELECTION => [
+            'controller' => RestorePageBackupSelection::class,
+            'method' => 'step',
+        ],
+        Routes::RESTORE_STEP_BACKUP_SELECTION_SAVE_FORM => [
+            'controller' => RestorePageBackupSelection::class,
+            'method' => 'save',
+        ],
+        Routes::RESTORE_STEP_BACKUP_SELECTION_SUBMIT_FORM => [
+            'controller' => RestorePageBackupSelection::class,
+            'method' => 'submit',
+        ],
+        Routes::RESTORE_STEP_BACKUP_SELECTION_DELETE_FORM => [
+            'controller' => RestorePageBackupSelection::class,
+            'method' => 'delete',
+        ],
+        /* step: restore */
+        Routes::RESTORE_PAGE_RESTORE => [
+            'controller' => RestorePageRestore::class,
+            'method' => 'index',
+        ],
+        Routes::RESTORE_STEP_RESTORE => [
+            'controller' => RestorePageRestore::class,
+            'method' => 'step',
+        ],
+        /* step: post restore */
+        Routes::RESTORE_PAGE_POST_RESTORE => [
             'controller' => 'todo',
             'method' => 'index',
         ],
+        Routes::RESTORE_STEP_POST_RESTORE => [
+            'controller' => 'todo',
+            'method' => 'step',
+        ],
+        /* COMMON */
+        /* error reporting */
         Routes::DISPLAY_ERROR_REPORT_MODAL => [
             'controller' => ErrorReportController::class,
             'method' => 'displayErrorReportModal',
         ],
+        /* logs */
         Routes::DOWNLOAD_LOGS => [
             'controller' => LogsController::class,
             'method' => 'getDownloadLogsButton',

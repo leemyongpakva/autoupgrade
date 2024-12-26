@@ -1,10 +1,18 @@
-<div class="form-group backup-selection" id="restore_backup">
+<form
+  class="form-group backup-selection"
+  action=""
+  data-route-to-save="{{ form_route_to_save }}"
+  data-route-to-submit="{{ form_route_to_submit }}"
+  data-route-to-delete="{{ form_route_to_delete }}"
+  id="{{ form_backup_selection_name }}"
+  name="{{ form_backup_selection_name }}"
+>
   <div class="backup-selection__infos">
-    <label for="restore_select">
+    <label for="{{ form_fields.BACKUP_NAME }}">
       {{ 'Select the backup you want to restore to'|trans({}) }}
     </label>
 
-    <select id="restore_select" name="restore_select">
+    <select id="{{ form_fields.BACKUP_NAME }}" name="{{ form_fields.BACKUP_NAME }}">
       <option value="0">
         {{ '-- Choose a backup to restore --'|trans({}) }}
       </option>
@@ -17,15 +25,13 @@
       {% endif %}
     </select>
   </div>
-
-  {% if showDelete %}
-    <button
-      class="btn btn-link backup-selection__delete"
-      id="button_delete_backup"
-      data-select-id="restore_select"
-    >
-      {{ 'Delete selection'|trans({}) }}
-      <i class="material-icons">delete</i>
-    </button>
-  {% endif %}
-</div>
+  <button
+    class="btn btn-link backup-selection__delete"
+    name="action"
+    type="submit"
+    value="delete"
+  >
+    {{ 'Delete selection'|trans({}) }}
+    <i class="material-icons">delete</i>
+  </button>
+</form>

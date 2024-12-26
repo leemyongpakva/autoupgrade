@@ -46,13 +46,23 @@ class Routes
     /* RESTORE PAGE */
     /* step: backup selection */
     const RESTORE_PAGE_BACKUP_SELECTION = 'restore-page-backup-selection';
+    const RESTORE_STEP_BACKUP_SELECTION = 'restore-step-backup-selection';
+    const RESTORE_STEP_BACKUP_SELECTION_SAVE_FORM = 'restore-step-backup-selection-save-form';
+    const RESTORE_STEP_BACKUP_SELECTION_SUBMIT_FORM = 'restore-step-backup-selection-submit-form';
+    const RESTORE_STEP_BACKUP_SELECTION_DELETE_FORM = 'restore-step-backup-selection-delete-form';
+
+    /* step: restore */
     const RESTORE_PAGE_RESTORE = 'restore-page-restore';
+    const RESTORE_STEP_RESTORE = 'restore-step-restore';
+
+    /* step: post restore */
     const RESTORE_PAGE_POST_RESTORE = 'restore-page-post-restore';
+    const RESTORE_STEP_POST_RESTORE = 'restore-step-post-restore';
 
     /* COMMON */
-    /* logs */
-    const DOWNLOAD_LOGS = 'download-logs';
-
     /* error reporting */
     const DISPLAY_ERROR_REPORT_MODAL = 'update-step-update-submit-error-report';
+
+    /* logs */
+    const DOWNLOAD_LOGS = 'download-logs';
 }
