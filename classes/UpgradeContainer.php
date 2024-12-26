@@ -38,7 +38,6 @@ use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationValidator;
 use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\LocalChannelConfigurationValidator;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Progress\CompletionCalculator;
 use PrestaShop\Module\AutoUpgrade\Repository\LocalArchiveRepository;
 use PrestaShop\Module\AutoUpgrade\Services\ComposerService;

@@ -28,8 +28,8 @@ namespace PrestaShop\Module\AutoUpgrade\Tests\Twig;
 
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
-use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\Steps;
+use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
 class StepsTest extends TestCase

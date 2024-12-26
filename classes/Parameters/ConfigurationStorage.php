@@ -68,6 +68,7 @@ class ConfigurationStorage
             default:
                 throw new \InvalidArgumentException('Configuration class ' . $config . ' is unknown.');
         }
+
         return $this->storage->save($config->toArray(), $fileName);
     }
 }

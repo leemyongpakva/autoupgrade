@@ -29,7 +29,6 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;

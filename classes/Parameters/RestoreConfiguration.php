@@ -14,7 +14,7 @@ class RestoreConfiguration extends ArrayCollection
     const BACKUP_NAME = 'BACKUP_NAME';
 
     const RESTORE_CONST_KEYS = [
-        self::BACKUP_NAME
+        self::BACKUP_NAME,
     ];
 
     public function getBackupName(): ?string

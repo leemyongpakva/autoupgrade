@@ -27,7 +27,6 @@
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponse;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Router;
 use PrestaShop\Module\AutoUpgrade\Tools14;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;

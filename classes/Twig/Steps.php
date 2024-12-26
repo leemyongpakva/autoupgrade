@@ -2,12 +2,12 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Twig;
 
-use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
+use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
 class Steps
 {
-    /** @var Translator  */
+    /** @var Translator */
     private $translator;
 
     /** @var TaskType::TASK_* */
@@ -28,8 +28,7 @@ class Steps
      */
     private function getCurrentTaskSteps(): array
     {
-        switch ($this->currentTask)
-        {
+        switch ($this->currentTask) {
             case TaskType::TASK_TYPE_UPDATE:
                 return (new UpdateSteps($this->translator))->getSteps();
             case TaskType::TASK_TYPE_RESTORE:
@@ -40,7 +39,7 @@ class Steps
     }
 
     /**
-     * @param UpdateSteps::STEP_* | RestoreSteps::STEP_* $currentStep
+     * @param UpdateSteps::STEP_*|RestoreSteps::STEP_* $currentStep
      *
      * @return array<int, array<string, string>>
      */
@@ -67,7 +66,7 @@ class Steps
     }
 
     /**
-     * @param UpdateSteps::STEP_* | RestoreSteps::STEP_* $step
+     * @param UpdateSteps::STEP_*|RestoreSteps::STEP_* $step
      *
      * @return string
      */

@@ -16,7 +16,7 @@ class RestorePageBackupSelection extends AbstractPageWithStepController
     const CURRENT_STEP = RestoreSteps::STEP_BACKUP_SELECTION;
     const FORM_NAME = 'backup_choice';
     const FORM_FIELDS = [
-        RestoreConfiguration::BACKUP_NAME => RestoreConfiguration::BACKUP_NAME
+        RestoreConfiguration::BACKUP_NAME => RestoreConfiguration::BACKUP_NAME,
     ];
 
     public function index()
