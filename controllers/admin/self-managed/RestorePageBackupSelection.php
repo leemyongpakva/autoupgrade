@@ -23,7 +23,7 @@ class RestorePageBackupSelection extends AbstractPageWithStepController
     {
         $backups = $this->upgradeContainer->getBackupFinder()->getAvailableBackups();
 
-        if ($backups) {
+        if (!empty($backups)) {
             return parent::index();
         }
 
@@ -52,16 +52,24 @@ class RestorePageBackupSelection extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
-        $updateSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_RESTORE);
+        $restoreSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_RESTORE);
+
+        $backupsAvailable = $this->upgradeContainer->getBackupFinder()->getSortedAndFormatedAvailableBackups();
+
+        $currentConfiguration = new RestoreConfiguration($this->upgradeContainer->getFileStorage()->load(UpgradeFileNames::RESTORE_CONFIG_FILENAME));
+
+        $currentBackup = $currentConfiguration->getBackupName() ?? $backupsAvailable[0]['filename'];
 
         return array_merge(
-            $updateSteps->getStepParams($this::CURRENT_STEP),
+            $restoreSteps->getStepParams($this::CURRENT_STEP),
             [
                 'form_backup_selection_name' => self::FORM_NAME,
                 'form_route_to_save' => Routes::UPDATE_STEP_VERSION_CHOICE_SAVE_FORM,
                 'form_route_to_submit' => Routes::UPDATE_STEP_VERSION_CHOICE_SUBMIT_FORM,
                 'form_route_to_delete' => Routes::UPDATE_STEP_VERSION_CHOICE_SUBMIT_FORM,
                 'form_fields' => self::FORM_FIELDS,
+                'current_backup' => $currentBackup,
+                'backups_available' => $backupsAvailable,
             ]
         );
     }

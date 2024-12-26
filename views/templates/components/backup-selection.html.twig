@@ -13,16 +13,16 @@
     </label>
 
     <select id="{{ form_fields.BACKUP_NAME }}" name="{{ form_fields.BACKUP_NAME }}">
-      <option value="0">
-        {{ '-- Choose a backup to restore --'|trans({}) }}
-      </option>
-      {% if availableBackups is not empty %}
-        {% for backupName in availableBackups %}
-          <option value="{{ backupName }}">
-            {{ backupName }}
-          </option>
-        {% endfor %}
-      {% endif %}
+      {% for backup in backups_available %}
+        <option
+                value="{{ backup.filename }}"
+                {% if backup.filename == current_backup %}
+                  selected
+                {% endif %}
+        >
+          {{ backup.filename }}  {{ backup.datetime }}
+        </option>
+      {% endfor %}
     </select>
   </div>
   <button

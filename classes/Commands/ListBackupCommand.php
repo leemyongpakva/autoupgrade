@@ -56,7 +56,7 @@ class ListBackupCommand extends AbstractBackupCommand
         try {
             $this->setupEnvironment($input, $output);
 
-            $backups = $this->backupFinder->getAvailableBackups();
+            $backups = $this->backupFinder->getSortedAndFormatedAvailableBackups();
 
             if (empty($backups)) {
                 $this->logger->info('No store backup files found in your dedicated directory');
@@ -88,14 +88,13 @@ class ListBackupCommand extends AbstractBackupCommand
      */
     private function getRows(array $backups): array
     {
-        $rows = array_map(function ($backupName) {
-            return $this->backupFinder->parseBackupMetadata($backupName);
-        }, $backups);
-
-        $this->backupFinder->sortBackupsByNewest($rows);
-
-        foreach ($rows as &$row) {
-            unset($row['timestamp']);
+        $rows = [];
+        foreach ($backups as &$row) {
+            $rows[] = [
+                'datetime' => $row['datetime'],
+                'version' => $row['version'],
+                'filename' => $row['filename'],
+            ];
         }
 
         return $rows;
