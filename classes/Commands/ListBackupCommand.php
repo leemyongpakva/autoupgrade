@@ -80,11 +80,9 @@ class ListBackupCommand extends AbstractBackupCommand
     }
 
     /**
-     * @param string[] $backups
+     * @param array<array{timestamp: int, datetime: string, version:string, filename: string}> $backups
      *
      * @return array<int, array{datetime: string, version:string, filename: string}>
-     *
-     * @throws BackupException
      */
     private function getRows(array $backups): array
     {

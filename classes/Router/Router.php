@@ -195,14 +195,14 @@ class Router
             'method' => 'step',
         ],
         /* step: post restore */
-        Routes::RESTORE_PAGE_POST_RESTORE => [
-            'controller' => 'todo',
-            'method' => 'index',
-        ],
-        Routes::RESTORE_STEP_POST_RESTORE => [
-            'controller' => 'todo',
-            'method' => 'step',
-        ],
+//        Routes::RESTORE_PAGE_POST_RESTORE => [
+//            'controller' => 'todo',
+//            'method' => 'index',
+//        ],
+//        Routes::RESTORE_STEP_POST_RESTORE => [
+//            'controller' => 'todo',
+//            'method' => 'step',
+//        ],
         /* COMMON */
         /* error reporting */
         Routes::DISPLAY_ERROR_REPORT_MODAL => [

@@ -76,33 +76,45 @@ class RestorePageBackupSelection extends AbstractPageWithStepController
 
     public function delete(): JsonResponse
     {
-        $backup = $this->request->get(self::FORM_FIELDS[RestoreConfiguration::BACKUP_NAME]);
+        $backup = $this->request->request->get(self::FORM_FIELDS[RestoreConfiguration::BACKUP_NAME]);
         $this->upgradeContainer->getBackupManager()->deleteBackup($backup);
 
         return AjaxResponseBuilder::nextRouteResponse(Routes::RESTORE_PAGE_RESTORE);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function save(): JsonResponse
     {
-        $request = $this->request->toArray();
-        $this->saveBackupConfiguration($request);
+        $this->saveBackupConfiguration();
 
         return AjaxResponseBuilder::nextRouteResponse(Routes::RESTORE_STEP_BACKUP_SELECTION);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function submit(): JsonResponse
     {
-        $request = $this->request->toArray();
-        $this->saveBackupConfiguration($request);
+        $this->saveBackupConfiguration();
 
         return AjaxResponseBuilder::nextRouteResponse(Routes::RESTORE_STEP_RESTORE);
     }
 
-    private function saveBackupConfiguration(array $request)
+    /**
+     * @throws \Exception
+     */
+    private function saveBackupConfiguration(): void
     {
-        $storage = $this->upgradeContainer->getFileStorage();
-        $restoreConfiguration = new RestoreConfiguration($request);
+        $configurationStorage = $this->upgradeContainer->getConfigurationStorage();
+        $restoreConfiguration = $configurationStorage->loadRestoreConfiguration();
 
-        $storage->save($restoreConfiguration, UpgradeFileNames::RESTORE_CONFIG_FILENAME);
+        $config = [
+            RestoreConfiguration::BACKUP_NAME => $this->request->request->get(RestoreConfiguration::BACKUP_NAME),
+        ];
+
+        $restoreConfiguration->merge($config);
+        $configurationStorage->save($restoreConfiguration);
     }
 }

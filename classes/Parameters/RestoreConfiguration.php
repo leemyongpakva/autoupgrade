@@ -4,6 +4,11 @@ namespace PrestaShop\Module\AutoUpgrade\Parameters;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * Contains the restore configuration (form params).
+ *
+ * @extends ArrayCollection<string, mixed>
+ */
 class RestoreConfiguration extends ArrayCollection
 {
     const BACKUP_NAME = 'BACKUP_NAME';
@@ -21,8 +26,6 @@ class RestoreConfiguration extends ArrayCollection
      * @param array<string, mixed> $array
      *
      * @return void
-     *
-     * @throws UnexpectedValueException
      */
     public function merge(array $array = []): void
     {

@@ -67,7 +67,7 @@ class BackupFinder
     }
 
     /**
-     * @return array{timestamp: int, datetime: string, version:string, filename: string}
+     * @return array<array{timestamp: int, datetime: string, version:string, filename: string}>
      */
     public function getSortedAndFormatedAvailableBackups(): array
     {

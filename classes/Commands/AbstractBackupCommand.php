@@ -89,7 +89,7 @@ abstract class AbstractBackupCommand extends AbstractCommand
             throw new BackupException('Invalid backup selection.');
         }
 
-        return $formattedBackups[$key]['filename'];
+        return $backups[$key]['filename'];
     }
 
     /**

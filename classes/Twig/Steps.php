@@ -77,15 +77,9 @@ class Steps
     }
 
     /**
-     * @return array{
-     *          step: array {
-     *            code: string,
-     *            title: string
-     *          },
-     *          steps: array<int, array<string, string>>
-     *        }
+     * @return array{step: array{code: string, title: string}, steps: array<int, array<string, string>>}
      */
-    public function getStepParams(string $step)
+    public function getStepParams(string $step): array
     {
         return [
             'step' => [

@@ -76,7 +76,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
             UpgradeConfiguration::updatePSDisableOverrides($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES]);
 
             $upgradeConfiguration->merge($config);
-            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::UPDATE_CONFIG_FILENAME);
+            $upgradeConfigurationStorage->save($upgradeConfiguration);
         }
 
         return $this->getRefreshOfForm(array_merge(

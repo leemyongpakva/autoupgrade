@@ -29,8 +29,6 @@ namespace PrestaShop\Module\AutoUpgrade\Task\Miscellaneous;
 
 use Exception;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfigurationStorage;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Task\AbstractTask;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
@@ -168,14 +166,15 @@ class UpdateConfig extends AbstractTask
      */
     private function writeConfig(array $config): bool
     {
-        $classConfig = $this->container->getUpgradeConfiguration();
+        $configurationStorage = $this->container->getConfigurationStorage();
+        $classConfig = $configurationStorage->loadUpdateConfiguration();
         $classConfig->merge($config);
 
         $this->logger->info($this->translator->trans('Configuration successfully updated.'));
 
         $this->container->getLogger()->debug('Configuration update: ' . json_encode($classConfig->toArray(), JSON_PRETTY_PRINT));
 
-        return (new UpgradeConfigurationStorage($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR))->save($classConfig, UpgradeFileNames::UPDATE_CONFIG_FILENAME);
+        return $configurationStorage->save($classConfig);
     }
 
     public function init(): void

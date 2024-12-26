@@ -200,7 +200,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
             $config = $this->upgradeContainer->getUpgradeConfiguration();
             $config->merge($requestConfig);
 
-            $this->upgradeContainer->getConfigurationStorage()->save($config, UpgradeFileNames::UPDATE_CONFIG_FILENAME);
+            $this->upgradeContainer->getConfigurationStorage()->save($config);
             $state = $this->upgradeContainer->getUpdateState()->setDestinationVersion($this->upgradeContainer->getUpgrader()->getDestinationVersion());
             $state->save();
 
