@@ -77,7 +77,7 @@ class UpgradeContainerTest extends TestCase
             ['getCacheCleaner', PrestaShop\Module\AutoUpgrade\UpgradeTools\CacheCleaner::class],
             ['getChecksumCompare', PrestaShop\Module\AutoUpgrade\Xml\ChecksumCompare::class],
             ['getCookie', PrestaShop\Module\AutoUpgrade\Cookie::class],
-            ['getFileConfigurationStorage', PrestaShop\Module\AutoUpgrade\Parameters\FileStorage::class],
+            ['getFileStorage', PrestaShop\Module\AutoUpgrade\Parameters\FileStorage::class],
             ['getFileFilter', \PrestaShop\Module\AutoUpgrade\UpgradeTools\FileFilter::class],
             // ['getUpgrader', \PrestaShop\Module\AutoUpgrade\Upgrader::class],
             ['getFilesystemAdapter', PrestaShop\Module\AutoUpgrade\UpgradeTools\FilesystemAdapter::class],
