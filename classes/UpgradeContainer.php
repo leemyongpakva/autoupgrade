@@ -726,7 +726,7 @@ class UpgradeContainer
             return $this->twig;
         }
 
-        if (class_exists(Environment::class)) {
+        if (version_compare($this->getProperty(self::PS_VERSION), '1.7.8.0', '>')) {
             // We use Twig 3
             $loader = new FilesystemLoader();
             $loader->addPath(realpath(__DIR__ . '/..') . '/views/templates', 'ModuleAutoUpgrade');
