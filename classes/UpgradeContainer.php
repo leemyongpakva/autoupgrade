@@ -144,11 +144,6 @@ class UpgradeContainer
     private $prestashopConfiguration;
 
     /**
-     * @var UpgradeConfiguration
-     */
-    private $upgradeConfiguration;
-
-    /**
      * @var FilesystemAdapter
      */
     private $filesystemAdapter;
@@ -325,7 +320,7 @@ class UpgradeContainer
             case self::LOGS_PATH:
                 return $this->autoupgradeWorkDir . DIRECTORY_SEPARATOR . 'logs';
             case self::ARCHIVE_FILENAME:
-                return $this->getUpgradeConfiguration()->getChannelZip();
+                return $this->getConfigurationStorage()->loadUpdateConfiguration()->getChannelZip();
             case self::ARCHIVE_FILEPATH:
                 return $this->getProperty(self::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $this->getProperty(self::ARCHIVE_FILENAME);
             case self::PS_VERSION:
@@ -344,7 +339,7 @@ class UpgradeContainer
         // The identifier shoudl be a value a value always different between two shops
         // But equal between two upgrade processes
         return $this->analytics = new Analytics(
-            $this->getUpgradeConfiguration(),
+            $this->getConfigurationStorage(),
             [
                 'update' => $this->getUpdateState(),
                 'restore' => $this->getRestoreState(),
@@ -472,7 +467,7 @@ class UpgradeContainer
         }
 
         $this->fileFilter = new FileFilter(
-            $this->getUpgradeConfiguration(),
+            $this->getConfigurationStorage(),
             $this->getComposerService(),
             $this->getProperty(self::PS_ROOT_PATH)
         );
@@ -494,7 +489,7 @@ class UpgradeContainer
 
         $upgrader = new Upgrader(
             $this->getPhpVersionResolverService(),
-            $this->getUpgradeConfiguration(),
+            $this->getConfigurationStorage(),
             $this->getProperty(self::PS_VERSION)
         );
 
@@ -775,19 +770,6 @@ class UpgradeContainer
     /**
      * @throws Exception
      */
-    public function getUpgradeConfiguration(): UpgradeConfiguration
-    {
-        if (null !== $this->upgradeConfiguration) {
-            return $this->upgradeConfiguration;
-        }
-        $this->upgradeConfiguration = $this->getConfigurationStorage()->loadUpdateConfiguration();
-
-        return $this->upgradeConfiguration;
-    }
-
-    /**
-     * @throws Exception
-     */
     public function getConfigurationStorage(): ConfigurationStorage
     {
         return new ConfigurationStorage($this->getFileStorage());
@@ -836,7 +818,7 @@ class UpgradeContainer
         $this->upgradeSelfCheck = new UpgradeSelfCheck(
             $this->getUpgrader(),
             $this->getUpdateState(),
-            $this->getUpgradeConfiguration(),
+            $this->getConfigurationStorage(),
             $this->getPrestaShopConfiguration(),
             $this->getTranslator(),
             $this->getPhpVersionResolverService(),
@@ -892,7 +874,7 @@ class UpgradeContainer
         $this->zipAction = new ZipAction(
             $this->getTranslator(),
             $this->getLogger(),
-            $this->getUpgradeConfiguration(),
+            $this->getConfigurationStorage(),
             $this->getProperty(self::PS_ROOT_PATH));
 
         return $this->zipAction;

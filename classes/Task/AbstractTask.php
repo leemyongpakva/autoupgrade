@@ -130,7 +130,7 @@ abstract class AbstractTask
             ->setStepDone($this->stepDone)
             ->setNext($this->next)
             ->setNextParams($this->nextParams)
-            ->setUpgradeConfiguration($this->container->getUpgradeConfiguration());
+            ->setUpgradeConfiguration($this->container->getConfigurationStorage()->loadUpdateConfiguration());
     }
 
     /**
@@ -200,8 +200,10 @@ abstract class AbstractTask
      */
     protected function setupEnvironment(): void
     {
-        if ($this::TASK_TYPE === TaskType::TASK_TYPE_UPDATE && $this->container->getUpgradeConfiguration()->isChannelLocal()) {
-            $archiveXml = $this->container->getUpgradeConfiguration()->getLocalChannelXml();
+        $updateConfiguration = $this->container->getConfigurationStorage()->loadUpdateConfiguration();
+
+        if ($this::TASK_TYPE === TaskType::TASK_TYPE_UPDATE && $updateConfiguration->isChannelLocal()) {
+            $archiveXml = $updateConfiguration->getLocalChannelXml();
             $this->container->getFileLoader()->addXmlMd5File($this->container->getUpgrader()->getDestinationVersion(), $this->container->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $archiveXml);
         }
 

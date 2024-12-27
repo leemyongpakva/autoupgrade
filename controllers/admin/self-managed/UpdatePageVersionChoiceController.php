@@ -104,7 +104,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
         }
         $archiveRepository = $this->upgradeContainer->getLocalArchiveRepository();
 
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
+        $upgradeConfiguration = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration();
         $currentChannel = $upgradeConfiguration->getChannel();
 
         return array_merge(
@@ -196,10 +196,12 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
                 $requestConfig['archive_version_num'] = $this->upgradeContainer->getPrestashopVersionService()->extractPrestashopVersionFromZip($fullFilePath);
             }
 
-            $config = $this->upgradeContainer->getUpgradeConfiguration();
+            $configurationStorage = $this->upgradeContainer->getConfigurationStorage();
+
+            $config = $configurationStorage->loadUpdateConfiguration();
             $config->merge($requestConfig);
 
-            $this->upgradeContainer->getConfigurationStorage()->save($config);
+            $configurationStorage->save($config);
             $state = $this->upgradeContainer->getUpdateState()->setDestinationVersion($this->upgradeContainer->getUpgrader()->getDestinationVersion());
             $state->save();
 

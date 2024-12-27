@@ -54,7 +54,7 @@ class FilesystemAdapterTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = new UpgradeContainer('/html', '/html/admin');        // We expect in these tests to NOT update the theme
+        $this->container = new UpgradeContainer(__DIR__, __DIR__ . '/..');     // We expect in these tests to NOT update the theme
         $this->filesystemAdapter = $this->container->getFilesystemAdapter();
     }
 
@@ -77,7 +77,11 @@ class FilesystemAdapterTest extends TestCase
 
     public function testListFilesInDirForBackupWithImages()
     {
-        $this->container->getUpgradeConfiguration()->set(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, true);
+        $configurationStorage = $this->container->getConfigurationStorage();
+        $configuration = $configurationStorage->loadUpdateConfiguration();
+        $configuration->merge([UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => true]);
+        $configurationStorage->save($configuration);
+
         $expected = $this->loadFixtureAndAddPrefixToFilePaths(
             __DIR__ . '/../../fixtures/listOfFiles-backup-with-images.json',
             self::$pathToFakeShop
@@ -94,7 +98,11 @@ class FilesystemAdapterTest extends TestCase
 
     public function testListFilesInDirForBackupWithoutImages()
     {
-        $this->container->getUpgradeConfiguration()->set(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, false);
+        $configurationStorage = $this->container->getConfigurationStorage();
+        $configuration = $configurationStorage->loadUpdateConfiguration();
+        $configuration->merge([UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => false]);
+        $configurationStorage->save($configuration);
+
         $expected = $this->loadFixtureAndAddPrefixToFilePaths(
             __DIR__ . '/../../fixtures/listOfFiles-backup-without-images.json',
             self::$pathToFakeShop
@@ -104,6 +112,7 @@ class FilesystemAdapterTest extends TestCase
             self::$pathToFakeShop,
             'backup'
         );
+
         // TODO: Should try using assertEqualsCanonicalizing after upgrade of PHPUnit
         $this->assertEquals([], array_diff($expected, $actual), "There are more files in the expected array than in the actual list: \n" . implode("\n", array_diff($expected, $actual)));
         $this->assertEquals([], array_diff($actual, $expected), "There are more files in the actual array than in the expected list: \n" . implode("\n", array_diff($actual, $expected)));
@@ -111,7 +120,11 @@ class FilesystemAdapterTest extends TestCase
 
     public function testListFilesInDirForRestoreWithImages()
     {
-        $this->container->getUpgradeConfiguration()->set(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, true);
+        $configurationStorage = $this->container->getConfigurationStorage();
+        $configuration = $configurationStorage->loadUpdateConfiguration();
+        $configuration->merge([UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => true]);
+        $configurationStorage->save($configuration);
+
         $expected = $this->loadFixtureAndAddPrefixToFilePaths(
             __DIR__ . '/../../fixtures/listOfFiles-restore-with-images.json',
             self::$pathToFakeShop
@@ -128,7 +141,11 @@ class FilesystemAdapterTest extends TestCase
 
     public function testListFilesInDirForRestoreWithoutImages()
     {
-        $this->container->getUpgradeConfiguration()->set(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, false);
+        $configurationStorage = $this->container->getConfigurationStorage();
+        $configuration = $configurationStorage->loadUpdateConfiguration();
+        $configuration->merge([UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => false]);
+        $configurationStorage->save($configuration);
+
         $expected = $this->loadFixtureAndAddPrefixToFilePaths(
             __DIR__ . '/../../fixtures/listOfFiles-restore-without-images.json',
             self::$pathToFakeShop

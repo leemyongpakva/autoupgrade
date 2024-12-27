@@ -27,7 +27,7 @@
 
 namespace PrestaShop\Module\AutoUpgrade;
 
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
+use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\State\RestoreState;
 use PrestaShop\Module\AutoUpgrade\State\UpdateState;
 
@@ -55,9 +55,9 @@ class Analytics
     private $properties;
 
     /**
-     * @var UpgradeConfiguration
+     * @var ConfigurationStorage
      */
-    private $upgradeConfiguration;
+    private $configurationStorage;
 
     /**
      * @var array{'restore': RestoreState, 'update': UpdateState}
@@ -69,12 +69,12 @@ class Analytics
      * @param array{'restore': RestoreState, 'update': UpdateState} $states
      */
     public function __construct(
-        UpgradeConfiguration $upgradeConfiguration,
-        array $states,
-        string $anonymousUserId,
-        array $options
+        ConfigurationStorage $configurationStorage,
+        array                $states,
+        string               $anonymousUserId,
+        array                $options
     ) {
-        $this->upgradeConfiguration = $upgradeConfiguration;
+        $this->configurationStorage = $configurationStorage;
         $this->states = $states;
 
         $this->anonymousId = hash('sha256', $anonymousUserId);
@@ -111,11 +111,13 @@ class Analytics
      */
     public function getProperties($type): array
     {
+        $updateConfiguration = $this->configurationStorage->loadUpdateConfiguration();
+
         switch ($type) {
             case self::WITH_BACKUP_PROPERTIES:
                 $additionalProperties = [
-                    'backup_files_and_databases' => $this->upgradeConfiguration->shouldBackupFilesAndDatabase(),
-                    'backup_images' => $this->upgradeConfiguration->shouldBackupImages(),
+                    'backup_files_and_databases' => $updateConfiguration->shouldBackupFilesAndDatabase(),
+                    'backup_images' => $updateConfiguration->shouldBackupImages(),
                 ];
                 $upgradeProperties = $this->properties[self::WITH_BACKUP_PROPERTIES] ?? [];
                 $additionalProperties = array_merge($upgradeProperties, $additionalProperties);
@@ -124,10 +126,10 @@ class Analytics
                 $additionalProperties = [
                     'from_ps_version' => $this->states['update']->getCurrentVersion(),
                     'to_ps_version' => $this->states['update']->getDestinationVersion(),
-                    'upgrade_channel' => $this->upgradeConfiguration->getChannel(),
-                    'disable_non_native_modules' => $this->upgradeConfiguration->shouldDeactivateCustomModules(),
-                    'switch_to_default_theme' => $this->upgradeConfiguration->shouldSwitchToDefaultTheme(),
-                    'regenerate_customized_email_templates' => $this->upgradeConfiguration->shouldRegenerateMailTemplates(),
+                    'upgrade_channel' => $updateConfiguration->getChannel(),
+                    'disable_non_native_modules' => $updateConfiguration->shouldDeactivateCustomModules(),
+                    'switch_to_default_theme' => $updateConfiguration->shouldSwitchToDefaultTheme(),
+                    'regenerate_customized_email_templates' => $updateConfiguration->shouldRegenerateMailTemplates(),
                 ];
                 $upgradeProperties = $this->properties[self::WITH_UPDATE_PROPERTIES] ?? [];
                 $additionalProperties = array_merge($upgradeProperties, $additionalProperties);

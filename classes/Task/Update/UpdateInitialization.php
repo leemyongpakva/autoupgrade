@@ -63,7 +63,7 @@ class UpdateInitialization extends AbstractTask
 
         $this->logger->info($this->translator->trans('Destination version: %s', [$this->container->getUpdateState()->getDestinationVersion()]));
 
-        switch ($this->container->getUpgradeConfiguration()->getChannelOrDefault()) {
+        switch ($this->container->getConfigurationStorage()->loadUpdateConfiguration()->getChannelOrDefault()) {
             case UpgradeConfiguration::CHANNEL_LOCAL:
                 $this->next = TaskName::TASK_UNZIP;
                 $this->logger->debug($this->translator->trans('Downloading step has been skipped, upgrade process will now unzip the local archive.'));

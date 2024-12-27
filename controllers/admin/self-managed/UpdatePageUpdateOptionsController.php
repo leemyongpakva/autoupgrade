@@ -56,10 +56,13 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         return Routes::UPDATE_PAGE_UPDATE_OPTIONS;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function saveOption(): JsonResponse
     {
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
-        $upgradeConfigurationStorage = $this->upgradeContainer->getConfigurationStorage();
+        $configurationStorage = $this->upgradeContainer->getConfigurationStorage();
+        $upgradeConfiguration = $configurationStorage->loadUpdateConfiguration();
 
         $config = [
             UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT, false),
@@ -75,7 +78,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
             UpgradeConfiguration::updatePSDisableOverrides($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES]);
 
             $upgradeConfiguration->merge($config);
-            $upgradeConfigurationStorage->save($upgradeConfiguration);
+            $configurationStorage->save($upgradeConfiguration);
         }
 
         return $this->getRefreshOfForm(array_merge(
@@ -97,7 +100,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
     protected function getParams(): array
     {
         $this->upgradeContainer->initPrestaShopCore();
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
+        $updateConfiguration = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration();
         $updateSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
 
         return array_merge(
@@ -109,15 +112,15 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
                 'form_fields' => [
                     'deactive_non_native_modules' => [
                         'field' => UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT,
-                        'value' => $upgradeConfiguration->shouldDeactivateCustomModules(),
+                        'value' => $updateConfiguration->shouldDeactivateCustomModules(),
                     ],
                     'regenerate_email_templates' => [
                         'field' => UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL,
-                        'value' => $upgradeConfiguration->shouldRegenerateMailTemplates(),
+                        'value' => $updateConfiguration->shouldRegenerateMailTemplates(),
                     ],
                     'disable_all_overrides' => [
                         'field' => UpgradeConfiguration::PS_DISABLE_OVERRIDES,
-                        'value' => !$upgradeConfiguration->isOverrideAllowed(),
+                        'value' => !$updateConfiguration->isOverrideAllowed(),
                     ],
                 ],
             ]

@@ -328,7 +328,6 @@ class AdminSelfUpgradeController extends ModuleAdminController
             );
 
             if (isset($_GET['refreshCurrentVersion'])) {
-                $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
                 // delete the potential xml files we saved in config/xml (from last release and from current)
                 $upgrader->clearXmlMd5File($this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION));
                 $upgrader->clearXmlMd5File($upgrader->getDestinationVersion());
@@ -427,7 +426,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
             throw new UnexpectedValueException(reset($error)['message']);
         }
 
-        $UpConfig = $this->upgradeContainer->getUpgradeConfiguration();
+        $UpConfig = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration();
         $UpConfig->merge($config);
 
         if ($this->upgradeContainer->getConfigurationStorage()->save($UpConfig)
@@ -485,7 +484,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
         // update backup name
         $backupFinder = $this->upgradeContainer->getBackupFinder();
         $availableBackups = $backupFinder->getAvailableBackups();
-        if (!$this->upgradeContainer->getUpgradeConfiguration()->shouldBackupFilesAndDatabase()
+        if (!$this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration()->shouldBackupFilesAndDatabase()
             && !empty($availableBackups)
             && !in_array($this->upgradeContainer->getBackupState()->getBackupName(), $availableBackups)
         ) {
@@ -496,7 +495,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
 
         $response = new AjaxResponse($this->upgradeContainer->getUpdateState(), $this->upgradeContainer->getLogger());
         $this->content = (new UpgradePage(
-            $this->upgradeContainer->getUpgradeConfiguration(),
+            $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration(),
             $this->upgradeContainer->getTwig(),
             $this->upgradeContainer->getTranslator(),
             $this->upgradeContainer->getUpgradeSelfCheck(),
@@ -511,7 +510,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
             $this->downloadPath
         ))->display(
             $response
-                ->setUpgradeConfiguration($this->upgradeContainer->getUpgradeConfiguration())
+                ->setUpgradeConfiguration($this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration())
                 ->getJson()
         );
 

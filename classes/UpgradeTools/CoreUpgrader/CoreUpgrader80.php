@@ -87,7 +87,7 @@ class CoreUpgrader80 extends CoreUpgrader
         $lang_pack = \Language::getLangDetails($isoCode);
         \Language::installSfLanguagePack($lang_pack['locale'], $errorsLanguage);
 
-        if ($this->container->getUpgradeConfiguration()->shouldRegenerateMailTemplates()) {
+        if ($this->container->getConfigurationStorage()->loadUpdateConfiguration()->shouldRegenerateMailTemplates()) {
             $this->logger->debug($this->container->getTranslator()->trans('Generating mail templates for %lang%', ['%lang%' => $isoCode]));
             $mailTheme = \Configuration::get('PS_MAIL_THEME', null, null, null, 'modern');
 

@@ -83,7 +83,7 @@ class BackupDatabase extends AbstractTask
                 $state->setBackupLoopLimit(0);
             }
 
-            if ($written > $this->container->getUpgradeConfiguration()->getMaxSizeToWritePerCall()) {
+            if ($written > $this->container->getConfigurationStorage()->loadUpdateConfiguration()->getMaxSizeToWritePerCall()) {
                 // In the previous loop execution, we reached the limit of data to store in a single file.
                 // We reset the stream
                 $written = 0;

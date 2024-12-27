@@ -91,7 +91,6 @@ class UpgradeContainerTest extends TestCase
             // Cannot be run in the context of unit tests as the class would be loaded from PS dependencies
             // ['getTwig', \Twig\Environment::class],
             ['getPrestaShopConfiguration', PrestaShop\Module\AutoUpgrade\PrestashopConfiguration::class],
-            ['getUpgradeConfiguration', PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration::class],
             ['getWorkspace', PrestaShop\Module\AutoUpgrade\Workspace::class],
             ['getZipAction', PrestaShop\Module\AutoUpgrade\ZipAction::class],
         ];

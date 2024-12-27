@@ -58,7 +58,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
 
     public function submitBackup(): JsonResponse
     {
-        $imagesIncluded = $this->upgradeContainer->getUpgradeConfiguration()->shouldBackupImages();
+        $imagesIncluded = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration()->shouldBackupImages();
 
         return $this->displayDialog($imagesIncluded ? 'dialog-backup-all' : 'dialog-backup', [
             'dialogId' => 'dialog-confirm-backup',
@@ -116,7 +116,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
+        $upgradeConfiguration = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration();
         $updateSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
 
         $logsPath = $this->upgradeContainer->getLogsService()->getDownloadLogsPath(TaskType::TASK_TYPE_BACKUP);
