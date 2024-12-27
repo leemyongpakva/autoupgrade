@@ -70,9 +70,9 @@ class Analytics
      */
     public function __construct(
         ConfigurationStorage $configurationStorage,
-        array                $states,
-        string               $anonymousUserId,
-        array                $options
+        array $states,
+        string $anonymousUserId,
+        array $options
     ) {
         $this->configurationStorage = $configurationStorage;
         $this->states = $states;

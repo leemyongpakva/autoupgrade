@@ -31,7 +31,6 @@ use PrestaShop\Module\AutoUpgrade\Exceptions\DistributionApiException;
 use PrestaShop\Module\AutoUpgrade\Exceptions\UpgradeException;
 use PrestaShop\Module\AutoUpgrade\Models\PrestashopRelease;
 use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationStorage;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Xml\FileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -52,8 +51,8 @@ class Upgrader
 
     public function __construct(
         PhpVersionResolverService $phpRequirementService,
-        ConfigurationStorage      $configurationStorage,
-        string                    $currentPsVersion
+        ConfigurationStorage $configurationStorage,
+        string $currentPsVersion
     ) {
         $this->currentPsVersion = $currentPsVersion;
         $this->phpVersionResolverService = $phpRequirementService;

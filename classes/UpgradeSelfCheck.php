@@ -123,16 +123,16 @@ class UpgradeSelfCheck
     const THEME_TEMPERED_FILES_LIST_NOT_EMPTY = 20;
 
     public function __construct(
-        Upgrader                  $upgrader,
-        UpdateState               $state,
-        ConfigurationStorage      $configurationStorage,
-        PrestashopConfiguration   $prestashopConfiguration,
-        Translator                $translator,
+        Upgrader $upgrader,
+        UpdateState $state,
+        ConfigurationStorage $configurationStorage,
+        PrestashopConfiguration $prestashopConfiguration,
+        Translator $translator,
         PhpVersionResolverService $phpRequirementService,
-        ChecksumCompare           $checksumCompare,
-        string                    $prodRootPath,
-        string                    $adminPath,
-        string                    $autoUpgradePath
+        ChecksumCompare $checksumCompare,
+        string $prodRootPath,
+        string $adminPath,
+        string $autoUpgradePath
     ) {
         $this->upgrader = $upgrader;
         $this->state = $state;
