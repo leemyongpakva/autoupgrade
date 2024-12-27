@@ -32,7 +32,6 @@ use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\RestoreSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\Steps;
-use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 
 class RestorePagePostRestoreController extends AbstractPageWithStepController
