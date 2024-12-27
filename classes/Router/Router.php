@@ -31,6 +31,7 @@ use PrestaShop\Module\AutoUpgrade\Controller\ErrorReportController;
 use PrestaShop\Module\AutoUpgrade\Controller\HomePageController;
 use PrestaShop\Module\AutoUpgrade\Controller\LogsController;
 use PrestaShop\Module\AutoUpgrade\Controller\RestorePageBackupSelectionController;
+use PrestaShop\Module\AutoUpgrade\Controller\RestorePagePostRestoreController;
 use PrestaShop\Module\AutoUpgrade\Controller\RestorePageRestoreController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageBackupController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageBackupOptionsController;
@@ -195,14 +196,14 @@ class Router
             'method' => 'step',
         ],
         /* step: post restore */
-//        Routes::RESTORE_PAGE_POST_RESTORE => [
-//            'controller' => 'todo',
-//            'method' => 'index',
-//        ],
-//        Routes::RESTORE_STEP_POST_RESTORE => [
-//            'controller' => 'todo',
-//            'method' => 'step',
-//        ],
+        Routes::RESTORE_PAGE_POST_RESTORE => [
+            'controller' => RestorePagePostRestoreController::class,
+            'method' => 'index',
+        ],
+        Routes::RESTORE_STEP_POST_RESTORE => [
+            'controller' => RestorePagePostRestoreController::class,
+            'method' => 'step',
+        ],
         /* COMMON */
         /* error reporting */
         Routes::DISPLAY_ERROR_REPORT_MODAL => [
