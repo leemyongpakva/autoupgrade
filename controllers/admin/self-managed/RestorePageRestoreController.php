@@ -7,7 +7,7 @@ use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\RestoreSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\Steps;
 
-class RestorePageRestore extends AbstractPageWithStepController
+class RestorePageRestoreController extends AbstractPageWithStepController
 {
     const CURRENT_STEP = RestoreSteps::STEP_RESTORE;
 

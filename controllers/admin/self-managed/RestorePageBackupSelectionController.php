@@ -11,7 +11,7 @@ use PrestaShop\Module\AutoUpgrade\Twig\RestoreSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\Steps;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class RestorePageBackupSelection extends AbstractPageWithStepController
+class RestorePageBackupSelectionController extends AbstractPageWithStepController
 {
     const CURRENT_STEP = RestoreSteps::STEP_BACKUP_SELECTION;
     const FORM_NAME = 'backup_choice';

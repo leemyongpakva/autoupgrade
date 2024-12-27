@@ -30,8 +30,8 @@ namespace PrestaShop\Module\AutoUpgrade\Router;
 use PrestaShop\Module\AutoUpgrade\Controller\ErrorReportController;
 use PrestaShop\Module\AutoUpgrade\Controller\HomePageController;
 use PrestaShop\Module\AutoUpgrade\Controller\LogsController;
-use PrestaShop\Module\AutoUpgrade\Controller\RestorePageBackupSelection;
-use PrestaShop\Module\AutoUpgrade\Controller\RestorePageRestore;
+use PrestaShop\Module\AutoUpgrade\Controller\RestorePageBackupSelectionController;
+use PrestaShop\Module\AutoUpgrade\Controller\RestorePageRestoreController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageBackupController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePageBackupOptionsController;
 use PrestaShop\Module\AutoUpgrade\Controller\UpdatePagePostUpdateController;
@@ -166,32 +166,32 @@ class Router
         /* RESTORE PAGE */
         /* step: backup selection */
         Routes::RESTORE_PAGE_BACKUP_SELECTION => [
-            'controller' => RestorePageBackupSelection::class,
+            'controller' => RestorePageBackupSelectionController::class,
             'method' => 'index',
         ],
         Routes::RESTORE_STEP_BACKUP_SELECTION => [
-            'controller' => RestorePageBackupSelection::class,
+            'controller' => RestorePageBackupSelectionController::class,
             'method' => 'step',
         ],
         Routes::RESTORE_STEP_BACKUP_SELECTION_SAVE_FORM => [
-            'controller' => RestorePageBackupSelection::class,
+            'controller' => RestorePageBackupSelectionController::class,
             'method' => 'save',
         ],
         Routes::RESTORE_STEP_BACKUP_SELECTION_SUBMIT_FORM => [
-            'controller' => RestorePageBackupSelection::class,
+            'controller' => RestorePageBackupSelectionController::class,
             'method' => 'submit',
         ],
         Routes::RESTORE_STEP_BACKUP_SELECTION_DELETE_FORM => [
-            'controller' => RestorePageBackupSelection::class,
+            'controller' => RestorePageBackupSelectionController::class,
             'method' => 'delete',
         ],
         /* step: restore */
         Routes::RESTORE_PAGE_RESTORE => [
-            'controller' => RestorePageRestore::class,
+            'controller' => RestorePageRestoreController::class,
             'method' => 'index',
         ],
         Routes::RESTORE_STEP_RESTORE => [
-            'controller' => RestorePageRestore::class,
+            'controller' => RestorePageRestoreController::class,
             'method' => 'step',
         ],
         /* step: post restore */
