@@ -1,9 +1,9 @@
 import api from '../api/RequestHandler';
 import { dialogContainer } from '../autoUpgrade';
 import DialogContainer from '../components/DialogContainer';
-import UpdatePage from './UpdatePage';
+import StepPage from './StepPage';
 
-export default class UpdatePageBackupOptions extends UpdatePage {
+export default class UpdatePageBackupOptions extends StepPage {
   protected stepCode = 'backup';
 
   public mount(): void {

@@ -27,7 +27,7 @@ class RestorePageBackupSelection extends AbstractPageWithStepController
             return parent::index();
         }
 
-        return $this->redirectTo(Routes::HOME_PAGE);
+        return AjaxResponseBuilder::nextRouteResponse(Routes::HOME_PAGE);
     }
 
     protected function getPageTemplate(): string
@@ -64,9 +64,9 @@ class RestorePageBackupSelection extends AbstractPageWithStepController
             $restoreSteps->getStepParams($this::CURRENT_STEP),
             [
                 'form_backup_selection_name' => self::FORM_NAME,
-                'form_route_to_save' => Routes::UPDATE_STEP_VERSION_CHOICE_SAVE_FORM,
-                'form_route_to_submit' => Routes::UPDATE_STEP_VERSION_CHOICE_SUBMIT_FORM,
-                'form_route_to_delete' => Routes::UPDATE_STEP_VERSION_CHOICE_SUBMIT_FORM,
+                'form_route_to_save' => Routes::RESTORE_STEP_BACKUP_SELECTION_SAVE_FORM,
+                'form_route_to_submit' => Routes::RESTORE_STEP_BACKUP_SELECTION_SUBMIT_FORM,
+                'form_route_to_delete' => Routes::RESTORE_STEP_BACKUP_SELECTION_DELETE_FORM,
                 'form_fields' => self::FORM_FIELDS,
                 'current_backup' => $currentBackup,
                 'backups_available' => $backupsAvailable,
@@ -79,7 +79,7 @@ class RestorePageBackupSelection extends AbstractPageWithStepController
         $backup = $this->request->request->get(self::FORM_FIELDS[RestoreConfiguration::BACKUP_NAME]);
         $this->upgradeContainer->getBackupManager()->deleteBackup($backup);
 
-        return AjaxResponseBuilder::nextRouteResponse(Routes::RESTORE_PAGE_RESTORE);
+        return AjaxResponseBuilder::nextRouteResponse(Routes::RESTORE_PAGE_BACKUP_SELECTION);
     }
 
     /**

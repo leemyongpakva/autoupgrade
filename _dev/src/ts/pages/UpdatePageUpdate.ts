@@ -1,8 +1,8 @@
-import UpdatePage from './UpdatePage';
+import StepPage from './StepPage';
 import api from '../api/RequestHandler';
 import ProcessContainer from '../components/ProcessContainer';
 
-export default class UpdatePageUpdate extends UpdatePage {
+export default class UpdatePageUpdate extends StepPage {
   protected stepCode = 'update';
   #processContainer: ProcessContainer;
   #restoreAlertForm: null | HTMLFormElement = null;

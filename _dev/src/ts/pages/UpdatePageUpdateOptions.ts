@@ -1,7 +1,7 @@
-import UpdatePage from './UpdatePage';
+import StepPage from './StepPage';
 import api from '../api/RequestHandler';
 
-export default class UpdatePageUpdateOptions extends UpdatePage {
+export default class UpdatePageUpdateOptions extends StepPage {
   protected stepCode = 'update-options';
 
   public mount() {

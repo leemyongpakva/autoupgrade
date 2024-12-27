@@ -1,7 +1,7 @@
 import Stepper from '../utils/Stepper';
 import PageAbstract from './PageAbstract';
 
-export default class UpdatePage extends PageAbstract {
+export default class StepPage extends PageAbstract {
   protected stepCode = 'version-choice';
 
   constructor() {
@@ -13,10 +13,10 @@ export default class UpdatePage extends PageAbstract {
   public beforeDestroy() {}
 
   protected initStepper = () => {
-    if (!window.UpdatePageStepper) {
-      window.UpdatePageStepper = new Stepper();
+    if (!window.PageStepper) {
+      window.PageStepper = new Stepper();
     } else {
-      window.UpdatePageStepper.setCurrentStep(this.stepCode);
+      window.PageStepper.setCurrentStep(this.stepCode);
     }
   };
 }
