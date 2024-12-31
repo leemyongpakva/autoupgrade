@@ -53,6 +53,15 @@
       </trans-unit>
     </body>
   </file>
+  <file original="classes/Services/LogsService.php" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="ebdbffe8dea73e1e0285fd052f720259">
+        <source>Download update logs</source>
+        <target>Download update logs</target>
+        <note>Line: 121</note>
+      </trans-unit>
+    </body>
+  </file>
   <file original="classes/Task/AbstractTask.php" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
       <trans-unit id="435d516735dbf7f622c7d14585f66840">
@@ -2538,11 +2547,6 @@ Comment: directory already exists</note>
   </file>
   <file original="views/templates/steps/post-update.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="ebdbffe8dea73e1e0285fd052f720259">
-        <source>Download update logs</source>
-        <target>Download update logs</target>
-        <note>Line: 70</note>
-      </trans-unit>
       <trans-unit id="201ad8cac531a92e1ec77ae5c1e7aa20">
         <source>Post-update checklist</source>
         <target>Post-update checklist</target>
