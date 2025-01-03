@@ -116,7 +116,7 @@ class ModuleMigrationTest extends TestCase
 
         $this->logger->expects($this->once())
             ->method('notice')
-            ->with('No version present in database for module mymodule, all files for upgrade will be applied.');
+            ->with('No version present in database for module mymodule, all files for update will be applied.');
 
         $this->moduleMigration->listUpgradeFiles($moduleMigrationContext);
     }

@@ -121,14 +121,14 @@ class Translation
         }
 
         if (!file_exists($orig)) {
-            $this->logger->notice($this->translator->trans('[NOTICE] File %s does not exist, merge skipped.', [$orig]));
+            $this->logger->notice($this->translator->trans('File %s does not exist, merge skipped.', [$orig]));
 
             return true;
         }
         include $orig;
         if (!isset($$var_name)) {
             $this->logger->warning($this->translator->trans(
-                '[WARNING] %variablename% variable missing in file %filename%. Merge skipped.',
+                '%variablename% variable missing in file %filename%. Merge skipped.',
                 [
                     '%variablename%' => $var_name,
                     '%filename%' => $orig,
@@ -140,7 +140,7 @@ class Translation
         $var_orig = $$var_name;
 
         if (!file_exists($dest)) {
-            $this->logger->notice($this->translator->trans('[NOTICE] File %s does not exist, merge skipped.', [$dest]));
+            $this->logger->notice($this->translator->trans('File %s does not exist, merge skipped.', [$dest]));
 
             return false;
         }
@@ -152,7 +152,7 @@ class Translation
                 unlink($dest);
             }
             $this->logger->warning($this->translator->trans(
-                '[WARNING] %variablename% variable missing in file %filename%. File %filename% deleted and merge skipped.',
+                '%variablename% variable missing in file %filename%. File %filename% deleted and merge skipped.',
                 [
                     '%variablename%' => $var_name,
                     '%filename%' => $dest,

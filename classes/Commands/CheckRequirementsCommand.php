@@ -43,7 +43,6 @@ class CheckRequirementsCommand extends AbstractCommand
 {
     /** @var string */
     protected static $defaultName = 'update:check-requirements';
-    const MODULE_CONFIG_DIR = 'autoupgrade';
     /** @var OutputInterface */
     private $output;
     /** @var int */

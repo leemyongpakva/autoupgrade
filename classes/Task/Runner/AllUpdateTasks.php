@@ -79,7 +79,7 @@ class AllUpdateTasks extends ChainedTasks
             return false;
         }
 
-        $this->logger->info('Restart requested. Please run the following command to continue your upgrade:');
+        $this->logger->info('Restart requested. Please run the following command to continue your update:');
         $args = $_SERVER['argv'];
         foreach ($args as $key => $arg) {
             if (strpos($arg, '--action') === 0 || strpos($arg, '--config-file-path') === 0) {

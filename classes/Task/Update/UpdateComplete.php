@@ -65,13 +65,13 @@ class UpdateComplete extends AbstractTask
         if ($this->container->getUpgradeConfiguration()->isChannelOnline() && file_exists($this->container->getFilePath()) && unlink($this->container->getFilePath())) {
             $this->logger->debug($this->translator->trans('%s removed', [$this->container->getFilePath()]));
         } elseif (is_file($this->container->getFilePath())) {
-            $this->logger->debug('<strong>' . $this->translator->trans('Please remove %s by FTP', [$this->container->getFilePath()]) . '</strong>');
+            $this->logger->debug($this->translator->trans('Please remove %s by FTP', [$this->container->getFilePath()]));
         }
 
         if (file_exists($this->container->getProperty(UpgradeContainer::LATEST_PATH)) && FilesystemAdapter::deleteDirectory($this->container->getProperty(UpgradeContainer::LATEST_PATH))) {
             $this->logger->debug($this->translator->trans('%s removed', [$this->container->getProperty(UpgradeContainer::LATEST_PATH)]));
         } elseif (is_dir($this->container->getProperty(UpgradeContainer::LATEST_PATH))) {
-            $this->logger->debug('<strong>' . $this->translator->trans('Please remove %s by FTP', [$this->container->getProperty(UpgradeContainer::LATEST_PATH)]) . '</strong>');
+            $this->logger->debug($this->translator->trans('Please remove %s by FTP', [$this->container->getProperty(UpgradeContainer::LATEST_PATH)]));
         }
 
         // removing temporary files

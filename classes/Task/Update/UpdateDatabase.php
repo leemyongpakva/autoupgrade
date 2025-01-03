@@ -83,14 +83,14 @@ class UpdateDatabase extends AbstractTask
             foreach ($e->getQuickInfos() as $log) {
                 $this->logger->debug($log);
             }
-            $this->logger->error($this->translator->trans('Error during database upgrade. You may need to restore your database.'));
+            $this->logger->error($this->translator->trans('Error during database update. You may need to restore your database.'));
             $this->logger->error($e->getMessage());
 
             return ExitCode::FAIL;
         }
         $this->next = TaskName::TASK_UPDATE_MODULES;
         $this->stepDone = true;
-        $this->logger->info($this->translator->trans('Database upgraded. Now upgrading your Addons modules...'));
+        $this->logger->info($this->translator->trans('Database updated. Now updating your Addons modules...'));
 
         return ExitCode::SUCCESS;
     }

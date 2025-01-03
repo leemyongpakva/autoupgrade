@@ -48,7 +48,7 @@ class UpdateInitialization extends AbstractTask
      */
     public function run(): int
     {
-        $this->logger->info($this->translator->trans('Starting upgrade...'));
+        $this->logger->info($this->translator->trans('Starting update...'));
         $this->container->getUpdateState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
         );
@@ -56,7 +56,7 @@ class UpdateInitialization extends AbstractTask
         $upgrader = $this->container->getUpgrader();
         if ($upgrader->isLastVersion()) {
             $this->next = TaskName::TASK_COMPLETE;
-            $this->logger->info($this->translator->trans('Your shop is currently running the latest compatible version. No updates are needed at this time.'));
+            $this->logger->info($this->translator->trans('Your store is currently running the latest compatible version. No updates are needed at this time.'));
 
             return ExitCode::SUCCESS;
         }
@@ -66,12 +66,12 @@ class UpdateInitialization extends AbstractTask
         switch ($this->container->getUpgradeConfiguration()->getChannelOrDefault()) {
             case UpgradeConfiguration::CHANNEL_LOCAL:
                 $this->next = TaskName::TASK_UNZIP;
-                $this->logger->debug($this->translator->trans('Downloading step has been skipped, upgrade process will now unzip the local archive.'));
-                $this->logger->info($this->translator->trans('Shop deactivated. Extracting files...'));
+                $this->logger->debug($this->translator->trans('Downloading step has been skipped, update process will now unzip the local archive.'));
+                $this->logger->info($this->translator->trans('Store deactivated. Extracting files...'));
                 break;
             default:
                 $this->next = TaskName::TASK_DOWNLOAD;
-                $this->logger->info($this->translator->trans('Shop deactivated. Now downloading... (this can take a while)'));
+                $this->logger->info($this->translator->trans('Store deactivated. Now downloading... (this can take a while)'));
                 $this->logger->debug($this->translator->trans('Downloaded archive will come from %s', [$upgrader->getOnlineDestinationRelease()->getZipDownloadUrl()]));
                 $this->logger->debug($this->translator->trans('MD5 hash will be checked against %s', [$upgrader->getOnlineDestinationRelease()->getZipMd5()]));
         }
