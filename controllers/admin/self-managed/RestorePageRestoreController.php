@@ -5,7 +5,7 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\Steps\RestoreSteps;
-use PrestaShop\Module\AutoUpgrade\Twig\Steps\Steps;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\Stepper;
 
 class RestorePageRestoreController extends AbstractPageWithStepController
 {
@@ -33,7 +33,7 @@ class RestorePageRestoreController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
-        $updateSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_RESTORE);
+        $updateSteps = new Stepper($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_RESTORE);
 
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),

@@ -5,7 +5,7 @@ namespace PrestaShop\Module\AutoUpgrade\Twig\Steps;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
 
-class Steps
+class Stepper
 {
     /** @var Translator */
     private $translator;

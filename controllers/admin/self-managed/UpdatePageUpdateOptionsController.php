@@ -32,7 +32,7 @@ use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
-use PrestaShop\Module\AutoUpgrade\Twig\Steps\Steps;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\Stepper;
 use PrestaShop\Module\AutoUpgrade\Twig\Steps\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -100,7 +100,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
     {
         $this->upgradeContainer->initPrestaShopCore();
         $updateConfiguration = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration();
-        $updateSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
+        $updateSteps = new Stepper($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
 
         return array_merge(
             $updateSteps->getStepParams(self::CURRENT_STEP),

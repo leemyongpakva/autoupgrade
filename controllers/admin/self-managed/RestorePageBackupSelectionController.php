@@ -8,7 +8,7 @@ use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\Steps\RestoreSteps;
-use PrestaShop\Module\AutoUpgrade\Twig\Steps\Steps;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\Stepper;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class RestorePageBackupSelectionController extends AbstractPageWithStepController
@@ -52,7 +52,7 @@ class RestorePageBackupSelectionController extends AbstractPageWithStepControlle
      */
     protected function getParams(): array
     {
-        $restoreSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_RESTORE);
+        $restoreSteps = new Stepper($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_RESTORE);
 
         $backupsAvailable = $this->upgradeContainer->getBackupFinder()->getSortedAndFormatedAvailableBackups();
 

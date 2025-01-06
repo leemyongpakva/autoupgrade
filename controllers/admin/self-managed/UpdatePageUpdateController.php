@@ -31,7 +31,7 @@ use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskName;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
-use PrestaShop\Module\AutoUpgrade\Twig\Steps\Steps;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\Stepper;
 use PrestaShop\Module\AutoUpgrade\Twig\Steps\UpdateSteps;
 
 class UpdatePageUpdateController extends AbstractPageWithStepController
@@ -60,7 +60,7 @@ class UpdatePageUpdateController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
-        $updateSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
+        $updateSteps = new Stepper($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
         $backupFinder = $this->upgradeContainer->getBackupFinder();
 
         return array_merge(
