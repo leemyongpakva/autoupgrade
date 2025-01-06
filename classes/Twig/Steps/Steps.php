@@ -1,6 +1,6 @@
 <?php
 
-namespace PrestaShop\Module\AutoUpgrade\Twig;
+namespace PrestaShop\Module\AutoUpgrade\Twig\Steps;
 
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;

@@ -4,8 +4,8 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
-use PrestaShop\Module\AutoUpgrade\Twig\RestoreSteps;
-use PrestaShop\Module\AutoUpgrade\Twig\Steps;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\RestoreSteps;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\Steps;
 
 class RestorePageRestoreController extends AbstractPageWithStepController
 {
