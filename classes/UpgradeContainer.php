@@ -918,7 +918,7 @@ class UpgradeContainer
         $this->zipAction = new ZipAction(
             $this->getTranslator(),
             $this->getLogger(),
-            $this->getConfigurationStorage(),
+            $this->getUpdateConfiguration(),
             $this->getProperty(self::PS_ROOT_PATH));
 
         return $this->zipAction;
