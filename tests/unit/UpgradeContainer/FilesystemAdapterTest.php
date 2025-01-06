@@ -78,7 +78,7 @@ class FilesystemAdapterTest extends TestCase
     public function testListFilesInDirForBackupWithImages()
     {
         $configurationStorage = $this->container->getConfigurationStorage();
-        $configuration = $configurationStorage->loadUpdateConfiguration();
+        $configuration = $this->container->getUpdateConfiguration();
         $configuration->merge([UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => true]);
         $configurationStorage->save($configuration);
 
@@ -99,7 +99,7 @@ class FilesystemAdapterTest extends TestCase
     public function testListFilesInDirForBackupWithoutImages()
     {
         $configurationStorage = $this->container->getConfigurationStorage();
-        $configuration = $configurationStorage->loadUpdateConfiguration();
+        $configuration = $this->container->getUpdateConfiguration();
         $configuration->merge([UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => false]);
         $configurationStorage->save($configuration);
 
@@ -121,7 +121,7 @@ class FilesystemAdapterTest extends TestCase
     public function testListFilesInDirForRestoreWithImages()
     {
         $configurationStorage = $this->container->getConfigurationStorage();
-        $configuration = $configurationStorage->loadUpdateConfiguration();
+        $configuration = $this->container->getUpdateConfiguration();
         $configuration->merge([UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => true]);
         $configurationStorage->save($configuration);
 
@@ -142,7 +142,7 @@ class FilesystemAdapterTest extends TestCase
     public function testListFilesInDirForRestoreWithoutImages()
     {
         $configurationStorage = $this->container->getConfigurationStorage();
-        $configuration = $configurationStorage->loadUpdateConfiguration();
+        $configuration = $this->container->getUpdateConfiguration();
         $configuration->merge([UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => false]);
         $configurationStorage->save($configuration);
 
