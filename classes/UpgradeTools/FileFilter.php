@@ -28,7 +28,7 @@
 namespace PrestaShop\Module\AutoUpgrade\UpgradeTools;
 
 use DirectoryIterator;
-use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Services\ComposerService;
 use SplFileInfo;
 
@@ -37,7 +37,7 @@ class FileFilter
     /**
      * @var ConfigurationStorage
      */
-    protected $configurationStorage;
+    protected $updateConfiguration;
 
     /** @var ComposerService */
     protected $composerService;
@@ -64,12 +64,12 @@ class FileFilter
     ];
 
     public function __construct(
-        ConfigurationStorage $configurationStorage,
+        UpgradeConfiguration $updateConfiguration,
         ComposerService $composerService,
         string $rootDir,
         string $autoupgradeDir = 'autoupgrade'
     ) {
-        $this->configurationStorage = $configurationStorage;
+        $this->updateConfiguration = $updateConfiguration;
         $this->composerService = $composerService;
         $this->rootDir = $rootDir;
         $this->autoupgradeDir = $autoupgradeDir;
@@ -94,7 +94,7 @@ class FileFilter
             '/admin/autoupgrade',
         ];
 
-        if (!$this->configurationStorage->loadUpdateConfiguration()->shouldBackupImages()) {
+        if (!$this->updateConfiguration->shouldBackupImages()) {
             $backupIgnoreAbsoluteFiles[] = '/img';
         } else {
             $backupIgnoreAbsoluteFiles[] = '/img/tmp';
@@ -117,7 +117,7 @@ class FileFilter
             '..',
         ];
 
-        if (!$this->configurationStorage->loadUpdateConfiguration()->shouldBackupImages()) {
+        if (!$this->updateConfiguration->shouldBackupImages()) {
             $restoreIgnoreAbsoluteFiles[] = '/img';
         } else {
             $restoreIgnoreAbsoluteFiles[] = '/img/tmp';

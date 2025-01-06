@@ -483,7 +483,7 @@ class UpgradeContainer
         }
 
         $this->fileFilter = new FileFilter(
-            $this->getConfigurationStorage(),
+            $this->getUpdateConfiguration(),
             $this->getComposerService(),
             $this->getProperty(self::PS_ROOT_PATH)
         );
