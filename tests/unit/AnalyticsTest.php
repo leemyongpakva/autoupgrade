@@ -36,7 +36,7 @@ class AnalyticsTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->container = new UpgradeContainer(__DIR__, __DIR__ . '/..');     // We expect in these tests to NOT update the theme
+        $this->container = new UpgradeContainer(__DIR__, __DIR__ . '/..');
         $this->filesystemAdapter = $this->container->getFilesystemAdapter();
     }
 
