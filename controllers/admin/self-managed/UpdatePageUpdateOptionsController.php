@@ -61,8 +61,7 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
      */
     public function saveOption(): JsonResponse
     {
-        $configurationStorage = $this->upgradeContainer->getConfigurationStorage();
-        $upgradeConfiguration = $configurationStorage->loadUpdateConfiguration();
+        $updateConfiguration = $this->upgradeContainer->getUpdateConfiguration();
 
         $config = [
             UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT, false),
@@ -77,8 +76,8 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
             $this->upgradeContainer->initPrestaShopCore();
             UpgradeConfiguration::updatePSDisableOverrides($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES]);
 
-            $upgradeConfiguration->merge($config);
-            $configurationStorage->save($upgradeConfiguration);
+            $updateConfiguration->merge($config);
+            $this->upgradeContainer->getConfigurationStorage()->save($updateConfiguration);
         }
 
         return $this->getRefreshOfForm(array_merge(

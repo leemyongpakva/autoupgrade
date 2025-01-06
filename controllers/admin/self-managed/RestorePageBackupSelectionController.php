@@ -108,7 +108,7 @@ class RestorePageBackupSelectionController extends AbstractPageWithStepControlle
     private function saveBackupConfiguration(): void
     {
         $configurationStorage = $this->upgradeContainer->getConfigurationStorage();
-        $restoreConfiguration = $configurationStorage->loadRestoreConfiguration();
+        $restoreConfiguration = $this->upgradeContainer->getRestoreConfiguration();
 
         $config = [
             RestoreConfiguration::BACKUP_NAME => $this->request->request->get(RestoreConfiguration::BACKUP_NAME),

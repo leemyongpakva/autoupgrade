@@ -68,7 +68,7 @@ class AnalyticsTest extends TestCase
         $configurationStorage->save($updateConfiguration);
 
         $analytics = new Analytics(
-            $configurationStorage,
+            $updateConfiguration,
             $states,
             'somePathToAutoupgradeModule',
             [

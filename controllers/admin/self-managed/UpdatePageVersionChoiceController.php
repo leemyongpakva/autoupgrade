@@ -104,8 +104,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
         }
         $archiveRepository = $this->upgradeContainer->getLocalArchiveRepository();
 
-        $upgradeConfiguration = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration();
-        $currentChannel = $upgradeConfiguration->getChannel();
+        $upgradeConfiguration = $this->upgradeContainer->getUpdateConfiguration();
 
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),
@@ -132,7 +131,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
                 'form_fields' => self::FORM_FIELDS,
                 'form_options' => self::FORM_OPTIONS,
                 'current_values' => [
-                    self::FORM_FIELDS['channel'] => $currentChannel,
+                    self::FORM_FIELDS['channel'] => $upgradeConfiguration->getChannel(),
                     self::FORM_FIELDS['archive_zip'] => $upgradeConfiguration->getLocalChannelZip(),
                     self::FORM_FIELDS['archive_xml'] => $upgradeConfiguration->getLocalChannelXml(),
                 ],
@@ -198,7 +197,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
 
             $configurationStorage = $this->upgradeContainer->getConfigurationStorage();
 
-            $config = $configurationStorage->loadUpdateConfiguration();
+            $config = $this->upgradeContainer->getUpdateConfiguration();
             $config->merge($requestConfig);
 
             $configurationStorage->save($config);

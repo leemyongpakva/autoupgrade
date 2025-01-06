@@ -58,7 +58,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
 
     public function submitBackup(): JsonResponse
     {
-        $imagesIncluded = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration()->shouldBackupImages();
+        $imagesIncluded = $this->upgradeContainer->getUpdateConfiguration()->shouldBackupImages();
 
         return $this->displayDialog($imagesIncluded ? 'dialog-backup-all' : 'dialog-backup', [
             'dialogId' => 'dialog-confirm-backup',
@@ -90,8 +90,8 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
 
     public function saveOption(): JsonResponse
     {
-        $upgradeConfigurationStorage = $this->upgradeContainer->getConfigurationStorage();
-        $upgradeConfiguration = $upgradeConfigurationStorage->loadUpdateConfiguration();
+        $configurationStorage = $this->upgradeContainer->getConfigurationStorage();
+        $upgradeConfiguration = $this->upgradeContainer->getUpdateConfiguration();
 
         $config = [
             UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, false),
@@ -100,7 +100,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
         $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
         if (empty($errors)) {
             $upgradeConfiguration->merge($config);
-            $upgradeConfigurationStorage->save($upgradeConfiguration);
+            $configurationStorage->save($upgradeConfiguration);
         }
 
         return $this->getRefreshOfForm(array_merge(
@@ -116,7 +116,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
-        $upgradeConfiguration = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration();
+        $updateConfiguration = $this->upgradeContainer->getUpdateConfiguration();
         $updateSteps = new Steps($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
 
         $logsPath = $this->upgradeContainer->getLogsService()->getDownloadLogsPath(TaskType::TASK_TYPE_BACKUP);
@@ -136,7 +136,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
                 'form_fields' => [
                     'include_images' => [
                         'field' => UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES,
-                        'value' => $upgradeConfiguration->shouldBackupImages(),
+                        'value' => $updateConfiguration->shouldBackupImages(),
                     ],
                 ],
             ]

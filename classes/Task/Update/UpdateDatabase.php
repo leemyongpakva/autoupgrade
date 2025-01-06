@@ -149,7 +149,7 @@ class UpdateDatabase extends AbstractTask
 
         $this->getCoreUpgrader()->setupUpdateEnvironment();
 
-        if ($this->container->getConfigurationStorage()->loadUpdateConfiguration()->shouldDeactivateCustomModules()) {
+        if ($this->container->getUpdateConfiguration()->shouldDeactivateCustomModules()) {
             $this->logger->info($this->container->getTranslator()->trans('Disabling all non native modules'));
             $this->getCoreUpgrader()->disableCustomModules();
         } else {

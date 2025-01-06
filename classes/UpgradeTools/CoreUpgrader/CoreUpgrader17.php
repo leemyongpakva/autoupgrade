@@ -63,7 +63,7 @@ class CoreUpgrader17 extends CoreUpgrader
         $lang_pack = \Language::getLangDetails($isoCode);
         \Language::installSfLanguagePack($lang_pack['locale'], $errorsLanguage);
 
-        if ($this->container->getConfigurationStorage()->loadUpdateConfiguration()->shouldRegenerateMailTemplates()) {
+        if ($this->container->getUpdateConfiguration()->shouldRegenerateMailTemplates()) {
             \Language::installEmailsLanguagePack($lang_pack, $errorsLanguage);
         }
 

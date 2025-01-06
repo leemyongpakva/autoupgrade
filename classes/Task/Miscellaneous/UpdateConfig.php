@@ -167,7 +167,7 @@ class UpdateConfig extends AbstractTask
     private function writeConfig(array $config): bool
     {
         $configurationStorage = $this->container->getConfigurationStorage();
-        $classConfig = $configurationStorage->loadUpdateConfiguration();
+        $classConfig = $this->container->getUpdateConfiguration();
         $classConfig->merge($config);
 
         $this->logger->info($this->translator->trans('Configuration successfully updated.'));

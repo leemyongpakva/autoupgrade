@@ -749,7 +749,7 @@ abstract class CoreUpgrader
     protected function switchToDefaultTheme(): void
     {
         // The merchant can ask for keeping its current theme.
-        if (!$this->container->getConfigurationStorage()->loadUpdateConfiguration()->shouldSwitchToDefaultTheme()) {
+        if (!$this->container->getUpdateConfiguration()->shouldSwitchToDefaultTheme()) {
             $this->logger->info($this->container->getTranslator()->trans('Keeping current theme'));
 
             return;

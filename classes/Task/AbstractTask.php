@@ -130,7 +130,7 @@ abstract class AbstractTask
             ->setStepDone($this->stepDone)
             ->setNext($this->next)
             ->setNextParams($this->nextParams)
-            ->setUpgradeConfiguration($this->container->getConfigurationStorage()->loadUpdateConfiguration());
+            ->setUpgradeConfiguration($this->container->getUpdateConfiguration());
     }
 
     /**
@@ -200,7 +200,7 @@ abstract class AbstractTask
      */
     protected function setupEnvironment(): void
     {
-        $updateConfiguration = $this->container->getConfigurationStorage()->loadUpdateConfiguration();
+        $updateConfiguration = $this->container->getUpdateConfiguration();
 
         if ($this::TASK_TYPE === TaskType::TASK_TYPE_UPDATE && $updateConfiguration->isChannelLocal()) {
             $archiveXml = $updateConfiguration->getLocalChannelXml();

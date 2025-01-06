@@ -215,7 +215,7 @@ class RestoreDatabase extends AbstractTask
                 }
 
                 $time_elapsed = time() - $startTime;
-            } while ($time_elapsed < $this->container->getConfigurationStorage()->loadUpdateConfiguration()->getTimePerCall());
+            } while ($time_elapsed < $this->container->getUpdateConfiguration()->getTimePerCall());
 
             $queries_left = $backlog->getRemainingTotal();
 

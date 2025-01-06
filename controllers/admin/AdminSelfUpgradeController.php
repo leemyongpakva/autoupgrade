@@ -426,7 +426,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
             throw new UnexpectedValueException(reset($error)['message']);
         }
 
-        $UpConfig = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration();
+        $UpConfig = $this->upgradeContainer->getUpdateConfiguration();
         $UpConfig->merge($config);
 
         if ($this->upgradeContainer->getConfigurationStorage()->save($UpConfig)
@@ -484,7 +484,8 @@ class AdminSelfUpgradeController extends ModuleAdminController
         // update backup name
         $backupFinder = $this->upgradeContainer->getBackupFinder();
         $availableBackups = $backupFinder->getAvailableBackups();
-        if (!$this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration()->shouldBackupFilesAndDatabase()
+        $updateConfiguration = $this->upgradeContainer->getUpdateConfiguration();
+        if (!$updateConfiguration->shouldBackupFilesAndDatabase()
             && !empty($availableBackups)
             && !in_array($this->upgradeContainer->getBackupState()->getBackupName(), $availableBackups)
         ) {
@@ -495,7 +496,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
 
         $response = new AjaxResponse($this->upgradeContainer->getUpdateState(), $this->upgradeContainer->getLogger());
         $this->content = (new UpgradePage(
-            $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration(),
+            $updateConfiguration,
             $this->upgradeContainer->getTwig(),
             $this->upgradeContainer->getTranslator(),
             $this->upgradeContainer->getUpgradeSelfCheck(),
@@ -510,7 +511,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
             $this->downloadPath
         ))->display(
             $response
-                ->setUpgradeConfiguration($this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration())
+                ->setUpgradeConfiguration($updateConfiguration)
                 ->getJson()
         );
 
