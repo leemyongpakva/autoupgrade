@@ -35,7 +35,7 @@ use SplFileInfo;
 class FileFilter
 {
     /**
-     * @var ConfigurationStorage
+     * @var UpgradeConfiguration
      */
     protected $updateConfiguration;
 

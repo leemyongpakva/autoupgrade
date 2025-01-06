@@ -139,7 +139,7 @@ class Upgrader
     public function getDestinationVersion(): ?string
     {
         if ($this->updateConfiguration->isChannelLocal()) {
-            return $updateConfiguration->getLocalChannelVersion();
+            return $this->updateConfiguration->getLocalChannelVersion();
         } else {
             return $this->getOnlineDestinationRelease() ? $this->getOnlineDestinationRelease()->getVersion() : null;
         }

@@ -355,7 +355,7 @@ class UpgradeContainer
         // The identifier shoudl be a value a value always different between two shops
         // But equal between two upgrade processes
         return $this->analytics = new Analytics(
-            $this->getConfigurationStorage(),
+            $this->getUpdateConfiguration(),
             [
                 'update' => $this->getUpdateState(),
                 'restore' => $this->getRestoreState(),
