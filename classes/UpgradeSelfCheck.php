@@ -33,7 +33,7 @@ use Context;
 use Exception;
 use PrestaShop\Module\AutoUpgrade\Exceptions\DistributionApiException;
 use PrestaShop\Module\AutoUpgrade\Exceptions\UpgradeException;
-use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\State\UpdateState;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
@@ -88,8 +88,8 @@ class UpgradeSelfCheck
     private $autoUpgradePath;
     /** @var PrestashopConfiguration */
     private $prestashopConfiguration;
-    /** @var ConfigurationStorage */
-    private $configurationStorage;
+    /** @var UpgradeConfiguration */
+    private $updateConfiguration;
     /** @var PhpVersionResolverService */
     private $phpRequirementService;
     /** @var Translator */
@@ -125,7 +125,7 @@ class UpgradeSelfCheck
     public function __construct(
         Upgrader $upgrader,
         UpdateState $state,
-        ConfigurationStorage $configurationStorage,
+        UpgradeConfiguration $updateConfiguration,
         PrestashopConfiguration $prestashopConfiguration,
         Translator $translator,
         PhpVersionResolverService $phpRequirementService,
@@ -136,7 +136,7 @@ class UpgradeSelfCheck
     ) {
         $this->upgrader = $upgrader;
         $this->state = $state;
-        $this->configurationStorage = $configurationStorage;
+        $this->updateConfiguration = $updateConfiguration;
         $this->prestashopConfiguration = $prestashopConfiguration;
         $this->translator = $translator;
         $this->phpRequirementService = $phpRequirementService;
@@ -172,7 +172,7 @@ class UpgradeSelfCheck
             self::SHOP_VERSION_NOT_MATCHING_VERSION_IN_DATABASE => !$this->isShopVersionMatchingVersionInDatabase(),
         ];
 
-        if ($this->configurationStorage->loadUpdateConfiguration()->isChannelLocal()) {
+        if ($this->updateConfiguration->isChannelLocal()) {
             $errors[self::PHP_COMPATIBILITY_INVALID] = $this->getPhpRequirementsState() === PhpVersionResolverService::COMPATIBILITY_INVALID;
         }
 
@@ -192,7 +192,7 @@ class UpgradeSelfCheck
             self::THEME_TEMPERED_FILES_LIST_NOT_EMPTY => !empty($this->getThemeAlteredFiles()) || !empty($this->getThemeMissingFiles()),
         ];
 
-        if ($this->configurationStorage->loadUpdateConfiguration()->isChannelLocal()) {
+        if ($this->updateConfiguration->isChannelLocal()) {
             $warnings[self::PHP_COMPATIBILITY_UNKNOWN] = $this->getPhpRequirementsState() === PhpVersionResolverService::COMPATIBILITY_UNKNOWN;
         }
 

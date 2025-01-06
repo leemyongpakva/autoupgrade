@@ -37,6 +37,7 @@ use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationValidator;
 use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\LocalChannelConfigurationValidator;
+use PrestaShop\Module\AutoUpgrade\Parameters\RestoreConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Progress\CompletionCalculator;
 use PrestaShop\Module\AutoUpgrade\Repository\LocalArchiveRepository;
@@ -142,6 +143,21 @@ class UpgradeContainer
      * @var PrestashopConfiguration
      */
     private $prestashopConfiguration;
+
+    /**
+     * @var ConfigurationStorage
+     */
+    private $configurationStorage;
+
+    /**
+     * @var UpgradeConfiguration
+     */
+    private $updateConfiguration;
+
+    /**
+     * @var RestoreConfiguration
+     */
+    private $restoreConfiguration;
 
     /**
      * @var FilesystemAdapter
@@ -772,7 +788,35 @@ class UpgradeContainer
      */
     public function getConfigurationStorage(): ConfigurationStorage
     {
-        return new ConfigurationStorage($this->getFileStorage());
+        if (null === $this->configurationStorage) {
+            $this->configurationStorage = new ConfigurationStorage($this->getFileStorage());
+        }
+
+        return $this->configurationStorage;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getUpdateConfiguration(): UpgradeConfiguration
+    {
+        if (null === $this->updateConfiguration) {
+            $this->updateConfiguration = $this->getConfigurationStorage()->loadUpdateConfiguration();
+        }
+
+        return $this->updateConfiguration;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getRestoreConfiguration(): RestoreConfiguration
+    {
+        if (null === $this->restoreConfiguration) {
+            $this->restoreConfiguration = $this->getConfigurationStorage()->loadRestoreConfiguration();
+        }
+
+        return $this->restoreConfiguration;
     }
 
     public function getDistributionApiService(): DistributionApiService
@@ -818,7 +862,7 @@ class UpgradeContainer
         $this->upgradeSelfCheck = new UpgradeSelfCheck(
             $this->getUpgrader(),
             $this->getUpdateState(),
-            $this->getConfigurationStorage(),
+            $this->getUpdateConfiguration(),
             $this->getPrestaShopConfiguration(),
             $this->getTranslator(),
             $this->getPhpVersionResolverService(),
