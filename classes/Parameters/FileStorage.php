@@ -84,7 +84,6 @@ class FileStorage
 
             return true;
         } catch (IOException $e) {
-            var_dump('HO NO');
             // TODO: $e needs to be logged
             return false;
         }
