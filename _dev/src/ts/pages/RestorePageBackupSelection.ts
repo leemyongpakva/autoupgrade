@@ -24,7 +24,7 @@ export default class RestorePageBackupSelection extends StepPage {
   }
 
   #saveForm = async () => {
-    const routeToSave = this.#form!.dataset.routeToSave;
+    const routeToSave = this.#form.dataset.routeToSave;
 
     if (!routeToSave) {
       throw new Error('No route to save form provided. Impossible to save form.');
@@ -39,9 +39,9 @@ export default class RestorePageBackupSelection extends StepPage {
     let routeToSubmit: string | undefined;
 
     if ((event.submitter as HTMLButtonElement)?.value === 'delete') {
-      routeToSubmit = this.#form!.dataset.routeToDelete;
+      routeToSubmit = this.#form.dataset.routeToDelete;
     } else {
-      routeToSubmit = this.#form!.dataset.routeToSubmit;
+      routeToSubmit = this.#form.dataset.routeToSubmit;
     }
 
     if (!routeToSubmit) {
@@ -52,7 +52,7 @@ export default class RestorePageBackupSelection extends StepPage {
   };
 
   #sendForm = async (routeToSend: string) => {
-    const formData = new FormData(this.#form!);
+    const formData = new FormData(this.#form);
     await api.post(routeToSend, formData);
   };
 }

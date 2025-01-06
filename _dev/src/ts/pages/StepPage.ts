@@ -2,7 +2,7 @@ import Stepper from '../utils/Stepper';
 import PageAbstract from './PageAbstract';
 
 export default class StepPage extends PageAbstract {
-  protected stepCode = 'version-choice';
+  protected stepCode = '';
 
   constructor() {
     super();
