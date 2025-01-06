@@ -93,18 +93,18 @@ Here is an example of the different fields that can be found in it:
 
 ```json
 {
-  "channel": "local", // see https://devdocs.prestashop-project.org/8/basics/keeping-up-to-date/upgrade-module/channels/
-  "archive_zip": "prestashop_8.0.0.zip", // Name of the zip file, specific to the archive channel, to be placed in the [your-admin-dir]/autoupgrade/download folder
-  "archive_xml": "prestashop_8.0.0.xml", // Name of the XML file, specific to the archive channel, to be placed in the [your-admin-dir]/autoupgrade/download folder
-  "archive_num": "8.0.0", // Release number, specific to the archive channel
-  "PS_AUTOUP_CUSTOM_MOD_DESACT": 1, // Disable non-native modules
-  "PS_AUTOUP_CHANGE_DEFAULT_THEME": 0, // Keep the current theme
-  "PS_AUTOUP_REGEN_EMAIL": 1, // Retain customized email templates
-  "PS_AUTOUP_BACKUP": 0, // Do not create a store backup
-  "PS_AUTOUP_KEEP_IMAGES": 1, // Retain images
-  "PS_DISABLE_OVERRIDES": 1 // Disable all overrides
+  "channel": "local",
+  "archive_zip": "prestashop_8.0.0.zip",
+  "archive_xml": "prestashop_8.0.0.xml",
+  "PS_AUTOUP_CUSTOM_MOD_DESACT": 1,
+  "PS_AUTOUP_CHANGE_DEFAULT_THEME": 0,
+  "PS_AUTOUP_REGEN_EMAIL": 1,
+  "PS_AUTOUP_KEEP_IMAGES": 1,
+  "PS_DISABLE_OVERRIDES": 1
 }
 ```
+
+Please see the section [Configuration Parameters](#configuration-parameters) for explanations concerning the configurations
 
 ## Rollback a shop
 
@@ -122,6 +122,23 @@ $ php bin/console backup:restore --backup=[backup-name]  <your-admin-dir>
 You can see all available parameters and options directly from the console by using the `--help` option with any command.
 
 For more information on using commands, please refer to the [PrestaShop developer documentation](https://devdocs.prestashop-project.org/8/basics/keeping-up-to-date/upgrade-module/upgrade-cli/#rollback-cli)
+
+## Configuration Parameters
+
+When using the command line interface (CLI), you can configure the module's behavior through a JSON file or by passing
+parameters directly via CLI. Below is a detailed description of the available parameters, including their data types and
+impact.
+
+| Command                                     | Configuration file key                        | CLI option                     | Possible Values                                                                         | Description                                                                                                                                   |
+|---------------------------------------------|-----------------------------------------------|--------------------------------|-----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|
+| `update:start`                              | `channel`                                     | `--channel`                    | `online` (default), `local`                                                             | Defines the update channel to use. The `local` channel requires specific files to be placed in the download folder.                           |
+| `update:start`, `update:check-requirements` | `archive_zip`                                 | `--zip`                        | Valid file name                                                                         | Name of the `ZIP` file to use for an update via the archive channel. This file must be placed in `[your-admin-dir]/autoupgrade/download`.     |
+| `update:start`, `update:check-requirements` | `archive_xml`                                 | `--xml`                        | Valid file name                                                                         | Name of the `XML` file corresponding to the ZIP file for the archive channel. Must also be placed in `[your-admin-dir]/autoupgrade/download`. |
+| `update:start`                              | `PS_AUTOUP_CUSTOM_MOD_DESACT`                 | `--disable-non-native-modules` | `true` (default), `false`, `'true'`, `'false'`, `'1'`, `'0'`, `1`, `0`, `'on'`, `'off'` | If enabled, disables all non-native modules before the update, reducing the risk of compatibility issues.                                     |
+| `update:start`                              | (DEPRECATED) `PS_AUTOUP_CHANGE_DEFAULT_THEME` | no option available            | `true`, `false` (default), `'true'`, `'false'`, `'1'`, `'0'`, `1`, `0`, `'on'`, `'off'` | If enabled, forces the use of the default PrestaShop theme after the update. If disabled, retains the current theme.                          |
+| `update:start`                              | `PS_AUTOUP_REGEN_EMAIL`                       | `--regenerate-email-templates` | `true` (default), `false`, `'true'`, `'false'`, `'1'`, `'0'`, `1`, `0`, `'on'`, `'off'` | If enabled, keeps the store's customized email templates. Otherwise, the templates are replaced with the default ones.                        |
+| `update:start`                              | `PS_DISABLE_OVERRIDES`                        | `--disable-all-overrides`      | `true` (default), `false`, `'true'`, `'false'`, `'1'`, `'0'`, `1`, `0`, `'on'`, `'off'` | If enabled, disables all PHP overrides in PrestaShop, ensuring better compatibility during the update process.                                |
+| `backup:create`                             | `PS_AUTOUP_KEEP_IMAGES`                       | `--include-images`             | `true` (default), `false`, `'true'`, `'false'`, `'1'`, `'0'`, `1`, `0`, `'on'`, `'off'` | If enabled, retains all images in the backup. This operation can take a long time depending on the storage of your images                     |
 
 ## Documentation
 
