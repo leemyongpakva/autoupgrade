@@ -66,8 +66,6 @@ class ZipAction
         $this->translator = $translator;
         $this->logger = $logger;
         $this->prodRootDir = $prodRootDir;
-
-        $updateConfiguration = $updateConfiguration;
         $this->configMaxNbFilesCompressedInARow = $updateConfiguration->getNumberOfFilesPerCall();
         $this->configMaxFileSizeAllowed = $updateConfiguration->getMaxFileToBackup();
     }

@@ -336,7 +336,7 @@ class UpgradeContainer
             case self::LOGS_PATH:
                 return $this->autoupgradeWorkDir . DIRECTORY_SEPARATOR . 'logs';
             case self::ARCHIVE_FILENAME:
-                return $this->getConfigurationStorage()->loadUpdateConfiguration()->getChannelZip();
+                return $this->getUpdateConfiguration()->getChannelZip();
             case self::ARCHIVE_FILEPATH:
                 return $this->getProperty(self::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $this->getProperty(self::ARCHIVE_FILENAME);
             case self::PS_VERSION:
