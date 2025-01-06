@@ -505,7 +505,7 @@ class UpgradeContainer
 
         $upgrader = new Upgrader(
             $this->getPhpVersionResolverService(),
-            $this->getConfigurationStorage(),
+            $this->getUpdateConfiguration(),
             $this->getProperty(self::PS_VERSION)
         );
 

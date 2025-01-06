@@ -30,7 +30,7 @@ namespace PrestaShop\Module\AutoUpgrade;
 use PrestaShop\Module\AutoUpgrade\Exceptions\DistributionApiException;
 use PrestaShop\Module\AutoUpgrade\Exceptions\UpgradeException;
 use PrestaShop\Module\AutoUpgrade\Models\PrestashopRelease;
-use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\Services\PhpVersionResolverService;
 use PrestaShop\Module\AutoUpgrade\Xml\FileLoader;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -46,17 +46,17 @@ class Upgrader
     protected $currentPsVersion;
     /** @var PhpVersionResolverService */
     protected $phpVersionResolverService;
-    /** @var ConfigurationStorage */
-    protected $configurationStorage;
+    /** @var UpgradeConfiguration */
+    protected $updateConfiguration;
 
     public function __construct(
         PhpVersionResolverService $phpRequirementService,
-        ConfigurationStorage $configurationStorage,
+        UpgradeConfiguration $updateConfiguration,
         string $currentPsVersion
     ) {
         $this->currentPsVersion = $currentPsVersion;
         $this->phpVersionResolverService = $phpRequirementService;
-        $this->configurationStorage = $configurationStorage;
+        $this->updateConfiguration = $updateConfiguration;
     }
 
     /**
@@ -138,8 +138,7 @@ class Upgrader
      */
     public function getDestinationVersion(): ?string
     {
-        $updateConfiguration = $this->configurationStorage->loadUpdateConfiguration();
-        if ($updateConfiguration->isChannelLocal()) {
+        if ($this->updateConfiguration->isChannelLocal()) {
             return $updateConfiguration->getLocalChannelVersion();
         } else {
             return $this->getOnlineDestinationRelease() ? $this->getOnlineDestinationRelease()->getVersion() : null;
