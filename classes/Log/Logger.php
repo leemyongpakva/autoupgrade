@@ -192,13 +192,12 @@ abstract class Logger implements LoggerInterface
      */
     private function getCallingClass(): ?string
     {
-        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8);
 
         foreach ($trace as $frame) {
             if (
                 isset($frame['class']) &&
-                !is_subclass_of($frame['class'], self::class) &&
-                $frame['class'] !== self::class
+                strpos($frame['class'], __NAMESPACE__) === false
             ) {
                 // Extract the class name without the namespace
                 return substr(strrchr($frame['class'], '\\') ?: $frame['class'], 1);
