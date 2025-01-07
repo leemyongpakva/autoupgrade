@@ -71,7 +71,7 @@ class ModuleMigration
     public function listUpgradeFiles(ModuleMigrationContext $moduleMigrationContext): array
     {
         if ($moduleMigrationContext->getDbVersion() === '0') {
-            $this->logger->notice($this->translator->trans('No version present in database for module %s, all files for upgrade will be applied.', [$moduleMigrationContext->getModuleName()]));
+            $this->logger->notice($this->translator->trans('No version present in database for module %s, all files for update will be applied.', [$moduleMigrationContext->getModuleName()]));
         }
 
         $files = glob($moduleMigrationContext->getUpgradeFilesRootPath() . '/*.php', GLOB_BRACE);

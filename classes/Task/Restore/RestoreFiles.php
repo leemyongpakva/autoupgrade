@@ -85,12 +85,12 @@ class RestoreFiles extends AbstractTask
 
             if (empty($fromArchive) || empty($toRemove)) {
                 if (empty($fromArchive)) {
-                    $this->logger->error($this->translator->trans('[ERROR] Backup file %s does not exist.', [UpgradeFileNames::FILES_FROM_ARCHIVE_LIST]));
+                    $this->logger->error($this->translator->trans('Backup file %s does not exist.', [UpgradeFileNames::FILES_FROM_ARCHIVE_LIST]));
                 }
                 if (empty($toRemove)) {
-                    $this->logger->error($this->translator->trans('[ERROR] File "%s" does not exist.', [UpgradeFileNames::FILES_TO_REMOVE_LIST]));
+                    $this->logger->error($this->translator->trans('File "%s" does not exist.', [UpgradeFileNames::FILES_TO_REMOVE_LIST]));
                 }
-                $this->logger->info($this->translator->trans('Unable to remove upgraded files.'));
+                $this->logger->info($this->translator->trans('Unable to remove updated files.'));
                 $this->next = TaskName::TASK_ERROR;
                 $this->setErrorFlag();
 

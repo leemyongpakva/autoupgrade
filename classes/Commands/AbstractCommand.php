@@ -81,7 +81,7 @@ abstract class AbstractCommand extends Command
         define('_PS_ADMIN_DIR_', $adminDir);
 
         $this->upgradeContainer = new UpgradeContainer($prodRootDir, $adminDir);
-        $this->logger->debug('Upgrade container initialized.');
+        $this->logger->debug('Update container initialized.');
 
         $this->logger->debug('Logger initialized: ' . get_class($this->logger));
 
