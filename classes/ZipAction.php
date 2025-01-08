@@ -61,14 +61,13 @@ class ZipAction
      */
     private $prodRootDir;
 
-    public function __construct(Translator $translator, LoggerInterface $logger, UpgradeConfiguration $configuration, string $prodRootDir)
+    public function __construct(Translator $translator, LoggerInterface $logger, UpgradeConfiguration $updateConfiguration, string $prodRootDir)
     {
         $this->translator = $translator;
         $this->logger = $logger;
         $this->prodRootDir = $prodRootDir;
-
-        $this->configMaxNbFilesCompressedInARow = $configuration->getNumberOfFilesPerCall();
-        $this->configMaxFileSizeAllowed = $configuration->getMaxFileToBackup();
+        $this->configMaxNbFilesCompressedInARow = $updateConfiguration->getNumberOfFilesPerCall();
+        $this->configMaxFileSizeAllowed = $updateConfiguration->getMaxFileToBackup();
     }
 
     /**

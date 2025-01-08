@@ -25,7 +25,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\Services\ComposerService;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\Source\ModuleSource;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\Source\Provider\ComposerSourceProvider;
@@ -35,7 +35,7 @@ class ComposerSourceProviderTest extends TestCase
     public function testCacheGenerationWithData()
     {
         $prestashopContents = realpath(__DIR__ . '/../../../../../fixtures/prestashop-release');
-        $fileConfigurationStorageMock = $this->createMock(FileConfigurationStorage::class);
+        $fileConfigurationStorageMock = $this->createMock(FileStorage::class);
 
         $sourceProvider = new ComposerSourceProvider($prestashopContents, new ComposerService(), $fileConfigurationStorageMock);
 
@@ -56,7 +56,7 @@ class ComposerSourceProviderTest extends TestCase
     {
         // root project composer.lock
         $prestashopContents = realpath(__DIR__ . '/../../../../../../');
-        $fileConfigurationStorageMock = $this->createMock(FileConfigurationStorage::class);
+        $fileConfigurationStorageMock = $this->createMock(FileStorage::class);
 
         $sourceProvider = new ComposerSourceProvider($prestashopContents, new ComposerService(), $fileConfigurationStorageMock);
 
@@ -71,7 +71,7 @@ class ComposerSourceProviderTest extends TestCase
     public function testCacheLoading()
     {
         $prestashopContents = realpath(__DIR__ . '/../../../../../prestashop-release');
-        $fileConfigurationStorageMock = $this->createMock(FileConfigurationStorage::class);
+        $fileConfigurationStorageMock = $this->createMock(FileStorage::class);
         $fileConfigurationStorageMock->method('exists')->willReturn(true);
         $fileConfigurationStorageMock->method('load')->willReturn([]);
 

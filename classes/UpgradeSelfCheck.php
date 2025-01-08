@@ -89,7 +89,7 @@ class UpgradeSelfCheck
     /** @var PrestashopConfiguration */
     private $prestashopConfiguration;
     /** @var UpgradeConfiguration */
-    private $upgradeConfiguration;
+    private $updateConfiguration;
     /** @var PhpVersionResolverService */
     private $phpRequirementService;
     /** @var Translator */
@@ -125,7 +125,7 @@ class UpgradeSelfCheck
     public function __construct(
         Upgrader $upgrader,
         UpdateState $state,
-        UpgradeConfiguration $upgradeConfiguration,
+        UpgradeConfiguration $updateConfiguration,
         PrestashopConfiguration $prestashopConfiguration,
         Translator $translator,
         PhpVersionResolverService $phpRequirementService,
@@ -136,7 +136,7 @@ class UpgradeSelfCheck
     ) {
         $this->upgrader = $upgrader;
         $this->state = $state;
-        $this->upgradeConfiguration = $upgradeConfiguration;
+        $this->updateConfiguration = $updateConfiguration;
         $this->prestashopConfiguration = $prestashopConfiguration;
         $this->translator = $translator;
         $this->phpRequirementService = $phpRequirementService;
@@ -172,7 +172,7 @@ class UpgradeSelfCheck
             self::SHOP_VERSION_NOT_MATCHING_VERSION_IN_DATABASE => !$this->isShopVersionMatchingVersionInDatabase(),
         ];
 
-        if ($this->upgradeConfiguration->isChannelLocal()) {
+        if ($this->updateConfiguration->isChannelLocal()) {
             $errors[self::PHP_COMPATIBILITY_INVALID] = $this->getPhpRequirementsState() === PhpVersionResolverService::COMPATIBILITY_INVALID;
         }
 
@@ -192,7 +192,7 @@ class UpgradeSelfCheck
             self::THEME_TEMPERED_FILES_LIST_NOT_EMPTY => !empty($this->getThemeAlteredFiles()) || !empty($this->getThemeMissingFiles()),
         ];
 
-        if ($this->upgradeConfiguration->isChannelLocal()) {
+        if ($this->updateConfiguration->isChannelLocal()) {
             $warnings[self::PHP_COMPATIBILITY_UNKNOWN] = $this->getPhpRequirementsState() === PhpVersionResolverService::COMPATIBILITY_UNKNOWN;
         }
 

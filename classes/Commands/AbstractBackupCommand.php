@@ -57,7 +57,7 @@ abstract class AbstractBackupCommand extends AbstractCommand
      */
     protected function selectBackupInteractive(InputInterface $input, OutputInterface $output): ?string
     {
-        $backups = $this->backupFinder->getAvailableBackups();
+        $backups = $this->backupFinder->getSortedAndFormatedAvailableBackups();
 
         if (empty($backups)) {
             $this->logger->info('No store backup files found in your dedicated directory');
@@ -65,15 +65,9 @@ abstract class AbstractBackupCommand extends AbstractCommand
             return null;
         }
 
-        $formattedBackups = array_map(function ($backupName) {
-            return $this->backupFinder->parseBackupMetadata($backupName);
-        }, $backups);
-
-        $this->backupFinder->sortBackupsByNewest($formattedBackups);
-
         $rows = array_map(function ($backup) {
             return $this->formatBackupRow($backup);
-        }, $formattedBackups);
+        }, $backups);
 
         $exit = 'Exit the process';
         $rows[] = $exit;
@@ -95,7 +89,7 @@ abstract class AbstractBackupCommand extends AbstractCommand
             throw new BackupException('Invalid backup selection.');
         }
 
-        return $formattedBackups[$key]['filename'];
+        return $backups[$key]['filename'];
     }
 
     /**

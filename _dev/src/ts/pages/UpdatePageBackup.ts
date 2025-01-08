@@ -1,8 +1,8 @@
-import UpdatePage from './UpdatePage';
+import StepPage from './StepPage';
 import api from '../api/RequestHandler';
 import ProcessContainer from '../components/ProcessContainer';
 
-export default class UpdatePageBackup extends UpdatePage {
+export default class UpdatePageBackup extends StepPage {
   protected stepCode = 'backup';
   #processContainer: ProcessContainer;
   #submitSkipBackupForm: null | HTMLFormElement = null;

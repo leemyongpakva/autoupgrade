@@ -57,7 +57,7 @@ class Analytics
     /**
      * @var UpgradeConfiguration
      */
-    private $upgradeConfiguration;
+    private $updateConfiguration;
 
     /**
      * @var array{'restore': RestoreState, 'update': UpdateState}
@@ -69,12 +69,12 @@ class Analytics
      * @param array{'restore': RestoreState, 'update': UpdateState} $states
      */
     public function __construct(
-        UpgradeConfiguration $upgradeConfiguration,
+        UpgradeConfiguration $updateConfiguration,
         array $states,
         string $anonymousUserId,
         array $options
     ) {
-        $this->upgradeConfiguration = $upgradeConfiguration;
+        $this->updateConfiguration = $updateConfiguration;
         $this->states = $states;
 
         $this->anonymousId = hash('sha256', $anonymousUserId);
@@ -114,8 +114,8 @@ class Analytics
         switch ($type) {
             case self::WITH_BACKUP_PROPERTIES:
                 $additionalProperties = [
-                    'backup_files_and_databases' => $this->upgradeConfiguration->shouldBackupFilesAndDatabase(),
-                    'backup_images' => $this->upgradeConfiguration->shouldBackupImages(),
+                    'backup_files_and_databases' => $this->updateConfiguration->shouldBackupFilesAndDatabase(),
+                    'backup_images' => $this->updateConfiguration->shouldBackupImages(),
                 ];
                 $upgradeProperties = $this->properties[self::WITH_BACKUP_PROPERTIES] ?? [];
                 $additionalProperties = array_merge($upgradeProperties, $additionalProperties);
@@ -124,10 +124,10 @@ class Analytics
                 $additionalProperties = [
                     'from_ps_version' => $this->states['update']->getCurrentVersion(),
                     'to_ps_version' => $this->states['update']->getDestinationVersion(),
-                    'upgrade_channel' => $this->upgradeConfiguration->getChannel(),
-                    'disable_non_native_modules' => $this->upgradeConfiguration->shouldDeactivateCustomModules(),
-                    'switch_to_default_theme' => $this->upgradeConfiguration->shouldSwitchToDefaultTheme(),
-                    'regenerate_customized_email_templates' => $this->upgradeConfiguration->shouldRegenerateMailTemplates(),
+                    'upgrade_channel' => $this->updateConfiguration->getChannel(),
+                    'disable_non_native_modules' => $this->updateConfiguration->shouldDeactivateCustomModules(),
+                    'switch_to_default_theme' => $this->updateConfiguration->shouldSwitchToDefaultTheme(),
+                    'regenerate_customized_email_templates' => $this->updateConfiguration->shouldRegenerateMailTemplates(),
                 ];
                 $upgradeProperties = $this->properties[self::WITH_UPDATE_PROPERTIES] ?? [];
                 $additionalProperties = array_merge($upgradeProperties, $additionalProperties);

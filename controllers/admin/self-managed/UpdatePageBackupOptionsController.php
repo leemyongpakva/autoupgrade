@@ -29,11 +29,11 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
 use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
-use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\Stepper;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -58,7 +58,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
 
     public function submitBackup(): JsonResponse
     {
-        $imagesIncluded = $this->upgradeContainer->getUpgradeConfiguration()->shouldBackupImages();
+        $imagesIncluded = $this->upgradeContainer->getUpdateConfiguration()->shouldBackupImages();
 
         return $this->displayDialog($imagesIncluded ? 'dialog-backup-all' : 'dialog-backup', [
             'dialogId' => 'dialog-confirm-backup',
@@ -90,8 +90,8 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
 
     public function saveOption(): JsonResponse
     {
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
-        $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
+        $configurationStorage = $this->upgradeContainer->getConfigurationStorage();
+        $upgradeConfiguration = $this->upgradeContainer->getUpdateConfiguration();
 
         $config = [
             UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES, false),
@@ -100,7 +100,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
         $errors = $this->upgradeContainer->getConfigurationValidator()->validate($config);
         if (empty($errors)) {
             $upgradeConfiguration->merge($config);
-            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+            $configurationStorage->save($upgradeConfiguration);
         }
 
         return $this->getRefreshOfForm(array_merge(
@@ -116,8 +116,8 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
-        $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
+        $updateConfiguration = $this->upgradeContainer->getUpdateConfiguration();
+        $updateSteps = new Stepper($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
 
         $logsPath = $this->upgradeContainer->getLogsService()->getDownloadLogsPath(TaskType::TASK_TYPE_BACKUP);
 
@@ -136,7 +136,7 @@ class UpdatePageBackupOptionsController extends AbstractPageWithStepController
                 'form_fields' => [
                     'include_images' => [
                         'field' => UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES,
-                        'value' => $upgradeConfiguration->shouldBackupImages(),
+                        'value' => $updateConfiguration->shouldBackupImages(),
                     ],
                 ],
             ]

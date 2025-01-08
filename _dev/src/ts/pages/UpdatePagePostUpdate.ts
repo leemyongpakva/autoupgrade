@@ -1,6 +1,6 @@
-import UpdatePage from './UpdatePage';
+import StepPage from './StepPage';
 
-export default class UpdatePagePostUpdate extends UpdatePage {
+export default class UpdatePagePostUpdate extends StepPage {
   protected stepCode = 'post-update';
 
   constructor() {

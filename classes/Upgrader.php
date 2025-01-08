@@ -47,16 +47,16 @@ class Upgrader
     /** @var PhpVersionResolverService */
     protected $phpVersionResolverService;
     /** @var UpgradeConfiguration */
-    protected $upgradeConfiguration;
+    protected $updateConfiguration;
 
     public function __construct(
         PhpVersionResolverService $phpRequirementService,
-        UpgradeConfiguration $upgradeConfiguration,
+        UpgradeConfiguration $updateConfiguration,
         string $currentPsVersion
     ) {
         $this->currentPsVersion = $currentPsVersion;
         $this->phpVersionResolverService = $phpRequirementService;
-        $this->upgradeConfiguration = $upgradeConfiguration;
+        $this->updateConfiguration = $updateConfiguration;
     }
 
     /**
@@ -138,8 +138,8 @@ class Upgrader
      */
     public function getDestinationVersion(): ?string
     {
-        if ($this->upgradeConfiguration->isChannelLocal()) {
-            return $this->upgradeConfiguration->getLocalChannelVersion();
+        if ($this->updateConfiguration->isChannelLocal()) {
+            return $this->updateConfiguration->getLocalChannelVersion();
         } else {
             return $this->getOnlineDestinationRelease() ? $this->getOnlineDestinationRelease()->getVersion() : null;
         }

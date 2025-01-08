@@ -6,6 +6,9 @@ import UpdatePageBackup from '../pages/UpdatePageBackup';
 import UpdatePageUpdate from '../pages/UpdatePageUpdate';
 import UpdatePagePostUpdate from '../pages/UpdatePagePostUpdate';
 
+import RestorePageBackupSelection from '../pages/RestorePageBackupSelection';
+import RestorePageRestore from '../pages/RestorePageRestore';
+
 import StartUpdateDialog from '../dialogs/StartUpdateDialog';
 import SendErrorReportDialog from '../dialogs/SendErrorReportDialog';
 
@@ -29,6 +32,9 @@ export default class ScriptHandler {
     'update-page-backup': UpdatePageBackup,
     'update-page-update': UpdatePageUpdate,
     'update-page-post-update': UpdatePagePostUpdate,
+
+    'restore-page-backup-selection': RestorePageBackupSelection,
+    'restore-page-restore': RestorePageRestore,
 
     'start-update-dialog': StartUpdateDialog,
     'send-error-report-dialog': SendErrorReportDialog

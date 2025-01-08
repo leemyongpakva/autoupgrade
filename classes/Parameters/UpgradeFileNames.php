@@ -48,7 +48,9 @@ class UpgradeFileNames
      *
      * @var string
      */
-    const CONFIG_FILENAME = 'config.var';
+    const UPDATE_CONFIG_FILENAME = 'update_config.var';
+
+    const RESTORE_CONFIG_FILENAME = 'restore_config.var';
 
     /**
      * during upgradeFiles process,

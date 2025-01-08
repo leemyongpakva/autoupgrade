@@ -58,11 +58,11 @@ class UpdateModules extends AbstractTask
      */
     public function run(): int
     {
-        if (!$this->container->getFileConfigurationStorage()->exists(UpgradeFileNames::MODULES_TO_UPGRADE_LIST)) {
+        if (!$this->container->getFileStorage()->exists(UpgradeFileNames::MODULES_TO_UPGRADE_LIST)) {
             return $this->warmUp();
         }
 
-        $listModules = Backlog::fromContents($this->container->getFileConfigurationStorage()->load(UpgradeFileNames::MODULES_TO_UPGRADE_LIST));
+        $listModules = Backlog::fromContents($this->container->getFileStorage()->load(UpgradeFileNames::MODULES_TO_UPGRADE_LIST));
 
         $modulesPath = $this->container->getProperty(UpgradeContainer::PS_ROOT_PATH) . DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR;
 
@@ -121,7 +121,7 @@ class UpdateModules extends AbstractTask
         $this->container->getUpdateState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->computePercentage($listModules, self::class, CleanDatabase::class)
         );
-        $this->container->getFileConfigurationStorage()->save($listModules->dump(), UpgradeFileNames::MODULES_TO_UPGRADE_LIST);
+        $this->container->getFileStorage()->save($listModules->dump(), UpgradeFileNames::MODULES_TO_UPGRADE_LIST);
 
         if ($modules_left) {
             $this->stepDone = false;
@@ -148,7 +148,7 @@ class UpdateModules extends AbstractTask
             $modulesToUpgrade = array_reverse($modulesToUpgrade);
             $total_modules_to_upgrade = count($modulesToUpgrade);
 
-            $this->container->getFileConfigurationStorage()->save(
+            $this->container->getFileStorage()->save(
                 (new Backlog($modulesToUpgrade, $total_modules_to_upgrade))->dump(),
                 UpgradeFileNames::MODULES_TO_UPGRADE_LIST
             );

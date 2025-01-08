@@ -25,25 +25,36 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-namespace PrestaShop\Module\AutoUpgrade\Parameters;
+namespace PrestaShop\Module\AutoUpgrade\Twig\Steps;
 
-class UpgradeConfigurationStorage extends FileConfigurationStorage
+use PrestaShop\Module\AutoUpgrade\UpgradeTools\Translator;
+
+class RestoreSteps implements StepsInterface
 {
-    public function load(string $fileName = ''): UpgradeConfiguration
+    const STEP_BACKUP_SELECTION = 'backup-selection';
+    const STEP_RESTORE = 'restore';
+    const STEP_POST_RESTORE = 'post-restore';
+
+    /** @var Translator */
+    private $translator;
+
+    public function __construct(Translator $translator)
     {
-        return new UpgradeConfiguration(parent::load($fileName));
+        $this->translator = $translator;
     }
 
-    /**
-     * @param UpgradeConfiguration $config
-     * @param string $fileName Destination path of the config file
-     */
-    public function save($config, string $fileName): bool
+    public function getSteps(): array
     {
-        if (!$config instanceof UpgradeConfiguration) {
-            throw new \InvalidArgumentException('Config is not a instance of UpgradeConfiguration');
-        }
-
-        return parent::save($config->toArray(), $fileName);
+        return [
+            self::STEP_BACKUP_SELECTION => [
+                'title' => $this->translator->trans('Backup selection'),
+            ],
+            self::STEP_RESTORE => [
+                'title' => $this->translator->trans('Restore'),
+            ],
+            self::STEP_POST_RESTORE => [
+                'title' => $this->translator->trans('Post-restore'),
+            ],
+        ];
     }
 }

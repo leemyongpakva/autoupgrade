@@ -62,7 +62,7 @@ class UpdateComplete extends AbstractTask
 
         $this->next = TaskName::TASK_COMPLETE;
 
-        if ($this->container->getUpgradeConfiguration()->isChannelOnline() && file_exists($this->container->getFilePath()) && unlink($this->container->getFilePath())) {
+        if ($this->container->getUpdateConfiguration()->isChannelOnline() && file_exists($this->container->getFilePath()) && unlink($this->container->getFilePath())) {
             $this->logger->debug($this->translator->trans('%s removed', [$this->container->getFilePath()]));
         } elseif (is_file($this->container->getFilePath())) {
             $this->logger->debug('<strong>' . $this->translator->trans('Please remove %s by FTP', [$this->container->getFilePath()]) . '</strong>');
@@ -75,7 +75,7 @@ class UpdateComplete extends AbstractTask
         }
 
         // removing temporary files
-        $this->container->getFileConfigurationStorage()->cleanAllUpdateFiles();
+        $this->container->getFileStorage()->cleanAllUpdateFiles();
         $this->container->getAnalytics()->track('Upgrade Succeeded', Analytics::WITH_UPDATE_PROPERTIES);
 
         return ExitCode::SUCCESS;

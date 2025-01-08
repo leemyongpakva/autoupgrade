@@ -170,4 +170,34 @@ class BackupFinderTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    public function testGetSortedAndFormattedAvailableBackups()
+    {
+        $backupFinder = new BackupFinder(self::$pathToBackup);
+
+        $expected = [
+            [
+                'timestamp' => 1727439717,
+                'datetime' => '09/27/24 12:21:57',
+                'version' => '8.1.0',
+                'filename' => 'V8.1.0_20240927-122157-25f311e3',
+            ],
+            [
+                'timestamp' => 1727438030,
+                'datetime' => '09/27/24 11:53:50',
+                'version' => '1.7.5.0',
+                'filename' => 'V1.7.5.0_20240927-115350-466afd74',
+            ],
+            [
+                'timestamp' => 1727437834,
+                'datetime' => '09/27/24 11:50:34',
+                'version' => '1.7.5.0',
+                'filename' => 'V1.7.5.0_20240927-115034-19c6d35c',
+            ],
+        ];
+
+        $result = $backupFinder->getSortedAndFormatedAvailableBackups();
+
+        $this->assertEquals($expected, $result);
+    }
 }

@@ -28,7 +28,6 @@
 namespace PrestaShop\Module\AutoUpgrade\Commands;
 
 use Exception;
-use PrestaShop\Module\AutoUpgrade\Exceptions\BackupException;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -56,7 +55,7 @@ class ListBackupCommand extends AbstractBackupCommand
         try {
             $this->setupEnvironment($input, $output);
 
-            $backups = $this->backupFinder->getAvailableBackups();
+            $backups = $this->backupFinder->getSortedAndFormatedAvailableBackups();
 
             if (empty($backups)) {
                 $this->logger->info('No store backup files found in your dedicated directory');
@@ -80,22 +79,19 @@ class ListBackupCommand extends AbstractBackupCommand
     }
 
     /**
-     * @param string[] $backups
+     * @param array<array{timestamp: int, datetime: string, version:string, filename: string}> $backups
      *
      * @return array<int, array{datetime: string, version:string, filename: string}>
-     *
-     * @throws BackupException
      */
     private function getRows(array $backups): array
     {
-        $rows = array_map(function ($backupName) {
-            return $this->backupFinder->parseBackupMetadata($backupName);
-        }, $backups);
-
-        $this->backupFinder->sortBackupsByNewest($rows);
-
-        foreach ($rows as &$row) {
-            unset($row['timestamp']);
+        $rows = [];
+        foreach ($backups as $row) {
+            $rows[] = [
+                'datetime' => $row['datetime'],
+                'version' => $row['version'],
+                'filename' => $row['filename'],
+            ];
         }
 
         return $rows;

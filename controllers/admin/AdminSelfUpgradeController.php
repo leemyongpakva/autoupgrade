@@ -27,7 +27,6 @@
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponse;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Router;
 use PrestaShop\Module\AutoUpgrade\Tools14;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
@@ -300,9 +299,9 @@ class AdminSelfUpgradeController extends ModuleAdminController
 
         if (!$this->ajax) {
             // removing temporary files before init state to make sure state is already available
-            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllUpdateFiles();
-            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllBackupFiles();
-            $this->upgradeContainer->getFileConfigurationStorage()->cleanAllRestoreFiles();
+            $this->upgradeContainer->getFileStorage()->cleanAllUpdateFiles();
+            $this->upgradeContainer->getFileStorage()->cleanAllBackupFiles();
+            $this->upgradeContainer->getFileStorage()->cleanAllRestoreFiles();
         }
 
         if (!$this->upgradeContainer->getUpdateState()->isInitialized()) {
@@ -329,7 +328,6 @@ class AdminSelfUpgradeController extends ModuleAdminController
             );
 
             if (isset($_GET['refreshCurrentVersion'])) {
-                $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
                 // delete the potential xml files we saved in config/xml (from last release and from current)
                 $upgrader->clearXmlMd5File($this->upgradeContainer->getProperty(UpgradeContainer::PS_VERSION));
                 $upgrader->clearXmlMd5File($upgrader->getDestinationVersion());
@@ -428,12 +426,10 @@ class AdminSelfUpgradeController extends ModuleAdminController
             throw new UnexpectedValueException(reset($error)['message']);
         }
 
-        $UpConfig = $this->upgradeContainer->getUpgradeConfiguration();
+        $UpConfig = $this->upgradeContainer->getUpdateConfiguration();
         $UpConfig->merge($config);
 
-        if ($this->upgradeContainer->getUpgradeConfigurationStorage()->save(
-            $UpConfig,
-            UpgradeFileNames::CONFIG_FILENAME)
+        if ($this->upgradeContainer->getConfigurationStorage()->save($UpConfig)
         ) {
             Tools14::redirectAdmin(self::$currentIndex . '&conf=6&token=' . Tools14::getValue('token'));
         }
@@ -488,7 +484,8 @@ class AdminSelfUpgradeController extends ModuleAdminController
         // update backup name
         $backupFinder = $this->upgradeContainer->getBackupFinder();
         $availableBackups = $backupFinder->getAvailableBackups();
-        if (!$this->upgradeContainer->getUpgradeConfiguration()->shouldBackupFilesAndDatabase()
+        $updateConfiguration = $this->upgradeContainer->getUpdateConfiguration();
+        if (!$updateConfiguration->shouldBackupFilesAndDatabase()
             && !empty($availableBackups)
             && !in_array($this->upgradeContainer->getBackupState()->getBackupName(), $availableBackups)
         ) {
@@ -499,7 +496,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
 
         $response = new AjaxResponse($this->upgradeContainer->getUpdateState(), $this->upgradeContainer->getLogger());
         $this->content = (new UpgradePage(
-            $this->upgradeContainer->getUpgradeConfiguration(),
+            $updateConfiguration,
             $this->upgradeContainer->getTwig(),
             $this->upgradeContainer->getTranslator(),
             $this->upgradeContainer->getUpgradeSelfCheck(),
@@ -514,7 +511,7 @@ class AdminSelfUpgradeController extends ModuleAdminController
             $this->downloadPath
         ))->display(
             $response
-                ->setUpgradeConfiguration($this->upgradeContainer->getUpgradeConfiguration())
+                ->setUpgradeConfiguration($updateConfiguration)
                 ->getJson()
         );
 

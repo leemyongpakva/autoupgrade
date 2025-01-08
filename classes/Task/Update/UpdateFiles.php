@@ -52,7 +52,7 @@ class UpdateFiles extends AbstractTask
     public function run(): int
     {
         // The first call must init the list of files be upgraded.
-        if (!$this->container->getFileConfigurationStorage()->exists(UpgradeFileNames::FILES_TO_UPGRADE_LIST)) {
+        if (!$this->container->getFileStorage()->exists(UpgradeFileNames::FILES_TO_UPGRADE_LIST)) {
             return $this->warmUp();
         }
 
@@ -63,11 +63,11 @@ class UpdateFiles extends AbstractTask
 
         // Now we load the list of files to be upgraded, prepared previously by warmUp method.
         $filesToUpgrade = Backlog::fromContents(
-            $this->container->getFileConfigurationStorage()->load(UpgradeFileNames::FILES_TO_UPGRADE_LIST)
+            $this->container->getFileStorage()->load(UpgradeFileNames::FILES_TO_UPGRADE_LIST)
         );
 
         // @TODO : does not upgrade files in modules, translations if they have not a correct md5 (or crc32, or whatever) from previous version
-        for ($i = 0; $i < $this->container->getUpgradeConfiguration()->getNumberOfFilesPerCall(); ++$i) {
+        for ($i = 0; $i < $this->container->getUpdateConfiguration()->getNumberOfFilesPerCall(); ++$i) {
             if (!$filesToUpgrade->getRemainingTotal()) {
                 $this->next = TaskName::TASK_UPDATE_DATABASE;
                 $this->logger->info($this->translator->trans('All files upgraded. Now upgrading database...'));
@@ -88,7 +88,7 @@ class UpdateFiles extends AbstractTask
         $this->container->getUpdateState()->setProgressPercentage(
             $this->container->getCompletionCalculator()->computePercentage($filesToUpgrade, self::class, UpdateDatabase::class)
         );
-        $this->container->getFileConfigurationStorage()->save($filesToUpgrade->dump(), UpgradeFileNames::FILES_TO_UPGRADE_LIST);
+        $this->container->getFileStorage()->save($filesToUpgrade->dump(), UpgradeFileNames::FILES_TO_UPGRADE_LIST);
 
         $countOfRemainingBacklog = $filesToUpgrade->getRemainingTotal();
         if ($countOfRemainingBacklog > 0) {
@@ -263,7 +263,7 @@ class UpdateFiles extends AbstractTask
         $list_files_to_upgrade = array_reverse(array_merge($diffFileList, $list_files_to_upgrade));
 
         $total_files_to_upgrade = count($list_files_to_upgrade);
-        $this->container->getFileConfigurationStorage()->save(
+        $this->container->getFileStorage()->save(
             (new Backlog($list_files_to_upgrade, $total_files_to_upgrade))->dump(),
             UpgradeFileNames::FILES_TO_UPGRADE_LIST
         );

@@ -63,7 +63,7 @@ class RestoreFiles extends AbstractTask
                 $fromArchive[DIRECTORY_SEPARATOR . $v] = DIRECTORY_SEPARATOR . $v;
             }
 
-            $this->container->getFileConfigurationStorage()->save($fromArchive, UpgradeFileNames::FILES_FROM_ARCHIVE_LIST);
+            $this->container->getFileStorage()->save($fromArchive, UpgradeFileNames::FILES_FROM_ARCHIVE_LIST);
             // get list of files to remove
             $toRemove = $this->container->getFilesystemAdapter()->listFilesToRemove();
             $toRemoveOnly = [];
@@ -81,7 +81,7 @@ class RestoreFiles extends AbstractTask
             }
 
             $this->logger->debug($this->translator->trans('%s file(s) will be removed before restoring the backup files.', [count($toRemoveOnly)]));
-            $this->container->getFileConfigurationStorage()->save($toRemoveOnly, UpgradeFileNames::FILES_TO_REMOVE_LIST);
+            $this->container->getFileStorage()->save($toRemoveOnly, UpgradeFileNames::FILES_TO_REMOVE_LIST);
 
             if (empty($fromArchive) || empty($toRemove)) {
                 if (empty($fromArchive)) {

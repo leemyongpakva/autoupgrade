@@ -31,10 +31,11 @@ use Exception;
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\DocumentationLinks;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
-use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\Stepper;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 use PrestaShop\Module\AutoUpgrade\VersionUtils;
@@ -76,7 +77,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
      */
     protected function getParams(): array
     {
-        $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
+        $updateSteps = new Stepper($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
         $isNewerVersionAvailableOnline = $this->upgradeContainer->getUpgrader()->isNewerVersionAvailableOnline();
         $onlineDestination = $this->upgradeContainer->getUpgrader()->getOnlineDestinationRelease();
 
@@ -103,8 +104,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
         }
         $archiveRepository = $this->upgradeContainer->getLocalArchiveRepository();
 
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
-        $currentChannel = $upgradeConfiguration->getChannel();
+        $upgradeConfiguration = $this->upgradeContainer->getUpdateConfiguration();
 
         return array_merge(
             $updateSteps->getStepParams($this::CURRENT_STEP),
@@ -131,7 +131,7 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
                 'form_fields' => self::FORM_FIELDS,
                 'form_options' => self::FORM_OPTIONS,
                 'current_values' => [
-                    self::FORM_FIELDS['channel'] => $currentChannel,
+                    self::FORM_FIELDS['channel'] => $upgradeConfiguration->getChannel(),
                     self::FORM_FIELDS['archive_zip'] => $upgradeConfiguration->getLocalChannelZip(),
                     self::FORM_FIELDS['archive_xml'] => $upgradeConfiguration->getLocalChannelXml(),
                 ],
@@ -195,10 +195,12 @@ class UpdatePageVersionChoiceController extends AbstractPageWithStepController
                 $requestConfig['archive_version_num'] = $this->upgradeContainer->getPrestashopVersionService()->extractPrestashopVersionFromZip($fullFilePath);
             }
 
-            $config = $this->upgradeContainer->getUpgradeConfiguration();
+            $configurationStorage = $this->upgradeContainer->getConfigurationStorage();
+
+            $config = $this->upgradeContainer->getUpdateConfiguration();
             $config->merge($requestConfig);
 
-            $this->upgradeContainer->getUpgradeConfigurationStorage()->save($config, UpgradeFileNames::CONFIG_FILENAME);
+            $configurationStorage->save($config);
             $state = $this->upgradeContainer->getUpdateState()->setDestinationVersion($this->upgradeContainer->getUpgrader()->getDestinationVersion());
             $state->save();
 

@@ -66,6 +66,19 @@ class BackupFinder
         return $this->availableBackups;
     }
 
+    /**
+     * @return array<array{timestamp: int, datetime: string, version:string, filename: string}>
+     */
+    public function getSortedAndFormatedAvailableBackups(): array
+    {
+        $backupsAvailable = $this->getAvailableBackups();
+        $backupsFormated = array_map([$this, 'parseBackupMetadata'], $backupsAvailable);
+
+        $this->sortBackupsByNewest($backupsFormated);
+
+        return $backupsFormated;
+    }
+
     public function getBackupPath(): string
     {
         return $this->backupPath;

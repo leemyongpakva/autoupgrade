@@ -25,37 +25,12 @@
  * @license   https://opensource.org/licenses/AFL-3.0 Academic Free License 3.0 (AFL-3.0)
  */
 
-namespace PrestaShop\Module\AutoUpgrade\Task\Backup;
+namespace PrestaShop\Module\AutoUpgrade\Twig\Steps;
 
-use Exception;
-use PrestaShop\Module\AutoUpgrade\Analytics;
-use PrestaShop\Module\AutoUpgrade\Task\AbstractTask;
-use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
-use PrestaShop\Module\AutoUpgrade\Task\TaskName;
-use PrestaShop\Module\AutoUpgrade\Task\TaskType;
-
-class BackupComplete extends AbstractTask
+interface StepsInterface
 {
-    const TASK_TYPE = TaskType::TASK_TYPE_BACKUP;
-
     /**
-     * @throws Exception
+     * @return array<self::STEP_*, array<string,string>>
      */
-    public function run(): int
-    {
-        $this->container->getBackupState()->setProgressPercentage(
-            $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
-        );
-
-        $this->stepDone = true;
-        $this->next = TaskName::TASK_COMPLETE;
-
-        $this->container->getFileStorage()->cleanAllBackupFiles();
-        $this->container->getUpdateState()->setBackupCompleted(true);
-        $this->container->getAnalytics()->track('Backup Succeeded', Analytics::WITH_BACKUP_PROPERTIES);
-
-        $this->logger->info($this->translator->trans('Backup completed successfully.'));
-
-        return ExitCode::SUCCESS;
-    }
+    public function getSteps(): array;
 }

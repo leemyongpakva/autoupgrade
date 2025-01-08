@@ -11,11 +11,11 @@ interface AutoUpgradeVariables {
 declare global {
   interface Window {
     AutoUpgradeVariables: AutoUpgradeVariables;
-    UpdatePageStepper: ?Stepper;
+    PageStepper: ?Stepper;
   }
 
   const AutoUpgradeVariables: AutoUpgradeVariables;
-  const UpdatePageStepper: ?Stepper;
+  const PageStepper: ?Stepper;
 }
 
 export {};

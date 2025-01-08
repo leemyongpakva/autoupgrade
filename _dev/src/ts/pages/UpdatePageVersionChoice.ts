@@ -1,8 +1,8 @@
-import UpdatePage from './UpdatePage';
+import StepPage from './StepPage';
 import api from '../api/RequestHandler';
 import Hydration from '../utils/Hydration';
 
-export default class UpdatePageVersionChoice extends UpdatePage {
+export default class UpdatePageVersionChoice extends StepPage {
   protected stepCode = 'version-choice';
   private radioLoadingClass = 'radio--show-requirements-loader';
 

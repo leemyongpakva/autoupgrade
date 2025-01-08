@@ -37,7 +37,7 @@ class FileFilter
     /**
      * @var UpgradeConfiguration
      */
-    protected $configuration;
+    protected $updateConfiguration;
 
     /** @var ComposerService */
     protected $composerService;
@@ -64,12 +64,12 @@ class FileFilter
     ];
 
     public function __construct(
-        UpgradeConfiguration $configuration,
+        UpgradeConfiguration $updateConfiguration,
         ComposerService $composerService,
         string $rootDir,
         string $autoupgradeDir = 'autoupgrade'
     ) {
-        $this->configuration = $configuration;
+        $this->updateConfiguration = $updateConfiguration;
         $this->composerService = $composerService;
         $this->rootDir = $rootDir;
         $this->autoupgradeDir = $autoupgradeDir;
@@ -94,7 +94,7 @@ class FileFilter
             '/admin/autoupgrade',
         ];
 
-        if (!$this->configuration->shouldBackupImages()) {
+        if (!$this->updateConfiguration->shouldBackupImages()) {
             $backupIgnoreAbsoluteFiles[] = '/img';
         } else {
             $backupIgnoreAbsoluteFiles[] = '/img/tmp';
@@ -117,7 +117,7 @@ class FileFilter
             '..',
         ];
 
-        if (!$this->configuration->shouldBackupImages()) {
+        if (!$this->updateConfiguration->shouldBackupImages()) {
             $restoreIgnoreAbsoluteFiles[] = '/img';
         } else {
             $restoreIgnoreAbsoluteFiles[] = '/img/tmp';

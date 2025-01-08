@@ -60,11 +60,11 @@ class BackupDatabase extends AbstractTask
         $db = $this->container->getDb();
         $dbLink = $db->connect();
 
-        if (!$this->container->getFileConfigurationStorage()->exists(UpgradeFileNames::DB_TABLES_TO_BACKUP_LIST)) {
+        if (!$this->container->getFileStorage()->exists(UpgradeFileNames::DB_TABLES_TO_BACKUP_LIST)) {
             return $this->warmUp();
         }
 
-        $tablesToBackup = Backlog::fromContents($this->container->getFileConfigurationStorage()->load(UpgradeFileNames::DB_TABLES_TO_BACKUP_LIST));
+        $tablesToBackup = Backlog::fromContents($this->container->getFileStorage()->load(UpgradeFileNames::DB_TABLES_TO_BACKUP_LIST));
 
         $numberOfSyncedTables = 0;
         $fp = false;
@@ -83,7 +83,7 @@ class BackupDatabase extends AbstractTask
                 $state->setBackupLoopLimit(0);
             }
 
-            if ($written > $this->container->getUpgradeConfiguration()->getMaxSizeToWritePerCall()) {
+            if ($written > $this->container->getUpdateConfiguration()->getMaxSizeToWritePerCall()) {
                 // In the previous loop execution, we reached the limit of data to store in a single file.
                 // We reset the stream
                 $written = 0;
@@ -231,7 +231,7 @@ class BackupDatabase extends AbstractTask
         $state->setProgressPercentage(
             $this->container->getCompletionCalculator()->computePercentage($tablesToBackup, self::class, BackupComplete::class)
         );
-        $this->container->getFileConfigurationStorage()->save($tablesToBackup->dump(), UpgradeFileNames::DB_TABLES_TO_BACKUP_LIST);
+        $this->container->getFileStorage()->save($tablesToBackup->dump(), UpgradeFileNames::DB_TABLES_TO_BACKUP_LIST);
 
         if ($numberOfSyncedTables) {
             $this->logger->info($this->translator->trans('%s tables have been saved.', [$numberOfSyncedTables]));
@@ -292,7 +292,7 @@ class BackupDatabase extends AbstractTask
 
         $tablesToBackup = new Backlog($listOfTables, count($listOfTables));
 
-        $this->container->getFileConfigurationStorage()->save($tablesToBackup->dump(), UpgradeFileNames::DB_TABLES_TO_BACKUP_LIST);
+        $this->container->getFileStorage()->save($tablesToBackup->dump(), UpgradeFileNames::DB_TABLES_TO_BACKUP_LIST);
 
         return ExitCode::SUCCESS;
     }

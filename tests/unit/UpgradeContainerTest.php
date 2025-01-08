@@ -77,7 +77,7 @@ class UpgradeContainerTest extends TestCase
             ['getCacheCleaner', PrestaShop\Module\AutoUpgrade\UpgradeTools\CacheCleaner::class],
             ['getChecksumCompare', PrestaShop\Module\AutoUpgrade\Xml\ChecksumCompare::class],
             ['getCookie', PrestaShop\Module\AutoUpgrade\Cookie::class],
-            ['getFileConfigurationStorage', PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage::class],
+            ['getFileStorage', PrestaShop\Module\AutoUpgrade\Parameters\FileStorage::class],
             ['getFileFilter', \PrestaShop\Module\AutoUpgrade\UpgradeTools\FileFilter::class],
             // ['getUpgrader', \PrestaShop\Module\AutoUpgrade\Upgrader::class],
             ['getFilesystemAdapter', PrestaShop\Module\AutoUpgrade\UpgradeTools\FilesystemAdapter::class],
@@ -91,7 +91,6 @@ class UpgradeContainerTest extends TestCase
             // Cannot be run in the context of unit tests as the class would be loaded from PS dependencies
             // ['getTwig', \Twig\Environment::class],
             ['getPrestaShopConfiguration', PrestaShop\Module\AutoUpgrade\PrestashopConfiguration::class],
-            ['getUpgradeConfiguration', PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration::class],
             ['getWorkspace', PrestaShop\Module\AutoUpgrade\Workspace::class],
             ['getZipAction', PrestaShop\Module\AutoUpgrade\ZipAction::class],
         ];

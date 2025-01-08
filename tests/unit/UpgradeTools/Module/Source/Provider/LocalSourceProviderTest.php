@@ -25,7 +25,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\Source\ModuleSource;
 use PrestaShop\Module\AutoUpgrade\UpgradeTools\Module\Source\Provider\LocalSourceProvider;
 
@@ -33,7 +33,7 @@ class LocalSourceProviderTest extends TestCase
 {
     public function testCacheGenerationWithData()
     {
-        $fileConfigurationStorageMock = $this->createMock(FileConfigurationStorage::class);
+        $fileConfigurationStorageMock = $this->createMock(FileStorage::class);
 
         $fixtureFolder = sys_get_temp_dir() . '/' . self::class;
         @mkdir($fixtureFolder);
@@ -70,7 +70,7 @@ class LocalSourceProviderTest extends TestCase
 
     public function testCacheGenerationWithNoData()
     {
-        $fileConfigurationStorageMock = $this->createMock(FileConfigurationStorage::class);
+        $fileConfigurationStorageMock = $this->createMock(FileStorage::class);
         $fixtureFolder = sys_get_temp_dir() . '/ewww';
 
         $sourceProvider = new LocalSourceProvider($fixtureFolder, $fileConfigurationStorageMock);
@@ -85,7 +85,7 @@ class LocalSourceProviderTest extends TestCase
 
     public function testCacheLoading()
     {
-        $fileConfigurationStorageMock = $this->createMock(FileConfigurationStorage::class);
+        $fileConfigurationStorageMock = $this->createMock(FileStorage::class);
         $fileConfigurationStorageMock->method('exists')->willReturn(true);
         $fileConfigurationStorageMock->method('load')->willReturn([]);
 

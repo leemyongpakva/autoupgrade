@@ -29,10 +29,11 @@ namespace PrestaShop\Module\AutoUpgrade\Controller;
 
 use PrestaShop\Module\AutoUpgrade\AjaxResponseBuilder;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Router\Routes;
+use PrestaShop\Module\AutoUpgrade\Task\TaskType;
 use PrestaShop\Module\AutoUpgrade\Twig\PageSelectors;
-use PrestaShop\Module\AutoUpgrade\Twig\UpdateSteps;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\Stepper;
+use PrestaShop\Module\AutoUpgrade\Twig\Steps\UpdateSteps;
 use PrestaShop\Module\AutoUpgrade\Twig\ValidatorToFormFormater;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -55,10 +56,12 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
         return Routes::UPDATE_PAGE_UPDATE_OPTIONS;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function saveOption(): JsonResponse
     {
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
-        $upgradeConfigurationStorage = $this->upgradeContainer->getUpgradeConfigurationStorage();
+        $updateConfiguration = $this->upgradeContainer->getUpdateConfiguration();
 
         $config = [
             UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => $this->request->request->getBoolean(UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT, false),
@@ -73,8 +76,8 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
             $this->upgradeContainer->initPrestaShopCore();
             UpgradeConfiguration::updatePSDisableOverrides($config[UpgradeConfiguration::PS_DISABLE_OVERRIDES]);
 
-            $upgradeConfiguration->merge($config);
-            $upgradeConfigurationStorage->save($upgradeConfiguration, UpgradeFileNames::CONFIG_FILENAME);
+            $updateConfiguration->merge($config);
+            $this->upgradeContainer->getConfigurationStorage()->save($updateConfiguration);
         }
 
         return $this->getRefreshOfForm(array_merge(
@@ -96,8 +99,8 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
     protected function getParams(): array
     {
         $this->upgradeContainer->initPrestaShopCore();
-        $upgradeConfiguration = $this->upgradeContainer->getUpgradeConfiguration();
-        $updateSteps = new UpdateSteps($this->upgradeContainer->getTranslator());
+        $updateConfiguration = $this->upgradeContainer->getConfigurationStorage()->loadUpdateConfiguration();
+        $updateSteps = new Stepper($this->upgradeContainer->getTranslator(), TaskType::TASK_TYPE_UPDATE);
 
         return array_merge(
             $updateSteps->getStepParams(self::CURRENT_STEP),
@@ -108,15 +111,15 @@ class UpdatePageUpdateOptionsController extends AbstractPageWithStepController
                 'form_fields' => [
                     'deactive_non_native_modules' => [
                         'field' => UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT,
-                        'value' => $upgradeConfiguration->shouldDeactivateCustomModules(),
+                        'value' => $updateConfiguration->shouldDeactivateCustomModules(),
                     ],
                     'regenerate_email_templates' => [
                         'field' => UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL,
-                        'value' => $upgradeConfiguration->shouldRegenerateMailTemplates(),
+                        'value' => $updateConfiguration->shouldRegenerateMailTemplates(),
                     ],
                     'disable_all_overrides' => [
                         'field' => UpgradeConfiguration::PS_DISABLE_OVERRIDES,
-                        'value' => !$upgradeConfiguration->isOverrideAllowed(),
+                        'value' => !$updateConfiguration->isOverrideAllowed(),
                     ],
                 ],
             ]

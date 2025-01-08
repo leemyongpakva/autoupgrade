@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\State\RestoreState;
 
@@ -13,7 +13,7 @@ class RestoreStateTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->fileConfigurationStorageMock = $this->createMock(FileConfigurationStorage::class);
+        $this->fileConfigurationStorageMock = $this->createMock(FileStorage::class);
         $this->state = new RestoreState($this->fileConfigurationStorageMock);
     }
 

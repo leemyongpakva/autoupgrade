@@ -33,12 +33,12 @@ use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupManager;
 use PrestaShop\Module\AutoUpgrade\Log\Logger;
 use PrestaShop\Module\AutoUpgrade\Log\WebLogger;
+use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\ConfigurationValidator;
-use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\LocalChannelConfigurationValidator;
+use PrestaShop\Module\AutoUpgrade\Parameters\RestoreConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfigurationStorage;
-use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 use PrestaShop\Module\AutoUpgrade\Progress\CompletionCalculator;
 use PrestaShop\Module\AutoUpgrade\Repository\LocalArchiveRepository;
 use PrestaShop\Module\AutoUpgrade\Services\ComposerService;
@@ -130,9 +130,9 @@ class UpgradeContainer
     public $db;
 
     /**
-     * @var FileConfigurationStorage
+     * @var FileStorage
      */
-    private $fileConfigurationStorage;
+    private $fileStorage;
 
     /**
      * @var FileFilter
@@ -145,9 +145,19 @@ class UpgradeContainer
     private $prestashopConfiguration;
 
     /**
+     * @var ConfigurationStorage
+     */
+    private $configurationStorage;
+
+    /**
      * @var UpgradeConfiguration
      */
-    private $upgradeConfiguration;
+    private $updateConfiguration;
+
+    /**
+     * @var RestoreConfiguration
+     */
+    private $restoreConfiguration;
 
     /**
      * @var FilesystemAdapter
@@ -326,7 +336,7 @@ class UpgradeContainer
             case self::LOGS_PATH:
                 return $this->autoupgradeWorkDir . DIRECTORY_SEPARATOR . 'logs';
             case self::ARCHIVE_FILENAME:
-                return $this->getUpgradeConfiguration()->getChannelZip();
+                return $this->getUpdateConfiguration()->getChannelZip();
             case self::ARCHIVE_FILEPATH:
                 return $this->getProperty(self::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $this->getProperty(self::ARCHIVE_FILENAME);
             case self::PS_VERSION:
@@ -345,7 +355,7 @@ class UpgradeContainer
         // The identifier shoudl be a value a value always different between two shops
         // But equal between two upgrade processes
         return $this->analytics = new Analytics(
-            $this->getUpgradeConfiguration(),
+            $this->getUpdateConfiguration(),
             [
                 'update' => $this->getUpdateState(),
                 'restore' => $this->getRestoreState(),
@@ -452,15 +462,15 @@ class UpgradeContainer
         return $this->getProperty(self::ARCHIVE_FILEPATH);
     }
 
-    public function getFileConfigurationStorage(): FileConfigurationStorage
+    public function getFileStorage(): FileStorage
     {
-        if (null !== $this->fileConfigurationStorage) {
-            return $this->fileConfigurationStorage;
+        if (null !== $this->fileStorage) {
+            return $this->fileStorage;
         }
 
-        $this->fileConfigurationStorage = new FileConfigurationStorage($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR);
+        $this->fileStorage = new FileStorage($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR);
 
-        return $this->fileConfigurationStorage;
+        return $this->fileStorage;
     }
 
     /**
@@ -473,7 +483,7 @@ class UpgradeContainer
         }
 
         $this->fileFilter = new FileFilter(
-            $this->getUpgradeConfiguration(),
+            $this->getUpdateConfiguration(),
             $this->getComposerService(),
             $this->getProperty(self::PS_ROOT_PATH)
         );
@@ -495,7 +505,7 @@ class UpgradeContainer
 
         $upgrader = new Upgrader(
             $this->getPhpVersionResolverService(),
-            $this->getUpgradeConfiguration(),
+            $this->getUpdateConfiguration(),
             $this->getProperty(self::PS_VERSION)
         );
 
@@ -606,9 +616,9 @@ class UpgradeContainer
         }
 
         $this->moduleSourceProviders = [
-            new LocalSourceProvider($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR . 'modules', $this->getFileConfigurationStorage()),
-            new MarketplaceSourceProvider($this->getUpdateState()->getDestinationVersion(), $this->getProperty(self::PS_ROOT_PATH), $this->getFileLoader(), $this->getFileConfigurationStorage()),
-            new ComposerSourceProvider($this->getProperty(self::LATEST_PATH), $this->getComposerService(), $this->getFileConfigurationStorage()),
+            new LocalSourceProvider($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR . 'modules', $this->getFileStorage()),
+            new MarketplaceSourceProvider($this->getUpdateState()->getDestinationVersion(), $this->getProperty(self::PS_ROOT_PATH), $this->getFileLoader(), $this->getFileStorage()),
+            new ComposerSourceProvider($this->getProperty(self::LATEST_PATH), $this->getComposerService(), $this->getFileStorage()),
             // Other providers
         ];
 
@@ -632,7 +642,7 @@ class UpgradeContainer
             return $this->backupState;
         }
 
-        $this->backupState = new BackupState($this->getFileConfigurationStorage());
+        $this->backupState = new BackupState($this->getFileStorage());
         $this->backupState->load();
 
         return $this->backupState;
@@ -644,7 +654,7 @@ class UpgradeContainer
             return $this->logsState;
         }
 
-        $this->logsState = new LogsState($this->getFileConfigurationStorage());
+        $this->logsState = new LogsState($this->getFileStorage());
         $this->logsState->load();
 
         return $this->logsState;
@@ -656,7 +666,7 @@ class UpgradeContainer
             return $this->restoreState;
         }
 
-        $this->restoreState = new RestoreState($this->getFileConfigurationStorage());
+        $this->restoreState = new RestoreState($this->getFileStorage());
         $this->restoreState->load();
 
         return $this->restoreState;
@@ -668,7 +678,7 @@ class UpgradeContainer
             return $this->updateState;
         }
 
-        $this->updateState = new UpdateState($this->getFileConfigurationStorage());
+        $this->updateState = new UpdateState($this->getFileStorage());
         $this->updateState->load();
 
         return $this->updateState;
@@ -776,23 +786,37 @@ class UpgradeContainer
     /**
      * @throws Exception
      */
-    public function getUpgradeConfiguration(): UpgradeConfiguration
+    public function getConfigurationStorage(): ConfigurationStorage
     {
-        if (null !== $this->upgradeConfiguration) {
-            return $this->upgradeConfiguration;
+        if (null === $this->configurationStorage) {
+            $this->configurationStorage = new ConfigurationStorage($this->getFileStorage());
         }
-        $upgradeConfigurationStorage = new UpgradeConfigurationStorage($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR);
-        $this->upgradeConfiguration = $upgradeConfigurationStorage->load(UpgradeFileNames::CONFIG_FILENAME);
 
-        return $this->upgradeConfiguration;
+        return $this->configurationStorage;
     }
 
     /**
      * @throws Exception
      */
-    public function getUpgradeConfigurationStorage(): UpgradeConfigurationStorage
+    public function getUpdateConfiguration(): UpgradeConfiguration
     {
-        return new UpgradeConfigurationStorage($this->getProperty(self::WORKSPACE_PATH) . DIRECTORY_SEPARATOR);
+        if (null === $this->updateConfiguration) {
+            $this->updateConfiguration = $this->getConfigurationStorage()->loadUpdateConfiguration();
+        }
+
+        return $this->updateConfiguration;
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getRestoreConfiguration(): RestoreConfiguration
+    {
+        if (null === $this->restoreConfiguration) {
+            $this->restoreConfiguration = $this->getConfigurationStorage()->loadRestoreConfiguration();
+        }
+
+        return $this->restoreConfiguration;
     }
 
     public function getDistributionApiService(): DistributionApiService
@@ -838,7 +862,7 @@ class UpgradeContainer
         $this->upgradeSelfCheck = new UpgradeSelfCheck(
             $this->getUpgrader(),
             $this->getUpdateState(),
-            $this->getUpgradeConfiguration(),
+            $this->getUpdateConfiguration(),
             $this->getPrestaShopConfiguration(),
             $this->getTranslator(),
             $this->getPhpVersionResolverService(),
@@ -894,7 +918,7 @@ class UpgradeContainer
         $this->zipAction = new ZipAction(
             $this->getTranslator(),
             $this->getLogger(),
-            $this->getUpgradeConfiguration(),
+            $this->getUpdateConfiguration(),
             $this->getProperty(self::PS_ROOT_PATH));
 
         return $this->zipAction;

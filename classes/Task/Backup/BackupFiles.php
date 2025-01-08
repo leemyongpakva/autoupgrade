@@ -57,7 +57,7 @@ class BackupFiles extends AbstractTask
             return ExitCode::FAIL;
         }
 
-        if (!$this->container->getFileConfigurationStorage()->exists(UpgradeFileNames::FILES_TO_BACKUP_LIST)) {
+        if (!$this->container->getFileStorage()->exists(UpgradeFileNames::FILES_TO_BACKUP_LIST)) {
             $state->setProgressPercentage(
                 $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)
             );
@@ -78,7 +78,7 @@ class BackupFiles extends AbstractTask
 
             $this->logger->debug($this->translator->trans('Backup files initialized in %s', [$backupFilesFilename]));
         } else {
-            $backlog = Backlog::fromContents($this->container->getFileConfigurationStorage()->load(UpgradeFileNames::FILES_TO_BACKUP_LIST));
+            $backlog = Backlog::fromContents($this->container->getFileStorage()->load(UpgradeFileNames::FILES_TO_BACKUP_LIST));
         }
 
         $this->next = TaskName::TASK_BACKUP_FILES;
@@ -93,7 +93,7 @@ class BackupFiles extends AbstractTask
 
                 return ExitCode::FAIL;
             }
-            $this->container->getFileConfigurationStorage()->save($backlog->dump(), UpgradeFileNames::FILES_TO_BACKUP_LIST);
+            $this->container->getFileStorage()->save($backlog->dump(), UpgradeFileNames::FILES_TO_BACKUP_LIST);
             $state->setProgressPercentage(
                 $this->container->getCompletionCalculator()->computePercentage($backlog, self::class, BackupDatabase::class)
             );

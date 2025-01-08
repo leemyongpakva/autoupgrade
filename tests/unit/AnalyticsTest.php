@@ -25,17 +25,25 @@
  */
 use PHPUnit\Framework\TestCase;
 use PrestaShop\Module\AutoUpgrade\Analytics;
-use PrestaShop\Module\AutoUpgrade\Parameters\FileConfigurationStorage;
+use PrestaShop\Module\AutoUpgrade\Parameters\FileStorage;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeConfiguration;
 use PrestaShop\Module\AutoUpgrade\State\RestoreState;
 use PrestaShop\Module\AutoUpgrade\State\UpdateState;
+use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 
 class AnalyticsTest extends TestCase
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->container = new UpgradeContainer(__DIR__, __DIR__ . '/..');
+        $this->filesystemAdapter = $this->container->getFilesystemAdapter();
+    }
+
     public function testProperties()
     {
         $fixturesDir = __DIR__ . '/../../fixtures/config/';
-        $fileStorage = new FileConfigurationStorage($fixturesDir);
+        $fileStorage = new FileStorage($fixturesDir);
 
         $restoreState = (new RestoreState($fileStorage))
             ->setRestoreName('V1.2.3_blablabla-🐶');
@@ -46,18 +54,21 @@ class AnalyticsTest extends TestCase
             'restore' => $restoreState,
             'update' => $updateState,
         ];
-        $upgradeConfiguration = (new UpgradeConfiguration([
-            UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => 0,
-            UpgradeConfiguration::PS_AUTOUP_CHANGE_DEFAULT_THEME => 1,
-            UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL => 1,
-            UpgradeConfiguration::PS_AUTOUP_BACKUP => 1,
-            UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => 0,
-            UpgradeConfiguration::CHANNEL => 'major',
+        $configurationStorage = $this->container->getConfigurationStorage();
+        $updateConfiguration = $configurationStorage->loadUpdateConfiguration();
+        $updateConfiguration->merge([
+            UpgradeConfiguration::PS_AUTOUP_CUSTOM_MOD_DESACT => false,
+            UpgradeConfiguration::PS_AUTOUP_CHANGE_DEFAULT_THEME => true,
+            UpgradeConfiguration::PS_AUTOUP_REGEN_EMAIL => true,
+            UpgradeConfiguration::PS_AUTOUP_BACKUP => true,
+            UpgradeConfiguration::PS_AUTOUP_KEEP_IMAGES => false,
+            UpgradeConfiguration::CHANNEL => UpgradeConfiguration::CHANNEL_LOCAL,
             UpgradeConfiguration::ARCHIVE_ZIP => 'zip.zip',
-        ]));
+        ]);
+        $configurationStorage->save($updateConfiguration);
 
         $analytics = new Analytics(
-            $upgradeConfiguration,
+            $updateConfiguration,
             $states,
             'somePathToAutoupgradeModule',
             [
@@ -100,7 +111,7 @@ class AnalyticsTest extends TestCase
 
                     'from_ps_version' => '8.8.8',
                     'to_ps_version' => '8.8.808',
-                    'upgrade_channel' => 'major',
+                    'upgrade_channel' => 'local',
                     'disable_non_native_modules' => false,
                     'switch_to_default_theme' => true,
                     'regenerate_customized_email_templates' => true,
