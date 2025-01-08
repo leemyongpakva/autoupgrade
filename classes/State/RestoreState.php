@@ -55,7 +55,7 @@ class RestoreState extends AbstractState
      */
     protected $dbStep = 0;
 
-    public function initDefault(RestoreConfiguration $restoreConfiguration)
+    public function initDefault(RestoreConfiguration $restoreConfiguration): void
     {
         $this->disableSave = true;
 
