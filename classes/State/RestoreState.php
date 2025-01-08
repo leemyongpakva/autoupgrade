@@ -39,7 +39,7 @@ class RestoreState extends AbstractState
      */
     protected $restoreName;
     /**
-     * @var null|string
+     * @var string|null
      */
     protected $restoreFilesFilename;
     /**
