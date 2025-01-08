@@ -95,7 +95,7 @@ abstract class AbstractState
     public function export(): array
     {
         $state = get_object_vars($this);
-        foreach (['fileConfigurationStorage', 'disableSave'] as $keyToRemove) {
+        foreach (['fileStorage', 'disableSave'] as $keyToRemove) {
             unset($state[$keyToRemove]);
         }
 
