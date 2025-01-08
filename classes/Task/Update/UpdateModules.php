@@ -159,7 +159,7 @@ class UpdateModules extends AbstractTask
         }
 
         if ($total_modules_to_upgrade) {
-            $this->logger->info($this->translator->trans('%s modules will be upgraded.', [$total_modules_to_upgrade]));
+            $this->logger->info($this->translator->trans('%s modules will be updated.', [$total_modules_to_upgrade]));
         }
 
         $this->stepDone = false;

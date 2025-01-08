@@ -175,9 +175,36 @@ abstract class Logger implements LoggerInterface
      */
     public function log($level, string $message, array $context = []): void
     {
+        $className = $this->getCallingClass();
+
         if (is_resource($this->fd)) {
-            fwrite($this->fd, '[' . date('Y-m-d H:i:s') . '] ' . self::$levels[$level] . ' - ' . $message . PHP_EOL);
+            fwrite(
+                $this->fd,
+                '[' . date('Y-m-d H:i:s') . '] ' . self::$levels[$level] . ' - ' .
+                ($className ? $className . ' - ' : '') .
+                $message . PHP_EOL
+            );
         }
+    }
+
+    /**
+     * Get the name of the class that called the logger.
+     */
+    private function getCallingClass(): ?string
+    {
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 8);
+
+        foreach ($trace as $frame) {
+            if (
+                isset($frame['class']) &&
+                strpos($frame['class'], __NAMESPACE__) === false
+            ) {
+                // Extract the class name without the namespace
+                return substr(strrchr($frame['class'], '\\') ?: $frame['class'], 1);
+            }
+        }
+
+        return null;
     }
 
     /**

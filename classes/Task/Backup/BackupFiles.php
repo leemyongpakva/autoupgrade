@@ -51,8 +51,7 @@ class BackupFiles extends AbstractTask
         if (empty($backupFilesFilename)) {
             $this->next = TaskName::TASK_ERROR;
             $this->setErrorFlag();
-            $this->logger->info($this->translator->trans('Error during backupFiles'));
-            $this->logger->error($this->translator->trans('[ERROR] backupFiles filename has not been set'));
+            $this->logger->error($this->translator->trans('Backup filename has not been set'));
 
             return ExitCode::FAIL;
         }

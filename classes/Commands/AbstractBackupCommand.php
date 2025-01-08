@@ -27,7 +27,6 @@
 
 namespace PrestaShop\Module\AutoUpgrade\Commands;
 
-use DateTime;
 use Exception;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupFinder;
 use PrestaShop\Module\AutoUpgrade\Backup\BackupManager;

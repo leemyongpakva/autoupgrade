@@ -124,9 +124,9 @@ abstract class CoreUpgrader
         $this->logger->info($this->container->getTranslator()->trans('Running generic queries'));
         $this->runRecurrentQueries();
 
-        $this->logger->info($this->container->getTranslator()->trans('Database upgrade OK')); // no error!
+        $this->logger->info($this->container->getTranslator()->trans('Database update OK')); // no error!
 
-        $this->logger->info($this->container->getTranslator()->trans('Upgrading languages'));
+        $this->logger->info($this->container->getTranslator()->trans('Updating languages'));
         $this->upgradeLanguages();
 
         $this->logger->info($this->container->getTranslator()->trans('Regenerating htaccess'));
@@ -147,9 +147,9 @@ abstract class CoreUpgrader
         $this->runCoreCacheClean();
 
         if ($this->container->getUpdateState()->getWarningExists()) {
-            $this->logger->warning($this->container->getTranslator()->trans('Warning detected during upgrade.'));
+            $this->logger->warning($this->container->getTranslator()->trans('Warning detected during update.'));
         } else {
-            $this->logger->info($this->container->getTranslator()->trans('Database upgrade completed'));
+            $this->logger->info($this->container->getTranslator()->trans('Database update completed'));
         }
     }
 
@@ -779,7 +779,7 @@ abstract class CoreUpgrader
 
         // BO theme
         if (class_exists(RtlStylesheetProcessor::class)) {
-            $this->logger->info($this->container->getTranslator()->trans('Upgrade the RTL files of back-office themes.'));
+            $this->logger->info($this->container->getTranslator()->trans('Update the RTL files of back-office themes.'));
 
             $this->removeExistingRTLFiles([
                 ['directory' => $this->container->getProperty(UpgradeContainer::PS_ADMIN_PATH) . DIRECTORY_SEPARATOR . 'themes'],
@@ -800,7 +800,7 @@ abstract class CoreUpgrader
             return;
         }
 
-        $this->logger->info($this->container->getTranslator()->trans('Upgrade the RTL files of front-office themes.'));
+        $this->logger->info($this->container->getTranslator()->trans('Update the RTL files of front-office themes.'));
         $themeAdapter = new ThemeAdapter($this->db);
 
         $themes = $themeAdapter->getListFromDisk();

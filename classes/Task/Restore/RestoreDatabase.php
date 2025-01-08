@@ -205,8 +205,7 @@ class RestoreDatabase extends AbstractTask
                 $query = trim($backlog->getNext());
                 if (!empty($query)) {
                     if (!$this->container->getDb()->execute($query, false)) {
-                        $this->logger->error($this->translator->trans('[SQL ERROR]') . ' ' . $query . ' - ' . $this->container->getDb()->getMsgError());
-                        $this->logger->info($this->translator->trans('Error during database restoration'));
+                        $this->logger->error($this->translator->trans('Error during database restoration: ') . ' ' . $query . ' - ' . $this->container->getDb()->getMsgError());
                         $this->setErrorFlag();
                         unlink($this->container->getProperty(UpgradeContainer::WORKSPACE_PATH) . DIRECTORY_SEPARATOR . UpgradeFileNames::QUERIES_TO_RESTORE_LIST);
 

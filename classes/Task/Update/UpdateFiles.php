@@ -70,7 +70,7 @@ class UpdateFiles extends AbstractTask
         for ($i = 0; $i < $this->container->getUpdateConfiguration()->getNumberOfFilesPerCall(); ++$i) {
             if (!$filesToUpgrade->getRemainingTotal()) {
                 $this->next = TaskName::TASK_UPDATE_DATABASE;
-                $this->logger->info($this->translator->trans('All files upgraded. Now upgrading database...'));
+                $this->logger->info($this->translator->trans('All files updated. Now updating database...'));
                 $this->stepDone = true;
                 break;
             }
@@ -81,7 +81,7 @@ class UpdateFiles extends AbstractTask
             if (!$this->upgradeThisFile($file)) {
                 // put the file back to the begin of the list
                 $this->next = TaskName::TASK_ERROR;
-                $this->logger->error($this->translator->trans('Error when trying to upgrade file %s.', [$file]));
+                $this->logger->error($this->translator->trans('Error when trying to update file %s.', [$file]));
                 break;
             }
         }
@@ -92,7 +92,7 @@ class UpdateFiles extends AbstractTask
 
         $countOfRemainingBacklog = $filesToUpgrade->getRemainingTotal();
         if ($countOfRemainingBacklog > 0) {
-            $this->logger->info($this->translator->trans('%s files left to upgrade.', [$countOfRemainingBacklog]));
+            $this->logger->info($this->translator->trans('%s files left to update.', [$countOfRemainingBacklog]));
             $this->stepDone = false;
         }
 
@@ -128,7 +128,7 @@ class UpdateFiles extends AbstractTask
             // if $dest is not a directory (that can happen), just remove that file
             if (!is_dir($dest) && file_exists($dest)) {
                 unlink($dest);
-                $this->logger->debug($this->translator->trans('[WARNING] File %1$s has been deleted.', [$file]));
+                $this->logger->debug($this->translator->trans('File %1$s has been deleted.', [$file]));
             }
             if (!file_exists($dest)) {
                 if (mkdir($dest)) {
@@ -151,12 +151,12 @@ class UpdateFiles extends AbstractTask
             if ($translationAdapter->isTranslationFile($file) && file_exists($dest)) {
                 $type_trad = $translationAdapter->getTranslationFileType($file);
                 if ($translationAdapter->mergeTranslationFile($orig, $dest, $type_trad)) {
-                    $this->logger->info($this->translator->trans('[TRANSLATION] The translation files have been merged into file %s.', [$dest]));
+                    $this->logger->info($this->translator->trans('The translation files have been merged into file %s.', [$dest]));
 
                     return true;
                 }
                 $this->logger->warning($this->translator->trans(
-                    '[TRANSLATION] The translation files have not been merged into file %filename%. Switch to copy %filename%.',
+                    'The translation files have not been merged into file %filename%. Switch to copy %filename%.',
                     ['%filename%' => $dest]
                 ));
             }
@@ -177,12 +177,12 @@ class UpdateFiles extends AbstractTask
             if (file_exists($dest)) {
                 unlink($dest);
             }
-            $this->logger->debug(sprintf('removed file %1$s.', $file));
+            $this->logger->debug(sprintf('Removed file %1$s.', $file));
 
             return true;
         } elseif (is_dir($dest)) {
             FilesystemAdapter::deleteDirectory($dest);
-            $this->logger->debug(sprintf('removed dir %1$s.', $file));
+            $this->logger->debug(sprintf('Removed dir %1$s.', $file));
 
             return true;
         } else {
@@ -269,12 +269,12 @@ class UpdateFiles extends AbstractTask
         );
 
         if ($total_files_to_upgrade === 0) {
-            $this->logger->error($this->translator->trans('[ERROR] Unable to find files to upgrade.'));
+            $this->logger->error($this->translator->trans('Unable to find files to update.'));
             $this->next = TaskName::TASK_ERROR;
 
             return ExitCode::FAIL;
         }
-        $this->logger->info($this->translator->trans('%s files will be upgraded.', [$total_files_to_upgrade]));
+        $this->logger->info($this->translator->trans('%s files will be updated.', [$total_files_to_upgrade]));
         $this->next = TaskName::TASK_UPDATE_FILES;
         $this->stepDone = false;
 

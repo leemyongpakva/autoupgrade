@@ -96,7 +96,7 @@ class UpdateConfig extends AbstractTask
             $fullFilePath = $this->container->getProperty(UpgradeContainer::DOWNLOAD_PATH) . DIRECTORY_SEPARATOR . $file;
             try {
                 $config['archive_version_num'] = $this->container->getPrestashopVersionService()->extractPrestashopVersionFromZip($fullFilePath);
-                $this->logger->info($this->translator->trans('Upgrade process will use archive.'));
+                $this->logger->info($this->translator->trans('Update process will use archive.'));
             } catch (Exception $exception) {
                 $this->setErrorFlag();
                 $this->logger->error($this->translator->trans('We couldn\'t find a PrestaShop version in the .zip file that was uploaded in your local archive. Please try again.'));
