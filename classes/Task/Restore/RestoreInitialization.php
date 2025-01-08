@@ -40,7 +40,7 @@ use PrestaShop\Module\AutoUpgrade\UpgradeContainer;
 /**
  * First step executed during a rollback.
  */
-class Restore extends AbstractTask
+class RestoreInitialization extends AbstractTask
 {
     const TASK_TYPE = TaskType::TASK_TYPE_RESTORE;
 
@@ -49,7 +49,9 @@ class Restore extends AbstractTask
      */
     public function run(): int
     {
+        $restoreConfiguration = $this->container->getRestoreConfiguration();
         $state = $this->container->getRestoreState();
+        $state->initDefault($restoreConfiguration);
 
         $state->setProgressPercentage(
             $this->container->getCompletionCalculator()->getBasePercentageOfTask(self::class)

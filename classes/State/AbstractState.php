@@ -36,11 +36,11 @@ abstract class AbstractState
     protected $disableSave = false;
 
     /** @var FileStorage */
-    private $fileConfigurationStorage;
+    private $fileStorage;
 
-    public function __construct(FileStorage $fileConfigurationStorage)
+    public function __construct(FileStorage $fileStorage)
     {
-        $this->fileConfigurationStorage = $fileConfigurationStorage;
+        $this->fileStorage = $fileStorage;
     }
 
     /** @return UpgradeFileNames::STATE_*_FILENAME */
@@ -51,7 +51,7 @@ abstract class AbstractState
      */
     public function load()
     {
-        $state = $this->fileConfigurationStorage->load($this->getFileNameForPersistentStorage());
+        $state = $this->fileStorage->load($this->getFileNameForPersistentStorage());
 
         $this->importFromArray($state);
     }
@@ -83,7 +83,7 @@ abstract class AbstractState
     public function save(): bool
     {
         if (!$this->disableSave) {
-            return $this->fileConfigurationStorage->save($this->export(), $this->getFileNameForPersistentStorage());
+            return $this->fileStorage->save($this->export(), $this->getFileNameForPersistentStorage());
         }
 
         return true;
@@ -104,6 +104,6 @@ abstract class AbstractState
 
     public function isInitialized(): bool
     {
-        return $this->fileConfigurationStorage->exists($this->getFileNameForPersistentStorage());
+        return $this->fileStorage->exists($this->getFileNameForPersistentStorage());
     }
 }

@@ -29,6 +29,7 @@ namespace PrestaShop\Module\AutoUpgrade\Commands;
 
 use Exception;
 use InvalidArgumentException;
+use PrestaShop\Module\AutoUpgrade\Parameters\RestoreConfiguration;
 use PrestaShop\Module\AutoUpgrade\Task\ExitCode;
 use PrestaShop\Module\AutoUpgrade\Task\Runner\AllRestoreTasks;
 use Symfony\Component\Console\Input\InputArgument;
@@ -79,7 +80,7 @@ class RestoreCommand extends AbstractBackupCommand
             $this->upgradeContainer->getFileStorage()->cleanAllRestoreFiles();
             $controller = new AllRestoreTasks($this->upgradeContainer);
             $controller->setOptions([
-                'backup' => $backup,
+                RestoreConfiguration::BACKUP_NAME => $backup,
             ]);
             $controller->init();
             $exitCode = $controller->run();

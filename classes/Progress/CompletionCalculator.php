@@ -32,7 +32,7 @@ use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupComplete;
 use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupDatabase;
 use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupFiles;
 use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupInitialization;
-use PrestaShop\Module\AutoUpgrade\Task\Restore\Restore;
+use PrestaShop\Module\AutoUpgrade\Task\Restore\RestoreInitialization;
 use PrestaShop\Module\AutoUpgrade\Task\Restore\RestoreComplete;
 use PrestaShop\Module\AutoUpgrade\Task\Restore\RestoreDatabase;
 use PrestaShop\Module\AutoUpgrade\Task\Restore\RestoreFiles;
@@ -72,7 +72,7 @@ class CompletionCalculator
             UpdateComplete::class => 100,
 
             // Restore
-            Restore::class => 0,
+            RestoreInitialization::class => 0,
             RestoreFiles::class => 33,
             RestoreDatabase::class => 66,
             RestoreComplete::class => 100,

@@ -27,6 +27,7 @@
 
 namespace PrestaShop\Module\AutoUpgrade\State;
 
+use PrestaShop\Module\AutoUpgrade\Parameters\RestoreConfiguration;
 use PrestaShop\Module\AutoUpgrade\Parameters\UpgradeFileNames;
 
 class RestoreState extends AbstractState
@@ -38,7 +39,7 @@ class RestoreState extends AbstractState
      */
     protected $restoreName;
     /**
-     * @var string
+     * @var null|string
      */
     protected $restoreFilesFilename;
     /**
@@ -53,6 +54,18 @@ class RestoreState extends AbstractState
      * @var int Contains the SQL progress
      */
     protected $dbStep = 0;
+
+    public function initDefault(RestoreConfiguration $restoreConfiguration)
+    {
+        $this->disableSave = true;
+
+        $this->setRestoreName($restoreConfiguration->getBackupName());
+        $this->setRestoreFilesFilename(null);
+        $this->setRestoreDbFilenames([]);
+
+        $this->disableSave = false;
+        $this->save();
+    }
 
     protected function getFileNameForPersistentStorage(): string
     {
@@ -90,7 +103,7 @@ class RestoreState extends AbstractState
         return $this->restoreFilesFilename;
     }
 
-    public function setRestoreFilesFilename(string $restoreFilesFilename): self
+    public function setRestoreFilesFilename(?string $restoreFilesFilename): self
     {
         $this->restoreFilesFilename = $restoreFilesFilename;
         $this->save();
