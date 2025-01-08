@@ -47,23 +47,25 @@
       </ul>
     </div>
 
-    <div class="content__section">
-      <a class="link" href="{{ backlog_link }}" download>
-        {{ 'Download restore logs'|trans({}) }}
-        <i class="material-icons">file_upload</i>
-      </a>
-    </div>
+    {% if download_logs is defined %}
+      <div class="content__section">
+        <a class="link" href="{{ download_logs.download_path }}" download="{{ download_logs.filename }}">
+          {{ download_logs.button_label }}
+          <i class="material-icons">file_upload</i>
+        </a>
+      </div>
+    {% endif %}
   </div>
 {% endblock %}
 
 {% block buttons_inner %}
-  <button class="btn btn-lg btn-default" type="button">
+  <a class="btn btn-lg btn-default" href="{{ exit_link }}">
     <i class="material-icons">exit_to_app</i>
     {{ 'Exit'|trans({}) }}
-  </button>
+  </a>
 
-  <button class="btn btn-lg btn-primary" type="button">
+  <a class="btn btn-lg btn-primary" type="button" href="{{ dev_doc_link }}" target="_blank">
     <i class="material-icons">launch</i>
     {{ 'Open developer documentation'|trans({}) }}
-  </button>
+  </a>
 {% endblock %}
