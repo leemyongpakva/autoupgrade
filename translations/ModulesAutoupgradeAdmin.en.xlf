@@ -55,6 +55,11 @@
   </file>
   <file original="classes/Services/LogsService.php" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
+      <trans-unit id="deaf32a53ead325a232c297209dc187f">
+        <source>Download restore logs</source>
+        <target>Download restore logs</target>
+        <note>Line: 119</note>
+      </trans-unit>
       <trans-unit id="ebdbffe8dea73e1e0285fd052f720259">
         <source>Download update logs</source>
         <target>Download update logs</target>
@@ -2522,11 +2527,6 @@ Comment: directory already exists</note>
   </file>
   <file original="views/templates/steps/post-restore.html.twig" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
-      <trans-unit id="deaf32a53ead325a232c297209dc187f">
-        <source>Download restore logs</source>
-        <target>Download restore logs</target>
-        <note>Line: 52</note>
-      </trans-unit>
       <trans-unit id="e6196201ba7431ba94d3bac5d6af97c8">
         <source>%startbold%Open the developer documentation%endbold% to keep this checklist at-hand.</source>
         <target>%startbold%Open the developer documentation%endbold% to keep this checklist at-hand.</target>
@@ -2540,7 +2540,7 @@ Comment: directory already exists</note>
       <trans-unit id="fef46e5063ce3dc78b8ae64fa474241d">
         <source>Exit</source>
         <target>Exit</target>
-        <note>Line: 62</note>
+        <note>Line: 64</note>
       </trans-unit>
       <trans-unit id="3d6cd7dd6feb249f99dd689ec7db7e81">
         <source>Post-restore checklist</source>
