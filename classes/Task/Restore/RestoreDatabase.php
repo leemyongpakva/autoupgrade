@@ -129,7 +129,7 @@ class RestoreDatabase extends AbstractTask
 
             if (empty($content)) {
                 $this->logger->error($this->translator->trans('Database backup is empty.'));
-                $this->next = TaskName::TASK_RESTORE;
+                $this->next = TaskName::TASK_RESTORE_INITIALIZATION;
 
                 return ExitCode::FAIL;
             }

@@ -34,7 +34,7 @@ use PrestaShop\Module\AutoUpgrade\Task\TaskName;
  */
 class AllRestoreTasks extends ChainedTasks
 {
-    const initialTask = TaskName::TASK_RESTORE;
+    const initialTask = TaskName::TASK_RESTORE_INITIALIZATION;
 
     /**
      * @var string
@@ -48,12 +48,15 @@ class AllRestoreTasks extends ChainedTasks
      * > data: Loads an encoded array of data coming from another request.
      *
      * @param array<string, string> $options
+     *
+     * @throws \Exception
      */
     public function setOptions(array $options): void
     {
-        if (!empty($options['backup'])) {
-            $this->container->getRestoreState()->setRestoreName($options['backup']);
-        }
+        $restoreConfiguration = $this->container->getRestoreConfiguration();
+        $restoreConfiguration->merge($options);
+
+        $this->container->getConfigurationStorage()->save($restoreConfiguration);
     }
 
     /**

@@ -39,7 +39,7 @@ class TaskName
     const TASK_BACKUP_COMPLETE = 'BackupComplete';
 
     // RESTORE
-    const TASK_RESTORE = 'Restore';
+    const TASK_RESTORE_INITIALIZATION = 'RestoreInitialization';
     const TASK_RESTORE_EMPTY = 'RestoreEmpty';
     const TASK_RESTORE_DATABASE = 'RestoreDatabase';
     const TASK_RESTORE_FILES = 'RestoreFiles';

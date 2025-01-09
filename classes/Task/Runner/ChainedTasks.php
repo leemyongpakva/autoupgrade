@@ -114,7 +114,7 @@ abstract class ChainedTasks extends AbstractTask
 
     private function setupLogging(): void
     {
-        $initializationSteps = [TaskName::TASK_BACKUP_INITIALIZATION, TaskName::TASK_UPDATE_INITIALIZATION, TaskName::TASK_RESTORE];
+        $initializationSteps = [TaskName::TASK_BACKUP_INITIALIZATION, TaskName::TASK_UPDATE_INITIALIZATION, TaskName::TASK_RESTORE_INITIALIZATION];
 
         if (in_array($this->step, $initializationSteps)) {
             $this->container->getWorkspace()->createFolders();
@@ -123,7 +123,7 @@ abstract class ChainedTasks extends AbstractTask
                 case TaskName::TASK_BACKUP_INITIALIZATION:
                     $this->container->getLogsState()->setActiveBackupLogFromDateTime($timestamp);
                     break;
-                case TaskName::TASK_RESTORE:
+                case TaskName::TASK_RESTORE_INITIALIZATION:
                     $this->container->getLogsState()->setActiveRestoreLogFromDateTime($timestamp);
                     break;
                 case TaskName::TASK_UPDATE_INITIALIZATION:

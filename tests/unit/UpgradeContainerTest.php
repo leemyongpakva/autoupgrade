@@ -32,11 +32,11 @@ use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupComplete;
 use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupDatabase;
 use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupFiles;
 use PrestaShop\Module\AutoUpgrade\Task\Backup\BackupInitialization;
-use PrestaShop\Module\AutoUpgrade\Task\Restore\Restore;
 use PrestaShop\Module\AutoUpgrade\Task\Restore\RestoreComplete;
 use PrestaShop\Module\AutoUpgrade\Task\Restore\RestoreDatabase;
 use PrestaShop\Module\AutoUpgrade\Task\Restore\RestoreEmpty;
 use PrestaShop\Module\AutoUpgrade\Task\Restore\RestoreFiles;
+use PrestaShop\Module\AutoUpgrade\Task\Restore\RestoreInitialization;
 use PrestaShop\Module\AutoUpgrade\Task\Update\CleanDatabase;
 use PrestaShop\Module\AutoUpgrade\Task\Update\Download;
 use PrestaShop\Module\AutoUpgrade\Task\Update\Unzip;
@@ -115,7 +115,7 @@ class UpgradeContainerTest extends TestCase
             [BackupFiles::class, BackupState::class],
             [BackupInitialization::class, BackupState::class],
 
-            [Restore::class, RestoreState::class],
+            [RestoreInitialization::class, RestoreState::class],
             [RestoreComplete::class, RestoreState::class],
             [RestoreDatabase::class, RestoreState::class],
             [RestoreEmpty::class, RestoreState::class],
