@@ -220,25 +220,6 @@
       </trans-unit>
     </body>
   </file>
-  <file original="classes/Task/Restore/Restore.php" source-language="en-US" target-language="en-US" datatype="plaintext">
-    <body>
-      <trans-unit id="3fdd2bbfdfb85efef6dd8029183d9311">
-        <source>File %s is missing: unable to restore files. Operation aborted.</source>
-        <target>File %s is missing: unable to restore files. Operation aborted.</target>
-        <note>Line: 80</note>
-      </trans-unit>
-      <trans-unit id="63427da10dfe2dc64d1e9bc666ccc65c">
-        <source>No backup database files found: it would be impossible to restore the database. Operation aborted.</source>
-        <target>No backup database files found: it would be impossible to restore the database. Operation aborted.</target>
-        <note>Line: 97</note>
-      </trans-unit>
-      <trans-unit id="0438424c05d45646dc089ef15df7e0e2">
-        <source>Restoring files ...</source>
-        <target>Restoring files ...</target>
-        <note>Line: 103</note>
-      </trans-unit>
-    </body>
-  </file>
   <file original="classes/Task/Restore/RestoreComplete.php" source-language="en-US" target-language="en-US" datatype="plaintext">
     <body>
       <trans-unit id="b579142dc2ece4e07e8fcc1f99cd75c8">
@@ -342,6 +323,25 @@
         <source>Files restored. Now restoring database...</source>
         <target>Files restored. Now restoring database...</target>
         <note>Line: 128</note>
+      </trans-unit>
+    </body>
+  </file>
+  <file original="classes/Task/Restore/RestoreInitialization.php" source-language="en-US" target-language="en-US" datatype="plaintext">
+    <body>
+      <trans-unit id="3fdd2bbfdfb85efef6dd8029183d9311">
+        <source>File %s is missing: unable to restore files. Operation aborted.</source>
+        <target>File %s is missing: unable to restore files. Operation aborted.</target>
+        <note>Line: 82</note>
+      </trans-unit>
+      <trans-unit id="63427da10dfe2dc64d1e9bc666ccc65c">
+        <source>No backup database files found: it would be impossible to restore the database. Operation aborted.</source>
+        <target>No backup database files found: it would be impossible to restore the database. Operation aborted.</target>
+        <note>Line: 99</note>
+      </trans-unit>
+      <trans-unit id="0438424c05d45646dc089ef15df7e0e2">
+        <source>Restoring files ...</source>
+        <target>Restoring files ...</target>
+        <note>Line: 105</note>
       </trans-unit>
     </body>
   </file>
