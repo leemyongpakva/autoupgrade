@@ -73,7 +73,7 @@ class ListBackupCommand extends AbstractBackupCommand
 
             return ExitCode::SUCCESS;
         } catch (Exception $e) {
-            $this->logger->error('An error occurred during the backup listing process');
+            $this->logger->error("An error occurred during the backup listing process:\n" . $e);
             throw $e;
         }
     }

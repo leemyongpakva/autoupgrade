@@ -74,7 +74,7 @@ class CreateBackupCommand extends AbstractCommand
 
             return $exitCode;
         } catch (Exception $e) {
-            $this->logger->error('An error occurred during the backup creation process');
+            $this->logger->error("An error occurred during the backup creation process::\n" . $e);
             throw $e;
         }
     }
