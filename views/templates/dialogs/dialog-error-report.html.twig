@@ -2,12 +2,12 @@
 
 {% set dialogId = 'errorDialog' %}
 {% set title = 'Send error report?'|trans({}) %}
-{% set dialogSize = 'sm' %}
+{% set dialogSize = 'md' %}
 
 {% block dialog_content %}
   <div class="dialog__error-report-content">
     <p>
-      {{ 'Help us improve the module by sending us this error report. You can add details in the description if you want to.'|trans({}) }}
+      {{ 'Help us improve the module by sending us this error report. For your information, the logs will be attached with your message. You can add more details in the description if you wish'|trans({}) }}
     </p>
 
     {% if data_transparency_link %}
@@ -22,6 +22,20 @@
 
 {% block dialog_extra_content_inner %}
   <form class="dialog__error-report-form" id="form-error-feedback" name="form-error-feedback">
+    <div class="form-group">
+      <label for="errorMessage">
+        {{ 'Error message'|trans({}) }}
+      </label>
+      <textarea
+        disabled
+        class="form-control"
+        id="errorMessage"
+        name="error"
+        placeholder=""
+        rows="3"
+      ></textarea>
+    </div>
+
     <div class="form-group">
       <label for="userEmail">
         {{ 'Email (optional)'|trans({}) }}

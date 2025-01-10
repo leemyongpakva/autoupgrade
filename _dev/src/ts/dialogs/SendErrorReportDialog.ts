@@ -9,6 +9,10 @@ export default class SendErrorReportDialog implements DomLifecycle {
 
   public mount = (): void => {
     this.#form.addEventListener('submit', this.#onSubmit);
+
+    const errorMessageArea: HTMLTextAreaElement = this.#form.querySelector('#errorMessage')!;
+    const errors = logStore.getErrors();
+    errorMessageArea.value = errors[errors.length - 1].message;
   };
 
   public beforeDestroy = (): void => {
